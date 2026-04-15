@@ -1,0 +1,13 @@
+<div class="scanops-panel p-3 mb-6">
+    <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-2">
+        {% for tab in settings_tabs %}
+            <a
+                href="{{ tab.url }}"
+                class="px-3 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 {% if active_tab == tab.slug %}bg-blue-500/20 text-blue-200 border border-blue-500/30{% else %}bg-slate-900/70 text-slate-300 border border-slate-800 hover:bg-slate-800{% endif %}"
+            >
+                <span class="material-symbols-outlined text-base">{{ tab.icon }}</span>
+                <span>{{ tab.label }}</span>
+            </a>
+        {% endfor %}
+    </div>
+</div>

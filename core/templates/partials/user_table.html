@@ -1,0 +1,108 @@
+{% load scanops_tags %}
+<div class="scanops-panel overflow-hidden">
+    <div class="overflow-x-auto">
+        <table class="w-full text-sm text-left">
+            <thead class="bg-slate-900/80 text-[10px] uppercase tracking-widest text-slate-500">
+            <tr>
+                <th class="px-4 py-3">Name</th>
+                <th class="px-4 py-3">Email</th>
+                <th class="px-4 py-3">Role</th>
+                <th class="px-4 py-3">Status</th>
+                <th class="px-4 py-3">Last Login</th>
+                <th class="px-4 py-3">Activity Summary</th>
+                <th class="px-4 py-3 text-right">Actions</th>
+            </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-800">
+            {% for user in users %}
+                <tr class="hover:bg-slate-900/40">
+                    <td class="px-4 py-3">
+                        <p class="font-semibold text-slate-100">{{ user.profile_cached.display_name|default:user.get_full_name|default:user.username }}</p>
+                        <p class="text-[11px] text-slate-500">@{{ user.username }}</p>
+                    </td>
+                    <td class="px-4 py-3 text-slate-300">{{ user.email }}</td>
+                    <td class="px-4 py-3">
+                        {% if user.profile_cached.role %}
+                            <span class="px-2 py-1 rounded text-[11px] {{ user.profile_cached.role.slug|status_badge }}">{{ user.profile_cached.role.name }}</span>
+                        {% elif user.is_superuser or user.is_administrator %}
+                            <span class="px-2 py-1 rounded text-[11px] bg-blue-500/10 text-blue-300 border border-blue-500/20">Administrator</span>
+                        {% else %}
+                            <span class="px-2 py-1 rounded text-[11px] bg-slate-500/10 text-slate-300 border border-slate-500/20">Unassigned</span>
+                        {% endif %}
+                    </td>
+                    <td class="px-4 py-3 space-x-2">
+                        <span class="px-2 py-1 rounded text-[11px] {% if user.is_active %}{{ 'active'|status_badge }}{% else %}{{ 'inactive'|status_badge }}{% endif %}">
+                            {{ user.is_active|yesno:"Active,Inactive" }}
+                        </span>
+                        <span class="px-2 py-1 rounded text-[11px] {% if user.profile_cached.is_approved %}{{ 'approved'|status_badge }}{% else %}{{ 'pending'|status_badge }}{% endif %}">
+                            {{ user.profile_cached.is_approved|yesno:"Approved,Pending" }}
+                        </span>
+                    </td>
+                    <td class="px-4 py-3 text-slate-400">
+                        {% if user.last_login %}
+                            {{ user.last_login|date:"Y-m-d H:i" }}
+                        {% else %}
+                            Never
+                        {% endif %}
+                    </td>
+                    <td class="px-4 py-3 text-slate-400">
+                        {% if user.activity_summary %}
+                            <p>{{ user.activity_summary.label }}</p>
+                            {% if user.activity_summary.last_seen_at %}
+                                <p class="text-[11px] text-slate-500">Last seen {{ user.activity_summary.last_seen_at|date:"Y-m-d H:i" }}</p>
+                            {% endif %}
+                        {% else %}
+                            No recent activity
+                        {% endif %}
+                    </td>
+                    <td class="px-4 py-3">
+                        <div class="flex justify-end gap-2">
+                            <a href="{% url 'ops:users-edit' user.pk %}" class="px-2.5 py-1.5 rounded bg-slate-800 border border-slate-700 text-xs text-slate-200 hover:bg-slate-700">Edit</a>
+                            <form method="post" action="{% url 'ops:users-toggle-active' user.pk %}">
+                                {% csrf_token %}
+                                <button type="submit" class="px-2.5 py-1.5 rounded {% if user.is_active %}bg-rose-500/20 text-rose-200 hover:bg-rose-500/30{% else %}bg-emerald-500/20 text-emerald-200 hover:bg-emerald-500/30{% endif %} text-xs">
+                                    {% if user.is_active %}Disable{% else %}Enable{% endif %}
+                                </button>
+                            </form>
+                            <form method="post" action="{% url 'ops:users-flag-password-reset' user.pk %}">
+                                {% csrf_token %}
+                                <button type="submit" class="px-2.5 py-1.5 rounded bg-amber-500/20 text-amber-200 hover:bg-amber-500/30 text-xs">Flag Reset</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="7" class="px-4 py-8 text-center text-slate-500">No users match the current filters.</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% if is_paginated %}
+        <div class="px-4 py-3 border-t border-slate-800 flex items-center justify-between text-xs text-slate-400">
+            <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+            <div class="flex gap-2">
+                {% if page_obj.has_previous %}
+                    <a
+                        href="?page={{ page_obj.previous_page_number }}"
+                        hx-get="?page={{ page_obj.previous_page_number }}"
+                        hx-target="#users-table-container"
+                        hx-push-url="true"
+                        class="px-2 py-1 rounded border border-slate-700 hover:bg-slate-800"
+                    >Previous</a>
+                {% endif %}
+                {% if page_obj.has_next %}
+                    <a
+                        href="?page={{ page_obj.next_page_number }}"
+                        hx-get="?page={{ page_obj.next_page_number }}"
+                        hx-target="#users-table-container"
+                        hx-push-url="true"
+                        class="px-2 py-1 rounded border border-slate-700 hover:bg-slate-800"
+                    >Next</a>
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+</div>

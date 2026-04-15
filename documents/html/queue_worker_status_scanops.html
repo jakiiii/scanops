@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ScanOps | Queue &amp; Worker Status</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-variant": "#2e3447",
+                        "on-error": "#690005",
+                        "on-error-container": "#ffdad6",
+                        "on-secondary": "#213145",
+                        "tertiary": "#ffb786",
+                        "tertiary-fixed": "#ffdcc6",
+                        "on-primary-container": "#00285d",
+                        "surface-dim": "#0c1324",
+                        "on-tertiary-fixed-variant": "#723600",
+                        "secondary-container": "#3a4a5f",
+                        "primary-container": "#4d8eff",
+                        "outline": "#8c909f",
+                        "inverse-on-surface": "#2a3043",
+                        "error-container": "#93000a",
+                        "secondary": "#b7c8e1",
+                        "primary": "#adc6ff",
+                        "on-background": "#dce1fb",
+                        "on-primary-fixed": "#001a42",
+                        "surface": "#0c1324",
+                        "on-tertiary-container": "#461f00",
+                        "on-surface-variant": "#c2c6d6",
+                        "surface-tint": "#adc6ff",
+                        "inverse-surface": "#dce1fb",
+                        "secondary-fixed": "#d3e4fe",
+                        "outline-variant": "#424754",
+                        "surface-container": "#191f31",
+                        "background": "#0c1324",
+                        "on-tertiary-fixed": "#311400",
+                        "surface-container-lowest": "#070d1f",
+                        "surface-container-low": "#151b2d",
+                        "on-secondary-fixed-variant": "#38485d",
+                        "inverse-primary": "#005ac2",
+                        "on-primary": "#002e6a",
+                        "on-secondary-container": "#a9bad3",
+                        "secondary-fixed-dim": "#b7c8e1",
+                        "error": "#ffb4ab",
+                        "tertiary-container": "#df7412",
+                        "primary-fixed": "#d8e2ff",
+                        "primary-fixed-dim": "#adc6ff",
+                        "surface-bright": "#33394c",
+                        "on-secondary-fixed": "#0b1c30",
+                        "tertiary-fixed-dim": "#ffb786",
+                        "on-surface": "#dce1fb",
+                        "surface-container-high": "#23293c",
+                        "on-primary-fixed-variant": "#004395"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Space Grotesk"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #0c1324;
+            color: #dce1fb;
+            font-family: 'Inter', sans-serif;
+        }
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 1rem;
+        }
+        .status-pulse {
+            position: relative;
+        }
+        .status-pulse::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 50%;
+            background: currentColor;
+            opacity: 0.4;
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.4; }
+            100% { transform: scale(2.5); opacity: 0; }
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-[#0c1324] dark:bg-[#0c1324] flex justify-between items-center px-6 h-16 shadow-none">
+<div class="flex items-center gap-8">
+<span class="text-2xl font-bold tracking-tighter text-blue-500 dark:text-blue-400 font-headline">ScanOps</span>
+<div class="hidden md:flex gap-6">
+<a class="text-slate-400 hover:text-slate-200 transition-colors font-headline tracking-tight" href="#">Dashboard</a>
+<a class="text-blue-400 border-b-2 border-blue-500 pb-1 font-headline tracking-tight" href="#">Queues</a>
+<a class="text-slate-400 hover:text-slate-200 transition-colors font-headline tracking-tight" href="#">Workers</a>
+<a class="text-slate-400 hover:text-slate-200 transition-colors font-headline tracking-tight" href="#">Infrastructure</a>
+<a class="text-slate-400 hover:text-slate-200 transition-colors font-headline tracking-tight" href="#">Logs</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative bg-[#151b2d] px-3 py-1.5 rounded flex items-center gap-2">
+<span class="material-symbols-outlined text-slate-400 text-sm">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-sm w-48 text-on-surface placeholder:text-slate-500" placeholder="Search systems..." type="text"/>
+</div>
+<button class="p-2 text-slate-400 hover:bg-[#151b2d] rounded-md transition-all active:scale-95 duration-150">
+<span class="material-symbols-outlined">notifications_active</span>
+</button>
+<button class="p-2 text-slate-400 hover:bg-[#151b2d] rounded-md transition-all active:scale-95 duration-150">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<div class="w-8 h-8 rounded-full overflow-hidden ml-2 ring-2 ring-primary/20">
+<img alt="User profile avatar" data-alt="professional male software engineer portrait, studio lighting, neutral background, sharp focus, tech specialist look" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDumSr0bgJXaDqZinSbshmdKvxj_g4Ssu3R5lxoY0Bw95yfx0Z_SsTpXM-x7mG2bHw2ULx0lmdUX3SDqWg6qGhOFWaJnPcH8t1Pj1OhVZvpP1uBt9RtnR8qODbZ6y43b5JSJgaOI6yxzZOf4LjXz4_e2S5ywkheCjdHn390ggr_1-Y2Rok8uXGBKDdZr0vFwdtQ6sdFhGRahiipDKnh07ESbuHlf3oU363ZVHMAa0gOudjJWXOWYha-YhMdcDtNSvrSGWD_nJsgQFMD"/>
+</div>
+</div>
+</nav>
+<!-- SideNavBar -->
+<aside class="h-screen w-64 fixed left-0 top-0 z-40 bg-[#0c1324] dark:bg-[#0c1324] shadow-[24px_0_48px_rgba(0,0,0,0.5)] flex flex-col pt-20 pb-6 font-body text-sm font-medium">
+<div class="px-6 mb-8">
+<div class="flex items-center gap-3 mb-1">
+<div class="w-2 h-2 rounded-full bg-primary status-pulse text-primary"></div>
+<span class="text-blue-400 font-bold">ScanOps Command</span>
+</div>
+<p class="text-slate-500 text-xs">v4.2.0-stable</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="text-slate-500 hover:text-slate-300 px-4 py-3 ml-2 mr-2 flex items-center gap-3 hover:bg-[#151b2d] rounded-md transition-all active:translate-x-1" href="#">
+<span class="material-symbols-outlined">hub</span>
+<span>Network Map</span>
+</a>
+<a class="text-slate-500 hover:text-slate-300 px-4 py-3 ml-2 mr-2 flex items-center gap-3 hover:bg-[#151b2d] rounded-md transition-all active:translate-x-1" href="#">
+<span class="material-symbols-outlined">radar</span>
+<span>Vulnerability Scan</span>
+</a>
+<a class="bg-[#2e3447] text-blue-400 rounded-md ml-2 mr-2 px-4 py-3 flex items-center gap-3 active:translate-x-1" href="#">
+<span class="material-symbols-outlined">memory</span>
+<span>Worker Nodes</span>
+</a>
+<a class="text-slate-500 hover:text-slate-300 px-4 py-3 ml-2 mr-2 flex items-center gap-3 hover:bg-[#151b2d] rounded-md transition-all active:translate-x-1" href="#">
+<span class="material-symbols-outlined">reorder</span>
+<span>Queue Manager</span>
+</a>
+<a class="text-slate-500 hover:text-slate-300 px-4 py-3 ml-2 mr-2 flex items-center gap-3 hover:bg-[#151b2d] rounded-md transition-all active:translate-x-1" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span>System Health</span>
+</a>
+</nav>
+<div class="px-4 mb-6">
+<button class="w-full bg-primary text-on-primary py-2.5 rounded-md flex items-center justify-center gap-2 font-headline font-bold text-xs uppercase tracking-widest active:scale-[0.98] transition-transform">
+<span class="material-symbols-outlined text-sm">add</span>
+                New Scan Task
+            </button>
+</div>
+<div class="border-t border-outline-variant/10 pt-4 space-y-1">
+<a class="text-slate-500 hover:text-slate-300 px-4 py-2 ml-2 mr-2 flex items-center gap-3 hover:bg-[#151b2d] rounded-md transition-all active:translate-x-1" href="#">
+<span class="material-symbols-outlined">description</span>
+<span>Documentation</span>
+</a>
+<a class="text-slate-500 hover:text-slate-300 px-4 py-2 ml-2 mr-2 flex items-center gap-3 hover:bg-[#151b2d] rounded-md transition-all active:translate-x-1" href="#">
+<span class="material-symbols-outlined">help_center</span>
+<span>Support</span>
+</a>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="ml-64 pt-24 px-8 pb-12">
+<!-- Header Section -->
+<header class="mb-10">
+<h1 class="text-5xl font-bold font-headline tracking-tighter text-on-surface mb-2 uppercase">Queue &amp; Worker Status</h1>
+<p class="text-on-surface-variant font-light text-lg max-w-3xl">Monitor scanning infrastructure health and job distribution across active worker nodes.</p>
+</header>
+<!-- Infrastructure Health Summary -->
+<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+<div class="bg-surface-container-low p-6 rounded-lg relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-6xl">dns</span>
+</div>
+<p class="text-on-surface-variant text-xs font-bold uppercase tracking-widest mb-1">Total Worker Nodes</p>
+<div class="flex items-end gap-2">
+<span class="text-4xl font-headline font-bold text-primary">12</span>
+<span class="text-tertiary text-sm font-medium mb-1">Online</span>
+</div>
+</div>
+<div class="bg-surface-container-low p-6 rounded-lg relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-6xl">speed</span>
+</div>
+<p class="text-on-surface-variant text-xs font-bold uppercase tracking-widest mb-1">Job Throughput</p>
+<div class="flex items-end gap-2">
+<span class="text-4xl font-headline font-bold text-primary">84</span>
+<span class="text-on-surface-variant text-sm font-medium mb-1">jobs/hr</span>
+</div>
+</div>
+<div class="bg-surface-container-low p-6 rounded-lg relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-6xl">pending_actions</span>
+</div>
+<p class="text-on-surface-variant text-xs font-bold uppercase tracking-widest mb-1">Queue Backlog</p>
+<div class="flex items-end gap-2">
+<span class="text-4xl font-headline font-bold text-error">42</span>
+<span class="text-on-surface-variant text-sm font-medium mb-1">pending</span>
+</div>
+</div>
+<div class="bg-surface-container-low p-6 rounded-lg relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-6xl">timelapse</span>
+</div>
+<p class="text-on-surface-variant text-xs font-bold uppercase tracking-widest mb-1">Avg Latency</p>
+<div class="flex items-end gap-2">
+<span class="text-4xl font-headline font-bold text-tertiary">14.2</span>
+<span class="text-on-surface-variant text-sm font-medium mb-1">ms</span>
+</div>
+</div>
+</section>
+<div class="grid grid-cols-12 gap-8">
+<!-- Left Column: Worker Grid and Metrics -->
+<div class="col-span-12 lg:col-span-8 space-y-8">
+<!-- Worker Status Cards -->
+<div class="space-y-4">
+<div class="flex justify-between items-center">
+<h2 class="font-headline text-2xl font-bold tracking-tight">Active Worker Fleet</h2>
+<span class="text-xs text-on-surface-variant font-mono">SCAN_CLO_04_REGION</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<!-- Node Alpha -->
+<div class="bg-surface-container p-5 rounded-xl border border-outline-variant/10 hover:bg-surface-container-high transition-all">
+<div class="flex justify-between items-start mb-6">
+<div>
+<h3 class="text-primary font-bold text-lg font-headline">Node Alpha</h3>
+<p class="text-xs text-on-surface-variant">US-East-1 | ID: 9942-X</p>
+</div>
+<span class="flex items-center gap-1.5 px-2 py-1 rounded bg-tertiary/10 text-tertiary text-[10px] font-bold uppercase">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary status-pulse text-tertiary"></span>
+                                    Online
+                                </span>
+</div>
+<div class="grid grid-cols-2 gap-4 mb-6">
+<div>
+<p class="text-[10px] text-on-surface-variant uppercase mb-1">CPU Load</p>
+<div class="w-full bg-surface-container-low h-1.5 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 72%"></div>
+</div>
+<span class="text-xs mt-1 block">72%</span>
+</div>
+<div>
+<p class="text-[10px] text-on-surface-variant uppercase mb-1">RAM Usage</p>
+<div class="w-full bg-surface-container-low h-1.5 rounded-full overflow-hidden">
+<div class="bg-secondary h-full rounded-full" style="width: 48%"></div>
+</div>
+<span class="text-xs mt-1 block">4.2 / 8GB</span>
+</div>
+</div>
+<div class="flex items-center justify-between pt-4 border-t border-outline-variant/10">
+<div class="text-xs">
+<span class="text-on-surface-variant">Jobs: </span>
+<span class="font-bold">14 Active</span>
+</div>
+<div class="flex gap-2">
+<button class="text-[10px] uppercase font-bold text-on-surface-variant hover:text-on-surface px-2 py-1 transition-colors">Manage</button>
+<button class="text-[10px] uppercase font-bold text-error bg-error/10 hover:bg-error/20 px-2 py-1 rounded transition-colors">Restart</button>
+</div>
+</div>
+</div>
+<!-- Node Beta -->
+<div class="bg-surface-container p-5 rounded-xl border border-outline-variant/10 hover:bg-surface-container-high transition-all">
+<div class="flex justify-between items-start mb-6">
+<div>
+<h3 class="text-primary font-bold text-lg font-headline">Node Beta</h3>
+<p class="text-xs text-on-surface-variant">EU-West-2 | ID: 3110-Y</p>
+</div>
+<span class="flex items-center gap-1.5 px-2 py-1 rounded bg-error/10 text-error text-[10px] font-bold uppercase">
+<span class="w-1.5 h-1.5 rounded-full bg-error status-pulse text-error"></span>
+                                    Degraded
+                                </span>
+</div>
+<div class="grid grid-cols-2 gap-4 mb-6">
+<div>
+<p class="text-[10px] text-on-surface-variant uppercase mb-1">CPU Load</p>
+<div class="w-full bg-surface-container-low h-1.5 rounded-full overflow-hidden">
+<div class="bg-error h-full rounded-full" style="width: 98%"></div>
+</div>
+<span class="text-xs mt-1 block">98%</span>
+</div>
+<div>
+<p class="text-[10px] text-on-surface-variant uppercase mb-1">RAM Usage</p>
+<div class="w-full bg-surface-container-low h-1.5 rounded-full overflow-hidden">
+<div class="bg-secondary h-full rounded-full" style="width: 82%"></div>
+</div>
+<span class="text-xs mt-1 block">7.1 / 8GB</span>
+</div>
+</div>
+<div class="flex items-center justify-between pt-4 border-t border-outline-variant/10">
+<div class="text-xs">
+<span class="text-on-surface-variant">Jobs: </span>
+<span class="font-bold">2 Active</span>
+</div>
+<div class="flex gap-2">
+<button class="text-[10px] uppercase font-bold text-on-surface-variant hover:text-on-surface px-2 py-1 transition-colors">Manage</button>
+<button class="text-[10px] uppercase font-bold text-error bg-error/10 hover:bg-error/20 px-2 py-1 rounded transition-colors">Restart</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Active Jobs Processing -->
+<div class="bg-surface-container-low rounded-xl overflow-hidden">
+<div class="p-6 border-b border-outline-variant/10 flex justify-between items-center">
+<h2 class="font-headline text-xl font-bold tracking-tight">Active Processing Queue</h2>
+<button class="text-xs font-bold text-primary flex items-center gap-1">
+                            VIEW ALL <span class="material-symbols-outlined text-xs">arrow_forward</span>
+</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead class="bg-surface-container-lowest/50 text-[10px] uppercase tracking-wider text-on-surface-variant font-bold">
+<tr>
+<th class="px-6 py-4">Job ID / Target</th>
+<th class="px-6 py-4">Progress</th>
+<th class="px-6 py-4">Worker</th>
+<th class="px-6 py-4">Elapsed</th>
+<th class="px-6 py-4">Status</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/5">
+<tr class="hover:bg-surface-container transition-colors group">
+<td class="px-6 py-4">
+<p class="font-bold text-sm">#SCAN-8812</p>
+<p class="text-[10px] text-on-surface-variant">192.168.1.1/24</p>
+</td>
+<td class="px-6 py-4 min-w-[160px]">
+<div class="flex items-center gap-3">
+<div class="flex-1 bg-surface-container h-1 rounded-full overflow-hidden">
+<div class="bg-primary h-full" style="width: 65%"></div>
+</div>
+<span class="text-xs font-mono">65%</span>
+</div>
+</td>
+<td class="px-6 py-4 text-xs font-medium">Node Alpha</td>
+<td class="px-6 py-4 text-xs text-on-surface-variant">04m 12s</td>
+<td class="px-6 py-4">
+<span class="px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-bold uppercase">Processing</span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container transition-colors group">
+<td class="px-6 py-4">
+<p class="font-bold text-sm">#SCAN-8815</p>
+<p class="text-[10px] text-on-surface-variant">internal.corp.net</p>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="flex-1 bg-surface-container h-1 rounded-full overflow-hidden">
+<div class="bg-primary h-full" style="width: 22%"></div>
+</div>
+<span class="text-xs font-mono">22%</span>
+</div>
+</td>
+<td class="px-6 py-4 text-xs font-medium">Node Gamma</td>
+<td class="px-6 py-4 text-xs text-on-surface-variant">01m 05s</td>
+<td class="px-6 py-4">
+<span class="px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-bold uppercase">Processing</span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container transition-colors group">
+<td class="px-6 py-4">
+<p class="font-bold text-sm">#SCAN-8790</p>
+<p class="text-[10px] text-on-surface-variant">api.edge-service.io</p>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="flex-1 bg-surface-container h-1 rounded-full overflow-hidden">
+<div class="bg-secondary h-full" style="width: 99%"></div>
+</div>
+<span class="text-xs font-mono">99%</span>
+</div>
+</td>
+<td class="px-6 py-4 text-xs font-medium">Node Delta</td>
+<td class="px-6 py-4 text-xs text-on-surface-variant">12m 44s</td>
+<td class="px-6 py-4">
+<span class="px-2 py-0.5 rounded-full bg-secondary-container text-secondary text-[10px] font-bold uppercase">Finalizing</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<!-- Right Column: Metrics and Failures -->
+<div class="col-span-12 lg:col-span-4 space-y-8">
+<!-- Worker Metrics Chart -->
+<div class="bg-surface-container-low p-6 rounded-xl border border-outline-variant/10">
+<h2 class="font-headline text-lg font-bold tracking-tight mb-6">Throughput (24h)</h2>
+<div class="relative h-48 flex items-end gap-1">
+<!-- Mock bar chart -->
+<div class="flex-1 bg-primary/20 hover:bg-primary/40 transition-all rounded-t" style="height: 40%"></div>
+<div class="flex-1 bg-primary/20 hover:bg-primary/40 transition-all rounded-t" style="height: 55%"></div>
+<div class="flex-1 bg-primary/20 hover:bg-primary/40 transition-all rounded-t" style="height: 35%"></div>
+<div class="flex-1 bg-primary/20 hover:bg-primary/40 transition-all rounded-t" style="height: 80%"></div>
+<div class="flex-1 bg-primary/20 hover:bg-primary/40 transition-all rounded-t" style="height: 65%"></div>
+<div class="flex-1 bg-primary/20 hover:bg-primary/40 transition-all rounded-t" style="height: 90%"></div>
+<div class="flex-1 bg-primary/20 hover:bg-primary/40 transition-all rounded-t" style="height: 70%"></div>
+<div class="flex-1 bg-primary/20 hover:bg-primary/40 transition-all rounded-t" style="height: 45%"></div>
+<div class="flex-1 bg-primary/20 hover:bg-primary/40 transition-all rounded-t" style="height: 55%"></div>
+<div class="flex-1 bg-primary/20 hover:bg-primary/40 transition-all rounded-t" style="height: 30%"></div>
+<div class="flex-1 bg-primary h-full rounded-t" style="height: 95%"></div>
+<div class="flex-1 bg-primary/20 hover:bg-primary/40 transition-all rounded-t" style="height: 85%"></div>
+</div>
+<div class="flex justify-between mt-3 text-[10px] text-on-surface-variant font-bold uppercase tracking-wider">
+<span>00:00</span>
+<span>12:00</span>
+<span>NOW</span>
+</div>
+<div class="mt-6 pt-6 border-t border-outline-variant/10">
+<div class="flex justify-between items-center text-sm">
+<span class="text-on-surface-variant">Peak Processing</span>
+<span class="font-bold text-primary font-headline">112 Jobs/hr</span>
+</div>
+</div>
+</div>
+<!-- Recent Failures & Alerts Panel -->
+<div class="bg-surface-container-low rounded-xl overflow-hidden flex flex-col h-[520px]">
+<div class="p-6 bg-error-container/10 border-b border-error/10">
+<div class="flex items-center gap-2 text-error">
+<span class="material-symbols-outlined">warning</span>
+<h2 class="font-headline text-lg font-bold tracking-tight">Critical Alerts</h2>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto p-4 space-y-4">
+<!-- Alert Item -->
+<div class="p-4 rounded bg-surface-container-lowest border-l-4 border-error">
+<div class="flex justify-between items-start mb-1">
+<span class="text-[10px] font-bold text-error uppercase">E-404 Timeout</span>
+<span class="text-[10px] text-on-surface-variant">14:22:10</span>
+</div>
+<p class="text-sm font-medium mb-2">Worker Node Gamma disconnected unexpectedly during Scan #8711</p>
+<button class="text-xs text-primary font-bold hover:underline">INVESTIGATE</button>
+</div>
+<!-- Alert Item -->
+<div class="p-4 rounded bg-surface-container-lowest border-l-4 border-tertiary">
+<div class="flex justify-between items-start mb-1">
+<span class="text-[10px] font-bold text-tertiary uppercase">W-201 Load Threshold</span>
+<span class="text-[10px] text-on-surface-variant">14:15:45</span>
+</div>
+<p class="text-sm font-medium mb-2">Node Beta exceeding 95% CPU utilization for &gt; 5 minutes.</p>
+<button class="text-xs text-primary font-bold hover:underline">SCALE UP</button>
+</div>
+<!-- Alert Item -->
+<div class="p-4 rounded bg-surface-container-lowest border-l-4 border-error">
+<div class="flex justify-between items-start mb-1">
+<span class="text-[10px] font-bold text-error uppercase">E-500 DB Failure</span>
+<span class="text-[10px] text-on-surface-variant">13:50:11</span>
+</div>
+<p class="text-sm font-medium mb-2">Failed to write scan results to elasticsearch-node-03.</p>
+<button class="text-xs text-primary font-bold hover:underline">RETRY</button>
+</div>
+<!-- Alert Item -->
+<div class="p-4 rounded bg-surface-container-lowest border-l-4 border-error">
+<div class="flex justify-between items-start mb-1">
+<span class="text-[10px] font-bold text-error uppercase">E-404 Timeout</span>
+<span class="text-[10px] text-on-surface-variant">13:22:01</span>
+</div>
+<p class="text-sm font-medium mb-2">Network handshake failed for node-epsilon-77.</p>
+<button class="text-xs text-primary font-bold hover:underline">INVESTIGATE</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Background Decoration -->
+<div class="fixed inset-0 -z-10 pointer-events-none overflow-hidden opacity-20">
+<div class="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] bg-primary/20 blur-[120px] rounded-full"></div>
+<div class="absolute -bottom-[10%] -right-[10%] w-[30%] h-[30%] bg-secondary/10 blur-[100px] rounded-full"></div>
+</div>
+</body></html>

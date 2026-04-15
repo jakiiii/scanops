@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Create Scan Profile | Sentinel Command</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-error-container": "#ffdad6",
+                        "inverse-on-surface": "#2a3043",
+                        "background": "#0c1324",
+                        "secondary-fixed": "#d3e4fe",
+                        "inverse-surface": "#dce1fb",
+                        "on-tertiary": "#502400",
+                        "inverse-primary": "#005ac2",
+                        "surface-container-highest": "#2e3447",
+                        "primary-fixed": "#d8e2ff",
+                        "on-secondary": "#213145",
+                        "on-background": "#dce1fb",
+                        "error-container": "#93000a",
+                        "on-primary-fixed-variant": "#004395",
+                        "on-tertiary-fixed-variant": "#723600",
+                        "secondary-container": "#3a4a5f",
+                        "on-secondary-fixed": "#0b1c30",
+                        "secondary": "#b7c8e1",
+                        "surface-bright": "#33394c",
+                        "surface-container-high": "#23293c",
+                        "on-error": "#690005",
+                        "on-tertiary-fixed": "#311400",
+                        "tertiary-container": "#df7412",
+                        "surface": "#0c1324",
+                        "error": "#ffb4ab",
+                        "on-surface-variant": "#c2c6d6",
+                        "primary": "#adc6ff",
+                        "on-surface": "#dce1fb",
+                        "on-secondary-fixed-variant": "#38485d",
+                        "on-primary-container": "#00285d",
+                        "surface-tint": "#adc6ff",
+                        "surface-container": "#191f31",
+                        "secondary-fixed-dim": "#b7c8e1",
+                        "surface-variant": "#2e3447",
+                        "on-primary": "#002e6a",
+                        "surface-container-low": "#151b2d",
+                        "surface-dim": "#0c1324",
+                        "tertiary-fixed-dim": "#ffb786",
+                        "outline": "#8c909f",
+                        "primary-fixed-dim": "#adc6ff",
+                        "on-secondary-container": "#a9bad3",
+                        "outline-variant": "#424754",
+                        "surface-container-lowest": "#070d1f",
+                        "on-tertiary-container": "#461f00",
+                        "on-primary-fixed": "#001a42",
+                        "tertiary-fixed": "#ffdcc6",
+                        "tertiary": "#ffb786",
+                        "primary-container": "#4d8eff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Space Grotesk"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #0c1324;
+            color: #dce1fb;
+            font-family: 'Inter', sans-serif;
+        }
+        .glass-panel {
+            background: rgba(51, 57, 76, 0.6);
+            backdrop-filter: blur(24px);
+        }
+    </style>
+</head>
+<body class="flex min-h-screen overflow-x-hidden">
+<!-- SideNavBar -->
+<aside class="h-screen w-64 fixed left-0 top-0 bg-[#0c1324] flex flex-col py-8 z-50 border-r border-outline-variant/15">
+<div class="px-6 mb-10">
+<h1 class="text-blue-400 font-black text-xl tracking-tighter">Sentinel Command</h1>
+<p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-1">Tactical Command</p>
+</div>
+<nav class="flex-1 px-4 space-y-1">
+<a class="flex items-center px-4 py-3 text-slate-500 font-['Inter'] text-sm hover:text-blue-300 hover:bg-[#151b2d] transition-all duration-200" href="#">
+<span class="material-symbols-outlined mr-3">dashboard</span> Dashboard
+            </a>
+<a class="flex items-center px-4 py-3 text-slate-500 font-['Inter'] text-sm hover:text-blue-300 hover:bg-[#151b2d] transition-all duration-200" href="#">
+<span class="material-symbols-outlined mr-3">lan</span> Network Map
+            </a>
+<!-- Active Tab: Scan Profiles -->
+<a class="flex items-center px-4 py-3 text-blue-400 border-r-2 border-blue-500 bg-gradient-to-r from-blue-500/10 to-transparent font-['Inter'] text-sm transition-all duration-200" href="#">
+<span class="material-symbols-outlined mr-3" style="font-variation-settings: 'FILL' 1;">settings_input_component</span> Scan Profiles
+            </a>
+<a class="flex items-center px-4 py-3 text-slate-500 font-['Inter'] text-sm hover:text-blue-300 hover:bg-[#151b2d] transition-all duration-200" href="#">
+<span class="material-symbols-outlined mr-3">security</span> Vulnerabilities
+            </a>
+<a class="flex items-center px-4 py-3 text-slate-500 font-['Inter'] text-sm hover:text-blue-300 hover:bg-[#151b2d] transition-all duration-200" href="#">
+<span class="material-symbols-outlined mr-3">assessment</span> Reporting
+            </a>
+</nav>
+<div class="mt-auto px-4 space-y-1">
+<a class="flex items-center px-4 py-3 text-slate-500 font-['Inter'] text-sm hover:text-blue-300 hover:bg-[#151b2d] transition-all duration-200" href="#">
+<span class="material-symbols-outlined mr-3">menu_book</span> Documentation
+            </a>
+<a class="flex items-center px-4 py-3 text-slate-500 font-['Inter'] text-sm hover:text-blue-300 hover:bg-[#151b2d] transition-all duration-200" href="#">
+<span class="material-symbols-outlined mr-3">logout</span> Log Out
+            </a>
+</div>
+</aside>
+<main class="ml-64 flex-1 flex flex-col">
+<!-- TopNavBar -->
+<header class="w-full sticky top-0 z-40 bg-[#0c1324] shadow-[0px_24px_48px_rgba(0,0,0,0.5)] flex items-center justify-between px-8 h-16">
+<div class="flex items-center space-x-4">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">search</span>
+<input class="bg-[#151b2d] border-none text-xs rounded-md pl-9 pr-4 py-2 w-64 focus:ring-1 focus:ring-primary/40 text-on-surface" placeholder="Search operations..." type="text"/>
+</div>
+</div>
+<div class="flex items-center space-x-6">
+<button class="text-slate-400 hover:bg-[#2e3447] p-2 rounded-md transition-colors active:scale-95 duration-150">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-slate-400 hover:bg-[#2e3447] p-2 rounded-md transition-colors active:scale-95 duration-150">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<button class="text-slate-400 hover:bg-[#2e3447] p-2 rounded-md transition-colors active:scale-95 duration-150">
+<span class="material-symbols-outlined">help</span>
+</button>
+<div class="h-8 w-8 rounded-full overflow-hidden border border-primary/20">
+<img alt="Administrator profile" data-alt="close up of a professional technology administrator profile avatar with a clean futuristic digital background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBOVLwanJxKkH8E0QLYqWFifVeO4rMgXE5Qm1d8YNadMPYlQGW1uPio0YV_UbSJ-QpadQio02rgxQSvGzSursdCZd6WHIbwmQWsEVwtKy5VqgOXv9P9NvKhZV2lwX8t8CSsc2o8bqcKOCYA2-ohLG1ayLewnHMwSgHSz3bVSKDjsC8fvQU1ViEMykculZl-uWXTi_v6MKm676NxQVyfsjJuIakPTxd9cH9n6jnvult6Jl0aR0JfZ0eoeRio6uKBRiodA9jPHpWtp9mB"/>
+</div>
+</div>
+</header>
+<!-- Main Content Area -->
+<div class="p-8 max-w-7xl mx-auto w-full">
+<!-- Breadcrumbs -->
+<nav class="flex mb-4 text-[10px] font-bold tracking-widest uppercase text-on-surface-variant">
+<span class="hover:text-primary cursor-pointer transition-colors">Operations</span>
+<span class="mx-2 text-outline-variant">/</span>
+<span class="hover:text-primary cursor-pointer transition-colors">Profiles</span>
+<span class="mx-2 text-outline-variant">/</span>
+<span class="text-primary">Create</span>
+</nav>
+<!-- Page Title -->
+<div class="mb-10">
+<h2 class="text-5xl font-['Space_Grotesk'] font-bold tracking-tight text-on-surface">Create Scan Profile</h2>
+<div class="h-1 w-24 bg-primary mt-4"></div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-5 gap-8 items-start">
+<!-- Form Section -->
+<div class="lg:col-span-3 space-y-6">
+<section class="bg-surface-container-low p-8 rounded-xl shadow-2xl relative overflow-hidden">
+<div class="absolute top-0 right-0 p-4 opacity-5">
+<span class="material-symbols-outlined text-8xl">settings_suggest</span>
+</div>
+<div class="space-y-8 relative z-10">
+<!-- Profile Name -->
+<div class="group">
+<label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2 group-focus-within:text-primary transition-colors">Profile Name</label>
+<input class="w-full bg-surface-container-lowest border-none rounded-md p-4 text-on-surface font-body focus:ring-1 focus:ring-primary/40 placeholder-outline-variant/50" placeholder="e.g. Q3 Internal Vulnerability Audit" type="text"/>
+</div>
+<!-- Description -->
+<div class="group">
+<label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2 group-focus-within:text-primary transition-colors">Description</label>
+<textarea class="w-full bg-surface-container-lowest border-none rounded-md p-4 text-on-surface font-body focus:ring-1 focus:ring-primary/40 placeholder-outline-variant/50" placeholder="Detail the scope and intended use of this scan profile..." rows="4"></textarea>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- Visibility -->
+<div class="group">
+<label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2 group-focus-within:text-primary transition-colors">Visibility</label>
+<select class="w-full bg-surface-container-lowest border-none rounded-md p-4 text-on-surface font-body focus:ring-1 focus:ring-primary/40 appearance-none">
+<option>Private</option>
+<option>Shared</option>
+<option>System-wide</option>
+</select>
+</div>
+<!-- Tags -->
+<div class="group">
+<label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2 group-focus-within:text-primary transition-colors">Tags</label>
+<div class="flex flex-wrap gap-2 p-3 bg-surface-container-lowest rounded-md min-h-[56px]">
+<span class="inline-flex items-center bg-primary/10 text-primary px-3 py-1 rounded-full text-xs font-medium border border-primary/20">
+                                            Stealth <button class="ml-2 hover:text-white"><span class="material-symbols-outlined text-xs">close</span></button>
+</span>
+<span class="inline-flex items-center bg-primary/10 text-primary px-3 py-1 rounded-full text-xs font-medium border border-primary/20">
+                                            PCI-DSS <button class="ml-2 hover:text-white"><span class="material-symbols-outlined text-xs">close</span></button>
+</span>
+<input class="bg-transparent border-none focus:ring-0 text-xs p-1 w-20" placeholder="Add tag..." type="text"/>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Footer Actions -->
+<div class="flex items-center space-x-4 pt-4">
+<button class="px-8 py-3 bg-primary text-on-primary font-bold rounded-md hover:bg-primary-container transition-all active:scale-95 flex items-center shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined mr-2">save</span> Save Profile
+                        </button>
+<button class="px-8 py-3 border border-outline-variant text-on-surface-variant font-medium rounded-md hover:bg-surface-container-highest transition-all active:scale-95">
+                            Cancel
+                        </button>
+</div>
+</div>
+<!-- Sidebar / Options Summary -->
+<div class="lg:col-span-2 space-y-6">
+<div class="bg-surface-container-high rounded-xl p-6 shadow-xl border border-outline-variant/10">
+<div class="flex items-center justify-between mb-6">
+<h3 class="text-primary font-['Space_Grotesk'] font-bold text-lg">Tactical Summary</h3>
+<span class="flex h-2 w-2 rounded-full bg-tertiary shadow-[0_0_8px_rgba(255,183,134,0.6)]"></span>
+</div>
+<div class="space-y-6">
+<div>
+<label class="block text-[10px] font-bold uppercase tracking-widest text-on-surface-variant mb-3">Active Scan Flags</label>
+<div class="bg-surface-container-lowest p-4 rounded-lg font-mono text-sm text-tertiary border-l-4 border-tertiary/40">
+                                    Full Stealth Audit: <br/>
+<span class="text-tertiary-fixed-dim">-sV -sC -A -T4 -p-</span>
+</div>
+</div>
+<div>
+<label class="block text-[10px] font-bold uppercase tracking-widest text-on-surface-variant mb-3">Preview Commands</label>
+<div class="bg-black/40 p-4 rounded-lg font-mono text-xs text-on-surface-variant leading-relaxed">
+<span class="text-blue-400">nmap</span> -p- -sV -sC -A -T4 <br/>
+                                    --script <span class="text-tertiary">vulners,exploit</span> <br/>
+                                    -oA <span class="text-on-surface">~/scans/$(date +%Y%m%d)</span>
+</div>
+</div>
+<div class="bg-surface-container p-4 rounded-lg">
+<div class="flex items-start">
+<span class="material-symbols-outlined text-tertiary mr-3 mt-1">info</span>
+<p class="text-xs text-on-surface-variant leading-relaxed">
+                                        Using <span class="text-on-surface font-bold">Stealth Mode</span> ensures a slower packet delivery rate to bypass basic IDS/IPS detection thresholds.
+                                    </p>
+</div>
+</div>
+</div>
+</div>
+<div class="relative rounded-xl overflow-hidden aspect-video shadow-2xl group cursor-crosshair">
+<img alt="Data Monolith Visualization" class="w-full h-full object-cover grayscale opacity-40 group-hover:opacity-60 transition-opacity" data-alt="abstract tech grid of glowing data points and network nodes in deep blue and obsidian lighting for a cyber tactical command aesthetic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBXz9EsGjBx5mjICJNayVZstPDBP0oMd9M5Flje4b-OoJJqb0x0OweS5L3Gelz-Pf1H5VzyMIs42gQp-8w1iYiGBQPrye5ZEIe6cf9TyR7yAr9oMWYaF_t5algtQMhG0dsBD-HEJME_-4R6SwibwGy4LWI_BKZlRrAbBerW5Dtk-9xbjF_6WgF-5CnIgrO2hW_L1TTB0H1XOvfNHvuOzXO03Tokv7sruQ5e9Wr4majGFWAOMwkohcBndjcN_ZyDDTIyd1HLLlxrULBe"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent"></div>
+<div class="absolute bottom-4 left-4 right-4">
+<p class="text-[10px] font-bold uppercase tracking-[0.2em] text-primary">Simulation Engine</p>
+<p class="text-xs text-on-surface-variant mt-1">Estimated Duration: <span class="text-on-surface">14m 32s</span></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Visual Polish: Decorative Grid Overlay -->
+<div class="fixed inset-0 pointer-events-none opacity-[0.03] z-[100]" style="background-image: radial-gradient(#adc6ff 0.5px, transparent 0.5px); background-size: 24px 24px;"></div>
+</body></html>

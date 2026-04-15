@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}Result Comparison | ScanOps{% endblock %}
+
+{% block content %}
+    {% include "includes/breadcrumbs.html" with breadcrumbs=breadcrumbs %}
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
+        <div>
+            <h1 class="text-3xl md:text-4xl font-bold text-white tracking-tight">Result Comparison</h1>
+            <p class="text-slate-400 mt-1">Side-by-side change analysis between two scan results.</p>
+        </div>
+        {% if current_result %}
+            <a href="{% url 'scans:result-detail' current_result.pk %}" class="px-4 py-2 rounded-lg bg-slate-800 border border-slate-700 text-sm text-slate-100 hover:bg-slate-700">Back to Result</a>
+        {% endif %}
+    </div>
+
+    <div class="scanops-panel p-4 mb-6">
+        {% if current_result %}
+            <form
+                method="get"
+                action="{% url 'scans:result-compare-current' current_result.pk %}"
+                hx-get="{% url 'scans:result-compare-current' current_result.pk %}"
+                hx-target="#comparison-container"
+                hx-trigger="change from:select"
+            >
+        {% else %}
+            <form
+                method="get"
+                action="{% url 'scans:result-compare' %}"
+                hx-get="{% url 'scans:result-compare' %}"
+                hx-target="#comparison-container"
+                hx-trigger="change from:select"
+            >
+        {% endif %}
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 items-end">
+                <div>
+                    <label for="{{ form.left_result.id_for_label }}" class="block text-[10px] uppercase tracking-widest text-slate-500 mb-1.5">Baseline Result</label>
+                    {{ form.left_result }}
+                </div>
+                <div>
+                    <label for="{{ form.right_result.id_for_label }}" class="block text-[10px] uppercase tracking-widest text-slate-500 mb-1.5">Current Result</label>
+                    {{ form.right_result }}
+                </div>
+                <div class="flex gap-2">
+                    <button type="submit" class="px-4 py-2 rounded-lg bg-blue-600 text-sm font-semibold text-white hover:bg-blue-500">Compare</button>
+                    {% if current_result %}
+                        <a href="{% url 'scans:result-compare-current' current_result.pk %}" class="px-4 py-2 rounded-lg bg-slate-800 border border-slate-700 text-sm text-slate-100 hover:bg-slate-700">Reset</a>
+                    {% else %}
+                        <a href="{% url 'scans:result-compare' %}" class="px-4 py-2 rounded-lg bg-slate-800 border border-slate-700 text-sm text-slate-100 hover:bg-slate-700">Reset</a>
+                    {% endif %}
+                </div>
+            </div>
+            {% if form.errors %}
+                <p class="text-xs text-rose-300 mt-3">{{ form.errors|striptags }}</p>
+            {% endif %}
+        </form>
+    </div>
+
+    <div id="comparison-container">
+        {% include "partials/comparison_summary.html" %}
+    </div>
+{% endblock %}

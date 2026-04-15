@@ -1,0 +1,214 @@
+from __future__ import annotations
+
+import random
+
+from django.db import transaction
+from django.utils import timezone
+
+from apps.scans.models import ScanExecution, ScanPortResult, ScanResult
+from apps.targets.models import Target
+
+
+COMMON_PORT_CATALOG = [
+    (22, "tcp", "ssh", "OpenSSH 8.2p1", ScanPortResult.RiskLevel.LOW),
+    (53, "udp", "domain", "BIND 9.16", ScanPortResult.RiskLevel.INFO),
+    (80, "tcp", "http", "nginx 1.18.0", ScanPortResult.RiskLevel.LOW),
+    (123, "udp", "ntp", "NTP daemon", ScanPortResult.RiskLevel.INFO),
+    (443, "tcp", "https", "nginx 1.20.1", ScanPortResult.RiskLevel.LOW),
+    (445, "tcp", "microsoft-ds", "SMBv2", ScanPortResult.RiskLevel.MEDIUM),
+    (3306, "tcp", "mysql", "MySQL 8.0.28", ScanPortResult.RiskLevel.HIGH),
+    (3389, "tcp", "ms-wbt-server", "RDP Service", ScanPortResult.RiskLevel.HIGH),
+    (5432, "tcp", "postgresql", "PostgreSQL 14", ScanPortResult.RiskLevel.MEDIUM),
+    (8080, "tcp", "http-proxy", "Squid 4.10", ScanPortResult.RiskLevel.MEDIUM),
+    (8443, "tcp", "https-alt", "Jetty 9", ScanPortResult.RiskLevel.MEDIUM),
+    (9000, "tcp", "cslistener", "Internal Agent", ScanPortResult.RiskLevel.INFO),
+]
+
+OS_CATALOG = [
+    "Linux 5.4",
+    "Linux 6.x",
+    "Ubuntu 22.04",
+    "Windows Server 2019",
+    "FreeBSD 13",
+]
+
+
+def _build_raw_output(target: str, open_ports: list[tuple]) -> str:
+    lines = [
+        f"# Nmap simulated run for {target}",
+        f"Starting Nmap at {timezone.now():%Y-%m-%d %H:%M:%S %Z}",
+        f"Host {target} is up.",
+        "PORT     STATE SERVICE      VERSION",
+    ]
+    for port, protocol, service, version, _risk in sorted(open_ports, key=lambda x: x[0]):
+        lines.append(f"{port}/{protocol:<4} open  {service:<12} {version}")
+    lines.append("Nmap done: 1 IP address (1 host up) scanned.")
+    return "\n".join(lines)
+
+
+def _build_traceroute(seed: int) -> list[dict]:
+    rng = random.Random(seed)
+    hops = []
+    for index in range(1, 5):
+        hops.append(
+            {
+                "hop": index,
+                "host": f"10.0.{rng.randint(1, 10)}.{rng.randint(1, 254)}",
+                "latency_ms": round(rng.uniform(0.5, 15.5), 2),
+            }
+        )
+    return hops
+
+
+@transaction.atomic
+def generate_mock_result_for_execution(execution: ScanExecution, force: bool = False) -> ScanResult:
+    if execution.status != ScanExecution.Status.COMPLETED and not force:
+        raise ValueError("Result generation requires a completed execution unless force=True.")
+
+    target_value = execution.scan_request.target.target_value
+    seed = sum(ord(ch) for ch in execution.execution_id)
+    rng = random.Random(seed)
+    open_port_count = rng.randint(4, 8)
+    open_ports = rng.sample(COMMON_PORT_CATALOG, k=open_port_count)
+    closed_ports = max(0, 1000 - open_port_count - rng.randint(5, 30))
+    filtered_ports = max(0, 1000 - open_port_count - closed_ports)
+    os_guess = rng.choice(OS_CATALOG)
+
+    parsed_ports = []
+    for port, protocol, service, version, risk in open_ports:
+        parsed_ports.append(
+            {
+                "port": port,
+                "protocol": protocol,
+                "state": "open",
+                "service": service,
+                "version": version,
+                "risk": risk,
+            }
+        )
+
+    raw_output_text = _build_raw_output(target_value, open_ports)
+    traceroute = _build_traceroute(seed)
+    script_output = {
+        "safe_scripts": ["banner", "http-title", "ssl-cert"],
+        "alerts": [
+            {
+                "name": "weak-cipher",
+                "severity": "medium",
+                "detail": "TLS endpoint allows weak ciphers.",
+            }
+        ]
+        if any(port in {443, 8443} for port, *_ in open_ports)
+        else [],
+    }
+    parsed_output = {
+        "host": {
+            "target": target_value,
+            "status": "up",
+            "latency_ms": round(rng.uniform(0.4, 2.8), 3),
+            "os_guess": os_guess,
+        },
+        "ports": parsed_ports,
+        "summary": {
+            "open_ports": open_port_count,
+            "closed_ports": closed_ports,
+            "filtered_ports": filtered_ports,
+        },
+    }
+
+    result_summary = {
+        "critical_findings": sum(1 for row in open_ports if row[4] == ScanPortResult.RiskLevel.HIGH),
+        "high_risk_ports": [row[0] for row in open_ports if row[4] == ScanPortResult.RiskLevel.HIGH],
+        "service_count": len({row[2] for row in open_ports}),
+    }
+
+    result, _created = ScanResult.objects.update_or_create(
+        execution=execution,
+        defaults={
+            "target_snapshot": target_value,
+            "host_status": ScanResult.HostStatus.UP,
+            "total_open_ports": open_port_count,
+            "total_closed_ports": closed_ports,
+            "total_filtered_ports": filtered_ports,
+            "total_services_detected": len({row[2] for row in open_ports}),
+            "os_guess": os_guess,
+            "raw_output_text": raw_output_text,
+            "raw_output_xml": "<nmaprun><host>simulated</host></nmaprun>",
+            "parsed_output_json": parsed_output,
+            "traceroute_data_json": traceroute,
+            "script_output_json": script_output,
+            "result_summary": result_summary,
+            "generated_at": timezone.now(),
+        },
+    )
+
+    result.port_results.all().delete()
+    ScanPortResult.objects.bulk_create(
+        [
+            ScanPortResult(
+                result=result,
+                port=port,
+                protocol=protocol,
+                state="open",
+                service_name=service,
+                service_version=version,
+                risk_level=risk,
+                extra_data_json={"source": "simulator"},
+            )
+            for port, protocol, service, version, risk in open_ports
+        ]
+    )
+    return result
+
+
+def get_previous_result(result: ScanResult) -> ScanResult | None:
+    execution = result.execution
+    target = execution.scan_request.target
+    return (
+        ScanResult.objects.select_related("execution__scan_request__target")
+        .filter(execution__scan_request__target=target, generated_at__lt=result.generated_at)
+        .order_by("-generated_at")
+        .first()
+    )
+
+
+def build_result_detail_context(result: ScanResult) -> dict:
+    port_results = result.port_results.all().order_by("port", "protocol")
+    service_rows = [row for row in port_results if row.service_name]
+    traceroute_rows = result.traceroute_data_json if isinstance(result.traceroute_data_json, list) else []
+    script_rows = result.script_output_json if isinstance(result.script_output_json, dict) else {}
+    return {
+        "port_results": port_results,
+        "service_rows": service_rows,
+        "traceroute_rows": traceroute_rows,
+        "script_rows": script_rows,
+        "parsed_output": result.parsed_output_json if isinstance(result.parsed_output_json, dict) else {},
+        "previous_result": get_previous_result(result),
+    }
+
+
+def build_host_detail_context(target: Target) -> dict:
+    results = (
+        ScanResult.objects.select_related("execution__scan_request", "execution__scan_request__profile")
+        .filter(execution__scan_request__target=target)
+        .order_by("-generated_at")
+    )
+    latest_result = results.first()
+    current_ports = latest_result.port_results.all().order_by("port") if latest_result else []
+
+    trend_rows = []
+    for row in results[:12][::-1]:
+        trend_rows.append(
+            {
+                "label": row.generated_at.strftime("%m-%d"),
+                "open_ports": row.total_open_ports,
+            }
+        )
+
+    return {
+        "target": target,
+        "latest_result": latest_result,
+        "recent_results": results[:10],
+        "current_ports": current_ports,
+        "trend_rows": trend_rows,
+    }

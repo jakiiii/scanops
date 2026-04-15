@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ScanOps Sentinel | Asset Inventory</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-tint": "#adc6ff",
+                        "surface-dim": "#0c1324",
+                        "on-secondary-container": "#a9bad3",
+                        "primary-container": "#4d8eff",
+                        "on-tertiary-fixed-variant": "#723600",
+                        "on-background": "#dce1fb",
+                        "surface-container": "#191f31",
+                        "primary-fixed-dim": "#adc6ff",
+                        "inverse-surface": "#dce1fb",
+                        "background": "#0c1324",
+                        "inverse-on-surface": "#2a3043",
+                        "inverse-primary": "#005ac2",
+                        "surface-variant": "#2e3447",
+                        "secondary-container": "#3a4a5f",
+                        "on-tertiary-fixed": "#311400",
+                        "on-tertiary-container": "#461f00",
+                        "secondary-fixed": "#d3e4fe",
+                        "error": "#ffb4ab",
+                        "surface": "#0c1324",
+                        "on-error": "#690005",
+                        "surface-container-highest": "#2e3447",
+                        "secondary-fixed-dim": "#b7c8e1",
+                        "on-surface-variant": "#c2c6d6",
+                        "on-primary-fixed-variant": "#004395",
+                        "primary": "#adc6ff",
+                        "on-primary": "#002e6a",
+                        "outline": "#8c909f",
+                        "on-secondary": "#213145",
+                        "on-primary-fixed": "#001a42",
+                        "tertiary": "#ffb786",
+                        "tertiary-container": "#df7412",
+                        "tertiary-fixed": "#ffdcc6",
+                        "surface-bright": "#33394c",
+                        "surface-container-lowest": "#070d1f",
+                        "on-surface": "#dce1fb",
+                        "primary-fixed": "#d8e2ff",
+                        "on-tertiary": "#502400",
+                        "on-error-container": "#ffdad6",
+                        "outline-variant": "#424754",
+                        "secondary": "#b7c8e1",
+                        "on-secondary-fixed-variant": "#38485d",
+                        "on-secondary-fixed": "#0b1c30",
+                        "on-primary-container": "#00285d",
+                        "surface-container-low": "#151b2d",
+                        "error-container": "#93000a",
+                        "tertiary-fixed-dim": "#ffb786",
+                        "surface-container-high": "#23293c"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Space Grotesk"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0c1324; }
+        ::-webkit-scrollbar-thumb { background: #2e3447; border-radius: 10px; }
+        .luminance-layering { background: linear-gradient(180deg, rgba(21, 27, 45, 1) 0%, rgba(12, 19, 36, 1) 100%); }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body overflow-hidden">
+<div class="flex h-screen w-full">
+<!-- SideNavBar -->
+<aside class="h-screen w-64 left-0 sticky flex flex-col h-full border-r border-slate-800/50 bg-[#151b2d] dark:bg-slate-900 shadow-2xl shadow-black/50 z-50">
+<div class="p-6 flex items-center gap-3">
+<div class="w-8 h-8 bg-primary rounded flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary text-xl">security</span>
+</div>
+<div>
+<h1 class="font-headline font-bold text-on-surface tracking-tighter text-lg leading-none">The Sentinel</h1>
+<p class="font-headline uppercase tracking-widest text-[10px] text-slate-500 mt-1">Level 4 Clearance</p>
+</div>
+</div>
+<nav class="flex-1 px-3 mt-4 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-800/50 transition-all duration-150 group" href="#">
+<span class="material-symbols-outlined text-lg">dashboard</span>
+<span class="font-headline uppercase tracking-widest text-[10px]">Command Center</span>
+</a>
+<!-- Active Tab: Asset Inventory -->
+<a class="flex items-center gap-3 px-4 py-3 bg-blue-500/10 text-blue-400 border-r-2 border-blue-500 transition-all duration-150 translate-x-1 group" href="#">
+<span class="material-symbols-outlined text-lg">lan</span>
+<span class="font-headline uppercase tracking-widest text-[10px]">Asset Inventory</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-800/50 transition-all duration-150 group" href="#">
+<span class="material-symbols-outlined text-lg">security</span>
+<span class="font-headline uppercase tracking-widest text-[10px]">Threat Hunting</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-800/50 transition-all duration-150 group" href="#">
+<span class="material-symbols-outlined text-lg">hub</span>
+<span class="font-headline uppercase tracking-widest text-[10px]">Network Topology</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-800/50 transition-all duration-150 group" href="#">
+<span class="material-symbols-outlined text-lg">list_alt</span>
+<span class="font-headline uppercase tracking-widest text-[10px]">Audit Logs</span>
+</a>
+</nav>
+<div class="p-4">
+<button class="w-full bg-primary py-2 px-4 rounded-md text-on-primary font-headline uppercase tracking-widest text-[10px] font-bold hover:opacity-90 transition-opacity">
+                    Initiate Scan
+                </button>
+</div>
+<div class="mt-auto border-t border-slate-800/50 p-3 space-y-1">
+<a class="flex items-center gap-3 px-4 py-2 text-slate-500 hover:bg-slate-800/50 transition-all duration-150 group" href="#">
+<span class="material-symbols-outlined text-sm">help</span>
+<span class="font-headline uppercase tracking-widest text-[10px]">Help Center</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-slate-500 hover:bg-slate-800/50 transition-all duration-150 group" href="#">
+<span class="material-symbols-outlined text-sm">headset_mic</span>
+<span class="font-headline uppercase tracking-widest text-[10px]">Support</span>
+</a>
+</div>
+<div class="p-4 flex items-center gap-3 bg-slate-950/30">
+<div class="w-8 h-8 rounded-full overflow-hidden bg-surface-container-highest flex items-center justify-center">
+<img alt="System Administrator" class="w-full h-full object-cover" data-alt="professional male portrait with high-tech lighting, cybersecurity operator aesthetic, dark background, sharp features" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBqQfutaFt3Np9intKk5IpOzX50-bB-PtpvHUpzb9ZhSvQ3yrutFnb5Uu9xgUH2QGCWhvda60DJVFLoJ9KAi0kJbMwcRfqr17o0BdcMSEDTQiQUeb0Xvi5EEdp6fMDLXnPmHg2DEZl_ZsGXXlN-HTB9mRI5rI6tx5bLcjyh50eoN7tAaks5-zlT0tnw6iBainELHS_ydfQhEvsMOBDoPCC5WWMcMGGy2TEJKBwsM9iUx-g52Seue2SOiyhQmApw1HHDzjarSq66c_7_"/>
+</div>
+<div class="overflow-hidden">
+<p class="text-[10px] font-bold text-on-surface truncate">Admin_Alpha</p>
+<p class="text-[8px] text-slate-500 truncate uppercase tracking-widest">Active Session</p>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col min-w-0 bg-surface overflow-hidden">
+<!-- TopNavBar -->
+<header class="w-full top-0 sticky bg-[#0c1324] dark:bg-slate-950 flex justify-between items-center px-6 py-4 w-full bg-gradient-to-b from-slate-900/50 to-transparent z-40">
+<div class="flex items-center flex-1 max-w-xl">
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg">search</span>
+<input class="w-full bg-surface-container-low border-none rounded-md pl-10 pr-4 py-2 text-sm text-on-surface focus:ring-1 focus:ring-primary/40 placeholder:text-slate-600" placeholder="Global search for assets, threats, or logs..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-4">
+<button class="relative text-slate-400 hover:text-blue-300 transition-colors duration-200">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-0 right-0 w-2 h-2 bg-error rounded-full border-2 border-[#0c1324]"></span>
+</button>
+<button class="text-slate-400 hover:text-blue-300 transition-colors duration-200">
+<span class="material-symbols-outlined">settings</span>
+</button>
+</div>
+<div class="h-6 w-[1px] bg-slate-800"></div>
+<div class="flex items-center gap-3">
+<span class="text-xl font-bold tracking-tighter text-blue-500 font-['Space_Grotesk']">Sentinel Tactical</span>
+<div class="w-8 h-8 rounded-full border border-primary/20 p-0.5">
+<img alt="User operator profile" class="w-full h-full rounded-full object-cover" data-alt="close up headshot of male software engineer with glasses, digital blue light reflection on face, cinematic lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDBe5o96oVdtvsWJHPoEGaP8JLXcagKxa7Pjku_6mKp9LEcxO9u-wqJyB_jGA1Qt_ajEsv0M9fB2k6DkKiSg0T6YTaq_yjwJrCc29N9D5z4B9Z6bMH8OyOqcRPyn5VrEwUB5dFp0HlZQjDdJXv8wkZRgD-MAPCPGiRgpI_dtRk9BUvd3RCwI-RHSwCZqzgM8d1CVFVrE-Rd-xrpL7ycat_RWxH0Y5CtyNIUYa3zJeZ70qmMlnd7DekJ9nHMKVIvAVQaxDQVhFvPv3dB"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Scrollable Content -->
+<div class="flex-1 overflow-y-auto p-8 space-y-8">
+<!-- Page Header -->
+<div class="flex items-end justify-between">
+<div>
+<div class="flex items-center gap-3">
+<h2 class="font-headline text-4xl font-bold tracking-tight text-on-surface">Asset Inventory</h2>
+<span class="bg-primary-container text-on-primary-container px-3 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-widest flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 bg-on-primary-container rounded-full animate-pulse"></span>
+                                2,481 TOTAL
+                            </span>
+</div>
+<p class="text-on-surface-variant mt-2 text-sm max-w-lg">Centralized inventory of all discovered network nodes, service endpoints, and infrastructure assets across global regions.</p>
+</div>
+<div class="flex gap-2">
+<button class="flex items-center gap-2 px-4 py-2 bg-surface-container-highest text-on-surface rounded-md text-xs font-medium border border-outline-variant/10 hover:bg-surface-bright transition-colors">
+<span class="material-symbols-outlined text-sm">download</span> Export
+                        </button>
+<button class="flex items-center gap-2 px-4 py-2 bg-primary text-on-primary rounded-md text-xs font-bold hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined text-sm">add</span> Add Asset
+                        </button>
+</div>
+</div>
+<!-- Filter Bar -->
+<div class="bg-surface-container-low p-4 rounded-xl flex flex-wrap items-center gap-4">
+<div class="relative flex-1 min-w-[200px]">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-lg">filter_alt</span>
+<input class="w-full bg-surface-container border-none rounded-md pl-10 pr-4 py-2 text-sm text-on-surface focus:ring-1 focus:ring-primary/40 placeholder:text-slate-600" placeholder="Filter by asset name or IP..." type="text"/>
+</div>
+<div class="flex items-center gap-3">
+<div class="group relative">
+<select class="appearance-none bg-surface-container-highest border-none text-on-surface text-xs rounded-md pl-4 pr-10 py-2 focus:ring-1 focus:ring-primary/40 cursor-pointer">
+<option>Network: All</option>
+<option>VLAN-10 (Prod)</option>
+<option>VLAN-40 (Staging)</option>
+<option>VLAN-99 (Legacy)</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none text-sm">expand_more</span>
+</div>
+<div class="group relative">
+<select class="appearance-none bg-surface-container-highest border-none text-on-surface text-xs rounded-md pl-4 pr-10 py-2 focus:ring-1 focus:ring-primary/40 cursor-pointer">
+<option>Owner: All Teams</option>
+<option>Infrastructure</option>
+<option>SecOps</option>
+<option>Platform Eng</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none text-sm">expand_more</span>
+</div>
+<div class="group relative">
+<select class="appearance-none bg-surface-container-highest border-none text-on-surface text-xs rounded-md pl-4 pr-10 py-2 focus:ring-1 focus:ring-primary/40 cursor-pointer">
+<option>Risk: All Levels</option>
+<option>Critical</option>
+<option>High</option>
+<option>Medium</option>
+<option>Low</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none text-sm">expand_more</span>
+</div>
+<div class="group relative">
+<select class="appearance-none bg-surface-container-highest border-none text-on-surface text-xs rounded-md pl-4 pr-10 py-2 focus:ring-1 focus:ring-primary/40 cursor-pointer">
+<option>Service: All</option>
+<option>HTTP/HTTPS</option>
+<option>SSH</option>
+<option>SQL</option>
+<option>Redis</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none text-sm">expand_more</span>
+</div>
+</div>
+</div>
+<!-- Asset Table -->
+<div class="bg-surface-container-low rounded-xl overflow-hidden shadow-2xl">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-high/50 border-b border-outline-variant/10">
+<th class="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-slate-500">Asset Name</th>
+<th class="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-slate-500">IP/Host</th>
+<th class="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-slate-500">OS</th>
+<th class="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-slate-500 text-center">Open Ports</th>
+<th class="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-slate-500">Risk Level</th>
+<th class="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-slate-500">Last Scanned</th>
+<th class="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-slate-500">Owner</th>
+<th class="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-slate-500 text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/10">
+<!-- Asset Row 1 -->
+<tr class="hover:bg-surface-container-high transition-colors group">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-lg">dns</span>
+<div>
+<p class="text-sm font-semibold text-on-surface">prod-web-front-01</p>
+<p class="text-[10px] text-slate-500">Web Application Proxy</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 font-mono text-xs text-on-surface-variant">10.0.4.155</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2 text-xs text-on-surface-variant">
+<span class="material-symbols-outlined text-sm">terminal</span> Linux 5.x
+                                    </div>
+</td>
+<td class="px-6 py-4 text-center">
+<span class="bg-surface-container-highest px-2 py-1 rounded text-[10px] font-mono text-primary border border-primary/20">12 Ports</span>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wide bg-error-container/20 text-error">
+<span class="w-1.5 h-1.5 bg-error rounded-full"></span> Critical
+                                    </span>
+</td>
+<td class="px-6 py-4 text-[10px] text-on-surface-variant">2023-10-24 14:22:01</td>
+<td class="px-6 py-4 text-[10px] text-on-surface-variant">Infrastructure</td>
+<td class="px-6 py-4 text-right">
+<div class="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-1.5 hover:bg-surface-bright rounded text-slate-400 hover:text-primary"><span class="material-symbols-outlined text-sm">visibility</span></button>
+<button class="p-1.5 hover:bg-surface-bright rounded text-slate-400 hover:text-primary"><span class="material-symbols-outlined text-sm">play_arrow</span></button>
+<button class="p-1.5 hover:bg-surface-bright rounded text-slate-400 hover:text-primary"><span class="material-symbols-outlined text-sm">edit</span></button>
+</div>
+</td>
+</tr>
+<!-- Asset Row 2 -->
+<tr class="hover:bg-surface-container-high transition-colors group">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-lg">database</span>
+<div>
+<p class="text-sm font-semibold text-on-surface">internal-db-alpha</p>
+<p class="text-[10px] text-slate-500">PostgreSQL Core Cluster</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 font-mono text-xs text-on-surface-variant">db.sentinel.internal</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2 text-xs text-on-surface-variant">
+<span class="material-symbols-outlined text-sm">terminal</span> Linux 5.15
+                                    </div>
+</td>
+<td class="px-6 py-4 text-center">
+<span class="bg-surface-container-highest px-2 py-1 rounded text-[10px] font-mono text-primary border border-primary/20">4 Ports</span>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wide bg-tertiary-container/20 text-tertiary">
+<span class="w-1.5 h-1.5 bg-tertiary rounded-full"></span> High
+                                    </span>
+</td>
+<td class="px-6 py-4 text-[10px] text-on-surface-variant">2023-10-24 12:05:44</td>
+<td class="px-6 py-4 text-[10px] text-on-surface-variant">Data Platform</td>
+<td class="px-6 py-4 text-right">
+<div class="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-1.5 hover:bg-surface-bright rounded text-slate-400 hover:text-primary"><span class="material-symbols-outlined text-sm">visibility</span></button>
+<button class="p-1.5 hover:bg-surface-bright rounded text-slate-400 hover:text-primary"><span class="material-symbols-outlined text-sm">play_arrow</span></button>
+<button class="p-1.5 hover:bg-surface-bright rounded text-slate-400 hover:text-primary"><span class="material-symbols-outlined text-sm">edit</span></button>
+</div>
+</td>
+</tr>
+<!-- Asset Row 3 -->
+<tr class="hover:bg-surface-container-high transition-colors group">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-lg">router</span>
+<div>
+<p class="text-sm font-semibold text-on-surface">core-rt-atl-01</p>
+<p class="text-[10px] text-slate-500">Edge Networking Layer</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 font-mono text-xs text-on-surface-variant">172.16.0.1</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2 text-xs text-on-surface-variant">
+<span class="material-symbols-outlined text-sm">settings_input_component</span> Cisco IOS-XE
+                                    </div>
+</td>
+<td class="px-6 py-4 text-center">
+<span class="bg-surface-container-highest px-2 py-1 rounded text-[10px] font-mono text-primary border border-primary/20">2 Ports</span>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wide bg-primary-container/20 text-primary">
+<span class="w-1.5 h-1.5 bg-primary rounded-full"></span> Medium
+                                    </span>
+</td>
+<td class="px-6 py-4 text-[10px] text-on-surface-variant">2023-10-23 09:12:11</td>
+<td class="px-6 py-4 text-[10px] text-on-surface-variant">Networking</td>
+<td class="px-6 py-4 text-right">
+<div class="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-1.5 hover:bg-surface-bright rounded text-slate-400 hover:text-primary"><span class="material-symbols-outlined text-sm">visibility</span></button>
+<button class="p-1.5 hover:bg-surface-bright rounded text-slate-400 hover:text-primary"><span class="material-symbols-outlined text-sm">play_arrow</span></button>
+<button class="p-1.5 hover:bg-surface-bright rounded text-slate-400 hover:text-primary"><span class="material-symbols-outlined text-sm">edit</span></button>
+</div>
+</td>
+</tr>
+<!-- Asset Row 4 -->
+<tr class="hover:bg-surface-container-high transition-colors group">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-lg">computer</span>
+<div>
+<p class="text-sm font-semibold text-on-surface">win-ad-dc-02</p>
+<p class="text-[10px] text-slate-500">Domain Controller</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 font-mono text-xs text-on-surface-variant">10.0.1.12</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2 text-xs text-on-surface-variant">
+<span class="material-symbols-outlined text-sm">window</span> Windows Server 2022
+                                    </div>
+</td>
+<td class="px-6 py-4 text-center">
+<span class="bg-surface-container-highest px-2 py-1 rounded text-[10px] font-mono text-primary border border-primary/20">18 Ports</span>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wide bg-tertiary-container/20 text-tertiary">
+<span class="w-1.5 h-1.5 bg-tertiary rounded-full"></span> High
+                                    </span>
+</td>
+<td class="px-6 py-4 text-[10px] text-on-surface-variant">2023-10-24 15:45:00</td>
+<td class="px-6 py-4 text-[10px] text-on-surface-variant">SecOps</td>
+<td class="px-6 py-4 text-right">
+<div class="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-1.5 hover:bg-surface-bright rounded text-slate-400 hover:text-primary"><span class="material-symbols-outlined text-sm">visibility</span></button>
+<button class="p-1.5 hover:bg-surface-bright rounded text-slate-400 hover:text-primary"><span class="material-symbols-outlined text-sm">play_arrow</span></button>
+<button class="p-1.5 hover:bg-surface-bright rounded text-slate-400 hover:text-primary"><span class="material-symbols-outlined text-sm">edit</span></button>
+</div>
+</td>
+</tr>
+<!-- Asset Row 5 -->
+<tr class="hover:bg-surface-container-high transition-colors group">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-lg">memory</span>
+<div>
+<p class="text-sm font-semibold text-on-surface">legacy-ftp-vm</p>
+<p class="text-[10px] text-slate-500">Decommissioned Backup Host</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 font-mono text-xs text-on-surface-variant">192.168.50.40</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2 text-xs text-on-surface-variant">
+<span class="material-symbols-outlined text-sm">terminal</span> Linux 3.x
+                                    </div>
+</td>
+<td class="px-6 py-4 text-center">
+<span class="bg-surface-container-highest px-2 py-1 rounded text-[10px] font-mono text-primary border border-primary/20">1 Port</span>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wide bg-surface-container-highest text-slate-400">
+<span class="w-1.5 h-1.5 bg-slate-500 rounded-full"></span> Low
+                                    </span>
+</td>
+<td class="px-6 py-4 text-[10px] text-on-surface-variant">2023-10-10 03:00:12</td>
+<td class="px-6 py-4 text-[10px] text-on-surface-variant">Infrastructure</td>
+<td class="px-6 py-4 text-right">
+<div class="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-1.5 hover:bg-surface-bright rounded text-slate-400 hover:text-primary"><span class="material-symbols-outlined text-sm">visibility</span></button>
+<button class="p-1.5 hover:bg-surface-bright rounded text-slate-400 hover:text-primary"><span class="material-symbols-outlined text-sm">play_arrow</span></button>
+<button class="p-1.5 hover:bg-surface-bright rounded text-slate-400 hover:text-primary"><span class="material-symbols-outlined text-sm">edit</span></button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<!-- Pagination -->
+<div class="px-6 py-4 bg-surface-container-high/30 flex items-center justify-between border-t border-outline-variant/10">
+<div class="text-xs text-slate-500">
+                            Showing <span class="text-on-surface font-medium">1 - 25</span> of <span class="text-on-surface font-medium">2,481</span> assets
+                        </div>
+<div class="flex items-center gap-1">
+<button class="p-2 text-slate-600 hover:text-on-surface disabled:opacity-30" disabled="">
+<span class="material-symbols-outlined text-sm">chevron_left</span>
+</button>
+<button class="px-3 py-1 bg-primary/10 text-primary text-xs font-bold rounded">1</button>
+<button class="px-3 py-1 hover:bg-surface-container-highest text-slate-400 text-xs rounded">2</button>
+<button class="px-3 py-1 hover:bg-surface-container-highest text-slate-400 text-xs rounded">3</button>
+<span class="px-2 text-slate-600">...</span>
+<button class="px-3 py-1 hover:bg-surface-container-highest text-slate-400 text-xs rounded">99</button>
+<button class="p-2 text-slate-600 hover:text-on-surface">
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

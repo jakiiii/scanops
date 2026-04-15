@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}{{ page_title }} | ScanOps{% endblock %}
+
+{% block content %}
+    {% include "includes/breadcrumbs.html" with breadcrumbs=breadcrumbs %}
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+        <div>
+            <h1 class="text-4xl font-bold text-white tracking-tight">{{ page_title }}</h1>
+            <p class="text-slate-400 mt-1">{{ page_description }}</p>
+        </div>
+        <div class="scanops-panel px-4 py-2 border-l-4 border-l-amber-500">
+            <p class="text-[10px] uppercase tracking-widest text-slate-500 mb-1">Policy Note</p>
+            <p class="text-xs text-amber-200">{{ policy_note }}</p>
+        </div>
+    </div>
+
+    {% include "ops/settings/_tabs.html" %}
+
+    <div id="settings-form-block">
+        {% include "partials/settings_form_block.html" %}
+    </div>
+{% endblock %}

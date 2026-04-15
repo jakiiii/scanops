@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-highest": "#2e3447",
+                        "background": "#0c1324",
+                        "tertiary-container": "#df7412",
+                        "surface-variant": "#2e3447",
+                        "secondary": "#b7c8e1",
+                        "on-surface-variant": "#c2c6d6",
+                        "on-tertiary-container": "#461f00",
+                        "on-secondary-fixed": "#0b1c30",
+                        "primary-fixed": "#d8e2ff",
+                        "on-error": "#690005",
+                        "secondary-fixed-dim": "#b7c8e1",
+                        "primary": "#adc6ff",
+                        "surface": "#0c1324",
+                        "on-secondary-container": "#a9bad3",
+                        "on-tertiary-fixed-variant": "#723600",
+                        "secondary-fixed": "#d3e4fe",
+                        "on-tertiary": "#502400",
+                        "on-tertiary-fixed": "#311400",
+                        "on-secondary": "#213145",
+                        "surface-container-lowest": "#070d1f",
+                        "primary-fixed-dim": "#adc6ff",
+                        "on-primary-container": "#00285d",
+                        "tertiary-fixed": "#ffdcc6",
+                        "surface-container": "#191f31",
+                        "inverse-on-surface": "#2a3043",
+                        "primary-container": "#4d8eff",
+                        "inverse-primary": "#005ac2",
+                        "on-error-container": "#ffdad6",
+                        "on-primary-fixed": "#001a42",
+                        "on-surface": "#dce1fb",
+                        "on-background": "#dce1fb",
+                        "surface-container-high": "#23293c",
+                        "tertiary": "#ffb786",
+                        "outline-variant": "#424754",
+                        "surface-dim": "#0c1324",
+                        "on-secondary-fixed-variant": "#38485d",
+                        "error-container": "#93000a",
+                        "on-primary": "#002e6a",
+                        "surface-tint": "#adc6ff",
+                        "inverse-surface": "#dce1fb",
+                        "error": "#ffb4ab",
+                        "tertiary-fixed-dim": "#ffb786",
+                        "outline": "#8c909f",
+                        "on-primary-fixed-variant": "#004395",
+                        "secondary-container": "#3a4a5f",
+                        "surface-bright": "#33394c",
+                        "surface-container-low": "#151b2d"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Space Grotesk"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(51, 57, 76, 0.6);
+            backdrop-filter: blur(24px);
+        }
+        .watermark {
+            pointer-events: none;
+            user-select: none;
+            opacity: 0.03;
+            transform: rotate(-45deg);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body selection:bg-primary/30">
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full z-50 bg-[#0c1324] flex justify-between items-center px-6 h-16 w-full font-['Space_Grotesk'] tracking-tight">
+<div class="flex items-center gap-8">
+<div class="text-xl font-bold text-blue-400">ScanOps Sentinel</div>
+<nav class="hidden md:flex gap-6 text-sm">
+<a class="text-slate-400 hover:bg-[#2e3447] px-3 py-1 rounded transition-colors duration-150" href="#">Dashboard</a>
+<a class="text-blue-400 font-bold px-3 py-1 rounded transition-colors duration-150" href="#">Reports</a>
+<a class="text-slate-400 hover:bg-[#2e3447] px-3 py-1 rounded transition-colors duration-150" href="#">Assets</a>
+<a class="text-slate-400 hover:bg-[#2e3447] px-3 py-1 rounded transition-colors duration-150" href="#">Settings</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-slate-400 hover:bg-[#2e3447] p-2 rounded transition-colors duration-150 active:scale-95">
+<span class="material-symbols-outlined">download</span>
+</button>
+<button class="text-slate-400 hover:bg-[#2e3447] p-2 rounded transition-colors duration-150 active:scale-95">
+<span class="material-symbols-outlined">print</span>
+</button>
+<button class="text-slate-400 hover:bg-[#2e3447] p-2 rounded transition-colors duration-150 active:scale-95">
+<span class="material-symbols-outlined">share</span>
+</button>
+<button class="text-slate-400 hover:bg-[#2e3447] p-2 rounded transition-colors duration-150 active:scale-95">
+<span class="material-symbols-outlined">refresh</span>
+</button>
+<div class="h-8 w-8 rounded-full bg-surface-container-highest overflow-hidden border border-outline-variant/30">
+<img alt="User profile" class="w-full h-full object-cover" data-alt="close-up portrait of a professional analyst with a neutral expression in high-key cinematic lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC5_wEwMR0FyHz9zlD1Vnyrk0szbnnMMOH4aerEB1n5KlpKkJ-ugQH3gRmnzYu9fn1_F51ALFuQueCo61fVL0IoHlq4tDLrPZWrtI6XzyrndPnogHg2k9-pHP8MHy8wr1Hwcn1HODt7_Nl6qf54bXq2mYA39J2PyK7dlNGa5hYkbxlHgmv9z1cDrIcx_lePLFoUJqOCAszLRW0pJrqElQtbLK2KPWdkcmU0u3tTzzizK_4KQiYMWTJIUPvWNG1hJSkrgplHcC1QCAoT"/>
+</div>
+</div>
+</header>
+<!-- SideNavBar (Report Index) -->
+<aside class="fixed left-0 h-full w-64 pt-16 bg-[#151b2d] flex flex-col font-['Inter'] text-sm shadow-2xl shadow-black/50 z-40">
+<div class="p-6">
+<div class="flex items-center gap-3 mb-6">
+<div class="p-2 bg-primary/10 rounded-lg">
+<span class="material-symbols-outlined text-blue-500">description</span>
+</div>
+<div>
+<div class="text-on-surface font-bold">Report Index</div>
+<div class="text-xs text-slate-500">Scan ID: 882-XQ</div>
+</div>
+</div>
+<nav class="space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-blue-400 border-r-2 border-blue-500 bg-[#2e3447]/50 transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]">summarize</span>
+<span>Executive Summary</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-400 hover:bg-[#2e3447] hover:text-white transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]">security</span>
+<span>Vulnerability Assessment</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-400 hover:bg-[#2e3447] hover:text-white transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]">hub</span>
+<span>Network Topology</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-400 hover:bg-[#2e3447] hover:text-white transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]">fact_check</span>
+<span>Compliance Status</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-400 hover:bg-[#2e3447] hover:text-white transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]">build</span>
+<span>Remediation Plan</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-400 hover:bg-[#2e3447] hover:text-white transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]">description</span>
+<span>Appendix</span>
+</a>
+</nav>
+</div>
+<div class="mt-auto p-6 border-t border-slate-800/30">
+<a class="flex items-center gap-3 px-4 py-2 text-slate-400 hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">help</span>
+<span>Support</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-slate-400 hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+<span>Settings</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="pl-64 pt-16 min-h-screen flex">
+<!-- Report Document Central Area -->
+<div class="flex-1 p-8 bg-surface-container-low overflow-y-auto">
+<!-- Breadcrumbs & Utility Bar -->
+<div class="flex justify-between items-center mb-8">
+<nav class="flex items-center gap-2 text-xs font-medium tracking-widest uppercase text-on-surface-variant">
+<span>Reports</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="text-primary">Report Detail</span>
+</nav>
+<div class="flex gap-3">
+<button class="bg-surface-container-highest text-on-surface px-4 py-2 rounded text-sm font-medium hover:bg-primary-fixed-dim hover:text-on-primary-fixed transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">refresh</span>
+                        Regenerate Report
+                    </button>
+<button class="bg-primary text-on-primary px-4 py-2 rounded text-sm font-bold hover:opacity-90 transition-opacity flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">picture_as_pdf</span>
+                        Download PDF
+                    </button>
+</div>
+</div>
+<!-- Document Preview Panel -->
+<div class="max-w-5xl mx-auto bg-surface-container-lowest shadow-2xl relative overflow-hidden p-12 min-h-[1400px]">
+<!-- Confidential Watermark -->
+<div class="absolute inset-0 flex items-center justify-center watermark">
+<span class="text-[120px] font-black text-on-surface tracking-[1rem]">CONFIDENTIAL</span>
+</div>
+<!-- Report Header -->
+<div class="relative z-10 border-b border-outline-variant/20 pb-8 mb-12 flex justify-between items-start">
+<div>
+<h1 class="font-headline text-5xl font-extrabold tracking-tight text-on-surface mb-2">Internal Security Audit</h1>
+<p class="text-on-surface-variant font-medium">Enterprise Perimeter Assessment &amp; Threat Vector Analysis</p>
+</div>
+<div class="text-right">
+<div class="text-error font-black text-sm tracking-widest uppercase bg-error-container/20 px-3 py-1 rounded-sm inline-block mb-2">Critical Priority</div>
+<div class="text-on-surface-variant text-xs">Generated: Oct 24, 2023 · 14:22 UTC</div>
+</div>
+</div>
+<!-- Executive Summary Section -->
+<section class="relative z-10 mb-16">
+<div class="flex items-center gap-4 mb-6">
+<span class="text-primary font-headline text-xl font-bold">01</span>
+<h2 class="font-headline text-2xl font-bold tracking-tight">Executive Summary</h2>
+<div class="flex-1 h-[1px] bg-outline-variant/20"></div>
+</div>
+<p class="text-on-surface-variant leading-relaxed mb-8 max-w-3xl">
+                        The security assessment performed on the target network <span class="text-on-surface font-semibold">"Sentinel-Net-04"</span> has identified significant exposure within the external-facing API gateways. While internal segmentation remains robust, the presence of three <span class="text-error font-bold">Critical</span> vulnerabilities in the authentication middleware poses an immediate risk of unauthorized data exfiltration.
+                    </p>
+<!-- Tactical Data Cards (Bento style) -->
+<div class="grid grid-cols-3 gap-4 mb-8">
+<div class="bg-surface-container p-6 rounded-lg">
+<div class="text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">Overall Score</div>
+<div class="text-5xl font-headline font-black text-error">42<span class="text-lg text-on-surface-variant">/100</span></div>
+<div class="mt-4 flex items-center gap-2 text-error text-xs font-bold">
+<span class="material-symbols-outlined text-[16px]">trending_down</span>
+                                12% lower than last scan
+                            </div>
+</div>
+<div class="bg-surface-container p-6 rounded-lg border-l-4 border-error">
+<div class="text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">Critical Risks</div>
+<div class="text-5xl font-headline font-black text-on-surface">03</div>
+<div class="mt-4 text-on-surface-variant text-xs">Immediate action required</div>
+</div>
+<div class="bg-surface-container p-6 rounded-lg">
+<div class="text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">Nodes Scanned</div>
+<div class="text-5xl font-headline font-black text-on-surface">124</div>
+<div class="mt-4 flex items-center gap-2 text-tertiary text-xs font-bold">
+<span class="material-symbols-outlined text-[16px]">info</span>
+                                4 segments unreachable
+                            </div>
+</div>
+</div>
+</section>
+<!-- Summary of Findings Table -->
+<section class="relative z-10 mb-16">
+<div class="flex items-center gap-4 mb-6">
+<span class="text-primary font-headline text-xl font-bold">02</span>
+<h2 class="font-headline text-2xl font-bold tracking-tight">Summary of Findings</h2>
+<div class="flex-1 h-[1px] bg-outline-variant/20"></div>
+</div>
+<div class="overflow-hidden rounded-xl bg-surface-container-low border border-outline-variant/10">
+<table class="w-full text-left text-sm">
+<thead>
+<tr class="bg-surface-container-high text-on-surface-variant font-bold uppercase text-[11px] tracking-[0.1em]">
+<th class="px-6 py-4">ID</th>
+<th class="px-6 py-4">Vulnerability Title</th>
+<th class="px-6 py-4">Severity</th>
+<th class="px-6 py-4">Status</th>
+<th class="px-6 py-4 text-right">CVSS</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/10">
+<tr class="hover:bg-surface-container-highest transition-colors">
+<td class="px-6 py-4 font-mono text-primary">VULN-2023-08</td>
+<td class="px-6 py-4 font-semibold text-on-surface">Broken Object Level Authorization</td>
+<td class="px-6 py-4"><span class="px-2 py-0.5 rounded text-[10px] font-black uppercase bg-error-container text-on-error-container">Critical</span></td>
+<td class="px-6 py-4"><span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-error animate-pulse"></span> Open</span></td>
+<td class="px-6 py-4 text-right font-mono font-bold">9.8</td>
+</tr>
+<tr class="hover:bg-surface-container-highest transition-colors">
+<td class="px-6 py-4 font-mono text-primary">VULN-2023-14</td>
+<td class="px-6 py-4 font-semibold text-on-surface">SQL Injection in User Profile API</td>
+<td class="px-6 py-4"><span class="px-2 py-0.5 rounded text-[10px] font-black uppercase bg-error-container text-on-error-container">Critical</span></td>
+<td class="px-6 py-4"><span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-error"></span> Open</span></td>
+<td class="px-6 py-4 text-right font-mono font-bold">9.1</td>
+</tr>
+<tr class="hover:bg-surface-container-highest transition-colors">
+<td class="px-6 py-4 font-mono text-primary">VULN-2023-22</td>
+<td class="px-6 py-4 font-semibold text-on-surface">Outdated SSL/TLS Version Support</td>
+<td class="px-6 py-4"><span class="px-2 py-0.5 rounded text-[10px] font-black uppercase bg-tertiary-container text-on-tertiary-container">Medium</span></td>
+<td class="px-6 py-4"><span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-tertiary"></span> In Progress</span></td>
+<td class="px-6 py-4 text-right font-mono font-bold">5.4</td>
+</tr>
+<tr class="hover:bg-surface-container-highest transition-colors">
+<td class="px-6 py-4 font-mono text-primary">VULN-2023-01</td>
+<td class="px-6 py-4 font-semibold text-on-surface">Password Complexity Enforcement</td>
+<td class="px-6 py-4"><span class="px-2 py-0.5 rounded text-[10px] font-black uppercase bg-surface-variant text-on-surface-variant">Low</span></td>
+<td class="px-6 py-4"><span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-green-500"></span> Resolved</span></td>
+<td class="px-6 py-4 text-right font-mono font-bold">2.1</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<!-- Visualization Placeholder -->
+<section class="relative z-10">
+<div class="flex items-center gap-4 mb-6">
+<span class="text-primary font-headline text-xl font-bold">03</span>
+<h2 class="font-headline text-2xl font-bold tracking-tight">Threat Distribution</h2>
+<div class="flex-1 h-[1px] bg-outline-variant/20"></div>
+</div>
+<div class="grid grid-cols-2 gap-8">
+<div class="h-64 rounded-xl bg-surface-container flex items-center justify-center border border-outline-variant/10 overflow-hidden group">
+<img class="w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-500" data-alt="abstract data visualization showing security threat levels with glowing nodes and digital connection lines in a dark space" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfGaOGgEE6VYSpYqxMu4pMVNF-AZM4VLednBlAGF0yMwdef0jR6aYq_UBIpoHWFeDpqGfYJhvS6IJ_eJj1oFCfP6iUS_0mSjtnrtXOoNf1JFeWV4yu7CX-A8yE-D9MvxHTLVYZ-WcNeBFyCLs2W9LskgyN6K1qJ66voui_LbmjkYBCnq_Mw9Z9RtKnxurT8uPfJwrJoSVKFNiD8TbqzUS9KEX8hzXrofyU8fYbCWMuZRwTZmbK59xUieZg81E7O6Ph6lWl3dXo5dbg"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest to-transparent flex items-end p-6">
+<span class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Attack Vector Heatmap</span>
+</div>
+</div>
+<div class="h-64 rounded-xl bg-surface-container flex items-center justify-center border border-outline-variant/10 overflow-hidden group">
+<img class="w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-500" data-alt="server room infrastructure with blue glowing light on data cables and digital network equipment in a high-tech environment" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBBsREa-l_V-S1f5ZbLZYRxz1EUQ5OjAn27rTbHrlY1eZNNic1keWsQSeOUMwxube7RkAmUVS3jGJXhAXsFDmLd960SBp6OxPazcmdZtu4662GN5kULsKMJUSMqGcgjBYAI9zI9jiTMv-h2ctjw7l9bv_Pi7stcnMr9iCe6FpWXfeP-HzdUGevD5wI8U2oTRimsDgBJwvWGFrHiyUBqHrBumenHSutz4iFS1uEaLOn49YFWnEUgX6P1mQE-9Fhq2O5_fptYgOJyqT6q"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest to-transparent flex items-end p-6">
+<span class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Affected Assets Overview</span>
+</div>
+</div>
+</div>
+</section>
+</div>
+</div>
+<!-- Metadata Sidebar -->
+<aside class="w-80 bg-surface-container border-l border-outline-variant/10 p-8">
+<h3 class="font-headline font-bold text-on-surface mb-6 uppercase tracking-widest text-xs">Report Metadata</h3>
+<div class="space-y-8">
+<div>
+<label class="block text-[10px] font-black text-on-surface-variant uppercase tracking-widest mb-1">Scan Identifier</label>
+<div class="text-on-surface font-mono text-lg font-bold">882-XQ-2023</div>
+</div>
+<div>
+<label class="block text-[10px] font-black text-on-surface-variant uppercase tracking-widest mb-1">Generation Date</label>
+<div class="text-on-surface font-semibold">October 24, 2023</div>
+<div class="text-xs text-on-surface-variant">14:22:18 UTC</div>
+</div>
+<div>
+<label class="block text-[10px] font-black text-on-surface-variant uppercase tracking-widest mb-1">Target Scope</label>
+<div class="text-on-surface font-semibold">124 Managed Nodes</div>
+<div class="mt-2 flex flex-wrap gap-2">
+<span class="px-2 py-1 bg-surface-container-highest rounded text-[10px] font-bold text-primary">AWS-US-EAST-1</span>
+<span class="px-2 py-1 bg-surface-container-highest rounded text-[10px] font-bold text-primary">K8S-PROD-01</span>
+</div>
+</div>
+<div>
+<label class="block text-[10px] font-black text-on-surface-variant uppercase tracking-widest mb-1">Lead Analyst</label>
+<div class="flex items-center gap-3 mt-2">
+<img alt="Analyst Avatar" class="h-10 w-10 rounded-full border border-primary/20" data-alt="professional male portrait for a security analyst profile" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC50-tVFejnSqgk-yhCbFw0AFBxAF0Lscd992VrDlnPWZbPMs31u0h5R7L25J4xvQTx4qjgcGLHo7b4kJ-rXPhTX9Godq3oOHDAOwiE6DwT942Qa0FOwBk1AAFTvHORjpSvVW6E5aNgUsPkDhRnyRE4sNP4mRviVHF8I6uGNS0wz3H3hV6ow5O3caTfwNn7bQLU95-OJWfHhpxV5vN5kaY_34JG6JilGE50JQHZ5w6Ppl4pqJ5tvgWoptUvhkJzM3rv-qyEIenyRyQW"/>
+<div>
+<div class="text-on-surface font-bold text-sm">Marcus Vance</div>
+<div class="text-xs text-on-surface-variant">Senior Security Engineer</div>
+</div>
+</div>
+</div>
+<div class="pt-8 border-t border-outline-variant/10">
+<label class="block text-[10px] font-black text-on-surface-variant uppercase tracking-widest mb-4">Verification</label>
+<div class="p-4 bg-surface-container-lowest rounded-lg border border-outline-variant/5">
+<div class="flex items-center gap-2 text-green-500 text-xs font-bold mb-2">
+<span class="material-symbols-outlined text-[16px]">verified_user</span>
+                            SHA-256 Verified
+                        </div>
+<div class="text-[10px] font-mono text-slate-500 break-all leading-tight">
+                            e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+                        </div>
+</div>
+</div>
+</div>
+</aside>
+</main>
+<!-- Contextual FAB (Hidden on detail page as per rules, but scaffolded for consistency) -->
+<!-- Suppression logic applied: suppress the FAB on Details screens -->
+</body></html>

@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-primary": "#002e6a",
+            "secondary-fixed": "#d3e4fe",
+            "tertiary": "#ffb786",
+            "tertiary-fixed": "#ffdcc6",
+            "primary-fixed": "#d8e2ff",
+            "inverse-primary": "#005ac2",
+            "on-error-container": "#ffdad6",
+            "on-error": "#690005",
+            "primary-container": "#4d8eff",
+            "tertiary-fixed-dim": "#ffb786",
+            "on-secondary-fixed": "#0b1c30",
+            "on-primary-fixed-variant": "#004395",
+            "secondary": "#b7c8e1",
+            "on-primary-fixed": "#001a42",
+            "surface-container-high": "#23293c",
+            "surface-container-low": "#151b2d",
+            "secondary-fixed-dim": "#b7c8e1",
+            "outline": "#8c909f",
+            "background": "#0c1324",
+            "on-secondary-container": "#a9bad3",
+            "surface-container-lowest": "#070d1f",
+            "on-tertiary-container": "#461f00",
+            "surface-container-highest": "#2e3447",
+            "surface": "#0c1324",
+            "on-tertiary": "#502400",
+            "outline-variant": "#424754",
+            "primary": "#adc6ff",
+            "on-surface-variant": "#c2c6d6",
+            "on-secondary-fixed-variant": "#38485d",
+            "surface-variant": "#2e3447",
+            "surface-bright": "#33394c",
+            "on-tertiary-fixed": "#311400",
+            "on-surface": "#dce1fb",
+            "on-background": "#dce1fb",
+            "on-tertiary-fixed-variant": "#723600",
+            "inverse-surface": "#dce1fb",
+            "primary-fixed-dim": "#adc6ff",
+            "surface-container": "#191f31",
+            "surface-dim": "#0c1324",
+            "secondary-container": "#3a4a5f",
+            "inverse-on-surface": "#2a3043",
+            "error": "#ffb4ab",
+            "error-container": "#93000a",
+            "tertiary-container": "#df7412",
+            "surface-tint": "#adc6ff",
+            "on-secondary": "#213145",
+            "on-primary-container": "#00285d"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "fontFamily": {
+            "headline": ["Space Grotesk"],
+            "body": ["Inter"],
+            "label": ["Inter"]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: #0c1324; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #2e3447; border-radius: 10px; }
+    .glass-panel {
+      background: rgba(51, 57, 76, 0.6);
+      backdrop-filter: blur(24px);
+    }
+    .timeline-node-glow {
+      box-shadow: 0 0 15px currentColor;
+    }
+  </style>
+</head>
+<body class="bg-background text-on-background font-body selection:bg-primary/30">
+<!-- SideNavBar -->
+<aside class="h-screen w-64 fixed left-0 top-0 bg-[#151b2d] flex flex-col py-6 z-40 shadow-2xl shadow-black/50">
+<div class="px-6 mb-8">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 bg-primary-container rounded flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary-container" style="font-variation-settings: 'FILL' 1;">security</span>
+</div>
+<div>
+<h1 class="text-lg font-black text-blue-500 font-headline tracking-tighter">The Sentinel</h1>
+<p class="text-[10px] uppercase tracking-[0.2em] text-slate-500 font-bold">Tactical Oversight</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 px-4 space-y-1">
+<div class="group flex items-center px-3 py-2 text-slate-500 hover:bg-[#2e3447] hover:text-slate-200 transition-all rounded-lg cursor-pointer duration-150 active:scale-95">
+<span class="material-symbols-outlined mr-3">dashboard</span>
+<span class="font-medium">Dashboard</span>
+</div>
+<div class="group flex items-center px-3 py-2 text-slate-500 hover:bg-[#2e3447] hover:text-slate-200 transition-all rounded-lg cursor-pointer duration-150 active:scale-95">
+<span class="material-symbols-outlined mr-3">hub</span>
+<span class="font-medium">Network Nodes</span>
+</div>
+<div class="group flex items-center px-3 py-2 bg-blue-500/10 text-blue-400 border-r-2 border-blue-500 transition-all rounded-l-lg cursor-pointer duration-150 active:scale-95">
+<span class="material-symbols-outlined mr-3" style="font-variation-settings: 'FILL' 1;">timeline</span>
+<span class="font-medium">Asset History</span>
+</div>
+<div class="group flex items-center px-3 py-2 text-slate-500 hover:bg-[#2e3447] hover:text-slate-200 transition-all rounded-lg cursor-pointer duration-150 active:scale-95">
+<span class="material-symbols-outlined mr-3">security_update_good</span>
+<span class="font-medium">Vulnerability Scan</span>
+</div>
+<div class="group flex items-center px-3 py-2 text-slate-500 hover:bg-[#2e3447] hover:text-slate-200 transition-all rounded-lg cursor-pointer duration-150 active:scale-95">
+<span class="material-symbols-outlined mr-3">receipt_long</span>
+<span class="font-medium">System Logs</span>
+</div>
+</nav>
+<div class="mt-auto px-4 space-y-1 border-t border-white/5 pt-4">
+<div class="group flex items-center px-3 py-2 text-slate-500 hover:bg-[#2e3447] hover:text-slate-200 transition-all rounded-lg cursor-pointer">
+<span class="material-symbols-outlined mr-3">help_outline</span>
+<span class="font-medium">Support</span>
+</div>
+<div class="group flex items-center px-3 py-2 text-slate-500 hover:bg-[#2e3447] hover:text-slate-200 transition-all rounded-lg cursor-pointer">
+<span class="material-symbols-outlined mr-3">logout</span>
+<span class="font-medium">Sign Out</span>
+</div>
+</div>
+</aside>
+<!-- Main Content Wrapper -->
+<main class="ml-64 min-h-screen flex flex-col">
+<!-- TopNavBar -->
+<header class="w-full sticky top-0 z-50 bg-[#0c1324] flex justify-between items-center px-8 py-4 bg-[#151b2d]">
+<div class="flex items-center flex-1">
+<div class="relative w-full max-w-md">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-sm">search</span>
+<input class="w-full bg-surface-container-low border-none rounded-lg pl-10 pr-4 py-2 text-sm text-on-surface focus:ring-1 focus:ring-primary/40 placeholder:text-slate-600 transition-all" placeholder="Search within history..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6 ml-6">
+<nav class="hidden md:flex gap-6">
+<a class="text-blue-400 font-bold font-['Space_Grotesk'] tracking-tight hover:text-blue-300 transition-colors duration-200" href="#">History</a>
+<a class="text-slate-400 font-['Space_Grotesk'] tracking-tight hover:text-blue-300 transition-colors duration-200" href="#">Alerts</a>
+<a class="text-slate-400 font-['Space_Grotesk'] tracking-tight hover:text-blue-300 transition-colors duration-200" href="#">Reports</a>
+</nav>
+<div class="flex items-center gap-4 border-l border-white/5 pl-6">
+<button class="text-slate-400 hover:text-blue-300 transition-colors relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-0 right-0 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<button class="text-slate-400 hover:text-blue-300 transition-colors">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-primary/20 ring-4 ring-primary/5">
+<img alt="Security Analyst Profile" class="w-full h-full object-cover" data-alt="professional portrait of a security analyst with a focused expression, neutral background, cinematic soft lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCXYv2sMDakuBaZelsGNsxQTvphn1c8RN8JHMb7ymFD-9YLUJYeoBrk32ob7nbZzcArw6sYo0A_k1Tf-LkUBFXXdtQwII81JaoRVPxZc_HjvHV5olV1vwcfWyeSdSppYyL74MctCjc0-6RVKHkj7eMdMdpDr57UOQlfIQ-FnoVA0BVAIzA7bI1YB77jQ6ArVf8rFnT31bkq59VTyyoBMvy3zZhB5BqTu67yJ_bbX7UfpOmIMNeUtl1maLeL-hp_RkUyfNh8r6hYoSxA"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Page Body -->
+<div class="p-8 max-w-6xl mx-auto w-full">
+<!-- Asset Metadata Header -->
+<section class="mb-10 animate-fade-in">
+<div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
+<div>
+<div class="flex items-center gap-3 mb-2">
+<span class="text-xs font-bold tracking-[0.2em] text-primary uppercase font-headline">Sentinel System Log</span>
+<span class="h-px w-8 bg-primary/30"></span>
+</div>
+<h2 class="text-4xl font-bold font-headline tracking-tighter text-on-surface mb-2">Asset Change History</h2>
+<div class="flex flex-wrap items-center gap-4 text-sm text-on-surface-variant">
+<div class="flex items-center gap-2 bg-surface-container-low px-3 py-1.5 rounded">
+<span class="material-symbols-outlined text-[16px] text-primary">dns</span>
+<span class="font-mono text-on-surface">prod-web-front-01</span>
+</div>
+<div class="flex items-center gap-2 bg-surface-container-low px-3 py-1.5 rounded">
+<span class="material-symbols-outlined text-[16px] text-primary">lan</span>
+<span class="font-mono text-on-surface">10.0.4.155</span>
+</div>
+<div class="flex items-center gap-2 bg-surface-container-low px-3 py-1.5 rounded">
+<span class="material-symbols-outlined text-[16px] text-primary">calendar_today</span>
+<span class="text-on-surface">Last 90 Days</span>
+</div>
+</div>
+</div>
+<div class="flex flex-col items-end gap-4">
+<div class="flex items-center gap-6 bg-surface-container-high p-4 rounded-xl border border-white/5 shadow-xl">
+<div class="text-right">
+<p class="text-[10px] uppercase tracking-widest text-slate-500 font-bold mb-1">Primary Risk Score</p>
+<p class="text-3xl font-black font-headline text-error leading-none tracking-tighter">84.2</p>
+</div>
+<div class="w-12 h-12 rounded-full border-4 border-error/20 border-t-error flex items-center justify-center">
+<span class="material-symbols-outlined text-error" style="font-variation-settings: 'FILL' 1;">warning</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Action Bar -->
+<section class="flex flex-col md:flex-row justify-between items-center gap-4 mb-8 bg-surface-container-lowest p-2 rounded-xl border border-white/5">
+<div class="flex p-1 bg-surface-container-low rounded-lg w-full md:w-auto">
+<button class="flex-1 md:flex-none px-6 py-2 text-sm font-medium text-slate-500 hover:text-on-surface transition-colors">Last 30 Days</button>
+<button class="flex-1 md:flex-none px-6 py-2 text-sm font-bold text-on-primary-container bg-primary-container rounded-md shadow-lg shadow-primary/20">Last 90 Days</button>
+<button class="flex-1 md:flex-none px-6 py-2 text-sm font-medium text-slate-500 hover:text-on-surface transition-colors">Custom</button>
+</div>
+<button class="w-full md:w-auto bg-surface-container-highest hover:bg-primary-fixed-dim hover:text-on-primary-fixed-variant text-on-surface px-6 py-3 rounded-lg flex items-center justify-center gap-3 font-bold transition-all active:scale-95">
+<span class="material-symbols-outlined">compare</span>
+          Compare Snapshots
+        </button>
+</section>
+<!-- Timeline Content -->
+<section class="relative">
+<!-- Vertical Line -->
+<div class="absolute left-[23px] top-0 bottom-0 w-px bg-gradient-to-b from-primary/50 via-primary/10 to-transparent"></div>
+<div class="space-y-12">
+<!-- Month Marker -->
+<div class="relative pl-14">
+<div class="absolute left-0 top-1/2 -translate-y-1/2 w-[48px] h-[48px] flex items-center justify-center">
+<div class="w-3 h-3 rounded-full bg-primary-container ring-8 ring-primary/10"></div>
+</div>
+<h3 class="text-sm font-black uppercase tracking-[0.3em] text-slate-500 font-headline">October 2023</h3>
+</div>
+<!-- Event: Port Opened -->
+<div class="relative pl-14 group">
+<div class="absolute left-0 top-4 w-[48px] h-[48px] flex items-center justify-center z-10">
+<div class="w-10 h-10 rounded-full bg-tertiary-container flex items-center justify-center text-on-tertiary-container timeline-node-glow">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">leak_add</span>
+</div>
+</div>
+<div class="bg-surface-container-low p-6 rounded-2xl border border-white/5 hover:border-tertiary/30 transition-all">
+<div class="flex justify-between items-start mb-4">
+<div>
+<div class="flex items-center gap-2 mb-1">
+<span class="px-2 py-0.5 bg-tertiary/10 text-tertiary text-[10px] font-bold uppercase tracking-wider rounded">Port Action</span>
+<span class="text-xs text-slate-500 font-medium">Oct 24, 2023 • 14:22:10 UTC</span>
+</div>
+<h4 class="text-xl font-bold font-headline text-on-surface">Port Opened: <span class="text-tertiary">3306 (MySQL)</span></h4>
+</div>
+<span class="material-symbols-outlined text-slate-600">more_vert</span>
+</div>
+<p class="text-on-surface-variant text-sm mb-4 leading-relaxed max-w-2xl">
+                A new inbound firewall rule was detected allowing traffic on port 3306. This exposes the database service to the internal subnet <span class="font-mono text-primary">10.0.4.0/24</span>.
+              </p>
+<div class="flex items-center gap-4">
+<div class="flex -space-x-2">
+<img alt="Admin Avatar" class="w-6 h-6 rounded-full border border-surface ring-2 ring-surface" data-alt="close-up profile photo of a technical administrator, neutral background, soft professional lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCzwZ-RnF8R_WdObwr4y89nnLt8QAkZVGB3FinZlob4glnZgHUvasOEhJhdOpI6qZT0wkyutTlUrKos5U9ddLMPbNA6xfBBWFOCyKtyhuE-9c_DoRdby67Hf3nc2QeXUzNkDFJmWC8CVVM3K1CgXeYHuydC5P_FMpO8O6K8p5B9nmKzzliw_xD-PRFc7-n90OM7bPtFwBNVQyqTg1W3LrGtW7m9AmAJes2hKXXVEUYeMeMBVTfM3zYNIi8O1ZkQpn8a2mssZALVIJa6"/>
+</div>
+<span class="text-xs text-slate-500 italic">Initiated by System Auto-Config (Service Mesh)</span>
+</div>
+</div>
+</div>
+<!-- Month Marker -->
+<div class="relative pl-14 pt-8">
+<div class="absolute left-0 top-1/2 -translate-y-1/2 w-[48px] h-[48px] flex items-center justify-center">
+<div class="w-3 h-3 rounded-full bg-slate-700 ring-8 ring-slate-800"></div>
+</div>
+<h3 class="text-sm font-black uppercase tracking-[0.3em] text-slate-500 font-headline">September 2023</h3>
+</div>
+<!-- Event: Version Shift -->
+<div class="relative pl-14 group">
+<div class="absolute left-0 top-4 w-[48px] h-[48px] flex items-center justify-center z-10">
+<div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container timeline-node-glow">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">upgrade</span>
+</div>
+</div>
+<div class="bg-surface-container-low p-6 rounded-2xl border border-white/5 hover:border-primary/30 transition-all">
+<div class="flex justify-between items-start mb-4">
+<div>
+<div class="flex items-center gap-2 mb-1">
+<span class="px-2 py-0.5 bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-wider rounded">System Update</span>
+<span class="text-xs text-slate-500 font-medium">Sep 28, 2023 • 03:45:12 UTC</span>
+</div>
+<h4 class="text-xl font-bold font-headline text-on-surface">Software Version Shift: <span class="text-primary">nginx</span></h4>
+</div>
+</div>
+<div class="flex items-center gap-6 bg-surface-container-lowest p-4 rounded-xl border border-white/5 mb-4">
+<div class="text-center flex-1">
+<p class="text-[10px] uppercase text-slate-500 font-bold mb-1">Previous</p>
+<p class="font-mono text-on-surface-variant line-through opacity-50">v1.21.0</p>
+</div>
+<span class="material-symbols-outlined text-primary">arrow_forward</span>
+<div class="text-center flex-1">
+<p class="text-[10px] uppercase text-primary font-bold mb-1">Current</p>
+<p class="font-mono text-on-surface font-bold">v1.21.6</p>
+</div>
+</div>
+<p class="text-on-surface-variant text-sm leading-relaxed">
+                Automated patch applied during maintenance window. 12 security vulnerabilities addressed in this release.
+              </p>
+</div>
+</div>
+<!-- Event: Port Closed -->
+<div class="relative pl-14 group">
+<div class="absolute left-0 top-4 w-[48px] h-[48px] flex items-center justify-center z-10">
+<div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container timeline-node-glow">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">leak_remove</span>
+</div>
+</div>
+<div class="bg-surface-container-low p-6 rounded-2xl border border-white/5 hover:border-secondary/30 transition-all">
+<div class="flex justify-between items-start mb-4">
+<div>
+<div class="flex items-center gap-2 mb-1">
+<span class="px-2 py-0.5 bg-secondary/10 text-secondary text-[10px] font-bold uppercase tracking-wider rounded">Hardening</span>
+<span class="text-xs text-slate-500 font-medium">Sep 15, 2023 • 09:10:00 UTC</span>
+</div>
+<h4 class="text-xl font-bold font-headline text-on-surface">Port Closed: <span class="text-secondary">21 (FTP)</span></h4>
+</div>
+</div>
+<p class="text-on-surface-variant text-sm mb-2 leading-relaxed">
+                Decommissioned legacy FTP service. Traffic is now routed through SFTP on port 22.
+              </p>
+<div class="flex items-center gap-2 text-[10px] font-bold text-secondary uppercase">
+<span class="material-symbols-outlined text-sm">verified_user</span>
+                Compliance Requirement Met: CIS Benchmark 4.1
+              </div>
+</div>
+</div>
+<!-- Event: Risk Score Increase -->
+<div class="relative pl-14 group">
+<div class="absolute left-0 top-4 w-[48px] h-[48px] flex items-center justify-center z-10">
+<div class="w-10 h-10 rounded-full bg-error-container flex items-center justify-center text-on-error-container timeline-node-glow">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">trending_up</span>
+</div>
+</div>
+<div class="bg-surface-container-low p-6 rounded-2xl border border-error/20 bg-error/5 transition-all">
+<div class="flex justify-between items-start mb-4">
+<div>
+<div class="flex items-center gap-2 mb-1">
+<span class="px-2 py-0.5 bg-error/20 text-error text-[10px] font-bold uppercase tracking-wider rounded">Risk Alert</span>
+<span class="text-xs text-slate-500 font-medium">Sep 02, 2023 • 18:55:40 UTC</span>
+</div>
+<h4 class="text-xl font-bold font-headline text-on-surface">Risk Score Increase: <span class="text-error">+14.5 Points</span></h4>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+<div class="glass-panel p-4 rounded-xl">
+<p class="text-[10px] uppercase text-error font-bold mb-2">New Vulnerabilities Found</p>
+<ul class="space-y-2 text-xs text-on-surface">
+<li class="flex items-center gap-2">
+<span class="w-1.5 h-1.5 rounded-full bg-error"></span>
+                      CVE-2023-44487 (Rapid Reset)
+                    </li>
+<li class="flex items-center gap-2">
+<span class="w-1.5 h-1.5 rounded-full bg-error"></span>
+                      CVE-2023-38039 (Zero Day)
+                    </li>
+</ul>
+</div>
+<div class="flex items-center justify-center bg-surface-container-highest rounded-xl p-4">
+<div class="text-center">
+<p class="text-[10px] uppercase text-slate-500 font-bold">New Score</p>
+<p class="text-3xl font-black font-headline text-error tracking-tighter">84.2</p>
+</div>
+</div>
+</div>
+<p class="text-on-surface-variant text-sm leading-relaxed">
+                Automatic vulnerability scan identified 2 high-criticality CVEs affecting the current service stack. Immediate patching recommended.
+              </p>
+</div>
+</div>
+</div>
+</section>
+<!-- Tactical Metrics Footer -->
+<footer class="mt-20 pt-8 border-t border-white/5 flex flex-wrap gap-12 opacity-60 hover:opacity-100 transition-opacity">
+<div>
+<p class="text-[10px] uppercase tracking-widest text-slate-500 font-bold mb-1">Total Events</p>
+<p class="text-xl font-bold font-headline text-on-surface">1,402</p>
+</div>
+<div>
+<p class="text-[10px] uppercase tracking-widest text-slate-500 font-bold mb-1">Integrity Hash</p>
+<p class="text-sm font-mono text-primary">SHA-256: 8f2b...1a0e</p>
+</div>
+<div>
+<p class="text-[10px] uppercase tracking-widest text-slate-500 font-bold mb-1">Last Scan</p>
+<p class="text-sm text-on-surface">Oct 26, 2023 • 04:00:00</p>
+</div>
+</footer>
+</div>
+</main>
+<!-- Status Beacon Animation CSS -->
+<style>
+    @keyframes pulse-aura {
+      0% { transform: scale(1); opacity: 0.8; }
+      100% { transform: scale(2.5); opacity: 0; }
+    }
+    .status-beacon-aura {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: currentColor;
+      animation: pulse-aura 2s infinite ease-out;
+    }
+  </style>
+</body></html>

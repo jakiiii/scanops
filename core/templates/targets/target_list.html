@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Targets | ScanOps{% endblock %}
+
+{% block content %}
+    <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-4 mb-8">
+        <div>
+            <h1 class="text-3xl font-extrabold text-white tracking-tight">Targets</h1>
+            <p class="text-slate-400 mt-1">Manage and monitor authorized scanning targets across your environment.</p>
+        </div>
+        <div class="flex gap-3">
+            <button class="px-4 py-2 bg-slate-800 border border-slate-700 text-white rounded-lg text-sm font-semibold hover:bg-slate-700 transition-colors flex items-center gap-2" type="button" disabled>
+                <span class="material-symbols-outlined text-sm">file_upload</span>
+                Import Targets
+            </button>
+            <button class="px-4 py-2 bg-slate-800 border border-slate-700 text-white rounded-lg text-sm font-semibold hover:bg-slate-700 transition-colors flex items-center gap-2" type="button" disabled>
+                <span class="material-symbols-outlined text-sm">file_download</span>
+                Export
+            </button>
+            <a href="{% url 'targets:create' %}" class="px-5 py-2 bg-blue-600 text-white rounded-lg text-sm font-bold hover:bg-blue-500 transition-colors flex items-center gap-2 shadow-lg shadow-blue-900/20">
+                <span class="material-symbols-outlined text-sm">add</span>
+                Add Target
+            </a>
+        </div>
+    </div>
+
+    {% include "partials/filter_bar.html" %}
+
+    <div id="targets-table-container">
+        {% include "partials/targets_table.html" %}
+    </div>
+{% endblock %}

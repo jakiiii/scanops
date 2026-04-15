@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Scheduled Scans | Sentinel Tactical</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "surface-container-highest": "#2e3447",
+                "surface-container": "#191f31",
+                "secondary-fixed-dim": "#b7c8e1",
+                "on-primary": "#002e6a",
+                "on-secondary-container": "#a9bad3",
+                "tertiary-fixed-dim": "#ffb786",
+                "tertiary-fixed": "#ffdcc6",
+                "on-surface-variant": "#c2c6d6",
+                "surface-dim": "#0c1324",
+                "inverse-primary": "#005ac2",
+                "primary-fixed": "#d8e2ff",
+                "surface-container-low": "#151b2d",
+                "surface-bright": "#33394c",
+                "on-tertiary": "#502400",
+                "on-primary-fixed": "#001a42",
+                "surface-container-high": "#23293c",
+                "outline": "#8c909f",
+                "on-error": "#690005",
+                "inverse-surface": "#dce1fb",
+                "tertiary": "#ffb786",
+                "on-tertiary-fixed": "#311400",
+                "on-surface": "#dce1fb",
+                "secondary-container": "#3a4a5f",
+                "on-secondary-fixed": "#0b1c30",
+                "secondary": "#b7c8e1",
+                "on-error-container": "#ffdad6",
+                "surface-variant": "#2e3447",
+                "on-secondary-fixed-variant": "#38485d",
+                "error": "#ffb4ab",
+                "on-secondary": "#213145",
+                "surface": "#0c1324",
+                "secondary-fixed": "#d3e4fe",
+                "background": "#0c1324",
+                "primary-container": "#4d8eff",
+                "on-tertiary-fixed-variant": "#723600",
+                "on-primary-fixed-variant": "#004395",
+                "on-background": "#dce1fb",
+                "surface-container-lowest": "#070d1f",
+                "surface-tint": "#adc6ff",
+                "on-tertiary-container": "#461f00",
+                "inverse-on-surface": "#2a3043",
+                "tertiary-container": "#df7412",
+                "primary-fixed-dim": "#adc6ff",
+                "primary": "#adc6ff",
+                "outline-variant": "#424754",
+                "on-primary-container": "#00285d",
+                "error-container": "#93000a"
+            },
+            "borderRadius": {
+                "DEFAULT": "0.125rem",
+                "lg": "0.25rem",
+                "xl": "0.5rem",
+                "full": "0.75rem"
+            },
+            "fontFamily": {
+                "headline": ["Space Grotesk"],
+                "body": ["Inter"],
+                "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+      body { font-family: 'Inter', sans-serif; }
+      .font-headline { font-family: 'Space Grotesk', sans-serif; }
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      .glass-panel {
+        background: rgba(51, 57, 76, 0.6);
+        backdrop-filter: blur(24px);
+      }
+      .status-pulse {
+        position: relative;
+      }
+      .status-pulse::after {
+        content: '';
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        background: currentColor;
+        border-radius: 50%;
+        opacity: 0.3;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        animation: pulse 2s infinite ease-out;
+      }
+      @keyframes pulse {
+        0% { transform: translate(-50%, -50%) scale(1); opacity: 0.4; }
+        100% { transform: translate(-50%, -50%) scale(2.5); opacity: 0; }
+      }
+    </style>
+</head>
+<body class="bg-surface text-on-surface selection:bg-primary/30">
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full z-50 bg-slate-950/60 backdrop-blur-xl shadow-2xl shadow-black/50 h-16 px-6 flex justify-between items-center">
+<div class="flex items-center gap-8">
+<span class="text-xl font-bold tracking-tighter text-blue-400 font-headline">Sentinel Tactical</span>
+<div class="hidden md:flex items-center gap-6">
+<div class="bg-slate-900/50 flex items-center px-3 py-1.5 rounded-lg border border-outline-variant/20">
+<span class="material-symbols-outlined text-slate-400 text-sm mr-2">search</span>
+<input class="bg-transparent border-none text-sm focus:ring-0 text-on-surface placeholder:text-slate-500 w-64" placeholder="Global search..." type="text"/>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-slate-400 hover:bg-blue-500/10 hover:text-blue-300 transition-colors active:scale-95 duration-150">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 text-slate-400 hover:bg-blue-500/10 hover:text-blue-300 transition-colors active:scale-95 duration-150">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<div class="h-8 w-8 rounded-full bg-slate-800 border border-outline-variant/30 overflow-hidden">
+<img alt="Security Analyst Profile" data-alt="close up headshot portrait of a professional security analyst with sharp features and a focused gaze in low light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCAh7axtMwVsqXejkwIlMCjCqlPmTW9chIRYrt5mQmqawEWVPBnhPT7Vi2hdTVjhHaLJLEPv2jJbEFV50ESIduKU-YyNZUzFKTiRPxJUcSyJfODH8x_xnXraZOPvdlVEVtVqdVdGXWT_6az4le0tsjhIfzjwpMtBu1XhO80ifTDAvhyViYYKfLHPl7XlZvC5I6iSAA6hWXm6AAFfv73F7nqqBRGVW-PODoMmuTt1asA-EJW_crlBxQWf4dI-Qy01kX1lIjODfi_d-Do"/>
+</div>
+</div>
+</header>
+<!-- SideNavBar -->
+<nav class="fixed left-0 top-0 h-screen w-64 z-40 bg-slate-950 flex flex-col pt-20 pb-6 hidden md:flex">
+<div class="px-6 mb-8">
+<h2 class="text-lg font-headline font-bold text-blue-400">Command Center</h2>
+<p class="text-xs text-slate-500 tracking-widest uppercase">Level 4 Clearance</p>
+</div>
+<div class="flex-1 flex flex-col gap-1">
+<a class="flex items-center gap-4 px-6 py-3 text-slate-500 hover:text-slate-300 hover:bg-slate-900 transition-all duration-200 cursor-pointer active:bg-slate-800" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-4 px-6 py-3 text-slate-500 hover:text-slate-300 hover:bg-slate-900 transition-all duration-200 cursor-pointer active:bg-slate-800" href="#">
+<span class="material-symbols-outlined">lan</span>
+<span class="text-sm font-medium">Network Map</span>
+</a>
+<a class="flex items-center gap-4 px-6 py-3 text-blue-400 bg-blue-500/5 border-r-2 border-blue-500 transition-all duration-200 cursor-pointer active:bg-slate-800" href="#">
+<span class="material-symbols-outlined">calendar_clock</span>
+<span class="text-sm font-medium">Scheduled Scans</span>
+</a>
+<a class="flex items-center gap-4 px-6 py-3 text-slate-500 hover:text-slate-300 hover:bg-slate-900 transition-all duration-200 cursor-pointer active:bg-slate-800" href="#">
+<span class="material-symbols-outlined">security</span>
+<span class="text-sm font-medium">Threat Logs</span>
+</a>
+<a class="flex items-center gap-4 px-6 py-3 text-slate-500 hover:text-slate-300 hover:bg-slate-900 transition-all duration-200 cursor-pointer active:bg-slate-800" href="#">
+<span class="material-symbols-outlined">key</span>
+<span class="text-sm font-medium">Vault</span>
+</a>
+</div>
+<div class="px-6 mb-6">
+<button class="w-full bg-primary text-on-primary font-bold py-2.5 rounded-lg flex items-center justify-center gap-2 hover:brightness-110 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-sm">rocket_launch</span>
+                Initiate Scan
+            </button>
+</div>
+<div class="mt-auto flex flex-col gap-1 border-t border-slate-900 pt-4">
+<a class="flex items-center gap-4 px-6 py-2 text-slate-500 hover:text-slate-300 hover:bg-slate-900 transition-all" href="#">
+<span class="material-symbols-outlined text-sm">help_center</span>
+<span class="text-xs">Support</span>
+</a>
+<a class="flex items-center gap-4 px-6 py-2 text-slate-500 hover:text-slate-300 hover:bg-slate-900 transition-all" href="#">
+<span class="material-symbols-outlined text-sm">analytics</span>
+<span class="text-xs">System Status</span>
+</a>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="md:pl-64 pt-16 min-h-screen bg-surface">
+<div class="p-8 max-w-7xl mx-auto">
+<!-- Page Header -->
+<div class="mb-10">
+<h1 class="text-5xl font-headline font-bold text-on-surface tracking-tight leading-none mb-2">Scheduled Scans</h1>
+<p class="text-on-surface-variant font-medium opacity-80 max-w-2xl">Automated network discovery and security audit orchestration.</p>
+</div>
+<!-- Summary Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-10">
+<div class="bg-surface-container-low p-6 rounded-xl border-l-4 border-primary">
+<p class="text-on-surface-variant text-xs uppercase tracking-widest font-bold mb-4">Active Schedules</p>
+<div class="flex items-baseline gap-2">
+<span class="text-4xl font-headline font-bold text-on-surface">24</span>
+<span class="text-primary text-xs flex items-center"><span class="material-symbols-outlined text-sm">arrow_drop_up</span> +3</span>
+</div>
+</div>
+<div class="bg-surface-container-low p-6 rounded-xl border-l-4 border-secondary">
+<p class="text-on-surface-variant text-xs uppercase tracking-widest font-bold mb-4">Upcoming Runs (24h)</p>
+<div class="flex items-baseline gap-2">
+<span class="text-4xl font-headline font-bold text-on-surface">112</span>
+<span class="text-secondary text-xs">Peak at 03:00</span>
+</div>
+</div>
+<div class="bg-surface-container-low p-6 rounded-xl border-l-4 border-tertiary">
+<p class="text-on-surface-variant text-xs uppercase tracking-widest font-bold mb-4">Paused Tasks</p>
+<div class="flex items-baseline gap-2">
+<span class="text-4xl font-headline font-bold text-on-surface">06</span>
+<span class="text-tertiary text-xs">Awaiting maintenance</span>
+</div>
+</div>
+<div class="bg-surface-container-low p-6 rounded-xl border-l-4 border-error">
+<p class="text-on-surface-variant text-xs uppercase tracking-widest font-bold mb-4">Notification Alerts</p>
+<div class="flex items-baseline gap-2">
+<span class="text-4xl font-headline font-bold text-on-surface">02</span>
+<div class="status-pulse text-error">
+<span class="relative z-10 text-error text-xs ml-2">Critical missed</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Operational Control Bar -->
+<div class="bg-surface-container p-4 rounded-t-xl flex flex-wrap items-center justify-between gap-4">
+<div class="flex items-center gap-3">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-lg">search</span>
+<input class="bg-surface-container-low border-none rounded-lg pl-10 pr-4 py-2 text-sm text-on-surface focus:ring-1 focus:ring-primary/40 w-64" placeholder="Filter targets..." type="text"/>
+</div>
+<div class="h-8 w-[1px] bg-outline-variant/30 mx-2"></div>
+<div class="flex gap-2">
+<button class="flex items-center gap-2 px-3 py-2 bg-surface-container-high rounded text-xs font-semibold text-on-surface-variant hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined text-sm">filter_list</span>
+                            Status: All
+                        </button>
+<button class="flex items-center gap-2 px-3 py-2 bg-surface-container-high rounded text-xs font-semibold text-on-surface-variant hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined text-sm">category</span>
+                            Profile
+                        </button>
+</div>
+</div>
+<button class="bg-primary-container text-on-primary-container px-4 py-2 rounded font-bold text-sm flex items-center gap-2 hover:brightness-110">
+<span class="material-symbols-outlined text-sm">add</span>
+                    Create Schedule
+                </button>
+</div>
+<!-- Data Monolith (Table) -->
+<div class="bg-surface-container-low rounded-b-xl overflow-hidden mb-12">
+<table class="w-full text-left border-separate border-spacing-0">
+<thead>
+<tr class="bg-surface-container text-on-surface-variant text-[10px] uppercase tracking-[0.15em] font-bold">
+<th class="px-6 py-4">Target (IP/Hostname)</th>
+<th class="px-6 py-4">Scan Profile</th>
+<th class="px-6 py-4">Frequency</th>
+<th class="px-6 py-4">Next Run</th>
+<th class="px-6 py-4">Status</th>
+<th class="px-6 py-4">Notifications</th>
+<th class="px-6 py-4 text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/10">
+<!-- Row 1 -->
+<tr class="hover:bg-surface-container-high/50 transition-colors group">
+<td class="px-6 py-5">
+<div class="flex flex-col">
+<span class="text-sm font-bold font-headline text-on-surface">192.168.10.0/24</span>
+<span class="text-[10px] text-on-surface-variant">Corp-VLAN-Main</span>
+</div>
+</td>
+<td class="px-6 py-5">
+<span class="px-2 py-1 bg-primary/10 text-primary text-[10px] font-bold rounded uppercase">Deep Audit</span>
+</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-2 text-xs font-medium text-on-surface-variant">
+<span class="material-symbols-outlined text-sm">history</span>
+                                    Daily @ 02:00
+                                </div>
+</td>
+<td class="px-6 py-5">
+<div class="text-xs text-on-surface tabular-nums">2023-11-28 02:00</div>
+</td>
+<td class="px-6 py-5">
+<span class="flex items-center gap-2 text-[10px] font-bold uppercase text-primary">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+                                    Active
+                                </span>
+</td>
+<td class="px-6 py-5">
+<div class="flex gap-2">
+<div class="w-6 h-6 rounded bg-surface-container-highest flex items-center justify-center text-primary" title="Email">
+<span class="material-symbols-outlined text-[14px]">mail</span>
+</div>
+<div class="w-6 h-6 rounded bg-surface-container-highest flex items-center justify-center text-secondary" title="Slack">
+<span class="material-symbols-outlined text-[14px]">chat</span>
+</div>
+</div>
+</td>
+<td class="px-6 py-5 text-right">
+<div class="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-1.5 text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined text-lg">play_arrow</span></button>
+<button class="p-1.5 text-on-surface-variant hover:text-on-surface transition-colors"><span class="material-symbols-outlined text-lg">edit</span></button>
+<button class="p-1.5 text-on-surface-variant hover:text-tertiary transition-colors"><span class="material-symbols-outlined text-lg">toggle_on</span></button>
+<button class="p-1.5 text-on-surface-variant hover:text-error transition-colors"><span class="material-symbols-outlined text-lg">delete</span></button>
+</div>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface-container-high/50 transition-colors group">
+<td class="px-6 py-5">
+<div class="flex flex-col">
+<span class="text-sm font-bold font-headline text-on-surface">edge-api-01.sentinel.net</span>
+<span class="text-[10px] text-on-surface-variant">Cloud Edge Gateway</span>
+</div>
+</td>
+<td class="px-6 py-5">
+<span class="px-2 py-1 bg-secondary/10 text-secondary text-[10px] font-bold rounded uppercase">Vuln-Scan</span>
+</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-2 text-xs font-medium text-on-surface-variant">
+<span class="material-symbols-outlined text-sm">history</span>
+                                    Weekly [Sun]
+                                </div>
+</td>
+<td class="px-6 py-5">
+<div class="text-xs text-on-surface tabular-nums">2023-12-03 00:00</div>
+</td>
+<td class="px-6 py-5">
+<span class="flex items-center gap-2 text-[10px] font-bold uppercase text-tertiary">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+                                    Paused
+                                </span>
+</td>
+<td class="px-6 py-5">
+<div class="flex gap-2">
+<div class="w-6 h-6 rounded bg-surface-container-highest flex items-center justify-center text-primary" title="Email">
+<span class="material-symbols-outlined text-[14px]">mail</span>
+</div>
+</div>
+</td>
+<td class="px-6 py-5 text-right">
+<div class="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-1.5 text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined text-lg">play_arrow</span></button>
+<button class="p-1.5 text-on-surface-variant hover:text-on-surface transition-colors"><span class="material-symbols-outlined text-lg">edit</span></button>
+<button class="p-1.5 text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined text-lg">toggle_off</span></button>
+<button class="p-1.5 text-on-surface-variant hover:text-error transition-colors"><span class="material-symbols-outlined text-lg">delete</span></button>
+</div>
+</td>
+</tr>
+<!-- Row 3 (Warning State) -->
+<tr class="hover:bg-surface-container-high/50 transition-colors group">
+<td class="px-6 py-5 border-l-2 border-error/50">
+<div class="flex flex-col">
+<span class="text-sm font-bold font-headline text-on-surface">10.0.4.155</span>
+<span class="text-[10px] text-on-surface-variant">Legacy-Auth-DB</span>
+</div>
+</td>
+<td class="px-6 py-5">
+<span class="px-2 py-1 bg-surface-container-highest text-on-surface-variant text-[10px] font-bold rounded uppercase">Compliance</span>
+</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-2 text-xs font-medium text-on-surface-variant">
+<span class="material-symbols-outlined text-sm">history</span>
+                                    Hourly
+                                </div>
+</td>
+<td class="px-6 py-5">
+<div class="text-xs text-error tabular-nums font-bold">MISSED: 2h ago</div>
+</td>
+<td class="px-6 py-5">
+<span class="flex items-center gap-2 text-[10px] font-bold uppercase text-error">
+<span class="w-1.5 h-1.5 rounded-full bg-error shadow-[0_0_8px_rgba(255,180,171,0.6)]"></span>
+                                    Warning
+                                </span>
+</td>
+<td class="px-6 py-5">
+<div class="flex gap-2">
+<div class="w-6 h-6 rounded bg-surface-container-highest flex items-center justify-center text-error" title="Webhook">
+<span class="material-symbols-outlined text-[14px]">webhook</span>
+</div>
+</div>
+</td>
+<td class="px-6 py-5 text-right">
+<div class="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-1.5 text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined text-lg">play_arrow</span></button>
+<button class="p-1.5 text-on-surface-variant hover:text-on-surface transition-colors"><span class="material-symbols-outlined text-lg">edit</span></button>
+<button class="p-1.5 text-on-surface-variant hover:text-tertiary transition-colors"><span class="material-symbols-outlined text-lg">toggle_on</span></button>
+<button class="p-1.5 text-on-surface-variant hover:text-error transition-colors"><span class="material-symbols-outlined text-lg">delete</span></button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Empty State Concept (Hidden by Default) -->
+<div class="hidden flex-col items-center justify-center py-32 bg-surface-container-lowest rounded-xl border-2 border-dashed border-outline-variant/10">
+<div class="w-20 h-20 bg-surface-container rounded-full flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-4xl text-outline-variant">calendar_add_on</span>
+</div>
+<h3 class="text-xl font-headline font-bold text-on-surface mb-2">No Active Scans Found</h3>
+<p class="text-on-surface-variant text-sm max-w-sm text-center mb-8">Your automated tactical discovery is empty. Start by creating your first scheduled scan profile.</p>
+<button class="bg-primary text-on-primary px-6 py-3 rounded font-bold flex items-center gap-3">
+<span class="material-symbols-outlined">add_circle</span>
+                    Create First Schedule
+                </button>
+</div>
+<!-- Tactical Footer Metadata -->
+<div class="flex justify-between items-center text-[10px] text-on-surface-variant font-medium tracking-widest uppercase opacity-50">
+<div class="flex gap-6">
+<span>Engine Status: Nominal</span>
+<span>Region: US-EAST-01</span>
+<span>Last Synced: 14:02:11 Z</span>
+</div>
+<div class="flex gap-4">
+<span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-primary"></span> Live Telemetry On</span>
+</div>
+</div>
+</div>
+</main>
+<!-- Contextual FAB - Restricted to Schedule Creation -->
+<button class="fixed bottom-8 right-8 w-14 h-14 bg-primary text-on-primary rounded-xl shadow-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all z-50 group">
+<span class="material-symbols-outlined text-3xl">add</span>
+<span class="absolute right-16 bg-surface-container-highest px-3 py-1 rounded text-xs font-bold text-on-surface opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">New Schedule</span>
+</button>
+</body></html>

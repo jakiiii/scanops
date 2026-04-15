@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Scan History | ScanOps Sentinel</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "secondary": "#b7c8e1",
+                      "on-tertiary": "#502400",
+                      "on-error": "#690005",
+                      "inverse-on-surface": "#2a3043",
+                      "tertiary-fixed-dim": "#ffb786",
+                      "secondary-container": "#3a4a5f",
+                      "on-secondary-container": "#a9bad3",
+                      "surface-variant": "#2e3447",
+                      "surface-container-lowest": "#070d1f",
+                      "secondary-fixed": "#d3e4fe",
+                      "primary-container": "#4d8eff",
+                      "tertiary-container": "#df7412",
+                      "primary-fixed": "#d8e2ff",
+                      "primary-fixed-dim": "#adc6ff",
+                      "on-secondary": "#213145",
+                      "inverse-primary": "#005ac2",
+                      "surface": "#0c1324",
+                      "tertiary": "#ffb786",
+                      "on-tertiary-fixed": "#311400",
+                      "secondary-fixed-dim": "#b7c8e1",
+                      "surface-bright": "#33394c",
+                      "on-tertiary-fixed-variant": "#723600",
+                      "error": "#ffb4ab",
+                      "surface-container-highest": "#2e3447",
+                      "on-tertiary-container": "#461f00",
+                      "surface-container-low": "#151b2d",
+                      "on-secondary-fixed-variant": "#38485d",
+                      "on-background": "#dce1fb",
+                      "outline": "#8c909f",
+                      "on-surface-variant": "#c2c6d6",
+                      "surface-container": "#191f31",
+                      "surface-dim": "#0c1324",
+                      "on-primary": "#002e6a",
+                      "on-error-container": "#ffdad6",
+                      "inverse-surface": "#dce1fb",
+                      "on-primary-fixed": "#001a42",
+                      "tertiary-fixed": "#ffdcc6",
+                      "on-primary-container": "#00285d",
+                      "outline-variant": "#424754",
+                      "on-surface": "#dce1fb",
+                      "error-container": "#93000a",
+                      "on-secondary-fixed": "#0b1c30",
+                      "surface-container-high": "#23293c",
+                      "background": "#0c1324",
+                      "surface-tint": "#adc6ff",
+                      "primary": "#adc6ff",
+                      "on-primary-fixed-variant": "#004395"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "fontFamily": {
+                      "headline": ["Space Grotesk"],
+                      "body": ["Inter"],
+                      "label": ["Inter"]
+              }
+            },
+          }
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, .font-headline { font-family: 'Space Grotesk', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0c1324; }
+        ::-webkit-scrollbar-thumb { background: #2e3447; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-background text-on-surface">
+<!-- SideNavBar -->
+<nav class="flex flex-col fixed left-0 top-0 h-full h-screen w-64 border-r border-transparent bg-[#0c1324] shadow-2xl shadow-black/50 z-50">
+<div class="p-6">
+<div class="flex items-center gap-3 mb-10">
+<div class="w-10 h-10 bg-primary/10 flex items-center justify-center rounded-lg">
+<span class="material-symbols-outlined text-primary" data-icon="security">security</span>
+</div>
+<div>
+<h1 class="text-2xl font-bold text-blue-400 tracking-tighter font-['Space_Grotesk']">The Sentinel</h1>
+<p class="text-[10px] uppercase tracking-widest text-slate-500 font-bold">Enterprise Command</p>
+</div>
+</div>
+<div class="space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-[#2e3447] transition-all duration-200 scale-[0.98] active:duration-75 font-['Space_Grotesk'] tracking-tight" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+                    Dashboard
+                </a>
+<!-- Active State: Network Scans (since History is a subset of Scans) -->
+<a class="flex items-center gap-3 px-4 py-3 text-blue-400 font-bold bg-[#2e3447] rounded-lg transition-all duration-200 scale-[0.98] active:duration-75 font-['Space_Grotesk'] tracking-tight" href="#">
+<span class="material-symbols-outlined" data-icon="radar">radar</span>
+                    Network Scans
+                </a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-[#2e3447] transition-all duration-200 scale-[0.98] active:duration-75 font-['Space_Grotesk'] tracking-tight" href="#">
+<span class="material-symbols-outlined" data-icon="security">security</span>
+                    Vulnerabilities
+                </a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-[#2e3447] transition-all duration-200 scale-[0.98] active:duration-75 font-['Space_Grotesk'] tracking-tight" href="#">
+<span class="material-symbols-outlined" data-icon="dns">dns</span>
+                    Assets
+                </a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-[#2e3447] transition-all duration-200 scale-[0.98] active:duration-75 font-['Space_Grotesk'] tracking-tight" href="#">
+<span class="material-symbols-outlined" data-icon="assessment">assessment</span>
+                    Reports
+                </a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-[#2e3447] transition-all duration-200 scale-[0.98] active:duration-75 font-['Space_Grotesk'] tracking-tight" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+                    Settings
+                </a>
+</div>
+<div class="mt-8 px-4">
+<button class="w-full bg-primary text-on-primary py-3 px-4 rounded-md font-bold text-sm transition-all hover:brightness-110 active:scale-95">
+                    New Scan
+                </button>
+</div>
+</div>
+<div class="mt-auto p-6 border-t border-white/5">
+<div class="flex items-center gap-3 mb-6 px-4">
+<div class="w-8 h-8 rounded-full overflow-hidden bg-surface-container-highest">
+<img alt="User profile" data-alt="professional headshot of a male IT director in a modern tech office environment with neutral lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCZEwy48q-29StonYPvprtQ7zXJ3aN6XYI0H7RnZ5oM7Imo7_3N_rqOYqQ4_VaPt9xVLx-Kvi2ymblQtsH-3S9VsGKQFF6JHC03MHRumZPLalHhkICARmgD8tO4lHSezxYvl6AEyOUUPoJ_CwVoJbnR58q6_kLsDNToNrM8kIvDKKUNQ1EAbfNcjyIOHED8fEU0146OfZH0y6X5FrJYJFUviPROdyk3LmK-mifIsVeBGiGdUdjb09EaR0m50bKqCf16Qmy4kgKewoLZ"/>
+</div>
+<div class="flex-1">
+<p class="text-xs font-bold text-slate-200">J. Wilson</p>
+<p class="text-[10px] text-slate-500">System Admin</p>
+</div>
+</div>
+<div class="space-y-1">
+<a class="flex items-center gap-3 px-4 py-2 text-slate-400 hover:text-slate-100 hover:bg-[#2e3447] transition-all duration-200 font-['Space_Grotesk'] tracking-tight text-sm" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="help_outline">help_outline</span>
+                    Support
+                </a>
+<a class="flex items-center gap-3 px-4 py-2 text-slate-400 hover:text-slate-100 hover:bg-[#2e3447] transition-all duration-200 font-['Space_Grotesk'] tracking-tight text-sm" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="logout">logout</span>
+                    Sign Out
+                </a>
+</div>
+</div>
+</nav>
+<!-- TopAppBar -->
+<header class="flex justify-between items-center pl-72 pr-8 w-full h-16 sticky top-0 z-40 bg-[#0c1324]/80 backdrop-blur-xl border-b border-white/5 font-['Space_Grotesk']">
+<div class="flex items-center flex-1 max-w-md">
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-sm" data-icon="search">search</span>
+<input class="w-full bg-[#151b2d] border-none rounded-lg pl-10 pr-4 py-2 text-sm text-slate-200 placeholder:text-slate-600 focus:ring-1 focus:ring-primary/40 transition-all" placeholder="Global system search..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-4">
+<button class="text-slate-400 hover:text-blue-300 transition-colors duration-300 relative">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="absolute top-0 right-0 w-2 h-2 bg-error rounded-full border-2 border-[#0c1324]"></span>
+</button>
+<button class="text-blue-400 hover:text-blue-300 transition-colors duration-300">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+</button>
+<button class="text-slate-400 hover:text-blue-300 transition-colors duration-300">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+</button>
+</div>
+<div class="h-4 w-[1px] bg-white/10"></div>
+<span class="text-blue-400 font-bold tracking-tight">Scan History</span>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="pl-72 pr-8 pt-8 pb-12">
+<!-- Hero Header -->
+<div class="mb-10">
+<h2 class="text-5xl font-bold text-on-surface tracking-tighter mb-2">Scan History</h2>
+<p class="text-on-surface-variant text-lg">Full audit trail of all network scanning activities.</p>
+</div>
+<!-- Advanced Filter Bar -->
+<div class="bg-surface-container-low rounded-xl p-4 mb-6 shadow-sm">
+<div class="flex flex-wrap items-center gap-4">
+<div class="flex-1 min-w-[200px] relative">
+<input class="w-full bg-surface-container-highest border-none rounded-md px-4 py-2.5 text-sm text-on-surface placeholder:text-outline focus:ring-1 focus:ring-primary/40" placeholder="Search Target or Scan ID..." type="text"/>
+</div>
+<div class="flex items-center gap-2">
+<select class="bg-surface-container-highest border-none rounded-md px-4 py-2.5 text-sm text-on-surface focus:ring-1 focus:ring-primary/40 appearance-none min-w-[120px]">
+<option>All Users</option>
+<option>j.wilson</option>
+<option>a.chen</option>
+<option>k.smith</option>
+</select>
+<button class="bg-surface-container-highest flex items-center gap-2 px-4 py-2.5 rounded-md text-sm text-on-surface hover:bg-surface-bright transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="calendar_month">calendar_month</span>
+                        Last 30 Days
+                    </button>
+<select class="bg-surface-container-highest border-none rounded-md px-4 py-2.5 text-sm text-on-surface focus:ring-1 focus:ring-primary/40 appearance-none min-w-[140px]">
+<option>All Profiles</option>
+<option>Aggressive Port Audit</option>
+<option>Full Vulnerability Scan</option>
+<option>Subdomain Discovery</option>
+</select>
+<select class="bg-surface-container-highest border-none rounded-md px-4 py-2.5 text-sm text-on-surface focus:ring-1 focus:ring-primary/40 appearance-none min-w-[120px]">
+<option>All Status</option>
+<option>Completed</option>
+<option>Failed</option>
+<option>Running</option>
+<option>Queued</option>
+</select>
+</div>
+<div class="ml-auto flex items-center gap-2">
+<button class="flex items-center gap-2 px-4 py-2.5 rounded-md text-sm font-semibold text-primary border border-primary/20 hover:bg-primary/5 transition-all">
+<span class="material-symbols-outlined text-sm" data-icon="download">download</span>
+                        Export Selected
+                    </button>
+</div>
+</div>
+</div>
+<!-- Scan History Table -->
+<div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-2xl border border-white/5">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-high/50 text-outline uppercase text-[10px] font-bold tracking-widest border-b border-white/5">
+<th class="px-6 py-4">Scan ID</th>
+<th class="px-6 py-4">Target (IP/Hostname)</th>
+<th class="px-6 py-4">Scan Profile</th>
+<th class="px-6 py-4">Executed By</th>
+<th class="px-6 py-4">Date &amp; Time</th>
+<th class="px-6 py-4">Status</th>
+<th class="px-6 py-4 text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="text-sm">
+<!-- Row 1: Completed -->
+<tr class="hover:bg-surface-container-high transition-colors border-b border-white/5 last:border-0 group">
+<td class="px-6 py-4 font-mono text-primary-fixed-dim">#SCN-88219</td>
+<td class="px-6 py-4 text-on-surface">10.0.4.12</td>
+<td class="px-6 py-4">
+<span class="bg-surface-container-highest px-2 py-1 rounded text-xs">Aggressive Port Audit</span>
+</td>
+<td class="px-6 py-4 text-on-surface-variant">j.wilson</td>
+<td class="px-6 py-4 text-on-surface-variant">Oct 24, 2023 · 14:22:10</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                                Completed
+                            </span>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="flex items-center justify-end gap-2 opacity-40 group-hover:opacity-100 transition-opacity">
+<button class="p-1.5 hover:text-primary" title="Re-run"><span class="material-symbols-outlined text-lg" data-icon="refresh">refresh</span></button>
+<button class="p-1.5 hover:text-primary" title="Clone Settings"><span class="material-symbols-outlined text-lg" data-icon="content_copy">content_copy</span></button>
+<button class="p-1.5 hover:text-primary" title="Compare"><span class="material-symbols-outlined text-lg" data-icon="compare">compare</span></button>
+<button class="p-1.5 hover:text-primary" title="More"><span class="material-symbols-outlined text-lg" data-icon="more_vert">more_vert</span></button>
+</div>
+</td>
+</tr>
+<!-- Row 2: Failed -->
+<tr class="hover:bg-surface-container-high transition-colors border-b border-white/5 last:border-0 group">
+<td class="px-6 py-4 font-mono text-primary-fixed-dim">#SCN-88218</td>
+<td class="px-6 py-4 text-on-surface">production.api.sentinel.io</td>
+<td class="px-6 py-4">
+<span class="bg-surface-container-highest px-2 py-1 rounded text-xs">Full Vulnerability Scan</span>
+</td>
+<td class="px-6 py-4 text-on-surface-variant">a.chen</td>
+<td class="px-6 py-4 text-on-surface-variant">Oct 24, 2023 · 13:05:44</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-error/10 text-error border border-error/20">
+<span class="w-1.5 h-1.5 rounded-full bg-error"></span>
+                                Failed
+                            </span>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="flex items-center justify-end gap-2 opacity-40 group-hover:opacity-100 transition-opacity">
+<button class="p-1.5 hover:text-primary" title="Re-run"><span class="material-symbols-outlined text-lg" data-icon="refresh">refresh</span></button>
+<button class="p-1.5 hover:text-primary" title="Clone Settings"><span class="material-symbols-outlined text-lg" data-icon="content_copy">content_copy</span></button>
+<button class="p-1.5 hover:text-primary" title="Compare"><span class="material-symbols-outlined text-lg" data-icon="compare">compare</span></button>
+<button class="p-1.5 hover:text-primary" title="More"><span class="material-symbols-outlined text-lg" data-icon="more_vert">more_vert</span></button>
+</div>
+</td>
+</tr>
+<!-- Row 3: Running -->
+<tr class="hover:bg-surface-container-high transition-colors border-b border-white/5 last:border-0 group">
+<td class="px-6 py-4 font-mono text-primary-fixed-dim">#SCN-88217</td>
+<td class="px-6 py-4 text-on-surface">192.168.1.100</td>
+<td class="px-6 py-4">
+<span class="bg-surface-container-highest px-2 py-1 rounded text-xs">Subdomain Discovery</span>
+</td>
+<td class="px-6 py-4 text-on-surface-variant">j.wilson</td>
+<td class="px-6 py-4 text-on-surface-variant">Oct 24, 2023 · 12:45:00</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary border border-primary/20">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+                                Running
+                            </span>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="flex items-center justify-end gap-2 opacity-40 group-hover:opacity-100 transition-opacity">
+<button class="p-1.5 hover:text-primary disabled:opacity-20" disabled="" title="Re-run"><span class="material-symbols-outlined text-lg" data-icon="refresh">refresh</span></button>
+<button class="p-1.5 hover:text-primary" title="Clone Settings"><span class="material-symbols-outlined text-lg" data-icon="content_copy">content_copy</span></button>
+<button class="p-1.5 hover:text-primary" title="Compare"><span class="material-symbols-outlined text-lg" data-icon="compare">compare</span></button>
+<button class="p-1.5 hover:text-primary" title="More"><span class="material-symbols-outlined text-lg" data-icon="more_vert">more_vert</span></button>
+</div>
+</td>
+</tr>
+<!-- Row 4: Queued -->
+<tr class="hover:bg-surface-container-high transition-colors border-b border-white/5 last:border-0 group">
+<td class="px-6 py-4 font-mono text-primary-fixed-dim">#SCN-88216</td>
+<td class="px-6 py-4 text-on-surface">dev-environment-v4</td>
+<td class="px-6 py-4">
+<span class="bg-surface-container-highest px-2 py-1 rounded text-xs">Full Vulnerability Scan</span>
+</td>
+<td class="px-6 py-4 text-on-surface-variant">k.smith</td>
+<td class="px-6 py-4 text-on-surface-variant">Oct 24, 2023 · 11:30:12</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-tertiary/10 text-tertiary border border-tertiary/20">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+                                Queued
+                            </span>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="flex items-center justify-end gap-2 opacity-40 group-hover:opacity-100 transition-opacity">
+<button class="p-1.5 hover:text-primary" title="Re-run"><span class="material-symbols-outlined text-lg" data-icon="refresh">refresh</span></button>
+<button class="p-1.5 hover:text-primary" title="Clone Settings"><span class="material-symbols-outlined text-lg" data-icon="content_copy">content_copy</span></button>
+<button class="p-1.5 hover:text-primary" title="Compare"><span class="material-symbols-outlined text-lg" data-icon="compare">compare</span></button>
+<button class="p-1.5 hover:text-primary" title="More"><span class="material-symbols-outlined text-lg" data-icon="more_vert">more_vert</span></button>
+</div>
+</td>
+</tr>
+<!-- Row 5: Completed -->
+<tr class="hover:bg-surface-container-high transition-colors border-b border-white/5 last:border-0 group">
+<td class="px-6 py-4 font-mono text-primary-fixed-dim">#SCN-88215</td>
+<td class="px-6 py-4 text-on-surface">172.16.254.1</td>
+<td class="px-6 py-4">
+<span class="bg-surface-container-highest px-2 py-1 rounded text-xs">Aggressive Port Audit</span>
+</td>
+<td class="px-6 py-4 text-on-surface-variant">j.wilson</td>
+<td class="px-6 py-4 text-on-surface-variant">Oct 23, 2023 · 22:15:55</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                                Completed
+                            </span>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="flex items-center justify-end gap-2 opacity-40 group-hover:opacity-100 transition-opacity">
+<button class="p-1.5 hover:text-primary" title="Re-run"><span class="material-symbols-outlined text-lg" data-icon="refresh">refresh</span></button>
+<button class="p-1.5 hover:text-primary" title="Clone Settings"><span class="material-symbols-outlined text-lg" data-icon="content_copy">content_copy</span></button>
+<button class="p-1.5 hover:text-primary" title="Compare"><span class="material-symbols-outlined text-lg" data-icon="compare">compare</span></button>
+<button class="p-1.5 hover:text-primary" title="More"><span class="material-symbols-outlined text-lg" data-icon="more_vert">more_vert</span></button>
+</div>
+</td>
+</tr>
+<!-- Row 6: Completed -->
+<tr class="hover:bg-surface-container-high transition-colors border-b border-white/5 last:border-0 group">
+<td class="px-6 py-4 font-mono text-primary-fixed-dim">#SCN-88214</td>
+<td class="px-6 py-4 text-on-surface">db-cluster-01.internal</td>
+<td class="px-6 py-4">
+<span class="bg-surface-container-highest px-2 py-1 rounded text-xs">Full Vulnerability Scan</span>
+</td>
+<td class="px-6 py-4 text-on-surface-variant">a.chen</td>
+<td class="px-6 py-4 text-on-surface-variant">Oct 23, 2023 · 18:40:00</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                                Completed
+                            </span>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="flex items-center justify-end gap-2 opacity-40 group-hover:opacity-100 transition-opacity">
+<button class="p-1.5 hover:text-primary" title="Re-run"><span class="material-symbols-outlined text-lg" data-icon="refresh">refresh</span></button>
+<button class="p-1.5 hover:text-primary" title="Clone Settings"><span class="material-symbols-outlined text-lg" data-icon="content_copy">content_copy</span></button>
+<button class="p-1.5 hover:text-primary" title="Compare"><span class="material-symbols-outlined text-lg" data-icon="compare">compare</span></button>
+<button class="p-1.5 hover:text-primary" title="More"><span class="material-symbols-outlined text-lg" data-icon="more_vert">more_vert</span></button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<!-- Pagination -->
+<div class="bg-surface-container-high/30 px-6 py-4 flex items-center justify-between border-t border-white/5">
+<div class="text-xs text-outline">
+                    Showing <span class="text-on-surface font-bold">1-10</span> of <span class="text-on-surface font-bold">1,284</span> scans
+                </div>
+<div class="flex items-center gap-1">
+<button class="p-1.5 rounded hover:bg-surface-container-highest text-outline disabled:opacity-30" disabled="">
+<span class="material-symbols-outlined text-xl" data-icon="chevron_left">chevron_left</span>
+</button>
+<button class="px-3 py-1.5 rounded text-sm bg-primary text-on-primary font-bold">1</button>
+<button class="px-3 py-1.5 rounded text-sm hover:bg-surface-container-highest text-outline">2</button>
+<button class="px-3 py-1.5 rounded text-sm hover:bg-surface-container-highest text-outline">3</button>
+<span class="px-2 text-outline">...</span>
+<button class="px-3 py-1.5 rounded text-sm hover:bg-surface-container-highest text-outline">129</button>
+<button class="p-1.5 rounded hover:bg-surface-container-highest text-outline">
+<span class="material-symbols-outlined text-xl" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-xs text-outline">Rows per page:</span>
+<select class="bg-transparent border-none text-xs text-on-surface focus:ring-0 appearance-none">
+<option>10</option>
+<option>25</option>
+<option>50</option>
+</select>
+</div>
+</div>
+</div>
+<!-- System Stats / Bento Grid Insight section -->
+<div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="bg-surface-container-low p-6 rounded-xl border border-white/5 overflow-hidden relative group">
+<div class="relative z-10">
+<p class="text-[10px] uppercase tracking-widest text-primary font-bold mb-1">Scan Volume</p>
+<h3 class="text-3xl font-bold font-headline mb-4">242.1k</h3>
+<div class="flex items-center gap-2 text-xs text-emerald-400">
+<span class="material-symbols-outlined text-sm" data-icon="trending_up">trending_up</span>
+<span>+12.5% from last month</span>
+</div>
+</div>
+<div class="absolute -right-4 -bottom-4 opacity-5 group-hover:opacity-10 transition-opacity">
+<span class="material-symbols-outlined text-9xl" data-icon="monitoring">monitoring</span>
+</div>
+</div>
+<div class="bg-surface-container-low p-6 rounded-xl border border-white/5 overflow-hidden relative group">
+<div class="relative z-10">
+<p class="text-[10px] uppercase tracking-widest text-tertiary font-bold mb-1">Success Rate</p>
+<h3 class="text-3xl font-bold font-headline mb-4">98.4%</h3>
+<div class="w-full bg-surface-container-highest h-1 rounded-full overflow-hidden">
+<div class="bg-tertiary h-full w-[98.4%]"></div>
+</div>
+</div>
+<div class="absolute -right-4 -bottom-4 opacity-5 group-hover:opacity-10 transition-opacity">
+<span class="material-symbols-outlined text-9xl" data-icon="check_circle">check_circle</span>
+</div>
+</div>
+<div class="bg-surface-container-low p-6 rounded-xl border border-white/5 overflow-hidden relative group">
+<div class="relative z-10">
+<p class="text-[10px] uppercase tracking-widest text-error font-bold mb-1">Critical Alarms</p>
+<h3 class="text-3xl font-bold font-headline mb-4">12</h3>
+<div class="flex items-center gap-2 text-xs text-on-surface-variant">
+<span class="material-symbols-outlined text-sm" data-icon="schedule">schedule</span>
+<span>All addressed in &lt; 4hrs</span>
+</div>
+</div>
+<div class="absolute -right-4 -bottom-4 opacity-5 group-hover:opacity-10 transition-opacity">
+<span class="material-symbols-outlined text-9xl" data-icon="emergency_home">emergency_home</span>
+</div>
+</div>
+</div>
+</main>
+</body></html>

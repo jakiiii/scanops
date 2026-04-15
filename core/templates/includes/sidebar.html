@@ -1,0 +1,84 @@
+<div class="px-6 py-7 border-b border-slate-800/70">
+    <div class="flex items-center gap-3">
+        <div class="w-9 h-9 bg-blue-600 rounded-lg flex items-center justify-center">
+            <span class="material-symbols-outlined text-white" style="font-variation-settings:'FILL' 1;">security</span>
+        </div>
+        <div>
+            <p class="text-white font-black text-lg leading-none">ScanOps</p>
+            <p class="text-[10px] text-slate-500 uppercase tracking-[0.2em] font-semibold mt-1">Enterprise Security</p>
+        </div>
+    </div>
+</div>
+
+<nav class="px-3 py-3 flex-1 overflow-y-auto">
+    <a href="{% url 'dashboard:home' %}" class="scanops-nav-link {% if request.path == '/dashboard/' %}is-active{% endif %}">
+        <span class="material-symbols-outlined">dashboard</span>
+        <span>Dashboard</span>
+    </a>
+    <a href="{% url 'scans:new' %}" class="scanops-nav-link {% if request.path|slice:':11' == '/scans/new/' %}is-active{% endif %}">
+        <span class="material-symbols-outlined">add_circle</span>
+        <span>New Scan</span>
+    </a>
+    <a href="{% url 'targets:list' %}" class="scanops-nav-link {% if request.path|slice:':9' == '/targets/' %}is-active{% endif %}">
+        <span class="material-symbols-outlined">track_changes</span>
+        <span>Targets</span>
+    </a>
+    <a href="{% url 'scans:running' %}" class="scanops-nav-link {% if request.path|slice:':15' == '/scans/running/' or request.path|slice:':14' == '/scans/monitor/' %}is-active{% endif %}">
+        <span class="material-symbols-outlined">sync</span>
+        <span>Running</span>
+    </a>
+    <a href="{% url 'scans:queue' %}" class="scanops-nav-link {% if request.path|slice:':13' == '/scans/queue/' %}is-active{% endif %}">
+        <span class="material-symbols-outlined">queue</span>
+        <span>Scan Queue</span>
+    </a>
+    <a href="{% url 'scans:results' %}" class="scanops-nav-link {% if request.path|slice:':15' == '/scans/results/' or request.path|slice:':12' == '/scans/hosts/' %}is-active{% endif %}">
+        <span class="material-symbols-outlined">analytics</span>
+        <span>Results</span>
+    </a>
+    <a href="{% url 'scans:history' %}" class="scanops-nav-link {% if request.path|slice:':14' == '/scans/history/' %}is-active{% endif %}">
+        <span class="material-symbols-outlined">history</span>
+        <span>History</span>
+    </a>
+    <a href="{% url 'reports:list' %}" class="scanops-nav-link {% if request.path|slice:':9' == '/reports/' %}is-active{% endif %}">
+        <span class="material-symbols-outlined">description</span>
+        <span>Reports</span>
+    </a>
+    <a href="{% url 'schedules:list' %}" class="scanops-nav-link {% if request.path|slice:':11' == '/schedules/' %}is-active{% endif %}">
+        <span class="material-symbols-outlined">calendar_clock</span>
+        <span>Schedule</span>
+    </a>
+    <a href="{% url 'notifications:list' %}" class="scanops-nav-link {% if request.path|slice:':15' == '/notifications/' %}is-active{% endif %}">
+        <span class="material-symbols-outlined">notifications</span>
+        <span>Notifications</span>
+    </a>
+    <a href="{% url 'assets:list' %}" class="scanops-nav-link {% if request.path|slice:':8' == '/assets/' %}is-active{% endif %}">
+        <span class="material-symbols-outlined">inventory_2</span>
+        <span>Assets</span>
+    </a>
+    <a href="{% url 'ops:settings-general' %}" class="scanops-nav-link {% if request.path|slice:':14' == '/ops/settings/' %}is-active{% endif %}">
+        <span class="material-symbols-outlined">settings</span>
+        <span>Settings</span>
+    </a>
+    <a href="{% url 'ops:users-list' %}" class="scanops-nav-link {% if request.path|slice:':11' == '/ops/users/' or request.path|slice:':11' == '/ops/roles/' or request.path|slice:':14' == '/ops/profiles/' %}is-active{% endif %}">
+        <span class="material-symbols-outlined">group</span>
+        <span>User Management</span>
+    </a>
+    <a href="{% url 'ops:health-system' %}" class="scanops-nav-link {% if request.path|slice:':12' == '/ops/health/' %}is-active{% endif %}">
+        <span class="material-symbols-outlined">monitor_heart</span>
+        <span>System Health</span>
+    </a>
+</nav>
+
+<div class="p-3 border-t border-slate-800/70 space-y-1">
+    <a href="{% url 'admin:index' %}" class="scanops-nav-link">
+        <span class="material-symbols-outlined">admin_panel_settings</span>
+        <span>Admin</span>
+    </a>
+    <form method="post" action="{% url 'accounts:logout' %}">
+        {% csrf_token %}
+        <button type="submit" class="scanops-nav-link w-full text-left">
+            <span class="material-symbols-outlined">logout</span>
+            <span>Logout</span>
+        </button>
+    </form>
+</div>

@@ -1,0 +1,46 @@
+{% load scanops_tags %}
+<div class="scanops-panel overflow-hidden">
+    <div class="px-5 py-4 border-b border-slate-800">
+        <h3 class="text-sm font-bold text-slate-200 uppercase tracking-widest">Permission Matrix</h3>
+    </div>
+    <div class="overflow-x-auto">
+        <table class="w-full text-sm text-left">
+            <thead class="bg-slate-900/80 text-[10px] uppercase tracking-widest text-slate-500">
+            <tr>
+                <th class="px-4 py-3">Capability</th>
+                {% for role in roles %}
+                    <th class="px-4 py-3 text-center">{{ role.name }}</th>
+                {% endfor %}
+            </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-800">
+            {% for row in matrix_rows %}
+                <tr class="hover:bg-slate-900/40">
+                    <td class="px-4 py-3 text-slate-300">{{ row.label }}</td>
+                    {% for role in roles %}
+                        <td class="px-4 py-3 text-center">
+                            <form
+                                hx-post="{% url 'ops:roles-toggle' %}"
+                                hx-target="#role-matrix-container"
+                                hx-swap="innerHTML"
+                            >
+                                {% csrf_token %}
+                                <input type="hidden" name="role_id" value="{{ role.id }}">
+                                <input type="hidden" name="permission_key" value="{{ row.permission_key }}">
+                                <input
+                                    type="checkbox"
+                                    name="is_allowed"
+                                    value="true"
+                                    {% if row.values_by_role|dict_get:role.id %}checked{% endif %}
+                                    onchange="this.form.requestSubmit()"
+                                    class="h-4 w-4 rounded border-slate-700 bg-slate-900 text-blue-500"
+                                />
+                            </form>
+                        </td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>

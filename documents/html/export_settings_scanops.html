@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Export Settings | ScanOps</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-fixed-dim": "#ffb786",
+                        "tertiary-fixed": "#ffdcc6",
+                        "surface-dim": "#0c1324",
+                        "error-container": "#93000a",
+                        "on-primary-fixed": "#001a42",
+                        "on-primary-container": "#00285d",
+                        "inverse-on-surface": "#2a3043",
+                        "on-error-container": "#ffdad6",
+                        "on-tertiary-fixed-variant": "#723600",
+                        "secondary-fixed-dim": "#b7c8e1",
+                        "on-secondary-container": "#a9bad3",
+                        "surface-container-low": "#151b2d",
+                        "secondary-fixed": "#d3e4fe",
+                        "secondary-container": "#3a4a5f",
+                        "outline-variant": "#424754",
+                        "on-surface": "#dce1fb",
+                        "on-secondary-fixed-variant": "#38485d",
+                        "on-tertiary-container": "#461f00",
+                        "surface-container": "#191f31",
+                        "surface-container-high": "#23293c",
+                        "on-tertiary-fixed": "#311400",
+                        "surface-variant": "#2e3447",
+                        "primary-fixed-dim": "#adc6ff",
+                        "on-background": "#dce1fb",
+                        "surface-bright": "#33394c",
+                        "tertiary": "#ffb786",
+                        "surface-container-lowest": "#070d1f",
+                        "outline": "#8c909f",
+                        "on-secondary-fixed": "#0b1c30",
+                        "background": "#0c1324",
+                        "surface-tint": "#adc6ff",
+                        "on-secondary": "#213145",
+                        "on-primary-fixed-variant": "#004395",
+                        "primary-fixed": "#d8e2ff",
+                        "on-tertiary": "#502400",
+                        "inverse-surface": "#dce1fb",
+                        "surface-container-highest": "#2e3447",
+                        "primary": "#adc6ff",
+                        "surface": "#0c1324",
+                        "on-surface-variant": "#c2c6d6",
+                        "secondary": "#b7c8e1",
+                        "on-primary": "#002e6a",
+                        "tertiary-container": "#df7412",
+                        "on-error": "#690005",
+                        "inverse-primary": "#005ac2",
+                        "error": "#ffb4ab",
+                        "primary-container": "#4d8eff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Space Grotesk"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; background-color: #0c1324; color: #dce1fb; }
+        .font-headline { font-family: 'Space Grotesk', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .glass-panel { background: rgba(51, 57, 76, 0.6); backdrop-filter: blur(24px); }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="bg-surface selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopNavBar -->
+<nav class="bg-slate-950/60 backdrop-blur-xl fixed top-0 w-full z-50 shadow-2xl shadow-black/50 flex items-center justify-between px-8 h-16 w-full">
+<div class="flex items-center gap-8">
+<span class="text-2xl font-bold tracking-tighter text-blue-400 font-headline">ScanOps</span>
+<div class="hidden md:flex gap-6">
+<a class="text-slate-400 hover:text-slate-200 transition-colors font-['Space_Grotesk'] tracking-tight" href="#">Dashboard</a>
+<a class="text-slate-400 hover:text-slate-200 transition-colors font-['Space_Grotesk'] tracking-tight" href="#">Scans</a>
+<a class="text-slate-400 hover:text-slate-200 transition-colors font-['Space_Grotesk'] tracking-tight" href="#">Assets</a>
+<a class="text-slate-400 hover:text-slate-200 transition-colors font-['Space_Grotesk'] tracking-tight" href="#">Reports</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative group">
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors">notifications</span>
+<span class="absolute -top-1 -right-1 w-2 h-2 bg-error rounded-full"></span>
+</div>
+<span class="material-symbols-outlined text-blue-400 border-b-2 border-blue-500 pb-1 cursor-pointer">settings</span>
+<img alt="User profile" class="w-8 h-8 rounded-full border border-outline-variant" data-alt="close-up portrait of a tech professional in a dimly lit office with cool blue ambient light reflecting on spectacles" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAabVAR6Y1AaNLRBkvLRmlsNVodrKW3o0FkscETTzyQ9FMvzzprQFxJ43ewDfmNToTelAiN8t4qfL49VXwfr9g07NGVeHv92LQzI__EMb_R8iFRIaeN2JA2f0_40lihI5GKcKvykmI80F7-5IY8ToVVv61XBBQj8AlmXy8fXeoBJN0hV48b0w8TokE9HYPOz9ukovNKDZ1TWidEKYgrSCNtEQLJbDpzbKlYn9jlcMsNAbmfjt3fgwCdjfsPD040phfMtMDbvUYk58Q6"/>
+</div>
+</nav>
+<!-- SideNavBar -->
+<aside class="h-screen w-64 fixed left-0 top-0 pt-20 bg-slate-950 flex flex-col space-y-2 p-4">
+<div class="px-4 py-2 mb-4">
+<h2 class="text-blue-400 font-bold font-headline uppercase tracking-widest text-xs">Export Settings</h2>
+<p class="text-slate-500 text-[10px] font-body uppercase tracking-tighter">Tactical Command</p>
+</div>
+<a class="flex items-center gap-3 p-3 rounded text-slate-500 hover:text-slate-300 hover:bg-slate-900/50 hover:translate-x-1 transition-transform duration-200 font-['Inter'] text-sm" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span>General</span>
+</a>
+<a class="flex items-center gap-3 p-3 rounded bg-blue-500/10 text-blue-400 font-semibold border-r-2 border-blue-500 hover:translate-x-1 transition-transform duration-200 font-['Inter'] text-sm" href="#">
+<span class="material-symbols-outlined" data-icon="ios_share">ios_share</span>
+<span>Export Rules</span>
+</a>
+<a class="flex items-center gap-3 p-3 rounded text-slate-500 hover:text-slate-300 hover:bg-slate-900/50 hover:translate-x-1 transition-transform duration-200 font-['Inter'] text-sm" href="#">
+<span class="material-symbols-outlined" data-icon="Description">description</span>
+<span>Templates</span>
+</a>
+<a class="flex items-center gap-3 p-3 rounded text-slate-500 hover:text-slate-300 hover:bg-slate-900/50 hover:translate-x-1 transition-transform duration-200 font-['Inter'] text-sm" href="#">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+<span>Retention</span>
+</a>
+<a class="flex items-center gap-3 p-3 rounded text-slate-500 hover:text-slate-300 hover:bg-slate-900/50 hover:translate-x-1 transition-transform duration-200 font-['Inter'] text-sm" href="#">
+<span class="material-symbols-outlined" data-icon="terminal">terminal</span>
+<span>Integrations</span>
+</a>
+<div class="mt-auto p-4">
+<button class="w-full bg-primary-container text-on-primary-container font-bold py-3 rounded-lg text-xs uppercase tracking-widest flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm">add</span>
+                New Template
+            </button>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-64 pt-24 px-8 pb-12 min-h-screen">
+<header class="mb-12">
+<h1 class="text-6xl font-headline font-extrabold tracking-tighter text-on-surface">Export Settings</h1>
+<p class="text-on-surface-variant text-sm mt-2 font-body max-w-2xl">Configure tactical data extraction parameters and report aesthetics. Changes applied here will reflect across all automated scan deliverables.</p>
+</header>
+<div class="grid grid-cols-12 gap-8">
+<!-- Left Column: Settings -->
+<div class="col-span-12 lg:col-span-8 space-y-8">
+<!-- Section 1: Default File Formats -->
+<section class="bg-surface-container-low p-8 rounded-xl">
+<div class="flex items-center justify-between mb-6">
+<h3 class="font-headline text-2xl font-bold text-primary">Default File Formats</h3>
+<span class="label-sm px-2 py-1 bg-surface-container-highest text-on-surface-variant rounded uppercase text-[10px] tracking-widest">Format Priority</span>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+<div class="bg-surface-container-highest p-4 rounded-lg flex flex-col items-center gap-3 border border-transparent hover:border-primary/40 transition-all cursor-pointer">
+<span class="material-symbols-outlined text-primary text-3xl">picture_as_pdf</span>
+<span class="font-headline font-bold">PDF</span>
+<input checked="" class="form-checkbox bg-surface-container rounded border-none text-primary focus:ring-primary focus:ring-offset-surface" type="checkbox"/>
+</div>
+<div class="bg-surface-container-highest p-4 rounded-lg flex flex-col items-center gap-3 border border-transparent hover:border-primary/40 transition-all cursor-pointer">
+<span class="material-symbols-outlined text-on-surface-variant text-3xl">data_object</span>
+<span class="font-headline font-bold">JSON</span>
+<input class="form-checkbox bg-surface-container rounded border-none text-primary focus:ring-primary focus:ring-offset-surface" type="checkbox"/>
+</div>
+<div class="bg-surface-container-highest p-4 rounded-lg flex flex-col items-center gap-3 border border-transparent hover:border-primary/40 transition-all cursor-pointer">
+<span class="material-symbols-outlined text-on-surface-variant text-3xl">code</span>
+<span class="font-headline font-bold">XML</span>
+<input class="form-checkbox bg-surface-container rounded border-none text-primary focus:ring-primary focus:ring-offset-surface" type="checkbox"/>
+</div>
+<div class="bg-surface-container-highest p-4 rounded-lg flex flex-col items-center gap-3 border border-transparent hover:border-primary/40 transition-all cursor-pointer">
+<span class="material-symbols-outlined text-on-surface-variant text-3xl">table_chart</span>
+<span class="font-headline font-bold">CSV</span>
+<input checked="" class="form-checkbox bg-surface-container rounded border-none text-primary focus:ring-primary focus:ring-offset-surface" type="checkbox"/>
+</div>
+</div>
+</section>
+<!-- Section 2: Branded Report Templates -->
+<section class="bg-surface-container-low p-8 rounded-xl">
+<h3 class="font-headline text-2xl font-bold text-primary mb-6">Branded Report Templates</h3>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Template Card -->
+<div class="bg-surface p-4 rounded-lg border-2 border-primary group cursor-pointer relative overflow-hidden">
+<div class="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<div class="h-32 mb-4 rounded bg-surface-container-high flex items-center justify-center overflow-hidden">
+<div class="w-full h-full bg-gradient-to-br from-primary/20 to-surface-container-highest flex items-center justify-center">
+<span class="material-symbols-outlined text-primary scale-150">analytics</span>
+</div>
+</div>
+<h4 class="font-bold text-on-surface">Executive Summary</h4>
+<p class="text-xs text-on-surface-variant mt-1">High-level risk assessment for C-suite and stakeholders.</p>
+<div class="mt-4 flex justify-end">
+<span class="material-symbols-outlined text-primary text-sm">check_circle</span>
+</div>
+</div>
+<!-- Template Card -->
+<div class="bg-surface-container-highest p-4 rounded-lg border border-outline-variant hover:border-primary/40 group cursor-pointer relative overflow-hidden">
+<div class="h-32 mb-4 rounded bg-surface-container-high flex items-center justify-center">
+<span class="material-symbols-outlined text-on-surface-variant scale-150">terminal</span>
+</div>
+<h4 class="font-bold text-on-surface">Full Technical Audit</h4>
+<p class="text-xs text-on-surface-variant mt-1">Granular log-level data for engineering response teams.</p>
+</div>
+<!-- Template Card -->
+<div class="bg-surface-container-highest p-4 rounded-lg border border-outline-variant hover:border-primary/40 group cursor-pointer relative overflow-hidden">
+<div class="h-32 mb-4 rounded bg-surface-container-high flex items-center justify-center">
+<span class="material-symbols-outlined text-on-surface-variant scale-150">verified_user</span>
+</div>
+<h4 class="font-bold text-on-surface">Compliance Standard</h4>
+<p class="text-xs text-on-surface-variant mt-1">Mapped to SOC2, ISO27001, and GDPR requirements.</p>
+</div>
+</div>
+</section>
+<!-- Section 3: Header/Footer Customization -->
+<section class="bg-surface-container-low p-8 rounded-xl">
+<h3 class="font-headline text-2xl font-bold text-primary mb-6">PDF Customization</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div class="space-y-4">
+<label class="block">
+<span class="text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2 block">Header Text</span>
+<input class="w-full bg-surface-container-lowest border-none rounded p-3 text-sm focus:ring-1 focus:ring-primary/40 text-on-surface" placeholder="e.g. Confidential Operations Report" type="text"/>
+</label>
+<label class="block">
+<span class="text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2 block">Footer Text</span>
+<input class="w-full bg-surface-container-lowest border-none rounded p-3 text-sm focus:ring-1 focus:ring-primary/40 text-on-surface" placeholder="© 2024 ScanOps Tactical Solutions" type="text"/>
+</label>
+<div class="pt-4">
+<span class="text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2 block">Insert Variables</span>
+<div class="flex flex-wrap gap-2">
+<button class="px-2 py-1 bg-surface-container-highest text-[10px] text-primary-fixed-dim rounded font-mono border border-outline-variant hover:border-primary transition-colors">{{SCAN_ID}}</button>
+<button class="px-2 py-1 bg-surface-container-highest text-[10px] text-primary-fixed-dim rounded font-mono border border-outline-variant hover:border-primary transition-colors">{{DATE}}</button>
+<button class="px-2 py-1 bg-surface-container-highest text-[10px] text-primary-fixed-dim rounded font-mono border border-outline-variant hover:border-primary transition-colors">{{USER_TAG}}</button>
+<button class="px-2 py-1 bg-surface-container-highest text-[10px] text-primary-fixed-dim rounded font-mono border border-outline-variant hover:border-primary transition-colors">{{THREAT_LVL}}</button>
+</div>
+</div>
+</div>
+<div class="space-y-4">
+<span class="text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2 block">Logo Assets</span>
+<div class="h-32 border-2 border-dashed border-outline-variant rounded-lg flex flex-col items-center justify-center gap-2 hover:bg-surface-container transition-colors cursor-pointer group">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors">cloud_upload</span>
+<span class="text-xs text-on-surface-variant">Upload High-Res PNG or SVG</span>
+<span class="text-[10px] text-outline">Max size 2MB (300x100px recommended)</span>
+</div>
+<div class="flex items-center gap-3 bg-surface-container-lowest p-3 rounded">
+<div class="w-10 h-10 bg-primary/20 rounded flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-sm">image</span>
+</div>
+<div class="flex-1">
+<p class="text-[10px] font-bold text-on-surface">default_brand_logo.svg</p>
+<p class="text-[9px] text-outline">12 KB • Vector Graphic</p>
+</div>
+<span class="material-symbols-outlined text-error text-sm cursor-pointer">delete</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 4: Export Retention -->
+<section class="bg-surface-container-low p-8 rounded-xl">
+<div class="flex items-center justify-between mb-8">
+<h3 class="font-headline text-2xl font-bold text-primary">Data Retention Policy</h3>
+<span class="text-3xl font-headline font-bold text-on-surface">180 <span class="text-sm text-outline font-normal">Days</span></span>
+</div>
+<div class="relative w-full h-8 flex items-center">
+<div class="absolute w-full h-1 bg-surface-container-highest rounded-full"></div>
+<div class="absolute w-1/2 h-1 bg-primary rounded-full"></div>
+<div class="absolute left-1/2 w-4 h-4 bg-primary border-4 border-surface rounded-full cursor-pointer shadow-lg"></div>
+</div>
+<div class="flex justify-between mt-4">
+<span class="text-[10px] text-outline font-bold uppercase tracking-wider">30 Days</span>
+<span class="text-[10px] text-outline font-bold uppercase tracking-wider">90 Days</span>
+<span class="text-[10px] text-primary font-bold uppercase tracking-wider">180 Days</span>
+<span class="text-[10px] text-outline font-bold uppercase tracking-wider">365 Days</span>
+<span class="text-[10px] text-outline font-bold uppercase tracking-wider">Infinity</span>
+</div>
+<p class="mt-6 p-4 bg-error-container/10 border-l-2 border-error text-[11px] text-error">
+                        Warning: Reports older than 180 days will be permanently purged from tactical storage. Ensure local backups are maintained.
+                    </p>
+</section>
+</div>
+<!-- Right Column: Preview & Sticky Actions -->
+<div class="col-span-12 lg:col-span-4 space-y-8">
+<!-- Report Branding Preview -->
+<div class="glass-panel p-6 rounded-2xl sticky top-24 shadow-2xl">
+<h3 class="font-headline text-lg font-bold text-on-surface mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-sm" style="font-variation-settings: 'FILL' 1;">visibility</span>
+                        Live Preview
+                    </h3>
+<div class="relative aspect-[3/4] bg-white rounded-sm shadow-inner overflow-hidden flex flex-col group">
+<!-- Preview Header -->
+<div class="p-6 border-b border-slate-100 flex justify-between items-start">
+<div class="w-16 h-6 bg-slate-200 rounded flex items-center px-1">
+<div class="w-4 h-4 bg-blue-500 rounded-full mr-1"></div>
+<div class="h-1 w-8 bg-slate-300 rounded"></div>
+</div>
+<div class="text-[8px] text-slate-400 font-mono text-right">
+<p>REPORT ID: #SC-0042</p>
+<p>OCT 24, 2024</p>
+</div>
+</div>
+<!-- Preview Content -->
+<div class="p-8 flex-1">
+<div class="h-2 w-24 bg-blue-500 mb-2"></div>
+<div class="h-6 w-full bg-slate-900 mb-6 rounded-sm"></div>
+<div class="space-y-3">
+<div class="h-2 w-full bg-slate-100 rounded"></div>
+<div class="h-2 w-full bg-slate-100 rounded"></div>
+<div class="h-2 w-3/4 bg-slate-100 rounded"></div>
+</div>
+<div class="mt-12 grid grid-cols-2 gap-4">
+<div class="h-20 bg-slate-50 border border-slate-100 rounded-sm p-2 flex flex-col justify-end">
+<div class="h-2 w-1/2 bg-blue-200 rounded mb-1"></div>
+<div class="h-4 w-3/4 bg-blue-400 rounded"></div>
+</div>
+<div class="h-20 bg-slate-50 border border-slate-100 rounded-sm p-2 flex flex-col justify-end">
+<div class="h-2 w-1/2 bg-amber-100 rounded mb-1"></div>
+<div class="h-4 w-3/4 bg-amber-400 rounded"></div>
+</div>
+</div>
+<div class="mt-8">
+<div class="h-32 w-full bg-slate-100 rounded-sm overflow-hidden opacity-50 flex items-center justify-center">
+<span class="material-symbols-outlined text-slate-300 text-4xl">insert_chart</span>
+</div>
+</div>
+</div>
+<!-- Preview Footer -->
+<div class="p-4 bg-slate-50 text-[6px] text-slate-400 text-center uppercase tracking-tighter border-t border-slate-100">
+                            Confidential Operations Report • Page 1 of 42 • {{SCAN_ID}}
+                        </div>
+<!-- Overlay Indicator -->
+<div class="absolute inset-0 bg-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+<button class="bg-blue-600 text-white text-[10px] px-4 py-2 rounded-full font-bold shadow-xl">VIEW FULL SCREEN</button>
+</div>
+</div>
+<div class="mt-8 space-y-3">
+<button class="w-full bg-primary text-on-primary font-bold py-4 rounded-lg uppercase tracking-widest text-xs hover:shadow-lg hover:shadow-primary/20 transition-all">
+                            Save Settings
+                        </button>
+<button class="w-full bg-surface-container-highest text-on-surface font-bold py-4 rounded-lg uppercase tracking-widest text-xs hover:bg-surface-bright transition-all">
+                            Reset to Defaults
+                        </button>
+</div>
+<div class="mt-6 p-4 rounded-lg bg-surface-container-low flex items-start gap-3">
+<span class="material-symbols-outlined text-tertiary text-sm">info</span>
+<div>
+<p class="text-[10px] text-on-surface font-bold">Auto-Sync Active</p>
+<p class="text-[9px] text-on-surface-variant">Settings will propagate to cloud instances within 2 minutes.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Status Bar (Tactical Detail) -->
+<footer class="fixed bottom-0 w-full h-10 bg-slate-950 border-t border-outline-variant/10 flex items-center px-8 justify-between z-50 text-[10px] font-mono text-slate-500">
+<div class="flex gap-6">
+<span class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-tertiary animate-pulse"></span> SYSTEM NOMINAL</span>
+<span class="text-slate-700">|</span>
+<span>LATENCY: 14MS</span>
+<span class="text-slate-700">|</span>
+<span>ENCRYPTION: AES-256</span>
+</div>
+<div class="flex gap-4">
+<span class="text-primary-fixed-dim">V.2.4.0-STABLE</span>
+<span>COORD: 37.7749° N, 122.4194° W</span>
+</div>
+</footer>
+</body></html>

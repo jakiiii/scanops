@@ -1,0 +1,74 @@
+{% load scanops_tags %}
+<div class="scanops-panel overflow-hidden">
+    <div class="overflow-x-auto">
+        <table class="w-full min-w-[1080px] text-left border-collapse">
+            <thead>
+            <tr class="border-b border-slate-800 bg-slate-900/70">
+                <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">Name</th>
+                <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">Target</th>
+                <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">Profile</th>
+                <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">Frequency</th>
+                <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">Next Run</th>
+                <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">Status</th>
+                <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">Notifications</th>
+                <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500 text-right">Actions</th>
+            </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-800/60">
+            {% for schedule in schedules %}
+                <tr class="hover:bg-slate-800/30 transition-colors">
+                    <td class="px-4 py-4">
+                        <p class="text-sm font-semibold text-slate-100">{{ schedule.name }}</p>
+                        <p class="text-[11px] text-slate-500">#{{ schedule.pk }}</p>
+                    </td>
+                    <td class="px-4 py-4 text-sm text-slate-200">{{ schedule.target.target_value }}</td>
+                    <td class="px-4 py-4 text-sm text-slate-300">{{ schedule.profile.name|default:schedule.get_scan_type_display }}</td>
+                    <td class="px-4 py-4 text-xs text-slate-300">{{ schedule.get_schedule_type_display }}</td>
+                    <td class="px-4 py-4 text-xs text-slate-300">{{ schedule.next_run_at|date:"M d, Y H:i"|default:"-" }}</td>
+                    <td class="px-4 py-4">
+                        <span class="px-2 py-1 rounded text-[10px] uppercase font-semibold {{ schedule.is_enabled|yesno:'enabled,disabled'|status_badge }}">{{ schedule.is_enabled|yesno:"Enabled,Disabled" }}</span>
+                    </td>
+                    <td class="px-4 py-4 text-xs text-slate-300">{{ schedule.notification_enabled|yesno:"Enabled,Disabled" }}</td>
+                    <td class="px-4 py-4">
+                        <div class="flex justify-end gap-2">
+                            <form method="post" action="{% url 'schedules:run-now' schedule.pk %}">
+                                {% csrf_token %}
+                                <button type="submit" class="px-2.5 py-1.5 rounded bg-blue-500/20 hover:bg-blue-500/30 text-[11px] text-blue-200">Run Now</button>
+                            </form>
+                            <a href="{% url 'schedules:edit' schedule.pk %}" class="px-2.5 py-1.5 rounded bg-slate-800 hover:bg-slate-700 text-[11px] text-slate-200">Edit</a>
+                            <form method="post" action="{% url 'schedules:toggle' schedule.pk %}">
+                                {% csrf_token %}
+                                <button type="submit" class="px-2.5 py-1.5 rounded bg-amber-500/20 hover:bg-amber-500/30 text-[11px] text-amber-200">{{ schedule.is_enabled|yesno:"Disable,Enable" }}</button>
+                            </form>
+                            <form method="post" action="{% url 'schedules:delete' schedule.pk %}">
+                                {% csrf_token %}
+                                <button type="submit" class="px-2.5 py-1.5 rounded bg-rose-500/20 hover:bg-rose-500/30 text-[11px] text-rose-200">Delete</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="8" class="px-4 py-14 text-center">
+                        <span class="material-symbols-outlined text-4xl text-slate-600">calendar_clock</span>
+                        <p class="text-sm text-slate-300 mt-2">No schedules available.</p>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% if is_paginated %}
+        <div class="px-4 py-3 border-t border-slate-800 bg-slate-900/40 flex justify-between items-center">
+            <p class="text-xs text-slate-500">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</p>
+            <div class="flex gap-2">
+                {% if page_obj.has_previous %}
+                    <a href="?page={{ page_obj.previous_page_number }}" hx-get="?page={{ page_obj.previous_page_number }}" hx-include="#schedule-filter-form" hx-target="#schedules-table-container" hx-push-url="true" class="px-3 py-1.5 text-xs rounded bg-slate-800 hover:bg-slate-700 text-slate-200">Previous</a>
+                {% endif %}
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}" hx-get="?page={{ page_obj.next_page_number }}" hx-include="#schedule-filter-form" hx-target="#schedules-table-container" hx-push-url="true" class="px-3 py-1.5 text-xs rounded bg-slate-800 hover:bg-slate-700 text-slate-200">Next</a>
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+</div>

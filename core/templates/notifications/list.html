@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}Notifications | ScanOps{% endblock %}
+
+{% block content %}
+    {% include "includes/breadcrumbs.html" with breadcrumbs=breadcrumbs %}
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+        <div>
+            <h1 class="text-4xl font-bold text-white tracking-tight">Notifications</h1>
+            <p class="text-slate-400 mt-1">Alerts and operational events linked to scans, schedules, reports, and assets.</p>
+        </div>
+        <form method="post" action="{% url 'notifications:mark-all-read' %}">
+            {% csrf_token %}
+            <button type="submit" class="px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-sm font-semibold text-slate-100 hover:bg-slate-700">Mark All Read</button>
+        </form>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+        <div class="scanops-panel p-5 border-l-4 border-l-blue-500">
+            <p class="text-xs uppercase tracking-widest text-slate-500">Total</p>
+            <p class="text-3xl font-bold text-blue-300 mt-2">{{ summary.total }}</p>
+        </div>
+        <div class="scanops-panel p-5 border-l-4 border-l-amber-500">
+            <p class="text-xs uppercase tracking-widest text-slate-500">Unread</p>
+            <p class="text-3xl font-bold text-amber-300 mt-2">{{ summary.unread }}</p>
+        </div>
+        <div class="scanops-panel p-5 border-l-4 border-l-rose-500">
+            <p class="text-xs uppercase tracking-widest text-slate-500">Critical Unread</p>
+            <p class="text-3xl font-bold text-rose-300 mt-2">{{ summary.critical }}</p>
+        </div>
+    </div>
+
+    <form
+        id="notification-filter-form"
+        class="scanops-panel p-4 mb-6"
+        hx-get="{% url 'notifications:list' %}"
+        hx-target="#notifications-container"
+        hx-trigger="keyup changed delay:450ms from:input, change from:select"
+        hx-push-url="true"
+    >
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+            <div>
+                <label class="block text-[10px] uppercase tracking-widest text-slate-500 mb-1.5">Search</label>
+                {{ filter_form.q }}
+            </div>
+            <div>
+                <label class="block text-[10px] uppercase tracking-widest text-slate-500 mb-1.5">Read State</label>
+                {{ filter_form.is_read }}
+            </div>
+            <div>
+                <label class="block text-[10px] uppercase tracking-widest text-slate-500 mb-1.5">Type</label>
+                {{ filter_form.notification_type }}
+            </div>
+            <div>
+                <label class="block text-[10px] uppercase tracking-widest text-slate-500 mb-1.5">Severity</label>
+                {{ filter_form.severity }}
+            </div>
+            <div>
+                <label class="block text-[10px] uppercase tracking-widest text-slate-500 mb-1.5">From</label>
+                {{ filter_form.date_from }}
+            </div>
+            <div>
+                <label class="block text-[10px] uppercase tracking-widest text-slate-500 mb-1.5">To</label>
+                {{ filter_form.date_to }}
+            </div>
+        </div>
+    </form>
+
+    <div id="notifications-container">
+        {% include "partials/notifications_list.html" %}
+    </div>
+{% endblock %}

@@ -1,0 +1,11 @@
+[Unit]
+Description=Run IncidentMatrix database backup every 15 days
+
+[Timer]
+OnBootSec=10m
+OnUnitActiveSec=15d
+Persistent=true
+Unit=incidentmatrix-db-backup.service
+
+[Install]
+WantedBy=timers.target

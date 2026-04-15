@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block title %}Generate Report | ScanOps{% endblock %}
+
+{% block content %}
+    {% include "includes/breadcrumbs.html" with breadcrumbs=breadcrumbs %}
+    <div class="mb-8">
+        <h1 class="text-4xl font-bold text-white tracking-tight">Generate Report</h1>
+        <p class="text-slate-400 mt-1">Create executive, technical, comparison, or per-host reports from existing operational data.</p>
+    </div>
+
+    {% if form.non_field_errors %}
+        <div class="scanops-panel p-4 border-rose-500/30 mb-6">
+            {% for error in form.non_field_errors %}
+                <p class="text-sm text-rose-200">{{ error }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
+        <div class="xl:col-span-8">
+            <form id="report-generate-form" method="post" class="space-y-6">
+                {% csrf_token %}
+                <div
+                    class="scanops-panel p-6 space-y-5"
+                    hx-post="{% url 'reports:preview' %}"
+                    hx-target="#report-preview-panel"
+                    hx-trigger="change from:select, change from:input[type='checkbox'], keyup delay:450ms from:input, keyup delay:550ms from:textarea"
+                    hx-include="#report-generate-form"
+                >
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div>
+                            <label class="block text-sm text-slate-300 mb-1.5">Report Title</label>
+                            {{ form.title }}
+                        </div>
+                        <div>
+                            <label class="block text-sm text-slate-300 mb-1.5">Source Type</label>
+                            {{ form.source_type }}
+                        </div>
+                        <div>
+                            <label class="block text-sm text-slate-300 mb-1.5">Report Type</label>
+                            {{ form.report_type }}
+                        </div>
+                        <div>
+                            <label class="block text-sm text-slate-300 mb-1.5">Output Format</label>
+                            {{ form.format }}
+                        </div>
+                    </div>
+
+                    <div class="border-t border-slate-800 pt-5">
+                        <p class="text-xs uppercase tracking-widest text-slate-500 mb-3">Source Selection</p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                            <div>
+                                <label class="block text-sm text-slate-300 mb-1.5">Source Result</label>
+                                {{ form.source_result }}
+                                {% if form.source_result.errors %}<p class="text-xs text-rose-300 mt-1">{{ form.source_result.errors|striptags }}</p>{% endif %}
+                            </div>
+                            <div>
+                                <label class="block text-sm text-slate-300 mb-1.5">Source Execution</label>
+                                {{ form.source_execution }}
+                                {% if form.source_execution.errors %}<p class="text-xs text-rose-300 mt-1">{{ form.source_execution.errors|striptags }}</p>{% endif %}
+                            </div>
+                            <div>
+                                <label class="block text-sm text-slate-300 mb-1.5">Comparison Baseline</label>
+                                {{ form.comparison_left_result }}
+                                {% if form.comparison_left_result.errors %}<p class="text-xs text-rose-300 mt-1">{{ form.comparison_left_result.errors|striptags }}</p>{% endif %}
+                            </div>
+                            <div>
+                                <label class="block text-sm text-slate-300 mb-1.5">Comparison Current</label>
+                                {{ form.comparison_right_result }}
+                                {% if form.comparison_right_result.errors %}<p class="text-xs text-rose-300 mt-1">{{ form.comparison_right_result.errors|striptags }}</p>{% endif %}
+                            </div>
+                            <div class="md:col-span-2">
+                                <label class="block text-sm text-slate-300 mb-1.5">Asset</label>
+                                {{ form.asset }}
+                                {% if form.asset.errors %}<p class="text-xs text-rose-300 mt-1">{{ form.asset.errors|striptags }}</p>{% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border-t border-slate-800 pt-5">
+                        <p class="text-xs uppercase tracking-widest text-slate-500 mb-3">Include Sections</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                            <label class="flex items-center justify-between gap-2 p-3 rounded-lg bg-slate-900/70 border border-slate-800"><span class="text-sm text-slate-300">Summary</span>{{ form.include_summary }}</label>
+                            <label class="flex items-center justify-between gap-2 p-3 rounded-lg bg-slate-900/70 border border-slate-800"><span class="text-sm text-slate-300">Ports</span>{{ form.include_ports }}</label>
+                            <label class="flex items-center justify-between gap-2 p-3 rounded-lg bg-slate-900/70 border border-slate-800"><span class="text-sm text-slate-300">Services</span>{{ form.include_services }}</label>
+                            <label class="flex items-center justify-between gap-2 p-3 rounded-lg bg-slate-900/70 border border-slate-800"><span class="text-sm text-slate-300">Findings</span>{{ form.include_findings }}</label>
+                            <label class="flex items-center justify-between gap-2 p-3 rounded-lg bg-slate-900/70 border border-slate-800"><span class="text-sm text-slate-300">Timeline</span>{{ form.include_timeline }}</label>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm text-slate-300 mb-1.5">Summary Notes</label>
+                        {{ form.summary_notes }}
+                    </div>
+                </div>
+                <div class="flex items-center justify-end gap-3">
+                    <a href="{% url 'reports:list' %}" class="px-4 py-2 text-sm font-semibold text-slate-400 hover:text-white">Cancel</a>
+                    <button type="submit" class="px-6 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-sm font-bold">Generate Report</button>
+                </div>
+            </form>
+        </div>
+        <div class="xl:col-span-4" id="report-preview-panel">
+            {% include "partials/report_preview.html" with preview=preview_payload %}
+        </div>
+    </div>
+{% endblock %}

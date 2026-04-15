@@ -1,0 +1,36 @@
+{% load scanops_tags %}
+<div class="space-y-4">
+    {% for change in changes %}
+        <div class="scanops-panel p-4">
+            <div class="flex justify-between items-start gap-3">
+                <div>
+                    <p class="text-sm font-semibold text-white">{{ change.asset.name }}</p>
+                    <p class="text-xs text-slate-500">{{ change.created_at|date:"M d, Y H:i:s" }}</p>
+                </div>
+                <span class="px-2 py-1 rounded text-[10px] uppercase font-semibold {{ change.change_type|status_badge }}">{{ change.get_change_type_display }}</span>
+            </div>
+            <p class="text-sm text-slate-300 mt-3">{{ change.summary }}</p>
+            {% if change.diff_json %}
+                <div class="mt-3 text-xs text-slate-400">
+                    {% if change.diff_json.ports_added %}
+                        <p>Added Ports: {{ change.diff_json.ports_added|length }}</p>
+                    {% endif %}
+                    {% if change.diff_json.ports_removed %}
+                        <p>Removed Ports: {{ change.diff_json.ports_removed|length }}</p>
+                    {% endif %}
+                    {% if change.diff_json.service_changed %}
+                        <p>Service Changes: {{ change.diff_json.service_changed|length }}</p>
+                    {% endif %}
+                    {% if change.diff_json.from and change.diff_json.to %}
+                        <p>OS: {{ change.diff_json.from }} -> {{ change.diff_json.to }}</p>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+    {% empty %}
+        <div class="scanops-panel p-10 text-center">
+            <span class="material-symbols-outlined text-4xl text-slate-600">timeline</span>
+            <p class="text-sm text-slate-300 mt-2">No asset changes detected yet.</p>
+        </div>
+    {% endfor %}
+</div>

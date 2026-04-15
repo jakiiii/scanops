@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ScanOps | User Management</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-container": "#4d8eff",
+                        "on-primary-container": "#00285d",
+                        "secondary-fixed-dim": "#b7c8e1",
+                        "on-tertiary": "#502400",
+                        "tertiary-fixed": "#ffdcc6",
+                        "secondary-container": "#3a4a5f",
+                        "surface-variant": "#2e3447",
+                        "on-secondary-container": "#a9bad3",
+                        "on-secondary-fixed-variant": "#38485d",
+                        "on-background": "#dce1fb",
+                        "secondary": "#b7c8e1",
+                        "on-error": "#690005",
+                        "surface-container-lowest": "#070d1f",
+                        "surface-bright": "#33394c",
+                        "tertiary-container": "#df7412",
+                        "surface-container": "#191f31",
+                        "on-tertiary-fixed": "#311400",
+                        "surface-container-highest": "#2e3447",
+                        "primary": "#adc6ff",
+                        "on-tertiary-fixed-variant": "#723600",
+                        "tertiary": "#ffb786",
+                        "outline-variant": "#424754",
+                        "on-surface-variant": "#c2c6d6",
+                        "inverse-on-surface": "#2a3043",
+                        "primary-fixed": "#d8e2ff",
+                        "on-primary": "#002e6a",
+                        "outline": "#8c909f",
+                        "on-surface": "#dce1fb",
+                        "on-primary-fixed": "#001a42",
+                        "secondary-fixed": "#d3e4fe",
+                        "tertiary-fixed-dim": "#ffb786",
+                        "surface-tint": "#adc6ff",
+                        "background": "#0c1324",
+                        "on-secondary-fixed": "#0b1c30",
+                        "surface-container-low": "#151b2d",
+                        "on-primary-fixed-variant": "#004395",
+                        "surface": "#0c1324",
+                        "surface-dim": "#0c1324",
+                        "surface-container-high": "#23293c",
+                        "on-tertiary-container": "#461f00",
+                        "inverse-surface": "#dce1fb",
+                        "inverse-primary": "#005ac2",
+                        "primary-fixed-dim": "#adc6ff",
+                        "error-container": "#93000a",
+                        "on-error-container": "#ffdad6",
+                        "error": "#ffb4ab",
+                        "on-secondary": "#213145"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Space Grotesk"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3 { font-family: 'Space Grotesk', sans-serif; }
+    </style>
+</head>
+<body class="bg-background text-on-surface selection:bg-primary-container selection:text-on-primary-container">
+<!-- SideNavBar -->
+<aside class="h-screen w-64 fixed left-0 top-0 bg-[#151b2d] flex flex-col py-4 z-40 transition-all duration-200 ease-in-out shadow-2xl shadow-black/50">
+<div class="px-6 mb-8">
+<h1 class="text-xl font-black text-blue-400 tracking-tighter uppercase">ScanOps Admin</h1>
+<div class="flex items-center mt-4 gap-3">
+<div class="w-10 h-10 rounded-lg bg-surface-variant flex items-center justify-center overflow-hidden">
+<img alt="System Administrator" class="w-full h-full object-cover" data-alt="Close-up portrait of a professional system administrator in a dark tech-focused environment with subtle blue lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBJxi6rH0t3gXYZ73HVDWcsKgwSXexj2uQsXOMPsOKgIeOxh5F7CK4yonnDFK7E62EBq7lmFZ7CeHdHLdxk0KfCtao-_57NBgAmzhCoVVeUYiN9LlzU82eHlNKIU6L49q6VJPoR33zmES4gzuME23x243Q-Miy6ddmDqFhQJXlLw15mSJK2gidXzaZPcNmB762_WDEmJ__fBxuzQ7UIv2Jodjvgv3J-ioneJRMPhIPgB47MvBRG8UO4j1w1FlAevhQBnL2Aev4ti03G"/>
+</div>
+<div>
+<p class="font-bold text-sm text-on-surface">Admin User</p>
+<p class="text-[10px] text-slate-500 uppercase tracking-widest">Level 4 Clearance</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center px-6 py-3 text-slate-500 hover:text-slate-300 hover:bg-white/5 transition-all" href="#">
+<span class="material-symbols-outlined mr-3">dashboard</span>
+<span class="font-medium text-sm">Dashboard</span>
+</a>
+<a class="flex items-center px-6 py-3 text-slate-500 hover:text-slate-300 hover:bg-white/5 transition-all" href="#">
+<span class="material-symbols-outlined mr-3">security</span>
+<span class="font-medium text-sm">Threat Intelligence</span>
+</a>
+<!-- Active Navigation State for User Management -->
+<a class="flex items-center px-6 py-3 text-blue-400 bg-blue-500/10 border-r-2 border-blue-500 transition-all" href="#">
+<span class="material-symbols-outlined mr-3">group</span>
+<span class="font-medium text-sm">User Management</span>
+</a>
+<a class="flex items-center px-6 py-3 text-slate-500 hover:text-slate-300 hover:bg-white/5 transition-all" href="#">
+<span class="material-symbols-outlined mr-3">radar</span>
+<span class="font-medium text-sm">Network Scan</span>
+</a>
+<a class="flex items-center px-6 py-3 text-slate-500 hover:text-slate-300 hover:bg-white/5 transition-all" href="#">
+<span class="material-symbols-outlined mr-3">assignment</span>
+<span class="font-medium text-sm">Audit Logs</span>
+</a>
+<a class="flex items-center px-6 py-3 text-slate-500 hover:text-slate-300 hover:bg-white/5 transition-all" href="#">
+<span class="material-symbols-outlined mr-3">admin_panel_settings</span>
+<span class="font-medium text-sm">Access Control</span>
+</a>
+</nav>
+<div class="mt-auto px-6 pt-4 border-t border-white/5">
+<button class="w-full bg-primary-container text-on-primary-container font-bold py-2 rounded-lg flex items-center justify-center gap-2 hover:brightness-110 transition-all active:scale-95">
+<span class="material-symbols-outlined text-sm">add</span>
+                New Scan
+            </button>
+<div class="mt-4 space-y-2">
+<a class="flex items-center text-xs text-slate-500 hover:text-slate-300 transition-colors" href="#">
+<span class="material-symbols-outlined text-sm mr-2">support_agent</span>
+                    Support
+                </a>
+<a class="flex items-center text-xs text-slate-500 hover:text-slate-300 transition-colors" href="#">
+<span class="material-symbols-outlined text-sm mr-2 text-tertiary">check_circle</span>
+                    System Status
+                </a>
+</div>
+</div>
+</aside>
+<!-- Main Canvas -->
+<main class="ml-64 min-h-screen flex flex-col">
+<!-- TopAppBar -->
+<header class="flex justify-between items-center px-6 w-full h-16 sticky top-0 z-50 bg-[#0c1324] border-b border-white/5">
+<div class="flex items-center gap-4 flex-1">
+<div class="relative w-full max-w-md">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">search</span>
+<input class="w-full bg-surface-container-low border-none rounded-lg pl-10 pr-4 py-2 text-sm text-on-surface focus:ring-1 focus:ring-primary/40 placeholder:text-slate-500" placeholder="Global search commands..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<button class="p-2 text-slate-400 hover:bg-white/5 transition-colors rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 text-slate-400 hover:bg-white/5 transition-colors rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<button class="p-2 text-slate-400 hover:bg-white/5 transition-colors rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined">help</span>
+</button>
+<div class="w-8 h-8 ml-2 rounded-full overflow-hidden border border-white/10">
+<img alt="Operator Profile" class="w-full h-full object-cover" data-alt="Portrait of a male technical operator in professional attire, high-end corporate style" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAEYZu9GYRAS0WPNXFw60g_q1C29LAdJxRz6l3qke_xy67Ggp9eNSoT3esY3TRYjz9rng8lAiVDbmXJSttXNSaeOuxKEdpjhJWG2E7lrEB86C33LRS9KL41PBQFjfZnaaqgzvlTQgOjVv_cmJRbYfb7ph4YSw72iEy39fRRptSmpWyl6G7NQ1qgDTMXsD9RPKJtoJAVeTsCiOR6xGcfBqAB9tkgSC696Ln0nnvPA-LdHWRgjM_UjcOHJn2slbHgxQs10528UxRDmc-b"/>
+</div>
+</div>
+</header>
+<!-- Content Area -->
+<div class="p-8 space-y-8">
+<!-- Breadcrumbs and Header -->
+<div class="flex justify-between items-end">
+<div class="space-y-1">
+<p class="text-xs font-medium text-primary tracking-widest uppercase">Operations Control</p>
+<h2 class="text-4xl font-bold tracking-tight text-on-surface font-headline">User Management</h2>
+<p class="text-on-surface-variant text-sm">Monitor system access and oversee operational privileges.</p>
+</div>
+<button class="bg-primary text-on-primary px-5 py-2.5 rounded-lg font-bold text-sm flex items-center gap-2 transition-all hover:shadow-[0_0_20px_rgba(173,198,255,0.3)] active:scale-95">
+<span class="material-symbols-outlined">person_add</span>
+                    + Create User
+                </button>
+</div>
+<!-- Dashboard Stats / Asymmetric Layout -->
+<div class="grid grid-cols-12 gap-6">
+<div class="col-span-8 bg-surface-container-low rounded-xl p-1 relative overflow-hidden group">
+<div class="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-50"></div>
+<div class="relative p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+<div class="space-y-2">
+<span class="text-[10px] text-primary font-bold tracking-widest uppercase bg-primary/10 px-2 py-1 rounded">Real-time Metrics</span>
+<div class="flex items-baseline gap-2">
+<h3 class="text-5xl font-black text-on-surface font-headline">248</h3>
+<span class="text-sm text-tertiary font-bold tracking-tight">Active Nodes</span>
+</div>
+<p class="text-sm text-on-surface-variant">98.2% Security Compliance achieved across all operator accounts.</p>
+</div>
+<div class="flex gap-4">
+<div class="text-center p-4 bg-surface-variant/40 rounded-lg backdrop-blur-md min-w-[100px]">
+<p class="text-xs text-on-surface-variant uppercase mb-1">Pending</p>
+<p class="text-2xl font-bold text-tertiary">14</p>
+</div>
+<div class="text-center p-4 bg-surface-variant/40 rounded-lg backdrop-blur-md min-w-[100px]">
+<p class="text-xs text-on-surface-variant uppercase mb-1">Disabled</p>
+<p class="text-2xl font-bold text-error">03</p>
+</div>
+</div>
+</div>
+</div>
+<div class="col-span-4 bg-surface-container-low rounded-xl p-6 flex flex-col justify-center border-l-4 border-primary">
+<div class="flex items-center gap-4 mb-4">
+<div class="w-12 h-12 rounded bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-3xl">verified_user</span>
+</div>
+<div>
+<p class="text-on-surface font-bold">Admin Authority</p>
+<p class="text-xs text-on-surface-variant">Global System Governance</p>
+</div>
+</div>
+<p class="text-xs text-on-surface-variant leading-relaxed">
+                        You are currently operating under <span class="text-primary">Level 4 Clearance</span>. All administrative actions are logged in the persistent audit trail.
+                    </p>
+</div>
+</div>
+<!-- Table Section -->
+<div class="bg-surface-container-low rounded-xl overflow-hidden shadow-2xl shadow-black/20">
+<!-- Filters Bar -->
+<div class="p-4 bg-surface-container-high/50 flex flex-wrap items-center justify-between gap-4 border-b border-white/5">
+<div class="flex items-center gap-3">
+<div class="relative">
+<select class="bg-surface-container rounded-lg border-none text-xs text-on-surface-variant py-2 pl-3 pr-8 focus:ring-1 focus:ring-primary/40 appearance-none cursor-pointer">
+<option>Filter by Role: All</option>
+<option>Admin</option>
+<option>Senior Analyst</option>
+<option>Operator</option>
+</select>
+<span class="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 text-xs pointer-events-none">expand_more</span>
+</div>
+<div class="relative">
+<select class="bg-surface-container rounded-lg border-none text-xs text-on-surface-variant py-2 pl-3 pr-8 focus:ring-1 focus:ring-primary/40 appearance-none cursor-pointer">
+<option>Filter by Status: All</option>
+<option>Active</option>
+<option>Disabled</option>
+<option>Pending</option>
+</select>
+<span class="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 text-xs pointer-events-none">expand_more</span>
+</div>
+</div>
+<div class="text-xs text-on-surface-variant flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">history</span>
+                        Showing 12 of 265 total operators
+                    </div>
+</div>
+<!-- Table Content -->
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-lowest/50">
+<th class="px-6 py-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest">Name &amp; Identity</th>
+<th class="px-6 py-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest">Access Role</th>
+<th class="px-6 py-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest">Status</th>
+<th class="px-6 py-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest">Last Auth</th>
+<th class="px-6 py-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest">Activity Insight</th>
+<th class="px-6 py-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-white/[0.03]">
+<!-- Row 1: Active Admin -->
+<tr class="group hover:bg-surface-container-high transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full overflow-hidden bg-primary/20">
+<img alt="Operator 1" class="w-full h-full object-cover" data-alt="Professional profile photo of a male IT expert in a modern office, clean professional lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDxHR1LMnZgKZhs5ZRuesF_lswHOSM-iRMPLFlZKBYzn2xxa4dU0YY3lzRvjD1xYgrpqzdyJrmqueMVAi4dP0Av0l5sJCJPkuMZs71j0N51mVpikbuZ48SMMJVb7h2kqcTvf14iRdRh-Bv0F7XRQ46y4XvtkHVvyv_CXztcJ_ad3ZRVdxEE4wZKVLZM-TCTPZyU5BxYax0AsjWvYPsBBhKBqf1Ks6TWUTppc3HabqGkPwR1mp39Nwqx62FimGDBqwII8Xq-0KuZVkai"/>
+</div>
+<div>
+<p class="text-sm font-bold text-on-surface">Elias Thorne</p>
+<p class="text-xs text-on-surface-variant">e.thorne@scanops.dev</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="text-xs font-medium text-primary">Admin</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-tertiary animate-pulse shadow-[0_0_8px_rgba(255,183,134,0.6)]"></span>
+<span class="text-xs text-on-surface">Active</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<p class="text-xs text-on-surface">2 mins ago</p>
+<p class="text-[10px] text-on-surface-variant uppercase">IP: 192.168.1.42</p>
+</td>
+<td class="px-6 py-4">
+<div class="flex flex-col gap-1">
+<div class="flex justify-between text-[10px] text-on-surface-variant">
+<span>System Integrity Scan</span>
+<span>88%</span>
+</div>
+<div class="w-32 h-1 bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[88%]"></div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="flex justify-end gap-2">
+<button class="p-1.5 rounded bg-surface-variant hover:bg-primary-container hover:text-on-primary-container transition-all">
+<span class="material-symbols-outlined text-sm">edit</span>
+</button>
+<button class="p-1.5 rounded bg-surface-variant hover:bg-error hover:text-on-error transition-all">
+<span class="material-symbols-outlined text-sm">block</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 2: Senior Analyst Pending -->
+<tr class="group hover:bg-surface-container-high transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full overflow-hidden bg-tertiary/20">
+<img alt="Operator 2" class="w-full h-full object-cover" data-alt="Professional female executive in a high-tech corporate setting, neutral workspace lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCLjFFZP5vBlQxQp3KorlKY3uL1eqNYCSftSGS4zZcnhabZVuqI2EyroIt0Auk7U6GZuHx2vudSyxkJgORKARGHqg7o6TWBpUnK_DWP8rVetUZ6lcS2zFHZObenaCLwckyZFWrxb6Mek4Qs62ENfaBOcawbdE7-AU44IUiI1RM6e8A4ZXh-KJ1oV-WiQ4eMXmIWeR4eYZCScx-NYTJQuvfTx1pPK8hDwHihsjBNzfHpNmRuFSZTjG6jNRX8QHpNnCJadORAo9N9Zqlg"/>
+</div>
+<div>
+<p class="text-sm font-bold text-on-surface">Sarah Jenkins</p>
+<p class="text-xs text-on-surface-variant">s.jenkins@scanops.dev</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="text-xs font-medium text-secondary">Senior Analyst</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-tertiary opacity-40"></span>
+<span class="text-xs text-tertiary">Pending</span>
+</div>
+</td>
+<td class="px-6 py-4 text-on-surface-variant">
+<span class="text-xs">Never</span>
+</td>
+<td class="px-6 py-4">
+<p class="text-[10px] text-on-surface-variant uppercase tracking-tighter italic">Awaiting Onboarding</p>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="flex justify-end gap-2">
+<button class="p-1.5 rounded bg-surface-variant hover:bg-primary-container hover:text-on-primary-container transition-all">
+<span class="material-symbols-outlined text-sm">edit</span>
+</button>
+<button class="p-1.5 rounded bg-surface-variant hover:bg-error hover:text-on-error transition-all">
+<span class="material-symbols-outlined text-sm">block</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 3: Operator Disabled -->
+<tr class="group hover:bg-surface-container-high transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3 opacity-60">
+<div class="w-9 h-9 rounded-full overflow-hidden grayscale">
+<img alt="Operator 3" class="w-full h-full object-cover" data-alt="Portrait of a young male professional in a tech environment, dark tones" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD13VhJZ1boW2EjSdx2ShX7cKzRS1D0fVaQf99b_0bnkor1eoYWnAinV2YfSS2xevHCzvwFc4I1q4uPfUW0Yf11QGtXQK6iHLIWTfzXYFclc5mJoxpkMjHwP__K1nwGuAuyT8o98EZyccXqRuuGyRpHVR9p_sReAgSQ-BAdZd9QZu297-MUBVNXfYVyJJd3GdWLuI7Cz-86V8CVOwvVffN8A6r3cNkcj7HShvjisO8jkFIMb6nMP_Rd8DXFsXPJ4U-levD4DJgepf3P"/>
+</div>
+<div>
+<p class="text-sm font-bold text-on-surface">Marcus Vance</p>
+<p class="text-xs text-on-surface-variant">m.vance@scanops.dev</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 opacity-60">
+<span class="text-xs font-medium text-on-surface-variant">Operator</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-error"></span>
+<span class="text-xs text-error">Disabled</span>
+</div>
+</td>
+<td class="px-6 py-4 opacity-60">
+<p class="text-xs text-on-surface">3 days ago</p>
+<p class="text-[10px] text-on-surface-variant uppercase">Auth Revoked</p>
+</td>
+<td class="px-6 py-4 opacity-60">
+<p class="text-[10px] text-on-surface-variant">Account locked by Admin Elias</p>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="flex justify-end gap-2">
+<button class="p-1.5 rounded bg-surface-variant hover:bg-primary-container hover:text-on-primary-container transition-all">
+<span class="material-symbols-outlined text-sm">edit</span>
+</button>
+<button class="p-1.5 rounded bg-primary text-on-primary transition-all">
+<span class="material-symbols-outlined text-sm">check_circle</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 4: Operator Active -->
+<tr class="group hover:bg-surface-container-high transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full overflow-hidden bg-secondary/20">
+<img alt="Operator 4" class="w-full h-full object-cover" data-alt="Portrait of a female technician in a data center with blue ambient glow" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDQ52DgDtGzVRhrt_C8cDlQ3Mi3KaZk72nVFYaItig8Lsdc09JSUox6oGQ24mV1DxmXe4O-xElCb5c5D15vlzE0TiQX09nFkP5-YVsI98TWjm_JENskOwnUTnBWLQGSkX7dmHe2ShQTUczkTuxklGRLXoPszo8ZwlOwrdo16UD2E-ghIpXq6DANuXfI4g4oVHtZ5NRFh-7ygZ-Mf1WW1ZSNdaBE7tReXExDyMy5tMFziLaQY_p1lb_m5PfuuI1W8DVlf_U-FGR50NOC"/>
+</div>
+<div>
+<p class="text-sm font-bold text-on-surface">Julia Chen</p>
+<p class="text-xs text-on-surface-variant">j.chen@scanops.dev</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="text-xs font-medium text-on-surface-variant">Operator</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-tertiary shadow-[0_0_8px_rgba(255,183,134,0.4)]"></span>
+<span class="text-xs text-on-surface">Active</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<p class="text-xs text-on-surface">45 mins ago</p>
+<p class="text-[10px] text-on-surface-variant uppercase">IP: 10.0.4.192</p>
+</td>
+<td class="px-6 py-4">
+<div class="flex flex-col gap-1">
+<div class="flex justify-between text-[10px] text-on-surface-variant">
+<span>Network Latency Ops</span>
+<span>12%</span>
+</div>
+<div class="w-32 h-1 bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[12%]"></div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="flex justify-end gap-2">
+<button class="p-1.5 rounded bg-surface-variant hover:bg-primary-container hover:text-on-primary-container transition-all">
+<span class="material-symbols-outlined text-sm">edit</span>
+</button>
+<button class="p-1.5 rounded bg-surface-variant hover:bg-error hover:text-on-error transition-all">
+<span class="material-symbols-outlined text-sm">block</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination -->
+<div class="p-4 bg-surface-container-high/30 flex items-center justify-between border-t border-white/5">
+<button class="text-xs font-bold text-slate-500 hover:text-primary transition-colors flex items-center gap-1 disabled:opacity-30" disabled="">
+<span class="material-symbols-outlined text-sm">chevron_left</span>
+                        Previous
+                    </button>
+<div class="flex items-center gap-1">
+<button class="w-8 h-8 rounded text-xs font-bold bg-primary text-on-primary">1</button>
+<button class="w-8 h-8 rounded text-xs font-bold text-slate-500 hover:bg-white/5">2</button>
+<button class="w-8 h-8 rounded text-xs font-bold text-slate-500 hover:bg-white/5">3</button>
+<span class="text-slate-500 px-1">...</span>
+<button class="w-8 h-8 rounded text-xs font-bold text-slate-500 hover:bg-white/5">22</button>
+</div>
+<button class="text-xs font-bold text-slate-500 hover:text-primary transition-colors flex items-center gap-1">
+                        Next
+                        <span class="material-symbols-outlined text-sm">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- Audit Insight - Floating Glass Card -->
+<div class="bg-surface-bright/60 backdrop-blur-xl p-6 rounded-xl border border-white/10 flex items-center justify-between">
+<div class="flex items-center gap-6">
+<div class="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center text-primary border border-primary/20 relative">
+<span class="material-symbols-outlined text-3xl">terminal</span>
+<div class="absolute -top-1 -right-1 w-4 h-4 bg-error rounded-full border-2 border-background flex items-center justify-center">
+<span class="w-1.5 h-1.5 bg-white rounded-full"></span>
+</div>
+</div>
+<div class="space-y-1">
+<h4 class="text-lg font-bold text-on-surface">Recent Policy Deviation</h4>
+<p class="text-sm text-on-surface-variant max-w-xl">
+                            Operator <span class="text-primary font-medium">Julia Chen</span> attempted to access restricted subnet <span class="font-mono text-error">DB-CORE-04</span>. System blocked request automatically based on role privileges.
+                        </p>
+</div>
+</div>
+<div class="flex gap-3">
+<button class="text-xs font-bold text-on-surface-variant hover:text-on-surface px-4 py-2">Dismiss</button>
+<button class="text-xs font-bold bg-surface-container-highest text-on-surface px-4 py-2 rounded-lg hover:bg-secondary-container transition-all">Review Log</button>
+</div>
+</div>
+</div>
+<!-- Footer Footer (Minimal) -->
+<footer class="mt-auto p-6 border-t border-white/5 flex justify-between items-center bg-surface-container-lowest/50">
+<p class="text-[10px] text-slate-600 uppercase tracking-widest font-medium">© 2024 ScanOps Tactical Command. End-to-end encrypted session.</p>
+<div class="flex gap-6">
+<a class="text-[10px] text-slate-600 hover:text-primary transition-colors uppercase tracking-widest font-bold" href="#">Privacy Protocol</a>
+<a class="text-[10px] text-slate-600 hover:text-primary transition-colors uppercase tracking-widest font-bold" href="#">System Integrity</a>
+</div>
+</footer>
+</main>
+</body></html>

@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ScanOps Intelligence | Tactical Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Space+Grotesk:wght@500;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "inverse-primary": "#005ac2",
+                "surface-container-high": "#272a31",
+                "surface-container-low": "#191c22",
+                "error-container": "#93000a",
+                "tertiary-fixed-dim": "#ffb786",
+                "tertiary-fixed": "#ffdcc6",
+                "outline-variant": "#424754",
+                "on-secondary-container": "#9fb5e7",
+                "secondary-fixed-dim": "#b1c6f9",
+                "on-secondary": "#182f59",
+                "on-error-container": "#ffdad6",
+                "inverse-surface": "#e1e2eb",
+                "surface-container-highest": "#32353c",
+                "on-secondary-fixed-variant": "#304671",
+                "on-tertiary-container": "#461f00",
+                "tertiary-container": "#df7412",
+                "surface-container": "#1d2026",
+                "outline": "#8c909f",
+                "secondary-fixed": "#d8e2ff",
+                "tertiary": "#ffb786",
+                "on-primary-container": "#00285d",
+                "primary-fixed-dim": "#adc6ff",
+                "surface-tint": "#adc6ff",
+                "surface-container-lowest": "#0b0e14",
+                "on-primary-fixed-variant": "#004395",
+                "inverse-on-surface": "#2e3037",
+                "secondary": "#b1c6f9",
+                "background": "#10131a",
+                "secondary-container": "#304671",
+                "primary-fixed": "#d8e2ff",
+                "on-secondary-fixed": "#001a42",
+                "surface-bright": "#363940",
+                "primary": "#adc6ff",
+                "surface": "#10131a",
+                "on-tertiary-fixed-variant": "#723600",
+                "on-error": "#690005",
+                "on-primary-fixed": "#001a42",
+                "on-tertiary": "#502400",
+                "on-background": "#e1e2eb",
+                "surface-variant": "#32353c",
+                "on-tertiary-fixed": "#311400",
+                "primary-container": "#4d8eff",
+                "on-primary": "#002e6a",
+                "on-surface-variant": "#c2c6d6",
+                "surface-dim": "#10131a",
+                "on-surface": "#e1e2eb",
+                "error": "#ffb4ab"
+            },
+            "borderRadius": {
+                "DEFAULT": "0.125rem",
+                "lg": "0.25rem",
+                "xl": "0.5rem",
+                "full": "0.75rem"
+            },
+            "fontFamily": {
+                "headline": ["Space Grotesk"],
+                "body": ["Inter"],
+                "label": ["Inter"],
+                "mono": ["JetBrains Mono"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .ghost-border {
+            outline: 1px solid rgba(140, 144, 159, 0.15);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #32353c;
+            border-radius: 10px;
+        }
+        .pulse-indicator {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body selection:bg-primary/30 selection:text-primary">
+<!-- Sidebar Component -->
+<aside class="docked fixed left-0 h-full w-64 bg-slate-950 flex flex-col h-screen py-6 px-4 border-r border-slate-800/50 z-50">
+<div class="mb-10 px-2 flex items-center gap-3">
+<div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary text-xl" style="font-variation-settings: 'FILL' 1;">radar</span>
+</div>
+<div>
+<h1 class="text-blue-500 font-black font-headline tracking-tighter text-lg leading-none">ScanOps</h1>
+<p class="text-[10px] text-slate-500 font-mono tracking-widest uppercase mt-1">Silent Sentinel v2.4</p>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="text-slate-100 bg-slate-800/50 border-l-2 border-blue-500 flex items-center gap-3 px-3 py-2.5 cursor-pointer active:translate-x-1 transition-colors font-medium text-[13px] tracking-wide" href="#">
+<span class="material-symbols-outlined text-blue-500">dashboard</span> Dashboard
+            </a>
+<a class="text-slate-500 hover:text-slate-200 hover:bg-slate-900/50 flex items-center gap-3 px-3 py-2.5 cursor-pointer active:translate-x-1 transition-colors font-medium text-[13px] tracking-wide" href="#">
+<span class="material-symbols-outlined">add_circle</span> New Scan
+            </a>
+<a class="text-slate-500 hover:text-slate-200 hover:bg-slate-900/50 flex items-center gap-3 px-3 py-2.5 cursor-pointer active:translate-x-1 transition-colors font-medium text-[13px] tracking-wide" href="#">
+<span class="material-symbols-outlined">analytics</span> Results
+            </a>
+<a class="text-slate-500 hover:text-slate-200 hover:bg-slate-900/50 flex items-center gap-3 px-3 py-2.5 cursor-pointer active:translate-x-1 transition-colors font-medium text-[13px] tracking-wide" href="#">
+<span class="material-symbols-outlined">history</span> History
+            </a>
+<a class="text-slate-500 hover:text-slate-200 hover:bg-slate-900/50 flex items-center gap-3 px-3 py-2.5 cursor-pointer active:translate-x-1 transition-colors font-medium text-[13px] tracking-wide" href="#">
+<span class="material-symbols-outlined">radar</span> Targets
+            </a>
+<a class="text-slate-500 hover:text-slate-200 hover:bg-slate-900/50 flex items-center gap-3 px-3 py-2.5 cursor-pointer active:translate-x-1 transition-colors font-medium text-[13px] tracking-wide" href="#">
+<span class="material-symbols-outlined">inventory_2</span> Assets
+            </a>
+<a class="text-slate-500 hover:text-slate-200 hover:bg-slate-900/50 flex items-center gap-3 px-3 py-2.5 cursor-pointer active:translate-x-1 transition-colors font-medium text-[13px] tracking-wide" href="#">
+<span class="material-symbols-outlined">description</span> Reports
+            </a>
+<a class="text-slate-500 hover:text-slate-200 hover:bg-slate-900/50 flex items-center gap-3 px-3 py-2.5 cursor-pointer active:translate-x-1 transition-colors font-medium text-[13px] tracking-wide" href="#">
+<span class="material-symbols-outlined">event</span> Schedules
+            </a>
+<a class="text-slate-500 hover:text-slate-200 hover:bg-slate-900/50 flex items-center gap-3 px-3 py-2.5 cursor-pointer active:translate-x-1 transition-colors font-medium text-[13px] tracking-wide" href="#">
+<span class="material-symbols-outlined">settings</span> Settings
+            </a>
+</nav>
+<div class="mt-auto pt-6 border-t border-slate-800/50 space-y-4">
+<div class="bg-surface-container-low p-4 rounded border border-outline-variant/10">
+<div class="flex items-center justify-between mb-2">
+<p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">System Health</p>
+<div class="w-2 h-2 rounded-full bg-emerald-500 pulse-indicator"></div>
+</div>
+<div class="flex flex-col gap-2">
+<div class="w-full bg-slate-900 h-1.5 rounded-full overflow-hidden">
+<div class="bg-blue-500 h-full w-[42%]"></div>
+</div>
+<p class="text-[10px] text-slate-500 font-mono">CPU Usage: 42% | Nodes: 08/08</p>
+</div>
+</div>
+<div class="space-y-1">
+<a class="text-slate-500 hover:text-slate-200 hover:bg-slate-900/50 flex items-center gap-3 px-3 py-2 cursor-pointer transition-colors font-medium text-[13px]" href="#">
+<span class="material-symbols-outlined">menu_book</span> Documentation
+                </a>
+<a class="text-slate-500 hover:text-slate-200 hover:bg-slate-900/50 flex items-center gap-3 px-3 py-2 cursor-pointer transition-colors font-medium text-[13px]" href="#">
+<span class="material-symbols-outlined">logout</span> Logout
+                </a>
+</div>
+<button class="w-full py-3 bg-gradient-to-br from-primary-container to-primary text-on-primary font-bold text-xs uppercase tracking-widest rounded-md active:scale-95 transition-all">
+                Upgrade Plan
+            </button>
+</div>
+</aside>
+<main class="ml-64 min-h-screen">
+<!-- TopAppBar Component -->
+<header class="docked full-width sticky top-0 z-40 bg-slate-900/60 backdrop-blur-xl flex justify-between items-center w-full px-8 py-3 shadow-[0_4px_40px_rgba(0,0,0,0.08)]">
+<div class="flex items-center gap-6">
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-lg group-focus-within:text-blue-400 transition-colors">search</span>
+<input class="bg-slate-800/40 border-0 focus:ring-0 focus:bg-slate-800/80 text-sm text-slate-100 pl-10 pr-4 py-2 w-80 rounded-lg transition-all font-body" placeholder="Command + K to search intel..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-4">
+<button class="p-2 text-slate-400 hover:bg-slate-800/80 hover:text-slate-100 rounded-lg transition-all relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full border-2 border-slate-900"></span>
+</button>
+</div>
+<div class="h-6 w-px bg-slate-800"></div>
+<button class="bg-blue-500 text-on-primary text-sm font-semibold px-4 py-2 rounded-lg hover:bg-blue-400 active:scale-95 duration-100 transition-all">
+                    + New Scan
+                </button>
+<div class="flex items-center gap-3 ml-2">
+<div class="text-right">
+<p class="text-[12px] font-bold text-slate-100 leading-none">Agent Zero</p>
+<p class="text-[10px] text-slate-500 font-mono mt-1">Tier: Enterprise</p>
+</div>
+<img alt="User profile" class="w-8 h-8 rounded-full border border-outline-variant/30" data-alt="Close-up portrait of a professional male tech worker with focused expression in a dark futuristic office setting with blue neon accents" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAml6QIg--BS6ldhOCuyCVdHKWZCbfETijhXLKpkzEDPnA_xWCCLr3UOAjjQG9y8EWoqKT6Bkmr_QMo6rpMkvB9sQYBr1BFmqB7JSl1xBkqdJaH7R6aJqkOQOC-XUaWIfMv8CZrZV1vQo5iKzd7QtGtIlaCS8CIUk12L_3FuDqPZJROLN1SP012Iw7PJpvPWXyi1HDtTIThsqhhP215MK9gfS3isimSMqDgR2ATHmnvHe7rzXWcelZafypQZdRYRQAQAoLKGXJcy7tw"/>
+</div>
+</div>
+</header>
+<!-- Main Content Area -->
+<div class="p-8 max-w-[1600px] mx-auto space-y-8">
+<!-- Hero Metrics / Top Stats -->
+<div class="grid grid-cols-1 md:grid-cols-5 gap-6">
+<div class="bg-surface-container p-6 border-l-2 border-blue-500 flex flex-col justify-between">
+<p class="text-[10px] font-bold text-on-surface-variant uppercase tracking-[0.2em]">Total Scans</p>
+<div class="mt-4">
+<span class="text-4xl font-bold font-headline leading-none">1,240</span>
+<p class="text-[11px] text-emerald-500 mt-2 font-mono flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">trending_up</span> +12% MoM
+                        </p>
+</div>
+</div>
+<div class="bg-surface-container p-6 border-l-2 border-primary-container flex flex-col justify-between">
+<p class="text-[10px] font-bold text-on-surface-variant uppercase tracking-[0.2em]">Running</p>
+<div class="mt-4 flex items-baseline gap-3">
+<span class="text-4xl font-bold font-headline leading-none text-primary">3</span>
+<div class="w-2 h-2 rounded-full bg-primary pulse-indicator"></div>
+</div>
+</div>
+<div class="bg-surface-container p-6 border-l-2 border-emerald-500 flex flex-col justify-between">
+<p class="text-[10px] font-bold text-on-surface-variant uppercase tracking-[0.2em]">Completed</p>
+<div class="mt-4">
+<span class="text-4xl font-bold font-headline leading-none">1.1k</span>
+<p class="text-[11px] text-on-surface-variant mt-2 font-mono">92% Success Rate</p>
+</div>
+</div>
+<div class="bg-surface-container p-6 border-l-2 border-error flex flex-col justify-between">
+<p class="text-[10px] font-bold text-on-surface-variant uppercase tracking-[0.2em]">Failed</p>
+<div class="mt-4">
+<span class="text-4xl font-bold font-headline leading-none text-error">12</span>
+<p class="text-[11px] text-on-surface-variant mt-2 font-mono">Requires attention</p>
+</div>
+</div>
+<div class="bg-surface-container p-6 border-l-2 border-slate-500 flex flex-col justify-between">
+<p class="text-[10px] font-bold text-on-surface-variant uppercase tracking-[0.2em]">Queued</p>
+<div class="mt-4">
+<span class="text-4xl font-bold font-headline leading-none text-on-surface-variant">5</span>
+<p class="text-[11px] text-on-surface-variant mt-2 font-mono">Estimated: 12m</p>
+</div>
+</div>
+</div>
+<!-- Charts Section (Asymmetric Bento Grid) -->
+<div class="grid grid-cols-12 gap-6">
+<!-- Scan Volume Line Chart -->
+<div class="col-span-12 lg:col-span-8 bg-surface-container p-8">
+<div class="flex items-center justify-between mb-10">
+<div>
+<h2 class="font-headline text-xl text-slate-100">Scan Volume Over Time</h2>
+<p class="text-sm text-on-surface-variant mt-1">Operational activity for the last 30 days</p>
+</div>
+<div class="flex gap-2">
+<span class="px-3 py-1 bg-surface-container-low text-[10px] font-bold rounded-lg border border-outline-variant/10">30 DAYS</span>
+<span class="px-3 py-1 bg-surface-container-highest text-[10px] font-bold rounded-lg border border-outline-variant/10">EXPORT</span>
+</div>
+</div>
+<div class="relative h-64 w-full">
+<!-- Mockup SVG Chart -->
+<svg class="w-full h-full overflow-visible" viewbox="0 0 800 200">
+<defs>
+<lineargradient id="chartGradient" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#4d8eff" stop-opacity="0.3"></stop>
+<stop offset="100%" stop-color="#4d8eff" stop-opacity="0"></stop>
+</lineargradient>
+</defs>
+<!-- Grid lines -->
+<line stroke="#32353c" stroke-width="0.5" x1="0" x2="800" y1="50" y2="50"></line>
+<line stroke="#32353c" stroke-width="0.5" x1="0" x2="800" y1="100" y2="100"></line>
+<line stroke="#32353c" stroke-width="0.5" x1="0" x2="800" y1="150" y2="150"></line>
+<!-- Path Area -->
+<path d="M0,160 Q100,120 200,140 T400,60 T600,100 T800,40 L800,200 L0,200 Z" fill="url(#chartGradient)"></path>
+<!-- Path Line -->
+<path d="M0,160 Q100,120 200,140 T400,60 T600,100 T800,40" fill="none" stroke="#adc6ff" stroke-linecap="round" stroke-width="3"></path>
+<!-- Points -->
+<circle cx="200" cy="140" fill="#adc6ff" r="4"></circle>
+<circle cx="400" cy="60" fill="#adc6ff" r="4"></circle>
+<circle cx="600" cy="100" fill="#adc6ff" r="4"></circle>
+</svg>
+</div>
+<div class="flex justify-between mt-6 px-2">
+<span class="text-[10px] font-mono text-on-surface-variant uppercase">01 Oct</span>
+<span class="text-[10px] font-mono text-on-surface-variant uppercase">10 Oct</span>
+<span class="text-[10px] font-mono text-on-surface-variant uppercase">20 Oct</span>
+<span class="text-[10px] font-mono text-on-surface-variant uppercase">30 Oct</span>
+</div>
+</div>
+<!-- Risk Bar Summary -->
+<div class="col-span-12 lg:col-span-4 bg-surface-container p-8">
+<h2 class="font-headline text-xl text-slate-100 mb-8">Risk Summary</h2>
+<div class="space-y-6">
+<div>
+<div class="flex justify-between items-center mb-2">
+<span class="text-xs font-bold uppercase tracking-wider text-error">Critical</span>
+<span class="text-xs font-mono">42</span>
+</div>
+<div class="w-full bg-surface-container-lowest h-3 rounded-full">
+<div class="bg-error h-full rounded-full" style="width: 85%"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between items-center mb-2">
+<span class="text-xs font-bold uppercase tracking-wider text-tertiary">High Risk</span>
+<span class="text-xs font-mono">156</span>
+</div>
+<div class="w-full bg-surface-container-lowest h-3 rounded-full">
+<div class="bg-tertiary h-full rounded-full" style="width: 60%"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between items-center mb-2">
+<span class="text-xs font-bold uppercase tracking-wider text-primary">Medium</span>
+<span class="text-xs font-mono">892</span>
+</div>
+<div class="w-full bg-surface-container-lowest h-3 rounded-full">
+<div class="bg-primary h-full rounded-full" style="width: 40%"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between items-center mb-2">
+<span class="text-xs font-bold uppercase tracking-wider text-on-surface-variant">Low</span>
+<span class="text-xs font-mono">2,410</span>
+</div>
+<div class="w-full bg-surface-container-lowest h-3 rounded-full">
+<div class="bg-outline-variant h-full rounded-full" style="width: 25%"></div>
+</div>
+</div>
+</div>
+<div class="mt-8 pt-6 border-t border-outline-variant/10">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-tertiary">warning</span>
+<p class="text-xs text-on-surface-variant leading-tight">14 Critical vulnerabilities remain unpatched for &gt; 30 days.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Recent Scans Table Section -->
+<div class="bg-surface-container p-0 overflow-hidden">
+<div class="p-8 pb-4 flex justify-between items-center">
+<h2 class="font-headline text-xl text-slate-100">Live Intel Feed</h2>
+<div class="flex gap-4">
+<button class="ghost-border px-3 py-1.5 text-xs font-medium hover:bg-surface-container-highest transition-colors">
+                            Filter
+                        </button>
+<button class="ghost-border px-3 py-1.5 text-xs font-medium hover:bg-surface-container-highest transition-colors">
+                            Export CSV
+                        </button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead class="bg-surface-container-low/50">
+<tr>
+<th class="px-8 py-4 text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Scan Name</th>
+<th class="px-8 py-4 text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Target Range</th>
+<th class="px-8 py-4 text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Started</th>
+<th class="px-8 py-4 text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Duration</th>
+<th class="px-8 py-4 text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Progress</th>
+<th class="px-8 py-4 text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Status</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/5">
+<tr class="hover:bg-slate-800/20 transition-colors">
+<td class="px-8 py-5">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-xl">security</span>
+<p class="text-sm font-semibold text-slate-100">External Perimeter A</p>
+</div>
+</td>
+<td class="px-8 py-5 font-mono text-[11px] text-primary">192.168.1.0/24</td>
+<td class="px-8 py-5 text-xs text-on-surface-variant">10:45:22 AM</td>
+<td class="px-8 py-5 text-xs text-on-surface-variant">00:42:15</td>
+<td class="px-8 py-5">
+<div class="flex items-center gap-3">
+<div class="w-24 bg-surface-container-lowest h-1.5 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[100%]"></div>
+</div>
+<span class="text-[10px] font-mono">100%</span>
+</div>
+</td>
+<td class="px-8 py-5">
+<span class="px-2 py-1 bg-emerald-500/10 text-emerald-500 text-[10px] font-bold rounded uppercase tracking-wider">Completed</span>
+</td>
+</tr>
+<tr class="hover:bg-slate-800/20 transition-colors">
+<td class="px-8 py-5">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-xl">database</span>
+<p class="text-sm font-semibold text-slate-100">Production DB Audit</p>
+</div>
+</td>
+<td class="px-8 py-5 font-mono text-[11px] text-primary">db-cluster.aws.internal</td>
+<td class="px-8 py-5 text-xs text-on-surface-variant">11:15:00 AM</td>
+<td class="px-8 py-5 text-xs text-on-surface-variant">--:--:--</td>
+<td class="px-8 py-5">
+<div class="flex items-center gap-3">
+<div class="w-24 bg-surface-container-lowest h-1.5 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[64%]"></div>
+</div>
+<span class="text-[10px] font-mono">64%</span>
+</div>
+</td>
+<td class="px-8 py-5">
+<div class="flex items-center gap-2">
+<div class="w-1.5 h-1.5 rounded-full bg-primary pulse-indicator"></div>
+<span class="text-primary text-[10px] font-bold rounded uppercase tracking-wider">Running</span>
+</div>
+</td>
+</tr>
+<tr class="hover:bg-slate-800/20 transition-colors">
+<td class="px-8 py-5">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-error text-xl">report_problem</span>
+<p class="text-sm font-semibold text-slate-100">Legacy Server Probe</p>
+</div>
+</td>
+<td class="px-8 py-5 font-mono text-[11px] text-primary">10.0.4.155</td>
+<td class="px-8 py-5 text-xs text-on-surface-variant">09:12:44 AM</td>
+<td class="px-8 py-5 text-xs text-on-surface-variant">00:04:12</td>
+<td class="px-8 py-5">
+<div class="flex items-center gap-3">
+<div class="w-24 bg-surface-container-lowest h-1.5 rounded-full overflow-hidden">
+<div class="bg-error h-full w-[12%]"></div>
+</div>
+<span class="text-[10px] font-mono">12%</span>
+</div>
+</td>
+<td class="px-8 py-5">
+<span class="px-2 py-1 bg-error/10 text-error text-[10px] font-bold rounded uppercase tracking-wider">Failed</span>
+</td>
+</tr>
+<tr class="hover:bg-slate-800/20 transition-colors">
+<td class="px-8 py-5">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-slate-400 text-xl">schedule</span>
+<p class="text-sm font-semibold text-slate-100">Weekly Full Infrastructure</p>
+</div>
+</td>
+<td class="px-8 py-5 font-mono text-[11px] text-primary">all-assets-global</td>
+<td class="px-8 py-5 text-xs text-on-surface-variant">Queue: 12:00 PM</td>
+<td class="px-8 py-5 text-xs text-on-surface-variant">--:--:--</td>
+<td class="px-8 py-5">
+<div class="flex items-center gap-3">
+<div class="w-24 bg-surface-container-lowest h-1.5 rounded-full overflow-hidden">
+<div class="bg-outline-variant h-full w-0"></div>
+</div>
+<span class="text-[10px] font-mono text-on-surface-variant">0%</span>
+</div>
+</td>
+<td class="px-8 py-5">
+<span class="px-2 py-1 bg-surface-container-highest text-on-surface-variant text-[10px] font-bold rounded uppercase tracking-wider">Queued</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="p-6 bg-surface-container-lowest/30 flex justify-center">
+<button class="text-[10px] font-bold text-primary uppercase tracking-[0.3em] flex items-center gap-2 hover:gap-4 transition-all">
+                        View Complete Scan History <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Bottom Layout: Alerts and Shortcuts -->
+<div class="grid grid-cols-12 gap-6">
+<!-- Recent Alerts -->
+<div class="col-span-12 md:col-span-8 bg-surface-container p-8">
+<h2 class="font-headline text-lg text-slate-100 mb-6 flex items-center gap-3">
+<span class="material-symbols-outlined text-tertiary">notifications_active</span> Recent Intelligence Alerts
+                    </h2>
+<div class="space-y-4">
+<div class="flex items-start gap-4 p-4 bg-surface-container-low rounded border-l-2 border-error">
+<span class="material-symbols-outlined text-error mt-0.5">error</span>
+<div>
+<p class="text-sm font-bold text-slate-100">Unauthenticated RDP access detected on 10.0.2.42</p>
+<p class="text-xs text-on-surface-variant mt-1">Found during External Perimeter scan. Source: 203.0.113.5 (Russia)</p>
+<p class="text-[10px] font-mono text-on-surface-variant mt-2 uppercase tracking-wider">04:12 PM | ACTION REQUIRED</p>
+</div>
+</div>
+<div class="flex items-start gap-4 p-4 bg-surface-container-low rounded border-l-2 border-tertiary">
+<span class="material-symbols-outlined text-tertiary mt-0.5">priority_high</span>
+<div>
+<p class="text-sm font-bold text-slate-100">Expiring SSL Certificate: api.scanops.io</p>
+<p class="text-xs text-on-surface-variant mt-1">Certificate expires in 3 days. Autorenewal failed due to DNS validation error.</p>
+<p class="text-[10px] font-mono text-on-surface-variant mt-2 uppercase tracking-wider">02:30 PM | WARNING</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Shortcuts Widget -->
+<div class="col-span-12 md:col-span-4 space-y-6">
+<div class="bg-surface-container p-8 h-full">
+<h2 class="font-headline text-lg text-slate-100 mb-6">Quick Scan Shortcuts</h2>
+<div class="grid grid-cols-1 gap-3">
+<button class="flex items-center justify-between p-3 bg-surface-container-low hover:bg-surface-container-highest transition-colors rounded ghost-border group">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">language</span>
+<span class="text-xs font-semibold">Web App Audit</span>
+</div>
+<span class="material-symbols-outlined text-xs text-slate-600 group-hover:text-primary transition-colors">play_arrow</span>
+</button>
+<button class="flex items-center justify-between p-3 bg-surface-container-low hover:bg-surface-container-highest transition-colors rounded ghost-border group">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">router</span>
+<span class="text-xs font-semibold">Port Sweep (Top 1k)</span>
+</div>
+<span class="material-symbols-outlined text-xs text-slate-600 group-hover:text-primary transition-colors">play_arrow</span>
+</button>
+<button class="flex items-center justify-between p-3 bg-surface-container-low hover:bg-surface-container-highest transition-colors rounded ghost-border group">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">cloud</span>
+<span class="text-xs font-semibold">AWS Bucket Discovery</span>
+</div>
+<span class="material-symbols-outlined text-xs text-slate-600 group-hover:text-primary transition-colors">play_arrow</span>
+</button>
+<button class="flex items-center justify-between p-3 bg-surface-container-low hover:bg-surface-container-highest transition-colors rounded ghost-border group">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">settings_ethernet</span>
+<span class="text-xs font-semibold">Local Subnet Discovery</span>
+</div>
+<span class="material-symbols-outlined text-xs text-slate-600 group-hover:text-primary transition-colors">play_arrow</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Contextual Floating Action Button - Only for Main Dashboard Actions -->
+<div class="fixed bottom-8 right-8 z-50">
+<button class="group relative flex items-center justify-center w-14 h-14 bg-blue-500 rounded-full shadow-2xl hover:scale-110 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-on-primary text-2xl" style="font-variation-settings: 'FILL' 1;">terminal</span>
+<div class="absolute right-full mr-4 bg-surface-container border border-outline-variant/30 py-2 px-4 rounded text-xs font-bold text-slate-100 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap shadow-xl">
+                Open Tactical Console
+            </div>
+</button>
+</div>
+</body></html>

@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Bulk Import Targets | Sentinel Command</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary": "#ffb786",
+                        "outline": "#8c909f",
+                        "on-primary-fixed-variant": "#004395",
+                        "tertiary-fixed": "#ffdcc6",
+                        "on-secondary-fixed-variant": "#38485d",
+                        "error-container": "#93000a",
+                        "on-tertiary-container": "#461f00",
+                        "on-primary-container": "#00285d",
+                        "surface-container": "#191f31",
+                        "tertiary-container": "#df7412",
+                        "secondary-fixed-dim": "#b7c8e1",
+                        "background": "#0c1324",
+                        "surface": "#0c1324",
+                        "surface-tint": "#adc6ff",
+                        "surface-container-high": "#23293c",
+                        "error": "#ffb4ab",
+                        "on-surface": "#dce1fb",
+                        "primary-fixed": "#d8e2ff",
+                        "on-tertiary-fixed": "#311400",
+                        "on-error": "#690005",
+                        "inverse-on-surface": "#2a3043",
+                        "on-primary": "#002e6a",
+                        "on-secondary-container": "#a9bad3",
+                        "surface-container-lowest": "#070d1f",
+                        "on-error-container": "#ffdad6",
+                        "tertiary-fixed-dim": "#ffb786",
+                        "on-tertiary-fixed-variant": "#723600",
+                        "on-tertiary": "#502400",
+                        "surface-container-highest": "#2e3447",
+                        "on-secondary-fixed": "#0b1c30",
+                        "primary-container": "#4d8eff",
+                        "inverse-primary": "#005ac2",
+                        "surface-bright": "#33394c",
+                        "outline-variant": "#424754",
+                        "on-surface-variant": "#c2c6d6",
+                        "on-primary-fixed": "#001a42",
+                        "secondary-fixed": "#d3e4fe",
+                        "on-secondary": "#213145",
+                        "surface-dim": "#0c1324",
+                        "primary-fixed-dim": "#adc6ff",
+                        "surface-variant": "#2e3447",
+                        "inverse-surface": "#dce1fb",
+                        "on-background": "#dce1fb",
+                        "secondary-container": "#3a4a5f",
+                        "secondary": "#b7c8e1",
+                        "surface-container-low": "#151b2d",
+                        "primary": "#adc6ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Space Grotesk"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(51, 57, 76, 0.6);
+            backdrop-filter: blur(24px);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body antialiased">
+<!-- TopNavBar -->
+<header class="bg-[#0c1324] fixed top-0 w-full z-50 flex justify-between items-center px-6 h-16 w-full shadow-none">
+<div class="flex items-center gap-8">
+<span class="text-xl font-bold tracking-tighter text-blue-400 font-['Space_Grotesk']">Sentinel Command</span>
+<div class="hidden md:flex items-center bg-[#151b2d] px-3 py-1.5 rounded-lg border border-outline-variant/10">
+<span class="material-symbols-outlined text-slate-400 text-sm">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-sm text-on-surface-variant w-64 placeholder-slate-500" placeholder="Search systems..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-slate-400 hover:text-blue-300 transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-slate-400 hover:text-blue-300 transition-colors">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<div class="h-8 w-8 rounded-full bg-primary-container flex items-center justify-center overflow-hidden">
+<img alt="Security Analyst Profile" data-alt="close up profile photo of a security professional in a dark office with blue ambient light highlights" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBeRjApsUFPiLxStJAtMueZetd8UTrq4xIvT2ksBzTLtGjtRQ0hHmI_m3vr80lfvz8TM36ruJhmh1CwWAZtK1aDyLcrxWjs24q8MppA1G9RFDcqklnCbSN7g2-Es472YimiNCA-btmS7tmMNRucKpjF4wkSp1ZXQMPPmLmt8393kiFi6zEWcHNcMnCBh9hG1ivMBmIsM3B46cE2RFMnjwbZawis-SJ7v5HQEQXI9-lro61NImo9SMb9xomimi48I52czASOJtMkeyeZ"/>
+</div>
+</div>
+</header>
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-16 h-[calc(100vh-64px)] w-64 bg-[#0c1324] flex flex-col py-4 z-40">
+<div class="px-6 mb-8">
+<h3 class="text-xs font-bold uppercase tracking-widest text-slate-500">Tactical Unit</h3>
+<p class="text-[10px] text-blue-500 font-mono">Network Ops</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-6 py-3 text-slate-500 hover:text-slate-300 hover:bg-[#151b2d] transition-all opacity-80 hover:opacity-100 font-['Inter'] text-sm font-medium" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+                Dashboard
+            </a>
+<a class="flex items-center gap-3 px-6 py-3 text-slate-500 hover:text-slate-300 hover:bg-[#151b2d] transition-all opacity-80 hover:opacity-100 font-['Inter'] text-sm font-medium" href="#">
+<span class="material-symbols-outlined">radar</span>
+                New Scan
+            </a>
+<a class="flex items-center gap-3 px-6 py-3 text-blue-400 bg-[#2e3447] rounded-r-lg border-l-4 border-blue-500 font-['Inter'] text-sm font-medium" href="#">
+<span class="material-symbols-outlined">target</span>
+                Targets
+            </a>
+<a class="flex items-center gap-3 px-6 py-3 text-slate-500 hover:text-slate-300 hover:bg-[#151b2d] transition-all opacity-80 hover:opacity-100 font-['Inter'] text-sm font-medium" href="#">
+<span class="material-symbols-outlined">security</span>
+                Vulnerabilities
+            </a>
+<a class="flex items-center gap-3 px-6 py-3 text-slate-500 hover:text-slate-300 hover:bg-[#151b2d] transition-all opacity-80 hover:opacity-100 font-['Inter'] text-sm font-medium" href="#">
+<span class="material-symbols-outlined">assessment</span>
+                Reports
+            </a>
+</nav>
+<div class="mt-auto border-t border-outline-variant/10 pt-4">
+<a class="flex items-center gap-3 px-6 py-3 text-slate-500 hover:text-slate-300 hover:bg-[#151b2d] transition-all opacity-80 hover:opacity-100 font-['Inter'] text-sm font-medium" href="#">
+<span class="material-symbols-outlined">help</span>
+                Support
+            </a>
+<a class="flex items-center gap-3 px-6 py-3 text-slate-500 hover:text-slate-300 hover:bg-[#151b2d] transition-all opacity-80 hover:opacity-100 font-['Inter'] text-sm font-medium" href="#">
+<span class="material-symbols-outlined">logout</span>
+                Log Out
+            </a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-64 mt-16 p-8 min-h-screen">
+<!-- Header & Breadcrumbs -->
+<header class="mb-10">
+<nav class="flex items-center gap-2 text-xs font-medium text-on-surface-variant mb-2">
+<span>Targets</span>
+<span class="material-symbols-outlined text-[10px]">chevron_right</span>
+<span class="text-primary">Bulk Import</span>
+</nav>
+<h1 class="text-5xl font-headline font-bold tracking-tighter text-on-surface">Bulk Import Targets</h1>
+<p class="text-on-surface-variant max-w-2xl mt-2 font-light">Ingest large sets of network assets via manual entry or structured file upload. Our engine automatically validates syntax and removes duplicates.</p>
+</header>
+<div class="grid grid-cols-12 gap-8">
+<!-- Left Column: Input Forms -->
+<div class="col-span-8 space-y-8">
+<div class="bg-surface-container-low rounded-xl overflow-hidden shadow-2xl">
+<!-- Tab Header -->
+<div class="flex bg-surface-container border-b border-outline-variant/5">
+<button class="px-8 py-4 text-sm font-bold border-b-2 border-primary text-primary flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">edit_note</span>
+                            Paste Targets
+                        </button>
+<button class="px-8 py-4 text-sm font-medium text-slate-500 hover:text-slate-300 transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">upload_file</span>
+                            Upload File
+                        </button>
+</div>
+<!-- Input Area -->
+<div class="p-6">
+<div class="relative flex bg-surface-container-lowest rounded-lg border border-outline-variant/10 min-h-[320px]">
+<div class="w-12 bg-surface-container-high/50 border-r border-outline-variant/5 text-right pr-3 py-4 font-mono text-xs text-slate-600 select-none leading-6">
+                                1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12
+                            </div>
+<textarea class="flex-1 bg-transparent border-none focus:ring-0 font-mono text-sm text-blue-100 p-4 leading-6 resize-none placeholder-slate-700" placeholder="Enter IPs, Hostnames, or CIDR ranges (one per line)...
+Example: 192.168.1.1/24
+Example: sentinel.cloud.internal"></textarea>
+</div>
+<div class="mt-4 flex justify-between items-center">
+<p class="text-xs text-slate-500">Supported: IPv4, IPv6, CIDR, Domains</p>
+<button class="text-xs font-bold text-primary hover:underline">Clear Canvas</button>
+</div>
+</div>
+</div>
+<!-- Preview Table -->
+<section class="bg-surface-container-low rounded-xl overflow-hidden">
+<div class="px-6 py-4 flex items-center justify-between border-b border-outline-variant/5">
+<h2 class="font-headline text-lg font-bold text-primary">Preview &amp; Verification</h2>
+<div class="flex gap-2">
+<span class="px-2 py-1 bg-surface-container-highest rounded text-[10px] font-bold text-slate-400">FILTER BY STATUS: ALL</span>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="text-[10px] uppercase tracking-widest text-slate-500 bg-surface-container/50">
+<th class="px-6 py-4 font-bold">Target</th>
+<th class="px-6 py-4 font-bold">Detected Type</th>
+<th class="px-6 py-4 font-bold">Status</th>
+<th class="px-6 py-4 font-bold text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/5">
+<tr class="hover:bg-surface-container-high transition-colors">
+<td class="px-6 py-4 font-mono text-sm text-blue-300">192.168.1.1</td>
+<td class="px-6 py-4 text-xs text-on-surface-variant">IPv4 Address</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-tight">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+                                            Valid
+                                        </span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-500 hover:text-error transition-colors">
+<span class="material-symbols-outlined text-lg">delete</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-high transition-colors">
+<td class="px-6 py-4 font-mono text-sm text-blue-300">internal-api.prod</td>
+<td class="px-6 py-4 text-xs text-on-surface-variant">Domain</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-tertiary/10 text-tertiary text-[10px] font-bold uppercase tracking-tight">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+                                            Duplicate
+                                        </span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-500 hover:text-error transition-colors">
+<span class="material-symbols-outlined text-lg">delete</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-high transition-colors">
+<td class="px-6 py-4 font-mono text-sm text-blue-300">10.0.0.0/24</td>
+<td class="px-6 py-4 text-xs text-on-surface-variant">CIDR Range</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-tight">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+                                            Valid
+                                        </span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-500 hover:text-error transition-colors">
+<span class="material-symbols-outlined text-lg">delete</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-high transition-colors">
+<td class="px-6 py-4 font-mono text-sm text-error/80">999.0.x.1</td>
+<td class="px-6 py-4 text-xs text-on-surface-variant">Unknown</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-error/10 text-error text-[10px] font-bold uppercase tracking-tight">
+<span class="w-1.5 h-1.5 rounded-full bg-error"></span>
+                                            Invalid Format
+                                        </span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-500 hover:text-error transition-colors">
+<span class="material-symbols-outlined text-lg">delete</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</div>
+<!-- Right Column: Sidebar Stats -->
+<aside class="col-span-4 space-y-6">
+<div class="bg-surface-container-lowest p-6 rounded-xl border border-outline-variant/10">
+<h3 class="text-xs font-bold uppercase tracking-widest text-slate-500 mb-6">Validation Summary</h3>
+<div class="space-y-4">
+<!-- Stat Card 1 -->
+<div class="bg-surface-container p-4 rounded-lg flex items-center justify-between">
+<div>
+<p class="text-[10px] text-slate-500 font-bold uppercase tracking-tighter">Total Detected</p>
+<p class="text-3xl font-headline font-bold text-on-surface">142</p>
+</div>
+<span class="material-symbols-outlined text-slate-600">database</span>
+</div>
+<!-- Stat Card 2 -->
+<div class="bg-surface-container p-4 rounded-lg flex items-center justify-between border-l-4 border-primary">
+<div>
+<p class="text-[10px] text-primary font-bold uppercase tracking-tighter">Valid Entries</p>
+<p class="text-3xl font-headline font-bold text-on-surface">138</p>
+</div>
+<span class="material-symbols-outlined text-primary/40">verified</span>
+</div>
+<!-- Stat Grid for Minors -->
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-surface-container-low p-4 rounded-lg">
+<p class="text-[10px] text-tertiary font-bold uppercase tracking-tighter">Duplicates</p>
+<p class="text-2xl font-headline font-bold text-on-surface">2</p>
+</div>
+<div class="bg-surface-container-low p-4 rounded-lg">
+<p class="text-[10px] text-error font-bold uppercase tracking-tighter">Invalid</p>
+<p class="text-2xl font-headline font-bold text-on-surface">2</p>
+</div>
+</div>
+</div>
+<div class="mt-8 p-4 bg-primary/5 rounded-lg border border-primary/10">
+<div class="flex gap-3">
+<span class="material-symbols-outlined text-primary text-sm">info</span>
+<p class="text-xs text-on-surface-variant leading-relaxed">System will automatically ignore 4 entries (2 invalid, 2 duplicates) during the final import process.</p>
+</div>
+</div>
+</div>
+<!-- Tactical Card -->
+<div class="relative overflow-hidden rounded-xl bg-gradient-to-br from-primary-container to-blue-900 p-8 text-on-primary-container">
+<div class="relative z-10">
+<h4 class="text-xl font-headline font-bold leading-tight">Advanced Mapping</h4>
+<p class="text-xs mt-2 opacity-90 leading-relaxed mb-4">Enable auto-discovery to find subdomains associated with these targets after import.</p>
+<button class="px-4 py-2 bg-on-primary-container text-primary-container text-[10px] font-bold uppercase tracking-widest rounded transition-transform active:scale-95">Enable Discovery</button>
+</div>
+<div class="absolute -right-8 -bottom-8 opacity-10">
+<span class="material-symbols-outlined text-[160px]">radar</span>
+</div>
+</div>
+</aside>
+</div>
+<!-- Footer Actions -->
+<footer class="mt-12 flex items-center justify-between pt-8 border-t border-outline-variant/10">
+<button class="px-8 py-3 text-sm font-medium text-slate-500 hover:text-on-surface transition-colors">Cancel</button>
+<div class="flex gap-4">
+<button class="px-8 py-3 bg-surface-container-highest text-on-surface text-sm font-bold rounded-lg transition-transform active:scale-95">Validate</button>
+<button class="px-8 py-3 bg-primary text-on-primary text-sm font-bold rounded-lg shadow-lg shadow-primary/20 transition-transform active:scale-95 flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">cloud_upload</span>
+                    Import 138 Targets
+                </button>
+</div>
+</footer>
+</main>
+</body></html>

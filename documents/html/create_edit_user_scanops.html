@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ScanOps Sentinel - Create User</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary-fixed-dim": "#adc6ff",
+                    "on-primary": "#002e6a",
+                    "primary-container": "#4d8eff",
+                    "on-surface-variant": "#c2c6d6",
+                    "surface": "#0c1324",
+                    "on-secondary": "#213145",
+                    "surface-container-high": "#23293c",
+                    "surface-tint": "#adc6ff",
+                    "tertiary": "#ffb786",
+                    "error": "#ffb4ab",
+                    "tertiary-fixed-dim": "#ffb786",
+                    "tertiary-container": "#df7412",
+                    "surface-variant": "#2e3447",
+                    "secondary-fixed-dim": "#b7c8e1",
+                    "on-background": "#dce1fb",
+                    "error-container": "#93000a",
+                    "on-secondary-container": "#a9bad3",
+                    "background": "#0c1324",
+                    "outline": "#8c909f",
+                    "inverse-on-surface": "#2a3043",
+                    "secondary": "#b7c8e1",
+                    "surface-container-highest": "#2e3447",
+                    "secondary-fixed": "#d3e4fe",
+                    "on-surface": "#dce1fb",
+                    "outline-variant": "#424754",
+                    "on-secondary-fixed-variant": "#38485d",
+                    "inverse-primary": "#005ac2",
+                    "on-tertiary-fixed-variant": "#723600",
+                    "on-primary-container": "#00285d",
+                    "on-tertiary": "#502400",
+                    "surface-dim": "#0c1324",
+                    "on-primary-fixed-variant": "#004395",
+                    "on-error-container": "#ffdad6",
+                    "on-tertiary-fixed": "#311400",
+                    "primary": "#adc6ff",
+                    "surface-container-lowest": "#070d1f",
+                    "surface-container": "#191f31",
+                    "surface-bright": "#33394c",
+                    "on-primary-fixed": "#001a42",
+                    "on-error": "#690005",
+                    "on-tertiary-container": "#461f00",
+                    "on-secondary-fixed": "#0b1c30",
+                    "inverse-surface": "#dce1fb",
+                    "tertiary-fixed": "#ffdcc6",
+                    "primary-fixed": "#d8e2ff",
+                    "surface-container-low": "#151b2d",
+                    "secondary-container": "#3a4a5f"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "fontFamily": {
+                    "headline": ["Space Grotesk"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+      body { font-family: 'Inter', sans-serif; }
+      .font-headline { font-family: 'Space Grotesk', sans-serif; }
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      .glass-panel {
+        background: rgba(46, 52, 71, 0.6);
+        backdrop-filter: blur(24px);
+      }
+    </style>
+</head>
+<body class="bg-surface text-on-surface overflow-hidden">
+<!-- Sidebar Component (Based on Shared JSON) -->
+<aside class="h-screen w-64 fixed left-0 top-0 bg-[#151b2d] border-r border-slate-800/50 shadow-2xl shadow-black/50 flex flex-col py-4 z-50">
+<div class="px-6 mb-8">
+<h1 class="text-blue-400 font-black tracking-tighter text-xl font-headline uppercase">ScanOps Sentinel</h1>
+<p class="text-[10px] text-slate-500 tracking-[0.2em] font-medium mt-1">COMMAND CENTER · L4 CLEARANCE</p>
+</div>
+<nav class="flex-1 px-4 space-y-1">
+<div class="flex items-center px-3 py-2 text-slate-400 hover:bg-[#2e3447] hover:text-slate-100 transition-all rounded-lg cursor-pointer duration-200 ease-in-out font-['Inter'] text-sm group">
+<span class="material-symbols-outlined mr-3 text-lg" data-icon="dashboard">dashboard</span>
+<span>Dashboard</span>
+</div>
+<div class="flex items-center px-3 py-2 text-slate-400 hover:bg-[#2e3447] hover:text-slate-100 transition-all rounded-lg cursor-pointer duration-200 ease-in-out font-['Inter'] text-sm group">
+<span class="material-symbols-outlined mr-3 text-lg" data-icon="security">security</span>
+<span>Threat Intelligence</span>
+</div>
+<!-- ACTIVE TAB -->
+<div class="flex items-center px-3 py-2 bg-[#2e3447] text-blue-400 border-r-2 border-blue-500 transition-all rounded-l-lg cursor-pointer duration-200 ease-in-out font-['Inter'] text-sm">
+<span class="material-symbols-outlined mr-3 text-lg" data-icon="group" style="font-variation-settings: 'FILL' 1;">group</span>
+<span class="font-bold">User Management</span>
+</div>
+<div class="flex items-center px-3 py-2 text-slate-400 hover:bg-[#2e3447] hover:text-slate-100 transition-all rounded-lg cursor-pointer duration-200 ease-in-out font-['Inter'] text-sm group">
+<span class="material-symbols-outlined mr-3 text-lg" data-icon="terminal">terminal</span>
+<span>Network Logs</span>
+</div>
+<div class="flex items-center px-3 py-2 text-slate-400 hover:bg-[#2e3447] hover:text-slate-100 transition-all rounded-lg cursor-pointer duration-200 ease-in-out font-['Inter'] text-sm group">
+<span class="material-symbols-outlined mr-3 text-lg" data-icon="history">history</span>
+<span>System Audit</span>
+</div>
+</nav>
+<div class="px-4 mt-auto pt-4 border-t border-slate-800/50 space-y-1">
+<div class="flex items-center px-3 py-2 text-slate-400 hover:bg-[#2e3447] transition-all rounded-lg cursor-pointer font-['Inter'] text-sm">
+<span class="material-symbols-outlined mr-3 text-lg" data-icon="help_outline">help_outline</span>
+<span>Support</span>
+</div>
+<div class="flex items-center px-3 py-2 text-slate-400 hover:bg-[#2e3447] transition-all rounded-lg cursor-pointer font-['Inter'] text-sm">
+<span class="material-symbols-outlined mr-3 text-lg" data-icon="logout">logout</span>
+<span>Sign Out</span>
+</div>
+</div>
+</aside>
+<!-- Main Content Wrapper -->
+<main class="ml-64 flex flex-col h-screen">
+<!-- TopAppBar (Based on Shared JSON) -->
+<header class="w-full sticky top-0 z-50 bg-[#0c1324] h-16 flex items-center justify-between px-8 border-b border-white/5">
+<div class="flex items-center gap-6 flex-1">
+<div class="relative w-96">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-sm" data-icon="search">search</span>
+<input class="bg-[#151b2d] border-none focus:ring-1 focus:ring-primary/40 rounded-lg pl-10 pr-4 py-1.5 text-sm w-full text-on-surface placeholder:text-slate-600" placeholder="Global System Search..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="relative p-2 text-slate-400 hover:text-blue-300 active:scale-95 transition-all">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<button class="p-2 text-slate-400 hover:text-blue-300 active:scale-95 transition-all">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+<div class="h-8 w-[1px] bg-white/10 mx-2"></div>
+<div class="flex items-center gap-3 pl-2">
+<div class="text-right">
+<p class="text-xs font-bold text-on-surface leading-none">Admin User</p>
+<p class="text-[10px] text-slate-500 leading-none mt-1">Super Administrator</p>
+</div>
+<img alt="Administrator Profile" class="w-9 h-9 rounded-full border border-blue-500/30" data-alt="professional portrait of a high-level system administrator in a dark office with blue ambient lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAVqu3t2OQ69z8rSq-sQihTziVPIPJXQpwCmVP1aV2DkuCNUgTiZFUkhlhRMDUYzwyImPIteeLOj5lM5Z9viY0ntPH1ibEgNApfsi4cZOoKE-PB4bh0O_rZr1QStk5Yez1yAQUiLJFJFzowNeXyrT7n7JFkDw5vAUdKrEhZzn2br5R9Riq1b6QUNi94f-OjcyqJT6anN3Q9FCws-gUSo0ONXHBBpffD5eXHQl4HMtLo8IF_4XWTqUufyv0XfbwsulRv6FO4Se1U186T"/>
+</div>
+</div>
+</header>
+<!-- Page Content Scroll Area -->
+<div class="flex-1 overflow-y-auto bg-surface-container-low p-8 custom-scrollbar">
+<!-- Breadcrumbs & Title Section -->
+<div class="max-w-6xl mx-auto mb-8">
+<nav class="flex items-center text-[10px] uppercase tracking-widest text-slate-500 mb-2 font-medium">
+<span>System Admin</span>
+<span class="material-symbols-outlined text-[12px] mx-2" data-icon="chevron_right">chevron_right</span>
+<span>User Management</span>
+<span class="material-symbols-outlined text-[12px] mx-2 text-blue-400" data-icon="chevron_right">chevron_right</span>
+<span class="text-blue-400">Create User</span>
+</nav>
+<div class="flex items-end justify-between">
+<div>
+<h2 class="text-4xl font-headline font-bold tracking-tighter text-on-surface">Create New User</h2>
+<p class="text-on-surface-variant body-md mt-1">Provision access credentials for specialized tactical personnel.</p>
+</div>
+<div class="flex items-center gap-2 mb-1">
+<div class="flex items-center px-3 py-1 bg-surface-container-highest rounded text-[10px] font-bold text-tertiary border border-tertiary/20">
+<span class="w-2 h-2 bg-tertiary rounded-full mr-2 animate-pulse"></span>
+                            PROVISIONING MODE ACTIVE
+                        </div>
+</div>
+</div>
+</div>
+<!-- Bento Layout Main Content -->
+<div class="max-w-6xl mx-auto grid grid-cols-12 gap-6">
+<!-- Left Column: Primary Form -->
+<div class="col-span-12 lg:col-span-8 space-y-6">
+<!-- Form Section: Account Information -->
+<section class="bg-surface-container-highest p-8 rounded-xl shadow-xl relative overflow-hidden">
+<div class="absolute top-0 left-0 w-1 h-full bg-primary"></div>
+<div class="flex items-center gap-3 mb-8">
+<span class="material-symbols-outlined text-primary" data-icon="account_circle">account_circle</span>
+<h3 class="font-headline text-lg font-bold tracking-tight text-on-surface">Account Information</h3>
+</div>
+<div class="grid grid-cols-2 gap-6">
+<div class="col-span-2 md:col-span-1 space-y-2">
+<label class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Full Legal Name</label>
+<input class="w-full bg-surface-container-low border-none focus:ring-1 focus:ring-primary/40 rounded-lg px-4 py-3 text-sm text-on-surface placeholder:text-slate-700" placeholder="e.g. Elias Thorne" type="text"/>
+</div>
+<div class="col-span-2 md:col-span-1 space-y-2">
+<label class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Employee ID</label>
+<input class="w-full bg-surface-container-low border-none focus:ring-1 focus:ring-primary/40 rounded-lg px-4 py-3 text-sm text-on-surface placeholder:text-slate-700" placeholder="SC-000-00" type="text"/>
+</div>
+<div class="col-span-2 space-y-2">
+<label class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Secure Email Address</label>
+<div class="relative">
+<input class="w-full bg-surface-container-low border-none focus:ring-1 focus:ring-primary/40 rounded-lg px-4 py-3 text-sm text-on-surface placeholder:text-slate-700" placeholder="ethorne@scanops.internal" type="email"/>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-tertiary text-lg" data-icon="verified_user">verified_user</span>
+</div>
+<p class="text-[10px] text-tertiary-fixed-dim">Validation: Internal domain verified.</p>
+</div>
+</div>
+</section>
+<!-- Form Section: Role & Access -->
+<div class="grid grid-cols-2 gap-6">
+<section class="col-span-2 md:col-span-1 bg-surface-container-highest p-6 rounded-xl shadow-lg border-l border-white/5">
+<div class="flex items-center gap-3 mb-6">
+<span class="material-symbols-outlined text-primary" data-icon="admin_panel_settings">admin_panel_settings</span>
+<h3 class="font-headline font-bold text-on-surface">Designated Role</h3>
+</div>
+<div class="space-y-4">
+<select class="w-full bg-surface-container-low border-none focus:ring-1 focus:ring-primary/40 rounded-lg px-4 py-3 text-sm text-on-surface appearance-none">
+<option>Operator</option>
+<option selected="">Senior Analyst</option>
+<option>Admin</option>
+</select>
+<div class="flex items-center justify-between p-3 bg-surface-container-low rounded-lg border border-white/5">
+<div>
+<p class="text-xs font-bold text-on-surface">Account Status</p>
+<p class="text-[10px] text-slate-500">Enable immediate login access</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-container"></div>
+</label>
+</div>
+</div>
+</section>
+<section class="col-span-2 md:col-span-1 bg-surface-container-highest p-6 rounded-xl shadow-lg border-l border-white/5">
+<div class="flex items-center gap-3 mb-6">
+<span class="material-symbols-outlined text-primary" data-icon="groups">groups</span>
+<h3 class="font-headline font-bold text-on-surface">Team Assignment</h3>
+</div>
+<div class="space-y-2">
+<div class="flex flex-wrap gap-2">
+<span class="px-2 py-1 bg-primary-container/20 text-primary text-[10px] font-bold rounded flex items-center gap-1">
+                                        RED TEAM <span class="material-symbols-outlined text-[12px] cursor-pointer" data-icon="close">close</span>
+</span>
+<span class="px-2 py-1 bg-primary-container/20 text-primary text-[10px] font-bold rounded flex items-center gap-1">
+                                        INFRASTRUCTURE <span class="material-symbols-outlined text-[12px] cursor-pointer" data-icon="close">close</span>
+</span>
+</div>
+<div class="relative">
+<select class="w-full bg-surface-container-low border-none focus:ring-1 focus:ring-primary/40 rounded-lg px-4 py-3 text-sm text-on-surface appearance-none">
+<option disabled="" selected="">Add to Workspaces...</option>
+<option>Sector-07</option>
+<option>Data-Vault-Beta</option>
+<option>External-Audit-Grp</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none" data-icon="add">add</span>
+</div>
+</div>
+</section>
+</div>
+<!-- Form Section: Permissions Grid -->
+<section class="bg-surface-container-highest p-8 rounded-xl shadow-xl border-l border-white/5">
+<div class="flex items-center gap-3 mb-8">
+<span class="material-symbols-outlined text-primary" data-icon="vpn_key">vpn_key</span>
+<h3 class="font-headline text-lg font-bold tracking-tight text-on-surface">Granular Permissions</h3>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<label class="flex items-center p-4 bg-surface-container-low rounded-lg border border-white/5 cursor-pointer hover:bg-surface-container-high transition-colors group">
+<input checked="" class="w-4 h-4 rounded border-slate-700 bg-surface-container text-primary-container focus:ring-primary-container/40" type="checkbox"/>
+<div class="ml-4">
+<p class="text-xs font-bold text-on-surface group-hover:text-primary transition-colors">Create Scans</p>
+<p class="text-[10px] text-slate-500">Initiate automated perimeter diagnostics</p>
+</div>
+</label>
+<label class="flex items-center p-4 bg-surface-container-low rounded-lg border border-white/5 cursor-pointer hover:bg-surface-container-high transition-colors group">
+<input class="w-4 h-4 rounded border-slate-700 bg-surface-container text-primary-container focus:ring-primary-container/40" type="checkbox"/>
+<div class="ml-4">
+<p class="text-xs font-bold text-on-surface group-hover:text-primary transition-colors">Delete Results</p>
+<p class="text-[10px] text-slate-500">Purge scan data from permanent storage</p>
+</div>
+</label>
+<label class="flex items-center p-4 bg-surface-container-low rounded-lg border border-white/5 cursor-pointer hover:bg-surface-container-high transition-colors group">
+<input checked="" class="w-4 h-4 rounded border-slate-700 bg-surface-container text-primary-container focus:ring-primary-container/40" type="checkbox"/>
+<div class="ml-4">
+<p class="text-xs font-bold text-on-surface group-hover:text-primary transition-colors">Manage API Keys</p>
+<p class="text-[10px] text-slate-500">Generate and revoke tactical integration tokens</p>
+</div>
+</label>
+<label class="flex items-center p-4 bg-surface-container-low rounded-lg border border-white/5 cursor-pointer hover:bg-surface-container-high transition-colors group">
+<input checked="" class="w-4 h-4 rounded border-slate-700 bg-surface-container text-primary-container focus:ring-primary-container/40" type="checkbox"/>
+<div class="ml-4">
+<p class="text-xs font-bold text-on-surface group-hover:text-primary transition-colors">Export Reports</p>
+<p class="text-[10px] text-slate-500">Download classified intelligence summaries</p>
+</div>
+</label>
+</div>
+</section>
+</div>
+<!-- Right Column: Sidebar Widget & Contextual Info -->
+<div class="col-span-12 lg:col-span-4 space-y-6">
+<!-- Access Intelligence Widget -->
+<section class="glass-panel p-6 rounded-xl border border-white/10 relative overflow-hidden">
+<div class="absolute -top-10 -right-10 w-32 h-32 bg-blue-500/10 rounded-full blur-3xl"></div>
+<div class="flex items-center gap-3 mb-6">
+<span class="material-symbols-outlined text-tertiary" data-icon="psychology">psychology</span>
+<h3 class="font-headline font-bold text-on-surface">Access Intelligence</h3>
+</div>
+<div class="space-y-4 relative z-10">
+<div class="p-3 bg-white/5 rounded border border-white/5">
+<p class="text-[10px] font-bold text-primary mb-1 uppercase">Selected Role Scope</p>
+<p class="text-xs text-on-surface-variant leading-relaxed">The <span class="text-on-surface font-bold">Senior Analyst</span> role inherits all Operator functions plus the ability to override automated scan schedules and access the API Gateway.</p>
+</div>
+<ul class="space-y-3">
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-sm text-green-400 mt-0.5" data-icon="check_circle">check_circle</span>
+<div class="text-[11px]">
+<p class="font-bold text-on-surface">Global Read Access</p>
+<p class="text-slate-500">View all scan reports across all assigned workspaces.</p>
+</div>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-sm text-green-400 mt-0.5" data-icon="check_circle">check_circle</span>
+<div class="text-[11px]">
+<p class="font-bold text-on-surface">Schedule Override</p>
+<p class="text-slate-500">Initiate ad-hoc high-priority scans during blackouts.</p>
+</div>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-sm text-red-400 mt-0.5" data-icon="cancel">cancel</span>
+<div class="text-[11px]">
+<p class="font-bold text-on-surface">System Hard-Reset</p>
+<p class="text-slate-500">Restricted to Admin level only.</p>
+</div>
+</li>
+</ul>
+</div>
+<div class="mt-6 pt-6 border-t border-white/10">
+<div class="flex items-center justify-between text-[10px] text-slate-500 mb-2">
+<span>Security Compliance Score</span>
+<span>88%</span>
+</div>
+<div class="h-1 bg-surface-container-low rounded-full overflow-hidden">
+<div class="h-full bg-primary-container w-[88%] shadow-[0_0_8px_rgba(77,142,255,0.5)]"></div>
+</div>
+</div>
+</section>
+<!-- Tactical Visual/Status -->
+<div class="bg-[#151b2d] rounded-xl overflow-hidden shadow-lg border border-white/5">
+<div class="h-24 bg-gradient-to-br from-primary/20 to-transparent p-4 relative">
+<span class="text-[40px] font-bold text-white/5 font-headline absolute bottom-0 right-0 tracking-tighter">SCAN OPS</span>
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-primary animate-pulse shadow-[0_0_8px_#adc6ff]"></div>
+<span class="text-[10px] font-bold text-primary tracking-[0.2em]">ENCRYPTED UPLINK</span>
+</div>
+</div>
+<div class="p-4 space-y-3">
+<p class="text-[11px] text-on-surface-variant leading-relaxed italic">"All user provisioning is logged via immutable audit chain. Please ensure compliance with Directive 07."</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Global Action Bar (Sticky Bottom) -->
+<div class="max-w-6xl mx-auto mt-8 flex items-center justify-between pt-6 border-t border-white/10">
+<button class="flex items-center gap-2 px-4 py-2 text-slate-400 hover:text-white transition-colors text-sm font-bold active:scale-95">
+<span class="material-symbols-outlined text-lg" data-icon="lock_reset">lock_reset</span>
+                    Reset Temporary Password
+                </button>
+<div class="flex items-center gap-4">
+<button class="px-6 py-2.5 text-sm font-bold text-slate-400 hover:text-white transition-all active:scale-95">
+                        Cancel
+                    </button>
+<button class="px-8 py-2.5 bg-primary text-on-primary text-sm font-bold rounded-lg shadow-[0_4px_20px_rgba(173,198,255,0.3)] hover:bg-primary-fixed-dim transition-all active:scale-95 flex items-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="save">save</span>
+                        Save Tactical User
+                    </button>
+</div>
+</div>
+</div>
+</main>
+</body></html>

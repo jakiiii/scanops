@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% load scanops_tags %}
+
+{% block title %}System Health | ScanOps{% endblock %}
+
+{% block content %}
+    {% include "includes/breadcrumbs.html" with breadcrumbs=breadcrumbs %}
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+        <div>
+            <h1 class="text-4xl font-bold text-white tracking-tight">System Health</h1>
+            <p class="text-slate-400 mt-1">Service status overview for database, scheduler, queue, storage, and tooling.</p>
+        </div>
+        <div class="flex gap-3">
+            <a href="{% url 'ops:health-queue-workers' %}" class="px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-sm font-semibold text-slate-100 hover:bg-slate-700">Queue & Workers</a>
+            <div class="scanops-panel px-4 py-2 border-l-4 {% if overall_status == 'error' %}border-l-rose-500{% elif overall_status == 'warning' %}border-l-amber-500{% elif overall_status == 'healthy' %}border-l-emerald-500{% else %}border-l-slate-500{% endif %}">
+                <p class="text-[10px] uppercase tracking-widest text-slate-500 mb-1">Overall Status</p>
+                <p class="text-sm font-bold text-slate-100">{{ overall_status|title }}</p>
+            </div>
+        </div>
+    </div>
+
+    <div
+        id="system-health-cards-container"
+        hx-get="{% url 'ops:health-system-cards' %}"
+        hx-trigger="every 30s"
+        hx-target="#system-health-cards-container"
+        hx-swap="innerHTML"
+    >
+        {% include "partials/system_health_cards.html" %}
+    </div>
+
+    <div
+        id="system-health-alerts-container"
+        class="mt-6"
+        hx-get="{% url 'ops:health-system-alerts' %}"
+        hx-trigger="every 45s"
+        hx-target="#system-health-alerts-container"
+        hx-swap="innerHTML"
+    >
+        {% include "partials/system_health_alerts.html" %}
+    </div>
+
+    <div class="scanops-panel p-5 mt-6">
+        <h3 class="text-sm font-bold text-slate-200 uppercase tracking-widest mb-4">Recent Health Timeline</h3>
+        <div class="overflow-x-auto">
+            <table class="w-full text-sm text-left">
+                <thead class="text-[10px] uppercase tracking-widest text-slate-500">
+                <tr>
+                    <th class="py-2 pr-4">Service</th>
+                    <th class="py-2 pr-4">Status</th>
+                    <th class="py-2 pr-4">Summary</th>
+                    <th class="py-2 pr-4">Checked At</th>
+                </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-800">
+                {% for item in timeline %}
+                    <tr>
+                        <td class="py-2 pr-4 text-slate-300">{{ item.get_service_name_display }}</td>
+                        <td class="py-2 pr-4">
+                            <span class="px-2 py-1 rounded text-[11px] {{ item.status|status_badge }}">{{ item.get_status_display }}</span>
+                        </td>
+                        <td class="py-2 pr-4 text-slate-400">{{ item.summary }}</td>
+                        <td class="py-2 pr-4 text-slate-500">{{ item.checked_at|date:"Y-m-d H:i:s" }}</td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="4" class="py-6 text-center text-slate-500">No health snapshots available.</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

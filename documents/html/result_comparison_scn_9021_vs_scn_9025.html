@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Compare Results | Sentinel Tactical</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-fixed-dim": "#adc6ff",
+                        "surface-container-low": "#151b2d",
+                        "surface-bright": "#33394c",
+                        "on-primary-container": "#00285d",
+                        "outline": "#8c909f",
+                        "tertiary-container": "#df7412",
+                        "on-surface": "#dce1fb",
+                        "on-error": "#690005",
+                        "outline-variant": "#424754",
+                        "on-surface-variant": "#c2c6d6",
+                        "surface-variant": "#2e3447",
+                        "surface": "#0c1324",
+                        "on-secondary-fixed": "#0b1c30",
+                        "tertiary-fixed": "#ffdcc6",
+                        "surface-container-high": "#23293c",
+                        "surface-container": "#191f31",
+                        "primary-fixed": "#d8e2ff",
+                        "on-tertiary-fixed-variant": "#723600",
+                        "on-primary-fixed-variant": "#004395",
+                        "on-tertiary-container": "#461f00",
+                        "tertiary-fixed-dim": "#ffb786",
+                        "on-secondary-fixed-variant": "#38485d",
+                        "on-secondary-container": "#a9bad3",
+                        "on-background": "#dce1fb",
+                        "secondary-container": "#3a4a5f",
+                        "surface-container-highest": "#2e3447",
+                        "secondary": "#b7c8e1",
+                        "on-error-container": "#ffdad6",
+                        "inverse-surface": "#dce1fb",
+                        "inverse-on-surface": "#2a3043",
+                        "error": "#ffb4ab",
+                        "surface-tint": "#adc6ff",
+                        "primary": "#adc6ff",
+                        "on-secondary": "#213145",
+                        "background": "#0c1324",
+                        "on-tertiary-fixed": "#311400",
+                        "on-tertiary": "#502400",
+                        "primary-container": "#4d8eff",
+                        "on-primary-fixed": "#001a42",
+                        "on-primary": "#002e6a",
+                        "secondary-fixed-dim": "#b7c8e1",
+                        "error-container": "#93000a",
+                        "tertiary": "#ffb786",
+                        "surface-container-lowest": "#070d1f",
+                        "secondary-fixed": "#d3e4fe",
+                        "inverse-primary": "#005ac2",
+                        "surface-dim": "#0c1324"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Space Grotesk"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .headline { font-family: 'Space Grotesk', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .diff-added { background-color: rgba(173, 198, 255, 0.1); border-left: 4px solid #adc6ff; }
+        .diff-removed { background-color: rgba(255, 180, 171, 0.1); border-left: 4px solid #ffb4ab; }
+        .diff-changed { background-color: rgba(255, 183, 134, 0.1); border-left: 4px solid #ffb786; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface antialiased">
+<!-- TopNavBar Implementation -->
+<header class="fixed top-0 w-full z-50 bg-slate-950/80 backdrop-blur-xl shadow-2xl shadow-black/50 flex justify-between items-center px-6 h-16 w-full">
+<div class="flex items-center gap-8">
+<span class="text-xl font-bold tracking-tighter text-blue-400 font-['Space_Grotesk']">Sentinel Tactical</span>
+<nav class="hidden md:flex gap-6 items-center">
+<a class="text-slate-400 font-['Space_Grotesk'] tracking-tight hover:bg-slate-800/50 transition-colors px-3 py-1 rounded" href="#">Dashboard</a>
+<a class="text-blue-400 font-bold font-['Space_Grotesk'] tracking-tight hover:bg-slate-800/50 transition-colors px-3 py-1 rounded" href="#">Results</a>
+<a class="text-slate-400 font-['Space_Grotesk'] tracking-tight hover:bg-slate-800/50 transition-colors px-3 py-1 rounded" href="#">Assets</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden lg:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-sm">search</span>
+<input class="bg-slate-900 border-none rounded-lg pl-10 pr-4 py-1.5 text-sm focus:ring-1 focus:ring-blue-500 w-64" placeholder="Search operations..." type="text"/>
+</div>
+<button class="text-slate-400 hover:bg-slate-800/50 p-2 rounded transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-slate-400 hover:bg-slate-800/50 p-2 rounded transition-colors">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<div class="h-8 w-8 rounded-full bg-surface-container-highest flex items-center justify-center overflow-hidden border border-outline-variant/30">
+<img alt="User profile avatar" data-alt="close-up of a professional male security operator in a dark tech environment with blue lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCCrbj7Mbv6XXNfXA7RDN3_UrEj2DycSE427U-XJIrCn1MPZH7qHWA0dllt2wvwMxt1CPtd1U6cvN_R8y9WuvhCPxotM63dZR4fc6nbaVzyrUxyEaI8ht1HDz5QjEYHq3E_PZFQnox8xKNvaqvHcXnaTGx9UYt0aQetk6L3ynuJZi4iFj7Cw3_9bYs-LoDLDW2hKqkjkyX3ndF2S_1Z6HdaZt1VhuR81jMd2L9FbMZBids-EsF9fHQpq5eA6V6mO0cpXLrSN6qv63dW"/>
+</div>
+</div>
+</header>
+<!-- SideNavBar Implementation -->
+<aside class="fixed left-0 top-0 h-full w-64 z-40 bg-slate-950 flex flex-col pt-20 pb-6 border-r border-slate-900 hidden lg:flex">
+<div class="px-6 mb-8">
+<h3 class="text-on-surface-variant text-[10px] uppercase tracking-widest font-bold mb-4">Command Center</h3>
+<div class="flex items-center gap-3 p-3 bg-slate-900/50 rounded-xl">
+<div class="h-10 w-10 bg-primary-container/20 rounded flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">security</span>
+</div>
+<div>
+<p class="text-xs font-bold text-on-surface">Operator 01</p>
+<p class="text-[10px] text-on-surface-variant">Active Session</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 px-4 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-slate-300 hover:bg-slate-900 transition-all cursor-pointer active:bg-slate-800 rounded-lg">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-sm font-['Inter'] antialiased">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-slate-300 hover:bg-slate-900 transition-all cursor-pointer active:bg-slate-800 rounded-lg">
+<span class="material-symbols-outlined">radar</span>
+<span class="text-sm font-['Inter'] antialiased">Scans</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-blue-400 bg-blue-500/10 border-r-2 border-blue-500 transition-all cursor-pointer active:bg-slate-800 rounded-lg">
+<span class="material-symbols-outlined">analytics</span>
+<span class="text-sm font-['Inter'] antialiased font-bold">Results</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-slate-300 hover:bg-slate-900 transition-all cursor-pointer active:bg-slate-800 rounded-lg">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="text-sm font-['Inter'] antialiased">Assets</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-slate-300 hover:bg-slate-900 transition-all cursor-pointer active:bg-slate-800 rounded-lg">
+<span class="material-symbols-outlined">verified_user</span>
+<span class="text-sm font-['Inter'] antialiased">Compliance</span>
+</a>
+</nav>
+<div class="px-4 mt-auto border-t border-slate-900 pt-4 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-slate-300 hover:bg-slate-900 transition-all cursor-pointer rounded-lg">
+<span class="material-symbols-outlined text-sm">help_outline</span>
+<span class="text-xs">Support</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-slate-300 hover:bg-slate-900 transition-all cursor-pointer rounded-lg">
+<span class="material-symbols-outlined text-sm">terminal</span>
+<span class="text-xs">Logs</span>
+</a>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="lg:ml-64 pt-24 pb-12 px-8 min-h-screen">
+<!-- Breadcrumbs & Header -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+<div>
+<nav class="flex items-center gap-2 text-[10px] uppercase tracking-widest text-on-surface-variant font-bold mb-2">
+<span>Results</span>
+<span class="material-symbols-outlined text-[12px]">chevron_right</span>
+<span>SCN-9021</span>
+<span class="material-symbols-outlined text-[12px]">chevron_right</span>
+<span class="text-primary">Comparison</span>
+</nav>
+<h1 class="text-4xl headline font-bold tracking-tighter text-on-surface">Compare Results</h1>
+</div>
+<div class="flex items-center gap-3">
+<button class="bg-surface-container-highest hover:bg-surface-bright text-on-surface px-4 py-2 rounded flex items-center gap-2 text-sm font-medium transition-all">
+<span class="material-symbols-outlined text-[18px]">share</span>
+                    Share
+                </button>
+<button class="bg-primary text-on-primary px-4 py-2 rounded flex items-center gap-2 text-sm font-bold transition-all shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined text-[18px]">file_download</span>
+                    Export Comparison Report
+                </button>
+</div>
+</div>
+<!-- Scan Selector Bar -->
+<div class="bg-surface-container-low rounded-xl p-4 mb-8 flex flex-col md:flex-row items-center gap-4 border border-outline-variant/10 shadow-sm">
+<div class="flex-1 w-full grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="space-y-1.5">
+<label class="text-[10px] uppercase tracking-wider text-on-surface-variant font-bold ml-1">Baseline Scan (A)</label>
+<div class="flex items-center gap-3 bg-surface-container rounded-lg p-3 border border-outline-variant/20">
+<span class="material-symbols-outlined text-primary">history</span>
+<div class="flex-1">
+<p class="text-sm font-semibold">2023-11-01 09:00 UTC</p>
+<p class="text-[10px] text-on-surface-variant">Snapshot ID: SNAP-8812-A</p>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer">expand_more</span>
+</div>
+</div>
+<div class="space-y-1.5">
+<label class="text-[10px] uppercase tracking-wider text-on-surface-variant font-bold ml-1">Target Scan (B)</label>
+<div class="flex items-center gap-3 bg-surface-container rounded-lg p-3 border border-primary/40 shadow-[0_0_10px_rgba(173,198,255,0.1)]">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">gps_fixed</span>
+<div class="flex-1">
+<p class="text-sm font-semibold">2023-11-15 14:30 UTC</p>
+<p class="text-[10px] text-on-surface-variant">Snapshot ID: SNAP-9021-B</p>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer">expand_more</span>
+</div>
+</div>
+</div>
+<button class="bg-surface-bright p-3 rounded-lg flex items-center justify-center hover:bg-primary-container/20 transition-all text-primary border border-outline-variant/20">
+<span class="material-symbols-outlined">swap_horiz</span>
+</button>
+</div>
+<!-- Summary Statistics Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+<div class="bg-surface-container-highest/40 p-6 rounded-xl border border-outline-variant/10">
+<p class="text-[10px] uppercase tracking-widest text-on-surface-variant font-bold mb-4">New Open Ports</p>
+<div class="flex items-baseline gap-2">
+<span class="text-5xl headline font-bold text-primary">+2</span>
+<div class="p-1 rounded bg-primary/10">
+<span class="material-symbols-outlined text-primary text-sm">arrow_upward</span>
+</div>
+</div>
+<p class="text-xs text-on-surface-variant mt-2">Potential surface expansion</p>
+</div>
+<div class="bg-surface-container-highest/40 p-6 rounded-xl border border-outline-variant/10">
+<p class="text-[10px] uppercase tracking-widest text-on-surface-variant font-bold mb-4">Closed Ports</p>
+<div class="flex items-baseline gap-2">
+<span class="text-5xl headline font-bold text-error">-1</span>
+<div class="p-1 rounded bg-error/10">
+<span class="material-symbols-outlined text-error text-sm">arrow_downward</span>
+</div>
+</div>
+<p class="text-xs text-on-surface-variant mt-2">Hardening confirmed</p>
+</div>
+<div class="bg-surface-container-highest/40 p-6 rounded-xl border border-outline-variant/10">
+<p class="text-[10px] uppercase tracking-widest text-on-surface-variant font-bold mb-4">Service Changes</p>
+<div class="flex items-baseline gap-2">
+<span class="text-5xl headline font-bold text-tertiary">3</span>
+<div class="p-1 rounded bg-tertiary/10">
+<span class="material-symbols-outlined text-tertiary text-sm">change_circle</span>
+</div>
+</div>
+<p class="text-xs text-on-surface-variant mt-2">Version upgrades detected</p>
+</div>
+<div class="bg-surface-container-highest/40 p-6 rounded-xl border border-outline-variant/10 flex flex-col justify-between">
+<div>
+<p class="text-[10px] uppercase tracking-widest text-on-surface-variant font-bold mb-2">OS Drift Status</p>
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded-full bg-tertiary animate-pulse shadow-[0_0_8px_rgba(255,183,134,0.5)]"></div>
+<span class="text-sm font-bold text-tertiary">Detected</span>
+</div>
+</div>
+<div class="mt-4 bg-surface-container-lowest p-2 rounded text-[10px] font-mono text-on-surface-variant">
+                    Kernel: 5.15.0 -&gt; 5.19.0
+                </div>
+</div>
+</div>
+<!-- Comparison Table Section -->
+<div class="bg-surface-container rounded-xl overflow-hidden shadow-2xl border border-outline-variant/5">
+<div class="p-6 border-b border-outline-variant/10 flex items-center justify-between bg-surface-container-low/50">
+<h3 class="headline text-xl font-bold">Drift Analysis &amp; Port Diff</h3>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+<span class="text-[10px] uppercase font-bold text-on-surface-variant">Added</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-error"></span>
+<span class="text-[10px] uppercase font-bold text-on-surface-variant">Removed</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+<span class="text-[10px] uppercase font-bold text-on-surface-variant">Changed</span>
+</div>
+</div>
+</div>
+<!-- Unified Comparison Table -->
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-lowest text-[10px] uppercase tracking-widest font-bold text-on-surface-variant">
+<th class="px-6 py-4">State</th>
+<th class="px-6 py-4">Component</th>
+<th class="px-6 py-4">Baseline (Scan A)</th>
+<th class="px-6 py-4">Target (Scan B)</th>
+<th class="px-6 py-4 text-right">Confidence</th>
+</tr>
+</thead>
+<tbody class="text-sm divide-y divide-outline-variant/5">
+<!-- Host State -->
+<tr class="hover:bg-surface-container-high transition-colors">
+<td class="px-6 py-4"><span class="px-2 py-0.5 rounded-full bg-surface-container-highest text-[10px] font-bold">STATIC</span></td>
+<td class="px-6 py-4 font-semibold">Host Reachability</td>
+<td class="px-6 py-4 text-primary font-medium">UP</td>
+<td class="px-6 py-4 text-primary font-medium">UP</td>
+<td class="px-6 py-4 text-right text-on-surface-variant">100%</td>
+</tr>
+<!-- Port Additions -->
+<tr class="diff-added hover:bg-primary/5 transition-colors">
+<td class="px-6 py-4">
+<span class="material-symbols-outlined text-primary text-lg">add_circle</span>
+</td>
+<td class="px-6 py-4">
+<div class="font-bold">Port 8080 (TCP)</div>
+<div class="text-[10px] text-on-surface-variant uppercase">HTTP-PROXY</div>
+</td>
+<td class="px-6 py-4 text-on-surface-variant italic">Closed / Filtered</td>
+<td class="px-6 py-4 font-bold text-primary">Open (NGINX 1.21.6)</td>
+<td class="px-6 py-4 text-right">
+<span class="bg-primary/20 text-primary text-[10px] px-2 py-0.5 rounded font-bold">HIGH</span>
+</td>
+</tr>
+<tr class="diff-added hover:bg-primary/5 transition-colors">
+<td class="px-6 py-4">
+<span class="material-symbols-outlined text-primary text-lg">add_circle</span>
+</td>
+<td class="px-6 py-4">
+<div class="font-bold">Port 6379 (TCP)</div>
+<div class="text-[10px] text-on-surface-variant uppercase">REDIS</div>
+</td>
+<td class="px-6 py-4 text-on-surface-variant italic">Closed / Filtered</td>
+<td class="px-6 py-4 font-bold text-primary">Open (Redis 6.2.6)</td>
+<td class="px-6 py-4 text-right">
+<span class="bg-primary/20 text-primary text-[10px] px-2 py-0.5 rounded font-bold">HIGH</span>
+</td>
+</tr>
+<!-- Port Removal -->
+<tr class="diff-removed hover:bg-error/5 transition-colors">
+<td class="px-6 py-4">
+<span class="material-symbols-outlined text-error text-lg">remove_circle</span>
+</td>
+<td class="px-6 py-4">
+<div class="font-bold">Port 21 (TCP)</div>
+<div class="text-[10px] text-on-surface-variant uppercase">FTP</div>
+</td>
+<td class="px-6 py-4 font-bold text-error">Open (vsftpd 3.0.3)</td>
+<td class="px-6 py-4 text-on-surface-variant italic">Closed / Filtered</td>
+<td class="px-6 py-4 text-right">
+<span class="bg-error/20 text-error text-[10px] px-2 py-0.5 rounded font-bold">TOTAL</span>
+</td>
+</tr>
+<!-- Version Change -->
+<tr class="diff-changed hover:bg-tertiary/5 transition-colors">
+<td class="px-6 py-4">
+<span class="material-symbols-outlined text-tertiary text-lg">published_with_changes</span>
+</td>
+<td class="px-6 py-4">
+<div class="font-bold">Port 22 (TCP)</div>
+<div class="text-[10px] text-on-surface-variant uppercase">SSH</div>
+</td>
+<td class="px-6 py-4 font-medium text-tertiary">OpenSSH 8.2p1</td>
+<td class="px-6 py-4 font-bold text-tertiary">OpenSSH 8.9p1</td>
+<td class="px-6 py-4 text-right text-on-surface-variant">98%</td>
+</tr>
+<!-- OS Fingerprint -->
+<tr class="diff-changed hover:bg-tertiary/5 transition-colors">
+<td class="px-6 py-4">
+<span class="material-symbols-outlined text-tertiary text-lg">fingerprint</span>
+</td>
+<td class="px-6 py-4 font-semibold">OS Fingerprint</td>
+<td class="px-6 py-4 text-tertiary font-medium">Ubuntu 20.04 LTS</td>
+<td class="px-6 py-4 text-tertiary font-bold">Ubuntu 22.04.1 LTS</td>
+<td class="px-6 py-4 text-right text-on-surface-variant">85%</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Details Grid Asymmetric -->
+<div class="mt-8 grid grid-cols-1 lg:grid-cols-5 gap-8">
+<!-- Left Side: Detail Cards -->
+<div class="lg:col-span-3 space-y-6">
+<div class="bg-surface-container rounded-xl p-6 border border-outline-variant/10">
+<div class="flex items-center justify-between mb-6">
+<h4 class="headline font-bold text-lg">Detected Service Drift Details</h4>
+<span class="material-symbols-outlined text-on-surface-variant">info</span>
+</div>
+<div class="space-y-4">
+<div class="p-4 bg-surface-container-low rounded-lg border-l-4 border-tertiary">
+<div class="flex justify-between items-start mb-2">
+<span class="text-xs font-bold text-tertiary uppercase tracking-wider">Upgrade Identified</span>
+<span class="text-[10px] text-on-surface-variant">ID: MOD-442</span>
+</div>
+<p class="text-sm font-medium mb-1">OpenSSH Service update detected on Port 22.</p>
+<p class="text-xs text-on-surface-variant">Version increased from 8.2p1 to 8.9p1. This aligns with a potential OS distribution upgrade from Focal to Jammy.</p>
+</div>
+<div class="p-4 bg-surface-container-low rounded-lg border-l-4 border-primary">
+<div class="flex justify-between items-start mb-2">
+<span class="text-xs font-bold text-primary uppercase tracking-wider">Surface Expansion</span>
+<span class="text-[10px] text-on-surface-variant">ID: ADD-901</span>
+</div>
+<p class="text-sm font-medium mb-1">Redis Database instance detected on Port 6379.</p>
+<p class="text-xs text-on-surface-variant">Risk: High. No authentication requirement detected in initial handshake scan. Verification required.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Side: Metadata / Side Panel -->
+<div class="lg:col-span-2 space-y-6">
+<div class="bg-surface-container-lowest p-6 rounded-xl border border-outline-variant/10 h-full">
+<p class="text-[10px] uppercase tracking-widest text-on-surface-variant font-bold mb-6">Scan Contextual Data</p>
+<div class="space-y-6">
+<div class="flex items-start gap-4">
+<div class="p-2 rounded bg-surface-container-highest text-primary">
+<span class="material-symbols-outlined">network_node</span>
+</div>
+<div>
+<p class="text-xs font-bold">Network Origin</p>
+<p class="text-sm text-on-surface-variant">VPC-Production-East-01</p>
+</div>
+</div>
+<div class="flex items-start gap-4">
+<div class="p-2 rounded bg-surface-container-highest text-primary">
+<span class="material-symbols-outlined">dns</span>
+</div>
+<div>
+<p class="text-xs font-bold">Target IP</p>
+<p class="text-sm font-mono text-on-surface-variant">10.0.4.192</p>
+</div>
+</div>
+<div class="flex items-start gap-4">
+<div class="p-2 rounded bg-surface-container-highest text-primary">
+<span class="material-symbols-outlined">timer</span>
+</div>
+<div>
+<p class="text-xs font-bold">Time Difference</p>
+<p class="text-sm text-on-surface-variant">14 days, 5 hours, 30 mins</p>
+</div>
+</div>
+<div class="mt-8 pt-8 border-t border-outline-variant/10">
+<img class="w-full h-32 object-cover rounded-lg opacity-40 mix-blend-luminosity grayscale hover:grayscale-0 transition-all duration-500" data-alt="abstract close-up of digital circuit board with blue glowing pathways representing data analysis and connectivity" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDz4vc6I6I6MKO25pGhGAg_AnyjNwnd8RidpOHnnangRipgdIwVSpqQASKW7ov5F2M3DUmFassYehPBkl8JtopzJxpA0BpYMTB4nUr-EOBGluzjarRR5JZhWEN6r03_uFkCpr8UttG3bcETpvaY9DIgH_AIyj63Qg8UGOmOsCCOXM83w4IdKPLXUybWl7mDGh3wG0g8hpkU433pVh0aUwRl1lF9vKpQ5SAyfoxpJ2Iyv3n3-gGqEomaRLctRng1uPGFLxo8Zq9oqQQx"/>
+<p class="text-[10px] italic text-on-surface-variant mt-4 text-center">Visualizing drift across temporal vectors.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Floating Action Button - Only for Primary Intent -->
+<button class="fixed bottom-8 right-8 bg-primary text-on-primary h-14 w-14 rounded-full shadow-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all z-50">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">add</span>
+</button>
+</body></html>

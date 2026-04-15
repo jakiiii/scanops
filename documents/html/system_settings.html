@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {},
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Public Sans"],
+                        "body": ["Public Sans"],
+                        "label": ["Public Sans"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Public Sans', sans-serif; }
+        .material-symbols-outlined { font-size: 20px; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #475569; }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-200">
+<!-- SideNavBar (Execution from JSON) -->
+<aside class="fixed left-0 top-0 h-full flex flex-col z-40 h-screen w-64 border-r border-slate-800 bg-slate-950 shadow-xl">
+<div class="p-6">
+<div class="text-xl font-black tracking-tighter text-white flex items-center gap-2">
+<span class="material-symbols-outlined text-blue-500" data-icon="security">security</span>
+                ScanOps
+            </div>
+<p class="text-[10px] text-slate-500 font-bold tracking-[0.2em] mt-1 ml-7 uppercase">Enterprise Security</p>
+</div>
+<nav class="flex-1 mt-4">
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-900 transition-colors duration-150 scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="text-xs font-semibold tracking-wide Inter">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-900 transition-colors duration-150 scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+<span class="text-xs font-semibold tracking-wide Inter">Assets</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-900 transition-colors duration-150 scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="radar">radar</span>
+<span class="text-xs font-semibold tracking-wide Inter">Scans</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-900 transition-colors duration-150 scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="security">security</span>
+<span class="text-xs font-semibold tracking-wide Inter">Vulnerabilities</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-900 transition-colors duration-150 scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="text-xs font-semibold tracking-wide Inter">Team Activity</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-900 transition-colors duration-150 scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="text-xs font-semibold tracking-wide Inter">Reports</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-900 transition-colors duration-150 scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="terminal">terminal</span>
+<span class="text-xs font-semibold tracking-wide Inter">Integration</span>
+</a>
+<!-- Active Settings State Mapping -->
+<a class="flex items-center gap-3 px-4 py-3 bg-blue-600/10 text-blue-400 border-r-2 border-blue-500 hover:bg-slate-900 transition-colors duration-150 scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="text-xs font-semibold tracking-wide Inter">Settings</span>
+</a>
+</nav>
+<div class="p-4 border-t border-slate-800">
+<a class="flex items-center gap-3 px-4 py-2 text-slate-400 hover:text-slate-100 hover:bg-slate-900 transition-colors duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+<span class="text-xs font-semibold tracking-wide Inter">Help Center</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-slate-400 hover:text-slate-100 hover:bg-slate-900 transition-colors duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span class="text-xs font-semibold tracking-wide Inter">Log Out</span>
+</a>
+</div>
+</aside>
+<!-- TopNavBar (Execution from JSON) -->
+<header class="sticky top-0 ml-64 flex justify-between items-center px-6 py-3 z-30 bg-slate-900/50 backdrop-blur-md border-b border-slate-800">
+<div class="flex items-center flex-1 max-w-xl">
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" data-icon="search">search</span>
+<input class="w-full bg-slate-800/50 border-0 rounded-lg pl-10 pr-4 py-1.5 text-sm focus:ring-1 focus:ring-blue-500/50 placeholder:text-slate-500" placeholder="Search configurations..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-4">
+<button class="text-slate-400 hover:text-white transition-colors opacity-80 hover:opacity-100">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="text-slate-400 hover:text-white transition-colors opacity-80 hover:opacity-100">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+</button>
+<button class="text-slate-400 hover:text-white transition-colors opacity-80 hover:opacity-100">
+<span class="material-symbols-outlined" data-icon="chat_bubble">chat_bubble</span>
+</button>
+</div>
+<div class="h-8 w-8 rounded-full overflow-hidden border border-slate-700">
+<img class="w-full h-full object-cover" data-alt="professional headshot of a corporate administrator in a dark suit with focused expression and neutral background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_b7Kb0eJt7dpmDwlTeO6Zw8chYarQeoeUySZkJmnPfvTRgqxRb_IHmb5EhLLiKwgvCANCs_87tFKn5S1wr55PqqdugBQjQenOnw7eKze83xdNAQ6eMXfykCfI1L7nvkA6pBEvqGhozVN2tC1hiFqYxDaZ1-7gFECRHEP3yOusnh62gLRi6hG5L_52RtcB-R-JJvnv4LKD0OHRrvptKi6auFmRhd7ufim9Jo-XQVG9bQUkLqs0YW-n5m1-AlVTTuAWhSP2xTnA7i1S"/>
+</div>
+</div>
+</header>
+<main class="ml-64 p-8 min-h-[calc(100vh-60px)]">
+<div class="max-w-6xl mx-auto">
+<header class="mb-10">
+<h1 class="text-3xl font-black tracking-tight text-white mb-2">System Settings</h1>
+<p class="text-slate-400 text-sm">Manage global infrastructure, scan intensity, and organizational branding.</p>
+</header>
+<div class="grid grid-cols-12 gap-8">
+<!-- Settings Categories Navigation -->
+<aside class="col-span-12 lg:col-span-3">
+<nav class="flex flex-col gap-1">
+<a class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-400 hover:bg-slate-900 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+<span class="text-sm font-medium">General</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2.5 rounded-lg bg-blue-600/10 text-blue-400 border border-blue-600/20 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="security_update_good">security_update_good</span>
+<span class="text-sm font-medium">Scan Policy</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-400 hover:bg-slate-900 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="notifications_active">notifications_active</span>
+<span class="text-sm font-medium">Notifications</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-400 hover:bg-slate-900 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="download">download</span>
+<span class="text-sm font-medium">Export</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-400 hover:bg-slate-900 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="palette">palette</span>
+<span class="text-sm font-medium">Theme</span>
+</a>
+</nav>
+<!-- Branding Preview Card -->
+<div class="mt-8 p-6 bg-slate-900 rounded-xl border border-slate-800 overflow-hidden relative group">
+<div class="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 blur-3xl -mr-10 -mt-10 group-hover:bg-blue-500/20 transition-colors"></div>
+<h3 class="text-xs font-bold uppercase tracking-widest text-slate-500 mb-4">Quick Preview</h3>
+<div class="flex flex-col items-center gap-3 py-2">
+<div class="w-16 h-16 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center shadow-lg shadow-blue-500/20">
+<span class="material-symbols-outlined text-3xl text-white" data-icon="shield">shield</span>
+</div>
+<span class="text-lg font-bold text-white">ScanOps Enterprise</span>
+<div class="flex gap-1">
+<div class="w-4 h-4 rounded-full bg-blue-500"></div>
+<div class="w-4 h-4 rounded-full bg-slate-800"></div>
+<div class="w-4 h-4 rounded-full bg-slate-700"></div>
+</div>
+</div>
+</div>
+</aside>
+<!-- Configuration Forms -->
+<div class="col-span-12 lg:col-span-9 space-y-8">
+<!-- Branding Section -->
+<section class="bg-slate-900/40 border border-slate-800 p-8 rounded-2xl">
+<h2 class="text-xl font-bold text-white mb-6">Branding &amp; Identity</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div class="space-y-4">
+<div>
+<label class="block text-sm font-semibold text-slate-300 mb-2">Organization Name</label>
+<input class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2.5 text-sm focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-all outline-none" type="text" value="ScanOps Global"/>
+</div>
+<div>
+<label class="block text-sm font-semibold text-slate-300 mb-2">Primary Color</label>
+<div class="flex gap-2">
+<input class="flex-1 bg-slate-950 border border-slate-800 rounded-lg px-4 py-2.5 text-sm focus:ring-1 focus:ring-blue-500 transition-all outline-none" type="text" value="#3B82F6"/>
+<div class="w-10 h-10 rounded-lg bg-blue-500 border border-slate-700 cursor-pointer"></div>
+</div>
+</div>
+</div>
+<div class="space-y-4">
+<label class="block text-sm font-semibold text-slate-300 mb-2">Organization Logo</label>
+<div class="border-2 border-dashed border-slate-800 rounded-xl p-6 flex flex-col items-center justify-center bg-slate-950/50 hover:bg-slate-900 transition-colors group cursor-pointer">
+<span class="material-symbols-outlined text-3xl text-slate-600 group-hover:text-blue-500 transition-colors mb-2" data-icon="cloud_upload">cloud_upload</span>
+<p class="text-xs text-slate-500">Drag and drop or <span class="text-blue-400">browse</span></p>
+<p class="text-[10px] text-slate-600 mt-1">PNG, JPG up to 5MB</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Scan Policy Section (Bento Style) -->
+<section class="space-y-6">
+<div class="flex items-center justify-between">
+<h2 class="text-xl font-bold text-white">Global Scan Policies</h2>
+<span class="px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 text-[10px] font-bold uppercase tracking-wider border border-emerald-500/20">Active Enforcement</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Network Constraints -->
+<div class="md:col-span-2 bg-slate-900/40 border border-slate-800 p-8 rounded-2xl">
+<div class="flex items-center gap-3 mb-6">
+<div class="p-2 bg-slate-800 rounded-lg text-blue-400">
+<span class="material-symbols-outlined" data-icon="hub">hub</span>
+</div>
+<h3 class="text-sm font-bold text-slate-200">Network Constraints</h3>
+</div>
+<div class="grid grid-cols-2 gap-6">
+<div>
+<label class="block text-[11px] font-bold text-slate-500 uppercase tracking-widest mb-3">Allowed Port Ranges</label>
+<input class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2.5 text-sm focus:ring-1 focus:ring-blue-500 outline-none" type="text" value="80, 443, 8080, 1-1024"/>
+<p class="text-[10px] text-slate-600 mt-2 italic">Comma-separated integers or ranges</p>
+</div>
+<div>
+<label class="block text-[11px] font-bold text-slate-500 uppercase tracking-widest mb-3">Scan Timeout</label>
+<div class="flex items-center gap-2">
+<input class="flex-1 bg-slate-950 border border-slate-800 rounded-lg px-4 py-2.5 text-sm focus:ring-1 focus:ring-blue-500 outline-none" type="number" value="300"/>
+<span class="text-xs text-slate-400">seconds</span>
+</div>
+</div>
+<div class="col-span-2">
+<label class="block text-[11px] font-bold text-slate-500 uppercase tracking-widest mb-3">Blacklisted CIDRs</label>
+<textarea class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2.5 text-sm focus:ring-1 focus:ring-blue-500 outline-none resize-none" rows="2">10.0.0.0/8, 192.168.0.0/16</textarea>
+</div>
+</div>
+</div>
+<!-- Performance Card -->
+<div class="bg-gradient-to-b from-blue-600/10 to-slate-900 border border-blue-500/20 p-8 rounded-2xl flex flex-col justify-between">
+<div>
+<div class="flex items-center gap-3 mb-6">
+<div class="p-2 bg-blue-600/20 rounded-lg text-blue-400">
+<span class="material-symbols-outlined" data-icon="bolt">bolt</span>
+</div>
+<h3 class="text-sm font-bold text-slate-200">Max Concurrency</h3>
+</div>
+<div class="space-y-6">
+<div>
+<div class="flex justify-between text-xs mb-3">
+<span class="text-slate-400">Parallel Tasks</span>
+<span class="text-blue-400 font-bold">128</span>
+</div>
+<div class="h-2 w-full bg-slate-800 rounded-full overflow-hidden">
+<div class="h-full bg-blue-500 w-[65%] rounded-full shadow-[0_0_10px_rgba(59,130,246,0.5)]"></div>
+</div>
+</div>
+<p class="text-[10px] text-slate-500">Increased concurrency may trigger intrusion detection systems on target networks.</p>
+</div>
+</div>
+<button class="w-full mt-6 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold py-2.5 rounded-lg transition-colors">
+                                    Optimized Profile
+                                </button>
+</div>
+</div>
+</section>
+<!-- Advanced Settings UI Preference -->
+<section class="bg-slate-900/40 border border-slate-800 p-8 rounded-2xl">
+<div class="flex items-center gap-3 mb-6">
+<div class="p-2 bg-slate-800 rounded-lg text-purple-400">
+<span class="material-symbols-outlined" data-icon="settings_input_component">settings_input_component</span>
+</div>
+<h2 class="text-xl font-bold text-white">Interface Preferences</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
+<div class="flex items-center justify-between py-2">
+<div>
+<p class="text-sm font-semibold text-slate-200">Advanced Log Stream</p>
+<p class="text-xs text-slate-500">Show raw console output during live scans</p>
+</div>
+<div class="w-10 h-5 bg-blue-600 rounded-full relative cursor-pointer">
+<div class="absolute right-1 top-1 h-3 w-3 bg-white rounded-full"></div>
+</div>
+</div>
+<div class="flex items-center justify-between py-2">
+<div>
+<p class="text-sm font-semibold text-slate-200">Bento Layout Mode</p>
+<p class="text-xs text-slate-500">Enable asymmetric grid for dashboards</p>
+</div>
+<div class="w-10 h-5 bg-blue-600 rounded-full relative cursor-pointer">
+<div class="absolute right-1 top-1 h-3 w-3 bg-white rounded-full"></div>
+</div>
+</div>
+<div class="flex items-center justify-between py-2">
+<div>
+<p class="text-sm font-semibold text-slate-200">Glassmorphism Effects</p>
+<p class="text-xs text-slate-500">Apply backdrop blur to overlay elements</p>
+</div>
+<div class="w-10 h-5 bg-slate-700 rounded-full relative cursor-pointer">
+<div class="absolute left-1 top-1 h-3 w-3 bg-slate-400 rounded-full"></div>
+</div>
+</div>
+<div class="flex items-center justify-between py-2">
+<div>
+<p class="text-sm font-semibold text-slate-200">Compact Navigation</p>
+<p class="text-xs text-slate-500">Minimize sidebar automatically on load</p>
+</div>
+<div class="w-10 h-5 bg-slate-700 rounded-full relative cursor-pointer">
+<div class="absolute left-1 top-1 h-3 w-3 bg-slate-400 rounded-full"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- Form Actions -->
+<div class="flex items-center justify-end gap-4 pb-12">
+<button class="px-6 py-2.5 rounded-lg text-sm font-bold text-slate-400 hover:text-white transition-colors">Discard Changes</button>
+<button class="px-8 py-2.5 rounded-lg text-sm font-bold bg-blue-600 text-white hover:bg-blue-500 shadow-lg shadow-blue-600/20 transition-all transform hover:-translate-y-0.5 active:scale-95">Save Configurations</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

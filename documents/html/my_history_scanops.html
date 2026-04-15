@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>My History - Sentinel ScanOps</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "inverse-surface": "#dce1fb",
+                      "on-tertiary-fixed-variant": "#723600",
+                      "surface-variant": "#2e3447",
+                      "surface-bright": "#33394c",
+                      "on-tertiary-fixed": "#311400",
+                      "on-surface": "#dce1fb",
+                      "on-background": "#dce1fb",
+                      "on-secondary-fixed-variant": "#38485d",
+                      "on-surface-variant": "#c2c6d6",
+                      "primary": "#adc6ff",
+                      "outline-variant": "#424754",
+                      "tertiary-container": "#df7412",
+                      "surface-tint": "#adc6ff",
+                      "on-secondary": "#213145",
+                      "on-primary-container": "#00285d",
+                      "error-container": "#93000a",
+                      "secondary-container": "#3a4a5f",
+                      "inverse-on-surface": "#2a3043",
+                      "error": "#ffb4ab",
+                      "surface-dim": "#0c1324",
+                      "surface-container": "#191f31",
+                      "primary-fixed-dim": "#adc6ff",
+                      "primary-container": "#4d8eff",
+                      "on-error-container": "#ffdad6",
+                      "on-error": "#690005",
+                      "tertiary-fixed": "#ffdcc6",
+                      "primary-fixed": "#d8e2ff",
+                      "inverse-primary": "#005ac2",
+                      "tertiary": "#ffb786",
+                      "secondary-fixed": "#d3e4fe",
+                      "on-primary": "#002e6a",
+                      "surface-container-highest": "#2e3447",
+                      "surface": "#0c1324",
+                      "on-tertiary": "#502400",
+                      "surface-container-lowest": "#070d1f",
+                      "on-tertiary-container": "#461f00",
+                      "on-secondary-container": "#a9bad3",
+                      "outline": "#8c909f",
+                      "background": "#0c1324",
+                      "surface-container-low": "#151b2d",
+                      "secondary-fixed-dim": "#b7c8e1",
+                      "surface-container-high": "#23293c",
+                      "secondary": "#b7c8e1",
+                      "on-primary-fixed": "#001a42",
+                      "tertiary-fixed-dim": "#ffb786",
+                      "on-secondary-fixed": "#0b1c30",
+                      "on-primary-fixed-variant": "#004395"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "fontFamily": {
+                      "headline": ["Space Grotesk"],
+                      "body": ["Inter"],
+                      "label": ["Inter"]
+              }
+            },
+          },
+        }
+      </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #0c1324;
+            color: #dce1fb;
+            font-family: 'Inter', sans-serif;
+        }
+        .headline-font {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        .glass-panel {
+            background: rgba(51, 57, 76, 0.6);
+            backdrop-filter: blur(24px);
+        }
+        /* Status Pulsing */
+        @keyframes pulse-aura {
+            0% { box-shadow: 0 0 0 0px rgba(255, 183, 134, 0.4); }
+            100% { box-shadow: 0 0 0 12px rgba(255, 183, 134, 0); }
+        }
+        .status-pulse {
+            animation: pulse-aura 2s infinite;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface">
+<!-- SideNavBar (Authority: JSON) -->
+<aside class="h-screen w-64 fixed left-0 top-0 bg-[#0c1324] border-r border-[#2e3447]/15 flex flex-col py-8 px-4 z-50">
+<div class="mb-10 px-2">
+<h1 class="text-blue-400 font-black tracking-tighter text-2xl headline-font uppercase">Sentinel</h1>
+<div class="mt-6 p-3 rounded bg-surface-container-low">
+<p class="text-on-surface-variant text-[10px] uppercase tracking-widest font-bold">Tactical Command</p>
+<p class="text-primary text-xs font-medium">Level 4 Clearance</p>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<!-- Scan History is ACTIVE -->
+<a class="flex items-center gap-3 px-3 py-2.5 text-blue-400 font-semibold border-r-2 border-blue-500 bg-[#151b2d] transition-all duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+<span class="font-body text-sm">Scan History</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-slate-500 hover:text-slate-200 hover:bg-[#151b2d] transition-all duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-body text-sm">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-slate-500 hover:text-slate-200 hover:bg-[#151b2d] transition-all duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="security">security</span>
+<span class="font-body text-sm">Threat Intelligence</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-slate-500 hover:text-slate-200 hover:bg-[#151b2d] transition-all duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="dns">dns</span>
+<span class="font-body text-sm">Assets</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-slate-500 hover:text-slate-200 hover:bg-[#151b2d] transition-all duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="assessment">assessment</span>
+<span class="font-body text-sm">Reports</span>
+</a>
+</nav>
+<div class="pt-6 border-t border-outline-variant/20 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2.5 text-slate-500 hover:text-slate-200 hover:bg-[#151b2d] transition-all duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="help_outline">help_outline</span>
+<span class="font-body text-sm">Support</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-slate-500 hover:text-slate-200 hover:bg-[#151b2d] transition-all duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span class="font-body text-sm">Logout</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-64 min-h-screen">
+<!-- TopAppBar (Authority: JSON) -->
+<header class="flex items-center justify-between px-8 w-full h-16 bg-[#0c1324] sticky top-0 z-40">
+<div class="flex items-center gap-4 flex-1">
+<div class="relative w-full max-w-md">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-sm" data-icon="search">search</span>
+<input class="w-full bg-[#151b2d] border-none text-sm py-2 pl-10 pr-4 rounded focus:ring-1 focus:ring-primary/40 text-on-surface placeholder-slate-500 font-body" placeholder="Search operational logs..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-4">
+<button class="text-slate-400 hover:bg-[#2e3447] p-2 rounded transition-colors duration-200">
+<span class="material-symbols-outlined text-[20px]" data-icon="notifications">notifications</span>
+</button>
+<button class="text-slate-400 hover:bg-[#2e3447] p-2 rounded transition-colors duration-200">
+<span class="material-symbols-outlined text-[20px]" data-icon="settings">settings</span>
+</button>
+</div>
+<div class="h-8 w-[1px] bg-outline-variant/20"></div>
+<div class="flex items-center gap-3">
+<div class="text-right">
+<p class="text-xs font-bold font-body">Analyst 092</p>
+<p class="text-[10px] text-on-surface-variant uppercase tracking-tighter">Active Session</p>
+</div>
+<img alt="Analyst profile avatar" class="w-10 h-10 rounded-full border border-primary/20" data-alt="Close-up portrait of a serious tech professional in a dark studio setting with subtle blue rim lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAusRts81168VhA4s4-sEGFwq1l3lCm2Dy54YaLE8z7Uay1xCKy2POkU19BMTACjHrXOE5uOAiEbQJNc72k5mEw3jV909vj0LZUHEtSbq-SbcbofzjldOitzAuw7SBHGbsRrBLgBeCezfGOaqzX0CjxPnHrxpOE0yC4WUSbMDKB-D1wNe17v6XoQS77toFHWBP1hXL0rCkXCHjDBuU4-NygpHBvl2Bk53hAzx7A3EUcU0H2Mf83l6PFwk0EGvxp2okXiLoHoq4Bs84b"/>
+</div>
+</div>
+</header>
+<!-- Page Content -->
+<div class="p-8 space-y-8">
+<!-- Page Header -->
+<section class="flex items-end justify-between">
+<div>
+<h2 class="text-4xl font-bold headline-font tracking-tighter text-on-surface">My History</h2>
+<p class="text-on-surface-variant mt-1 font-body text-sm tracking-wide">Comprehensive audit of tactical scanning operations and system telemetry.</p>
+</div>
+<div class="flex items-center gap-3">
+<div class="flex items-center gap-2 bg-surface-container-low px-4 py-2 rounded">
+<span class="w-2 h-2 rounded-full bg-tertiary status-pulse"></span>
+<span class="text-[10px] uppercase font-bold tracking-widest text-on-surface-variant">System Status: Live Audit</span>
+</div>
+</div>
+</section>
+<!-- Filters & Actions Bar -->
+<div class="grid grid-cols-12 gap-4 items-center bg-surface-container-lowest p-4 rounded-xl border border-outline-variant/5">
+<div class="col-span-4 relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-sm" data-icon="filter_list">filter_list</span>
+<input class="w-full bg-surface-container-low border-none rounded py-2.5 pl-10 text-sm font-body focus:ring-1 focus:ring-primary/30" placeholder="Filter by Target IP or Scan ID..." type="text"/>
+</div>
+<div class="col-span-2">
+<select class="w-full bg-surface-container-low border-none rounded py-2.5 text-sm font-body text-on-surface-variant focus:ring-1 focus:ring-primary/30">
+<option>All Statuses</option>
+<option>Completed</option>
+<option>Running</option>
+<option>Failed</option>
+</select>
+</div>
+<div class="col-span-2">
+<select class="w-full bg-surface-container-low border-none rounded py-2.5 text-sm font-body text-on-surface-variant focus:ring-1 focus:ring-primary/30">
+<option>All Profiles</option>
+<option>Aggressive Port Audit</option>
+<option>Service Discovery</option>
+<option>Vulnerability Assessment</option>
+</select>
+</div>
+<div class="col-span-2">
+<button class="w-full flex items-center justify-center gap-2 bg-surface-container-low border-none rounded py-2.5 text-sm font-body text-on-surface hover:bg-surface-container-highest transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="calendar_today">calendar_today</span>
+                        Last 30 Days
+                    </button>
+</div>
+<div class="col-span-2 flex justify-end">
+<button class="bg-primary text-on-primary font-bold px-6 py-2.5 rounded text-sm hover:opacity-90 transition-opacity">
+                        New Scan
+                    </button>
+</div>
+</div>
+<!-- Dashboard Layout (Bento-style Grid) -->
+<div class="grid grid-cols-12 gap-6">
+<!-- Favorite Scans (Authority: Horizontal Cards) -->
+<div class="col-span-12 lg:col-span-8 space-y-4">
+<div class="flex items-center justify-between">
+<h3 class="headline-font text-lg font-bold uppercase tracking-tighter text-primary">Favorite Scans</h3>
+<span class="text-[10px] text-on-surface-variant font-bold uppercase tracking-widest">Pinned Protocols</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<!-- Card 1 -->
+<div class="bg-surface-container-low p-5 rounded-xl border border-outline-variant/10 hover:border-primary/30 transition-all group relative overflow-hidden">
+<div class="absolute top-0 right-0 p-2">
+<span class="material-symbols-outlined text-primary/40 text-sm" data-icon="push_pin" style="font-variation-settings: 'FILL' 1;">push_pin</span>
+</div>
+<div class="flex flex-col h-full">
+<p class="text-xs text-on-surface-variant font-bold uppercase mb-1">Aggressive Audit</p>
+<h4 class="headline-font text-xl font-bold text-on-surface group-hover:text-primary transition-colors">Core Segment A</h4>
+<p class="text-[10px] text-outline mt-1 font-body tracking-wider">Target: 10.0.4.0/24</p>
+<div class="mt-6 flex items-center justify-between">
+<span class="text-[10px] bg-secondary-container text-on-secondary-container px-2 py-0.5 rounded font-bold uppercase">Weekly</span>
+<button class="bg-primary/10 text-primary hover:bg-primary hover:text-on-primary p-2 rounded-full transition-all flex items-center justify-center">
+<span class="material-symbols-outlined text-lg" data-icon="play_arrow" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface-container-low p-5 rounded-xl border border-outline-variant/10 hover:border-primary/30 transition-all group relative">
+<div class="flex flex-col h-full">
+<p class="text-xs text-on-surface-variant font-bold uppercase mb-1">Service Discovery</p>
+<h4 class="headline-font text-xl font-bold text-on-surface group-hover:text-primary transition-colors">DMZ Infrastructure</h4>
+<p class="text-[10px] text-outline mt-1 font-body tracking-wider">Target: 172.16.0.45</p>
+<div class="mt-6 flex items-center justify-between">
+<span class="text-[10px] bg-surface-container-highest text-on-surface-variant px-2 py-0.5 rounded font-bold uppercase">Daily</span>
+<button class="bg-primary/10 text-primary hover:bg-primary hover:text-on-primary p-2 rounded-full transition-all flex items-center justify-center">
+<span class="material-symbols-outlined text-lg" data-icon="play_arrow" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-surface-container-low p-5 rounded-xl border border-outline-variant/10 hover:border-primary/30 transition-all group relative">
+<div class="flex flex-col h-full">
+<p class="text-xs text-on-surface-variant font-bold uppercase mb-1">Stealth Sync</p>
+<h4 class="headline-font text-xl font-bold text-on-surface group-hover:text-primary transition-colors">Endpoint Matrix</h4>
+<p class="text-[10px] text-outline mt-1 font-body tracking-wider">Target: 10.0.12.0/22</p>
+<div class="mt-6 flex items-center justify-between">
+<span class="text-[10px] bg-surface-container-highest text-on-surface-variant px-2 py-0.5 rounded font-bold uppercase">Manual</span>
+<button class="bg-primary/10 text-primary hover:bg-primary hover:text-on-primary p-2 rounded-full transition-all flex items-center justify-center">
+<span class="material-symbols-outlined text-lg" data-icon="play_arrow" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Recent Activity (Authority: Compact Timeline) -->
+<div class="col-span-12 lg:col-span-4 space-y-4">
+<div class="flex items-center justify-between">
+<h3 class="headline-font text-lg font-bold uppercase tracking-tighter text-primary">Recent Activity</h3>
+<span class="material-symbols-outlined text-outline text-sm" data-icon="refresh">refresh</span>
+</div>
+<div class="bg-surface-container-low rounded-xl p-5 border border-outline-variant/10 h-[260px] overflow-y-auto">
+<div class="space-y-6 relative before:absolute before:left-[11px] before:top-2 before:bottom-2 before:w-[1px] before:bg-outline-variant/20">
+<!-- Event 1 -->
+<div class="relative pl-8">
+<div class="absolute left-0 top-1 w-6 h-6 rounded-full bg-surface-container flex items-center justify-center border border-primary/40 z-10">
+<span class="material-symbols-outlined text-[12px] text-primary" data-icon="check_circle">check_circle</span>
+</div>
+<div>
+<p class="text-xs font-bold font-body text-on-surface">Scan SCN-9021 completed</p>
+<p class="text-[10px] text-outline mt-0.5 font-body">Core Segment A • 2m ago</p>
+</div>
+</div>
+<!-- Event 2 -->
+<div class="relative pl-8">
+<div class="absolute left-0 top-1 w-6 h-6 rounded-full bg-surface-container flex items-center justify-center border border-outline-variant z-10">
+<span class="material-symbols-outlined text-[12px] text-outline" data-icon="file_download">file_download</span>
+</div>
+<div>
+<p class="text-xs font-bold font-body text-on-surface">Exported result for 10.0.4.12</p>
+<p class="text-[10px] text-outline mt-0.5 font-body">CSV Format • 14m ago</p>
+</div>
+</div>
+<!-- Event 3 -->
+<div class="relative pl-8">
+<div class="absolute left-0 top-1 w-6 h-6 rounded-full bg-surface-container flex items-center justify-center border border-error/40 z-10">
+<span class="material-symbols-outlined text-[12px] text-error" data-icon="error">error</span>
+</div>
+<div>
+<p class="text-xs font-bold font-body text-on-surface">Unauthorized Access Attempt</p>
+<p class="text-[10px] text-outline mt-0.5 font-body">Node 10.0.12.8 • 1h ago</p>
+</div>
+</div>
+<!-- Event 4 -->
+<div class="relative pl-8">
+<div class="absolute left-0 top-1 w-6 h-6 rounded-full bg-surface-container flex items-center justify-center border border-primary/40 z-10">
+<span class="material-symbols-outlined text-[12px] text-primary" data-icon="sync">sync</span>
+</div>
+<div>
+<p class="text-xs font-bold font-body text-on-surface">Profile 'Service Discovery' Updated</p>
+<p class="text-[10px] text-outline mt-0.5 font-body">By System Operator • 3h ago</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Scan History Table (Authority: Grid/Table Integration) -->
+<div class="col-span-12 space-y-4">
+<div class="flex items-center justify-between">
+<h3 class="headline-font text-lg font-bold uppercase tracking-tighter text-primary">Tactical Execution History</h3>
+<div class="flex gap-4">
+<span class="flex items-center gap-1.5 text-[10px] font-bold uppercase text-on-surface-variant">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span> Completed
+                            </span>
+<span class="flex items-center gap-1.5 text-[10px] font-bold uppercase text-on-surface-variant">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span> Running
+                            </span>
+<span class="flex items-center gap-1.5 text-[10px] font-bold uppercase text-on-surface-variant">
+<span class="w-1.5 h-1.5 rounded-full bg-error"></span> Failed
+                            </span>
+</div>
+</div>
+<div class="bg-surface-container-low rounded-xl border border-outline-variant/10 overflow-hidden">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-high/50 border-b border-outline-variant/10">
+<th class="px-6 py-4 text-[11px] font-black uppercase tracking-widest text-outline">Scan ID</th>
+<th class="px-6 py-4 text-[11px] font-black uppercase tracking-widest text-outline">Target</th>
+<th class="px-6 py-4 text-[11px] font-black uppercase tracking-widest text-outline">Profile</th>
+<th class="px-6 py-4 text-[11px] font-black uppercase tracking-widest text-outline">Execution Date</th>
+<th class="px-6 py-4 text-[11px] font-black uppercase tracking-widest text-outline">Status</th>
+<th class="px-6 py-4 text-[11px] font-black uppercase tracking-widest text-outline text-right">Commands</th>
+</tr>
+</thead>
+<tbody class="font-body text-sm">
+<!-- Row 1 -->
+<tr class="hover:bg-surface-container-high transition-colors group">
+<td class="px-6 py-4 font-bold text-on-surface headline-font">SCN-9021</td>
+<td class="px-6 py-4 text-primary">10.0.4.0/24</td>
+<td class="px-6 py-4 text-on-surface-variant">Aggressive Port Audit</td>
+<td class="px-6 py-4 text-outline tabular-nums">Oct 24, 2023 • 14:22:11</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-black bg-primary/10 text-primary uppercase">Completed</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center justify-end gap-3 text-outline">
+<button class="hover:text-primary transition-colors" title="View Result"><span class="material-symbols-outlined text-lg" data-icon="visibility">visibility</span></button>
+<button class="hover:text-primary transition-colors" title="Re-run"><span class="material-symbols-outlined text-lg" data-icon="replay">replay</span></button>
+<button class="hover:text-primary transition-colors" title="Clone"><span class="material-symbols-outlined text-lg" data-icon="content_copy">content_copy</span></button>
+</div>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface-container-high transition-colors group">
+<td class="px-6 py-4 font-bold text-on-surface headline-font">SCN-8845</td>
+<td class="px-6 py-4 text-primary">192.168.1.15</td>
+<td class="px-6 py-4 text-on-surface-variant">Service Discovery</td>
+<td class="px-6 py-4 text-outline tabular-nums">Oct 24, 2023 • 13:05:44</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-black bg-tertiary/10 text-tertiary uppercase">Running</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center justify-end gap-3 text-outline">
+<button class="hover:text-primary transition-colors" title="View Result"><span class="material-symbols-outlined text-lg" data-icon="visibility">visibility</span></button>
+<button class="hover:text-primary transition-colors" title="Re-run"><span class="material-symbols-outlined text-lg" data-icon="replay">replay</span></button>
+<button class="hover:text-primary transition-colors" title="Clone"><span class="material-symbols-outlined text-lg" data-icon="content_copy">content_copy</span></button>
+</div>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-surface-container-high transition-colors group">
+<td class="px-6 py-4 font-bold text-on-surface headline-font">SCN-7210</td>
+<td class="px-6 py-4 text-primary">10.0.12.254</td>
+<td class="px-6 py-4 text-on-surface-variant">Vulnerability Scan</td>
+<td class="px-6 py-4 text-outline tabular-nums">Oct 23, 2023 • 22:15:00</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-black bg-error/10 text-error uppercase">Failed</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center justify-end gap-3 text-outline">
+<button class="hover:text-primary transition-colors" title="View Result"><span class="material-symbols-outlined text-lg" data-icon="visibility">visibility</span></button>
+<button class="hover:text-primary transition-colors" title="Re-run"><span class="material-symbols-outlined text-lg" data-icon="replay">replay</span></button>
+<button class="hover:text-primary transition-colors" title="Clone"><span class="material-symbols-outlined text-lg" data-icon="content_copy">content_copy</span></button>
+</div>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-surface-container-high transition-colors group">
+<td class="px-6 py-4 font-bold text-on-surface headline-font">SCN-7198</td>
+<td class="px-6 py-4 text-primary">172.16.1.1/24</td>
+<td class="px-6 py-4 text-on-surface-variant">Stealth Discovery</td>
+<td class="px-6 py-4 text-outline tabular-nums">Oct 23, 2023 • 09:40:12</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-black bg-primary/10 text-primary uppercase">Completed</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center justify-end gap-3 text-outline">
+<button class="hover:text-primary transition-colors" title="View Result"><span class="material-symbols-outlined text-lg" data-icon="visibility">visibility</span></button>
+<button class="hover:text-primary transition-colors" title="Re-run"><span class="material-symbols-outlined text-lg" data-icon="replay">replay</span></button>
+<button class="hover:text-primary transition-colors" title="Clone"><span class="material-symbols-outlined text-lg" data-icon="content_copy">content_copy</span></button>
+</div>
+</td>
+</tr>
+<!-- Row 5 -->
+<tr class="hover:bg-surface-container-high transition-colors group">
+<td class="px-6 py-4 font-bold text-on-surface headline-font">SCN-6902</td>
+<td class="px-6 py-4 text-primary">10.0.1.5</td>
+<td class="px-6 py-4 text-on-surface-variant">OS Fingerprinting</td>
+<td class="px-6 py-4 text-outline tabular-nums">Oct 22, 2023 • 18:55:31</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-black bg-primary/10 text-primary uppercase">Completed</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center justify-end gap-3 text-outline">
+<button class="hover:text-primary transition-colors" title="View Result"><span class="material-symbols-outlined text-lg" data-icon="visibility">visibility</span></button>
+<button class="hover:text-primary transition-colors" title="Re-run"><span class="material-symbols-outlined text-lg" data-icon="replay">replay</span></button>
+<button class="hover:text-primary transition-colors" title="Clone"><span class="material-symbols-outlined text-lg" data-icon="content_copy">content_copy</span></button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="px-6 py-4 bg-surface-container-lowest/50 border-t border-outline-variant/10 flex items-center justify-between">
+<p class="text-[10px] text-outline font-bold uppercase tracking-widest">Displaying 1-5 of 1,284 scan records</p>
+<div class="flex gap-2">
+<button class="p-1 rounded hover:bg-surface-container-highest transition-colors text-outline">
+<span class="material-symbols-outlined text-lg" data-icon="chevron_left">chevron_left</span>
+</button>
+<button class="p-1 rounded hover:bg-surface-container-highest transition-colors text-on-surface">
+<span class="material-symbols-outlined text-lg" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- FAB Suppression Rule followed: No FAB on History/Details screen as per mandate -->
+</body></html>

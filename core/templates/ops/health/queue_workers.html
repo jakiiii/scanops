@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}Queue & Worker Status | ScanOps{% endblock %}
+
+{% block content %}
+    {% include "includes/breadcrumbs.html" with breadcrumbs=breadcrumbs %}
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+        <div>
+            <h1 class="text-4xl font-bold text-white tracking-tight">Queue & Worker Status</h1>
+            <p class="text-slate-400 mt-1">Live queue load and worker fleet activity for scan execution runtime.</p>
+        </div>
+        <a href="{% url 'ops:health-system' %}" class="px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-sm font-semibold text-slate-100 hover:bg-slate-700">System Health</a>
+    </div>
+
+    <div
+        id="worker-status-container"
+        hx-get="{% url 'ops:health-queue-workers' %}"
+        hx-trigger="every 20s"
+        hx-target="#worker-status-container"
+        hx-swap="innerHTML"
+    >
+        {% include "partials/worker_status_cards.html" %}
+    </div>
+{% endblock %}

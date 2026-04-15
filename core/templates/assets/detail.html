@@ -1,0 +1,181 @@
+{% extends "base.html" %}
+{% load scanops_tags %}
+
+{% block title %}Asset Detail | ScanOps{% endblock %}
+
+{% block content %}
+    {% include "includes/breadcrumbs.html" with breadcrumbs=breadcrumbs %}
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
+        <div>
+            <h1 class="text-4xl font-bold text-white tracking-tight">{{ asset.name }}</h1>
+            <p class="text-slate-400 mt-1">{{ asset.ip_address|default:"-" }} • {{ asset.hostname|default:"-" }} • {{ asset.operating_system|default:"Unknown OS" }}</p>
+        </div>
+        <div class="flex gap-2">
+            <a href="{% url 'assets:detail-changes' asset.pk %}" class="px-3 py-2 rounded-lg bg-slate-800 border border-slate-700 text-sm text-slate-100 hover:bg-slate-700">Change History</a>
+            {% if asset.target %}
+                <a href="{% url 'targets:detail' asset.target.pk %}" class="px-3 py-2 rounded-lg bg-blue-600 text-sm font-semibold text-white hover:bg-blue-500">Target</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-4 mb-6">
+        <div class="scanops-panel p-4">
+            <p class="text-[10px] uppercase tracking-widest text-slate-500">Risk Score</p>
+            <p class="text-2xl font-bold text-rose-300 mt-2">{{ asset.risk_score }}</p>
+        </div>
+        <div class="scanops-panel p-4">
+            <p class="text-[10px] uppercase tracking-widest text-slate-500">Risk Level</p>
+            <p class="mt-2"><span class="px-2 py-1 rounded text-[10px] uppercase font-semibold {{ asset.risk_level|risk_badge }}">{{ asset.get_risk_level_display }}</span></p>
+        </div>
+        <div class="scanops-panel p-4">
+            <p class="text-[10px] uppercase tracking-widest text-slate-500">Status</p>
+            <p class="mt-2"><span class="px-2 py-1 rounded text-[10px] uppercase font-semibold {{ asset.status|status_badge }}">{{ asset.get_status_display }}</span></p>
+        </div>
+        <div class="scanops-panel p-4">
+            <p class="text-[10px] uppercase tracking-widest text-slate-500">Open Ports</p>
+            <p class="text-2xl font-bold text-blue-300 mt-2">{{ asset.current_open_ports_count }}</p>
+        </div>
+        <div class="scanops-panel p-4">
+            <p class="text-[10px] uppercase tracking-widest text-slate-500">Last Scanned</p>
+            <p class="text-sm text-slate-200 mt-2">{{ asset.last_scanned_at|date:"M d, Y H:i"|default:"-" }}</p>
+        </div>
+    </div>
+
+    <div class="scanops-panel p-2 mb-6">
+        <div class="flex flex-wrap items-center gap-2">
+            <a href="?tab=overview" class="px-3 py-2 rounded text-sm {% if tab == 'overview' %}bg-blue-600 text-white{% else %}text-slate-300 hover:bg-slate-800{% endif %}">Overview</a>
+            <a href="?tab=snapshots" class="px-3 py-2 rounded text-sm {% if tab == 'snapshots' %}bg-blue-600 text-white{% else %}text-slate-300 hover:bg-slate-800{% endif %}">Snapshots</a>
+            <a href="?tab=changes" class="px-3 py-2 rounded text-sm {% if tab == 'changes' %}bg-blue-600 text-white{% else %}text-slate-300 hover:bg-slate-800{% endif %}">Change History</a>
+            <a href="?tab=results" class="px-3 py-2 rounded text-sm {% if tab == 'results' %}bg-blue-600 text-white{% else %}text-slate-300 hover:bg-slate-800{% endif %}">Related Results</a>
+            <a href="?tab=notes" class="px-3 py-2 rounded text-sm {% if tab == 'notes' %}bg-blue-600 text-white{% else %}text-slate-300 hover:bg-slate-800{% endif %}">Notes</a>
+        </div>
+    </div>
+
+    {% if tab == "snapshots" %}
+        <div class="scanops-panel overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full min-w-[860px] text-left border-collapse">
+                    <thead>
+                    <tr class="border-b border-slate-800 bg-slate-900/70">
+                        <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">Created</th>
+                        <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">OS</th>
+                        <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">Open Ports</th>
+                        <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">Source Result</th>
+                    </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-800/60">
+                    {% for snapshot in snapshots %}
+                        <tr>
+                            <td class="px-4 py-3 text-xs text-slate-300">{{ snapshot.created_at|date:"M d, Y H:i:s" }}</td>
+                            <td class="px-4 py-3 text-xs text-slate-300">{{ snapshot.operating_system|default:"-" }}</td>
+                            <td class="px-4 py-3 text-xs text-slate-300">{{ snapshot.open_ports_json|length }}</td>
+                            <td class="px-4 py-3 text-xs text-slate-300">
+                                {% if snapshot.source_result %}
+                                    <a href="{% url 'scans:result-detail' snapshot.source_result.pk %}" class="text-blue-300 hover:text-blue-200">Result #{{ snapshot.source_result.pk }}</a>
+                                {% else %}-{% endif %}
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr><td colspan="4" class="px-4 py-10 text-center text-slate-500">No snapshots available.</td></tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    {% elif tab == "changes" %}
+        <div id="asset-change-panel" hx-get="{% url 'assets:changes-partial' asset.pk %}" hx-trigger="load" hx-swap="innerHTML">
+            {% include "partials/asset_changes_timeline.html" with changes=change_logs %}
+        </div>
+    {% elif tab == "results" %}
+        <div class="scanops-panel overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full min-w-[920px] text-left border-collapse">
+                    <thead>
+                    <tr class="border-b border-slate-800 bg-slate-900/70">
+                        <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">Execution</th>
+                        <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">Generated At</th>
+                        <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">Open</th>
+                        <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">Services</th>
+                        <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">Host Status</th>
+                        <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500 text-right">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-800/60">
+                    {% for result in related_results %}
+                        <tr>
+                            <td class="px-4 py-3 text-xs font-mono text-blue-300">{{ result.execution.execution_id }}</td>
+                            <td class="px-4 py-3 text-xs text-slate-300">{{ result.generated_at|date:"M d, Y H:i" }}</td>
+                            <td class="px-4 py-3 text-xs text-slate-300">{{ result.total_open_ports }}</td>
+                            <td class="px-4 py-3 text-xs text-slate-300">{{ result.total_services_detected }}</td>
+                            <td class="px-4 py-3 text-xs text-slate-300">{{ result.get_host_status_display }}</td>
+                            <td class="px-4 py-3 text-right"><a href="{% url 'scans:result-detail' result.pk %}" class="px-2.5 py-1.5 rounded bg-slate-800 hover:bg-slate-700 text-[11px] text-slate-200">Open</a></td>
+                        </tr>
+                    {% empty %}
+                        <tr><td colspan="6" class="px-4 py-10 text-center text-slate-500">No related results found.</td></tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    {% elif tab == "notes" %}
+        <div class="scanops-panel p-5">
+            <h3 class="text-sm font-semibold text-white mb-3">Notes</h3>
+            <p class="text-sm text-slate-300 whitespace-pre-wrap">{{ asset.notes|default:"No notes recorded for this asset." }}</p>
+            <p class="text-xs text-slate-500 mt-3">Owner: {{ asset.owner_name|default:"-" }}</p>
+        </div>
+    {% else %}
+        <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
+            <div class="xl:col-span-7 scanops-panel overflow-hidden">
+                <div class="px-5 py-4 border-b border-slate-800 bg-slate-900/60">
+                    <h3 class="text-sm font-semibold text-white">Current Open Ports</h3>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full min-w-[760px] text-left border-collapse">
+                        <thead>
+                        <tr class="border-b border-slate-800 bg-slate-900/60">
+                            <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">Port</th>
+                            <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">Protocol</th>
+                            <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">Service</th>
+                            <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">Version</th>
+                            <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">Risk</th>
+                        </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-800/60">
+                        {% for port in current_ports %}
+                            <tr>
+                                <td class="px-4 py-3 text-sm font-mono text-blue-300">{{ port.port }}</td>
+                                <td class="px-4 py-3 text-sm text-slate-300">{{ port.protocol }}</td>
+                                <td class="px-4 py-3 text-sm text-slate-300">{{ port.service_name|default:"-" }}</td>
+                                <td class="px-4 py-3 text-sm text-slate-400">{{ port.service_version|default:"-" }}</td>
+                                <td class="px-4 py-3"><span class="px-2 py-1 rounded text-[10px] uppercase font-semibold {{ port.risk_level|risk_badge }}">{{ port.risk_level }}</span></td>
+                            </tr>
+                        {% empty %}
+                            <tr><td colspan="5" class="px-4 py-10 text-center text-slate-500">No open ports found.</td></tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="xl:col-span-5 space-y-6">
+                <div class="scanops-panel p-5">
+                    <h3 class="text-sm font-semibold text-white mb-3">Service Inventory</h3>
+                    {% for service in service_inventory %}
+                        <div class="mb-3 pb-3 border-b border-slate-800 last:border-b-0 last:pb-0">
+                            <p class="text-sm text-slate-100">{{ service.service_name }}</p>
+                            <p class="text-xs text-slate-500 mt-1">Ports: {{ service.ports|join:", " }}</p>
+                            {% if service.service_version %}<p class="text-xs text-slate-500">Version: {{ service.service_version }}</p>{% endif %}
+                        </div>
+                    {% empty %}
+                        <p class="text-sm text-slate-500">No services identified.</p>
+                    {% endfor %}
+                </div>
+                <div class="scanops-panel p-5">
+                    <h3 class="text-sm font-semibold text-white mb-3">Change Summary</h3>
+                    <p class="text-sm text-slate-300">Snapshots: {{ summary.snapshots }}</p>
+                    <p class="text-sm text-slate-300">Total Changes: {{ summary.changes }}</p>
+                    <p class="text-sm text-slate-300">Critical Changes: {{ summary.critical_changes }}</p>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}

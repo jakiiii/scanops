@@ -1,0 +1,9 @@
+[Unit]
+Description=IncidentMatrix database backup
+After=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=__PROJECT_ROOT__
+Environment=PATH=/usr/local/bin:/usr/bin:/bin
+ExecStart=__PYTHON_BIN__ __PROJECT_ROOT__/scripts/backup_db.py

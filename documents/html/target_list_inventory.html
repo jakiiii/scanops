@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Space+Grotesk:wght@500;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "inverse-primary": "#005ac2",
+            "surface-container-high": "#272a31",
+            "surface-container-low": "#191c22",
+            "error-container": "#93000a",
+            "tertiary-fixed-dim": "#ffb786",
+            "tertiary-fixed": "#ffdcc6",
+            "outline-variant": "#424754",
+            "on-secondary-container": "#9fb5e7",
+            "secondary-fixed-dim": "#b1c6f9",
+            "on-secondary": "#182f59",
+            "on-error-container": "#ffdad6",
+            "inverse-surface": "#e1e2eb",
+            "surface-container-highest": "#32353c",
+            "on-secondary-fixed-variant": "#304671",
+            "on-tertiary-container": "#461f00",
+            "tertiary-container": "#df7412",
+            "surface-container": "#1d2026",
+            "outline": "#8c909f",
+            "secondary-fixed": "#d8e2ff",
+            "tertiary": "#ffb786",
+            "on-primary-container": "#00285d",
+            "primary-fixed-dim": "#adc6ff",
+            "surface-tint": "#adc6ff",
+            "surface-container-lowest": "#0b0e14",
+            "on-primary-fixed-variant": "#004395",
+            "inverse-on-surface": "#2e3037",
+            "secondary": "#b1c6f9",
+            "background": "#10131a",
+            "secondary-container": "#304671",
+            "primary-fixed": "#d8e2ff",
+            "on-secondary-fixed": "#001a42",
+            "surface-bright": "#363940",
+            "primary": "#adc6ff",
+            "surface": "#10131a",
+            "on-tertiary-fixed-variant": "#723600",
+            "on-error": "#690005",
+            "on-primary-fixed": "#001a42",
+            "on-tertiary": "#502400",
+            "on-background": "#e1e2eb",
+            "surface-variant": "#32353c",
+            "on-tertiary-fixed": "#311400",
+            "primary-container": "#4d8eff",
+            "on-primary": "#002e6a",
+            "on-surface-variant": "#c2c6d6",
+            "surface-dim": "#10131a",
+            "on-surface": "#e1e2eb",
+            "error": "#ffb4ab"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "fontFamily": {
+            "headline": ["Space Grotesk"],
+            "body": ["Inter"],
+            "label": ["Inter"],
+            "mono": ["JetBrains Mono"]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      font-size: 20px;
+    }
+    .glass-panel {
+      background: rgba(50, 53, 60, 0.6);
+      backdrop-filter: blur(20px);
+    }
+    .ghost-border {
+      outline: 1px solid rgba(140, 144, 159, 0.15);
+    }
+    body {
+      background-color: #10131a;
+      color: #e1e2eb;
+      font-family: 'Inter', sans-serif;
+    }
+    .scanner-stripe-error { border-left: 2px solid #ffb4ab; }
+    .scanner-stripe-success { border-left: 2px solid #adc6ff; }
+    .scanner-stripe-warning { border-left: 2px solid #ffb786; }
+  </style>
+</head>
+<body class="flex overflow-hidden">
+<!-- SideNavBar -->
+<aside class="fixed left-0 h-full w-64 bg-slate-950 flex flex-col py-6 px-4 border-r border-slate-800/50 z-50">
+<div class="mb-10 px-2 flex items-center gap-3">
+<div class="w-8 h-8 bg-primary rounded flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary" data-icon="radar">radar</span>
+</div>
+<div>
+<h1 class="text-blue-500 font-black text-xl tracking-tighter font-headline">ScanOps</h1>
+<p class="text-[10px] text-slate-500 uppercase tracking-widest font-bold">Silent Sentinel v2.4</p>
+</div>
+</div>
+<nav class="flex-1 space-y-1 overflow-y-auto">
+<div class="text-slate-500 hover:text-slate-200 hover:bg-slate-900/50 transition-colors cursor-pointer active:translate-x-1 flex items-center gap-3 px-3 py-2 rounded-lg text-[13px] font-medium tracking-wide">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span> Dashboard
+      </div>
+<div class="text-slate-500 hover:text-slate-200 hover:bg-slate-900/50 transition-colors cursor-pointer active:translate-x-1 flex items-center gap-3 px-3 py-2 rounded-lg text-[13px] font-medium tracking-wide">
+<span class="material-symbols-outlined" data-icon="add_circle">add_circle</span> New Scan
+      </div>
+<div class="text-slate-500 hover:text-slate-200 hover:bg-slate-900/50 transition-colors cursor-pointer active:translate-x-1 flex items-center gap-3 px-3 py-2 rounded-lg text-[13px] font-medium tracking-wide">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span> Results
+      </div>
+<div class="text-slate-500 hover:text-slate-200 hover:bg-slate-900/50 transition-colors cursor-pointer active:translate-x-1 flex items-center gap-3 px-3 py-2 rounded-lg text-[13px] font-medium tracking-wide">
+<span class="material-symbols-outlined" data-icon="history">history</span> History
+      </div>
+<div class="text-slate-100 bg-slate-800/50 border-l-2 border-blue-500 transition-colors cursor-pointer active:translate-x-1 flex items-center gap-3 px-3 py-2 rounded-lg text-[13px] font-medium tracking-wide">
+<span class="material-symbols-outlined" data-icon="radar">radar</span> Targets
+      </div>
+<div class="text-slate-500 hover:text-slate-200 hover:bg-slate-900/50 transition-colors cursor-pointer active:translate-x-1 flex items-center gap-3 px-3 py-2 rounded-lg text-[13px] font-medium tracking-wide">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span> Assets
+      </div>
+<div class="text-slate-500 hover:text-slate-200 hover:bg-slate-900/50 transition-colors cursor-pointer active:translate-x-1 flex items-center gap-3 px-3 py-2 rounded-lg text-[13px] font-medium tracking-wide">
+<span class="material-symbols-outlined" data-icon="description">description</span> Reports
+      </div>
+<div class="text-slate-500 hover:text-slate-200 hover:bg-slate-900/50 transition-colors cursor-pointer active:translate-x-1 flex items-center gap-3 px-3 py-2 rounded-lg text-[13px] font-medium tracking-wide">
+<span class="material-symbols-outlined" data-icon="event">event</span> Schedules
+      </div>
+</nav>
+<div class="mt-auto pt-6 space-y-4">
+<button class="w-full bg-primary text-on-primary font-bold py-2.5 rounded hover:opacity-90 transition-opacity text-[13px]">Upgrade Plan</button>
+<div class="space-y-1">
+<div class="text-slate-500 hover:text-slate-200 hover:bg-slate-900/50 transition-colors cursor-pointer flex items-center gap-3 px-3 py-2 rounded text-[13px]">
+<span class="material-symbols-outlined" data-icon="menu_book">menu_book</span> Documentation
+        </div>
+<div class="text-slate-500 hover:text-slate-200 hover:bg-slate-900/50 transition-colors cursor-pointer flex items-center gap-3 px-3 py-2 rounded text-[13px]">
+<span class="material-symbols-outlined" data-icon="logout">logout</span> Logout
+        </div>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="ml-64 flex-1 h-screen flex flex-col bg-surface overflow-hidden">
+<!-- TopAppBar -->
+<header class="sticky top-0 z-40 bg-slate-900/60 backdrop-blur-xl flex justify-between items-center w-full px-8 py-4 shadow-[0_4px_40px_rgba(0,0,0,0.08)]">
+<div class="flex items-center gap-4">
+<h2 class="font-headline text-2xl font-bold tracking-tight text-on-surface">Target Assets</h2>
+<div class="h-6 w-px bg-outline-variant/30"></div>
+<div class="flex items-center gap-2 text-on-surface-variant font-mono text-sm bg-surface-container-lowest px-3 py-1.5 rounded ghost-border">
+<span class="material-symbols-outlined text-primary text-sm" data-icon="search">search</span>
+<input class="bg-transparent border-none focus:ring-0 p-0 text-sm w-64 placeholder:text-outline/50" placeholder="Filter by IP, Host, or Tags..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-on-surface-variant hover:bg-slate-800/80 hover:text-slate-100 transition-all duration-200 rounded-full active:scale-95">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="bg-primary-container text-on-primary-container px-5 py-2 font-bold text-sm tracking-tight hover:opacity-90 transition-all active:scale-95 flex items-center gap-2 rounded">
+<span class="material-symbols-outlined text-lg" data-icon="add">add</span> + New Scan
+        </button>
+<img alt="User profile" class="w-10 h-10 rounded-full border-2 border-primary-container/20 object-cover" data-alt="close-up portrait of a professional male analyst in a dimly lit office with cool cyan backlighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDAYb5MLCh9eLyI9ORpKFypYf1jAkvqSxkpd_YpIHzVse-JpXLeffm_3AjmFXq-m1s3gPk5YO9j08k9KFgcQzya6Zxp4D5uWKuunMlbQkDBZTsBoNrB0scNiSlkvECCgNTsv05tPWTcw6iyT4njWSvAevEgo1ZGk3ItNa9TcftVfi0ziJIfglC9S6-qYr2kBpu4MzgMg4lymyi0Yzu4pWdAHYv0t8w4lYKUhfUK9jgOxwORHlAkxyuO6rIy6ND7cFpsgp82i-8qUKFw"/>
+</div>
+</header>
+<!-- Page Content Container -->
+<div class="flex-1 overflow-y-auto p-8 space-y-8">
+<!-- Metrics Overview (Asymmetric) -->
+<section class="grid grid-cols-12 gap-6">
+<div class="col-span-8 surface-container-low rounded-xl p-6 ghost-border flex flex-col justify-between">
+<div class="flex justify-between items-start">
+<div>
+<p class="label-md text-on-surface-variant mb-1 font-bold tracking-widest text-[10px]">TOTAL DISCOVERED TARGETS</p>
+<h3 class="font-headline text-5xl font-bold text-primary">1,284</h3>
+</div>
+<div class="flex gap-2">
+<span class="px-2 py-1 bg-error-container/10 text-error text-[10px] font-bold rounded flex items-center gap-1">
+<span class="w-1.5 h-1.5 bg-error rounded-full"></span> 12 CRITICAL
+              </span>
+<span class="px-2 py-1 bg-tertiary-container/10 text-tertiary text-[10px] font-bold rounded flex items-center gap-1">
+<span class="w-1.5 h-1.5 bg-tertiary rounded-full"></span> 48 HIGH
+              </span>
+</div>
+</div>
+<div class="mt-8 flex items-end gap-2 h-12">
+<div class="bg-primary/20 w-full h-2 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-3/4"></div>
+</div>
+<span class="font-mono text-xs text-on-surface-variant">75% Scan Coverage</span>
+</div>
+</div>
+<div class="col-span-4 surface-container-high rounded-xl p-6 ghost-border flex flex-col justify-center items-center text-center">
+<span class="material-symbols-outlined text-primary text-4xl mb-3" data-icon="shield_with_heart" style="font-variation-settings: 'FILL' 1;">shield_with_heart</span>
+<p class="label-md text-on-surface-variant font-bold text-[11px] mb-1">NETWORK HEALTH</p>
+<h3 class="font-headline text-4xl font-bold">89.4<span class="text-xl text-on-surface-variant">/100</span></h3>
+<p class="text-[11px] text-primary mt-2 flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" data-icon="trending_up">trending_up</span> +2.4 from last week
+          </p>
+</div>
+</section>
+<!-- Global Filter & Bulk Actions Bar -->
+<section class="flex flex-wrap items-center justify-between gap-4">
+<div class="flex items-center gap-4">
+<div class="flex flex-col gap-1.5">
+<label class="text-[10px] font-bold text-outline uppercase tracking-tighter">Risk Level</label>
+<select class="bg-surface-container-low border-none rounded text-xs px-3 py-2 text-on-surface focus:ring-1 focus:ring-primary min-w-[140px]">
+<option>All Severities</option>
+<option>Critical</option>
+<option>High</option>
+<option>Medium</option>
+</select>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="text-[10px] font-bold text-outline uppercase tracking-tighter">Asset Type</label>
+<select class="bg-surface-container-low border-none rounded text-xs px-3 py-2 text-on-surface focus:ring-1 focus:ring-primary min-w-[140px]">
+<option>Any Type</option>
+<option>Workstation</option>
+<option>Server</option>
+<option>Network IoT</option>
+</select>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="text-[10px] font-bold text-outline uppercase tracking-tighter">Owner</label>
+<select class="bg-surface-container-low border-none rounded text-xs px-3 py-2 text-on-surface focus:ring-1 focus:ring-primary min-w-[140px]">
+<option>All Owners</option>
+<option>Infra-Team</option>
+<option>Dev-Ops</option>
+<option>Unknown</option>
+</select>
+</div>
+</div>
+<div class="flex items-center gap-3 pt-4">
+<button class="ghost-border text-on-surface-variant text-xs font-bold px-4 py-2 rounded hover:bg-surface-container-highest transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="download">download</span> Export CSV
+          </button>
+<button class="bg-primary text-on-primary text-xs font-bold px-4 py-2 rounded hover:opacity-90 transition-opacity flex items-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="play_arrow">play_arrow</span> Run Scan on Selected
+          </button>
+</div>
+</section>
+<!-- Data Table -->
+<section class="surface-container rounded-xl overflow-hidden ghost-border">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low/50 text-[10px] font-bold text-outline uppercase tracking-widest">
+<th class="px-6 py-4 w-12"><input class="rounded bg-surface-container-highest border-none text-primary focus:ring-0" type="checkbox"/></th>
+<th class="px-6 py-4">Target / IP Address</th>
+<th class="px-6 py-4">Tags</th>
+<th class="px-6 py-4">Risk Score</th>
+<th class="px-6 py-4">Last Scanned</th>
+<th class="px-6 py-4">Status</th>
+<th class="px-6 py-4">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/10">
+<!-- Row 1: Critical -->
+<tr class="hover:bg-surface-container-highest/30 transition-colors group scanner-stripe-error">
+<td class="px-6 py-4"><input class="rounded bg-surface-container-highest border-none text-primary focus:ring-0" type="checkbox"/></td>
+<td class="px-6 py-4">
+<div class="flex flex-col">
+<span class="text-sm font-bold font-headline text-on-surface">prod-web-01.local</span>
+<span class="text-xs font-mono text-outline">192.168.1.104</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex gap-2">
+<span class="text-[10px] bg-slate-800 text-slate-300 px-2 py-0.5 rounded">Production</span>
+<span class="text-[10px] bg-slate-800 text-slate-300 px-2 py-0.5 rounded">Ubuntu</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="bg-error-container/10 text-error px-3 py-1 rounded text-xs font-bold border border-error/20">9.8 CRITICAL</span>
+</td>
+<td class="px-6 py-4 text-xs text-on-surface-variant font-mono">2023-10-24 14:02</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-primary shadow-[0_0_8px_#adc6ff]"></span>
+<span class="text-xs font-bold text-primary">ONLINE</span>
+</div>
+</td>
+<td class="px-6 py-4 text-outline group-hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined cursor-pointer" data-icon="more_vert">more_vert</span>
+</td>
+</tr>
+<!-- Row 2: Medium -->
+<tr class="hover:bg-surface-container-highest/30 transition-colors group scanner-stripe-warning">
+<td class="px-6 py-4"><input class="rounded bg-surface-container-highest border-none text-primary focus:ring-0" type="checkbox"/></td>
+<td class="px-6 py-4">
+<div class="flex flex-col">
+<span class="text-sm font-bold font-headline text-on-surface">db-replica-sec</span>
+<span class="text-xs font-mono text-outline">10.0.4.55</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex gap-2">
+<span class="text-[10px] bg-slate-800 text-slate-300 px-2 py-0.5 rounded">Database</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="bg-tertiary-container/10 text-tertiary px-3 py-1 rounded text-xs font-bold border border-tertiary/20">4.2 MEDIUM</span>
+</td>
+<td class="px-6 py-4 text-xs text-on-surface-variant font-mono">2023-10-23 09:15</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-primary shadow-[0_0_8px_#adc6ff]"></span>
+<span class="text-xs font-bold text-primary">ONLINE</span>
+</div>
+</td>
+<td class="px-6 py-4 text-outline group-hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined cursor-pointer" data-icon="more_vert">more_vert</span>
+</td>
+</tr>
+<!-- Row 3: Offline -->
+<tr class="hover:bg-surface-container-highest/30 transition-colors group scanner-stripe-success">
+<td class="px-6 py-4"><input class="rounded bg-surface-container-highest border-none text-primary focus:ring-0" type="checkbox"/></td>
+<td class="px-6 py-4">
+<div class="flex flex-col">
+<span class="text-sm font-bold font-headline text-on-surface">staff-mbp-33</span>
+<span class="text-xs font-mono text-outline">192.168.1.22</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex gap-2">
+<span class="text-[10px] bg-slate-800 text-slate-300 px-2 py-0.5 rounded">Endpoint</span>
+<span class="text-[10px] bg-slate-800 text-slate-300 px-2 py-0.5 rounded">macOS</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="bg-secondary-container/10 text-secondary px-3 py-1 rounded text-xs font-bold border border-secondary/20">1.0 CLEAR</span>
+</td>
+<td class="px-6 py-4 text-xs text-on-surface-variant font-mono">2023-10-22 18:44</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-outline-variant"></span>
+<span class="text-xs font-bold text-outline-variant">OFFLINE</span>
+</div>
+</td>
+<td class="px-6 py-4 text-outline group-hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined cursor-pointer" data-icon="more_vert">more_vert</span>
+</td>
+</tr>
+<!-- Row 4: High -->
+<tr class="hover:bg-surface-container-highest/30 transition-colors group scanner-stripe-warning">
+<td class="px-6 py-4"><input class="rounded bg-surface-container-highest border-none text-primary focus:ring-0" type="checkbox"/></td>
+<td class="px-6 py-4">
+<div class="flex flex-col">
+<span class="text-sm font-bold font-headline text-on-surface">api-gateway-v2</span>
+<span class="text-xs font-mono text-outline">172.16.0.4</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex gap-2">
+<span class="text-[10px] bg-slate-800 text-slate-300 px-2 py-0.5 rounded">Internal API</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="bg-tertiary-container/20 text-tertiary px-3 py-1 rounded text-xs font-bold border border-tertiary/40">7.5 HIGH</span>
+</td>
+<td class="px-6 py-4 text-xs text-on-surface-variant font-mono">2023-10-24 11:30</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-primary shadow-[0_0_8px_#adc6ff]"></span>
+<span class="text-xs font-bold text-primary">ONLINE</span>
+</div>
+</td>
+<td class="px-6 py-4 text-outline group-hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined cursor-pointer" data-icon="more_vert">more_vert</span>
+</td>
+</tr>
+<!-- Row 5: Critical -->
+<tr class="hover:bg-surface-container-highest/30 transition-colors group scanner-stripe-error">
+<td class="px-6 py-4"><input class="rounded bg-surface-container-highest border-none text-primary focus:ring-0" type="checkbox"/></td>
+<td class="px-6 py-4">
+<div class="flex flex-col">
+<span class="text-sm font-bold font-headline text-on-surface">unauthorized-pi</span>
+<span class="text-xs font-mono text-outline">192.168.1.199</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex gap-2">
+<span class="text-[10px] bg-error-container/20 text-error px-2 py-0.5 rounded">Rogue Asset</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="bg-error-container/10 text-error px-3 py-1 rounded text-xs font-bold border border-error/20">9.1 CRITICAL</span>
+</td>
+<td class="px-6 py-4 text-xs text-on-surface-variant font-mono">2023-10-24 15:45</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-primary shadow-[0_0_8px_#adc6ff]"></span>
+<span class="text-xs font-bold text-primary">ONLINE</span>
+</div>
+</td>
+<td class="px-6 py-4 text-outline group-hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined cursor-pointer" data-icon="more_vert">more_vert</span>
+</td>
+</tr>
+</tbody>
+</table>
+<!-- Table Pagination -->
+<div class="bg-surface-container-low/30 px-6 py-4 flex items-center justify-between">
+<p class="text-xs text-on-surface-variant">Showing <span class="font-bold text-on-surface">1-5</span> of 1,284 targets</p>
+<div class="flex items-center gap-2">
+<button class="p-1 text-outline hover:text-on-surface disabled:opacity-30" disabled="">
+<span class="material-symbols-outlined" data-icon="chevron_left">chevron_left</span>
+</button>
+<div class="flex gap-1">
+<button class="w-8 h-8 rounded bg-primary text-on-primary text-xs font-bold">1</button>
+<button class="w-8 h-8 rounded hover:bg-surface-container-highest text-xs font-bold">2</button>
+<button class="w-8 h-8 rounded hover:bg-surface-container-highest text-xs font-bold">3</button>
+<span class="px-2 text-outline">...</span>
+<button class="w-8 h-8 rounded hover:bg-surface-container-highest text-xs font-bold">257</button>
+</div>
+<button class="p-1 text-outline hover:text-on-surface">
+<span class="material-symbols-outlined" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Tactical Intelligence Logs Section (Bento Bottom) -->
+<section class="grid grid-cols-3 gap-6 pb-8">
+<div class="col-span-2 surface-container-lowest p-5 rounded-xl ghost-border">
+<div class="flex items-center justify-between mb-4">
+<h4 class="text-xs font-bold font-headline tracking-widest text-outline">REAL-TIME DISCOVERY FEED</h4>
+<span class="flex items-center gap-1.5 text-[10px] text-primary">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span> LIVE
+            </span>
+</div>
+<div class="space-y-3 font-mono text-[11px] h-32 overflow-y-auto pr-2 custom-scrollbar">
+<p class="text-on-surface-variant"><span class="text-primary">[15:45:12]</span> DISCOVERED: <span class="text-on-surface">192.168.1.199</span> (Raspberry Pi Foundation) - Port 22 OPEN</p>
+<p class="text-on-surface-variant"><span class="text-primary">[15:44:01]</span> SCAN_COMPLETED: <span class="text-on-surface">prod-web-01.local</span> - Found CVE-2023-44487</p>
+<p class="text-on-surface-variant"><span class="text-primary">[15:42:55]</span> ALERT: Offline threshold reached for <span class="text-error">backup-srv-02</span></p>
+<p class="text-on-surface-variant"><span class="text-primary">[15:40:20]</span> SYSTEM: Integrity check passed for 45 assets in 'Database' cluster</p>
+</div>
+</div>
+<div class="surface-container p-5 rounded-xl ghost-border relative overflow-hidden">
+<div class="relative z-10">
+<h4 class="text-xs font-bold font-headline tracking-widest text-outline mb-4">THREAT GEOLOCATION</h4>
+<div class="aspect-video bg-surface-container-lowest rounded overflow-hidden relative">
+<img class="w-full h-full object-cover opacity-40 grayscale" data-alt="stylized abstract dark map of the world with glowing blue data points and grid lines" data-location="Global" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC905O5aMkkIBF34uLusigkHSHrM4Jdl89OMgMq0UVP3G1jmousQLllM1hH9zRHdy-vxOUlKAGMSK02s2s2BZHbRbIaNXoGSFNqMVzqnZt0VP1LVwoEPcnYw-HsxibyBL9m2IAikEL8oPppqdFm2y01iptEQSNiq1vfggVyZ2_TUqGc4WS-2uxDC6OUiGRQSJWcTPYjbEg3J4UyxhzysnL96QKdVYBctSgGsIYiS75vdkMctg21n_wK05rgI8FAqv_BICVU76nc-hx9"/>
+<div class="absolute inset-0 flex items-center justify-center">
+<span class="text-[10px] font-bold text-primary bg-surface/80 px-3 py-1 rounded backdrop-blur border border-primary/20">VIEW INTERACTIVE MAP</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+<style>
+    /* Custom Scrollbar for Terminal look */
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #32353c;
+      border-radius: 2px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #adc6ff;
+    }
+  </style>
+</body></html>

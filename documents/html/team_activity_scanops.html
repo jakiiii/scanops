@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Team Activity | ScanOps</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-fixed-dim": "#b7c8e1",
+                        "primary-fixed-dim": "#adc6ff",
+                        "surface-container-highest": "#2e3447",
+                        "outline-variant": "#424754",
+                        "on-surface": "#dce1fb",
+                        "primary-fixed": "#d8e2ff",
+                        "surface-dim": "#0c1324",
+                        "surface": "#0c1324",
+                        "on-tertiary-container": "#461f00",
+                        "primary-container": "#4d8eff",
+                        "on-tertiary-fixed": "#311400",
+                        "on-error-container": "#ffdad6",
+                        "on-secondary-fixed": "#0b1c30",
+                        "secondary": "#b7c8e1",
+                        "surface-container": "#191f31",
+                        "on-surface-variant": "#c2c6d6",
+                        "on-secondary-container": "#a9bad3",
+                        "tertiary-fixed": "#ffdcc6",
+                        "tertiary-fixed-dim": "#ffb786",
+                        "surface-variant": "#2e3447",
+                        "on-secondary": "#213145",
+                        "surface-tint": "#adc6ff",
+                        "on-secondary-fixed-variant": "#38485d",
+                        "error-container": "#93000a",
+                        "on-primary-fixed": "#001a42",
+                        "on-primary-container": "#00285d",
+                        "tertiary": "#ffb786",
+                        "on-tertiary": "#502400",
+                        "surface-container-high": "#23293c",
+                        "secondary-fixed": "#d3e4fe",
+                        "on-background": "#dce1fb",
+                        "inverse-primary": "#005ac2",
+                        "surface-bright": "#33394c",
+                        "primary": "#adc6ff",
+                        "secondary-container": "#3a4a5f",
+                        "on-primary": "#002e6a",
+                        "inverse-surface": "#dce1fb",
+                        "outline": "#8c909f",
+                        "surface-container-low": "#151b2d",
+                        "on-primary-fixed-variant": "#004395",
+                        "on-error": "#690005",
+                        "inverse-on-surface": "#2a3043",
+                        "surface-container-lowest": "#070d1f",
+                        "tertiary-container": "#df7412",
+                        "error": "#ffb4ab",
+                        "on-tertiary-fixed-variant": "#723600",
+                        "background": "#0c1324"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Space Grotesk"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .font-headline { font-family: 'Space Grotesk', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .status-pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: .5; }
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface antialiased">
+<!-- TopNavBar -->
+<nav class="bg-slate-950/80 backdrop-blur-xl fixed top-0 w-full z-50 shadow-2xl shadow-black/50 h-16 flex justify-between items-center px-6">
+<div class="flex items-center gap-8">
+<span class="text-2xl font-bold tracking-tighter text-blue-400 font-headline">ScanOps</span>
+<div class="hidden md:flex gap-6 font-headline tracking-tight">
+<a class="text-slate-400 hover:text-slate-200 transition-colors duration-200" href="#">Dashboard</a>
+<a class="text-slate-400 hover:text-slate-200 transition-colors duration-200" href="#">Scans</a>
+<a class="text-slate-400 hover:text-slate-200 transition-colors duration-200" href="#">Reports</a>
+<a class="text-blue-400 border-b-2 border-blue-500 pb-1" href="#">Team</a>
+<a class="text-slate-400 hover:text-slate-200 transition-colors duration-200" href="#">Intelligence</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-slate-400 hover:bg-slate-800/50 rounded-full transition-colors active:scale-95 duration-200">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 text-slate-400 hover:bg-slate-800/50 rounded-full transition-colors active:scale-95 duration-200">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center overflow-hidden border border-outline-variant">
+<img alt="User profile" class="w-full h-full object-cover" data-alt="professional headshot of a cybersecurity analyst wearing a dark hoodie in a dimly lit tech environment" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAKXvfOcMyHge5DmqocEqHUr0pm9EcPleuW7dlBo3I1XsQR8Hmc2D2fCIIj8FP0Tm6iHFaJY5TPmkI2pKVeBGMqzn2MmjGzJ1WwDaHKoak3ajTMLSaLhYQcsRwkpIqDUNIdWjMFyc1Cwl0TQyBG8GurYpJMPWPxSVLLWVd-VGUBdHjiBlAjK9JDoQflWmDxFxRNoiV2o3GN3zqy9AUslIB-cRhHyUf8hBOLHDwF5mj5XQZrtR6jZzgr7YR-h25KSq8yNAJXvg9zO09E"/>
+</div>
+</div>
+</nav>
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-16 h-[calc(100vh-64px)] w-64 bg-slate-900 flex flex-col py-4 z-40 hidden md:flex">
+<div class="px-6 mb-8">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-blue-500/20 rounded flex items-center justify-center">
+<span class="material-symbols-outlined text-blue-500" data-icon="shield">shield</span>
+</div>
+<div>
+<div class="text-xl font-black text-blue-500 font-headline leading-none">Command Center</div>
+<div class="text-[10px] uppercase tracking-widest text-slate-500 mt-1">Operation: Sentinel</div>
+</div>
+</div>
+</div>
+<div class="flex-1 space-y-1">
+<div class="bg-slate-800 text-blue-400 font-semibold border-r-4 border-blue-500 px-6 py-3 cursor-pointer active:translate-x-1 flex items-center gap-3 transition-all">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span>Activity Feed</span>
+</div>
+<div class="text-slate-400 hover:bg-slate-800/30 px-6 py-3 cursor-pointer active:translate-x-1 flex items-center gap-3 hover:text-blue-300 transition-all">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span>Team Matrix</span>
+</div>
+<div class="text-slate-400 hover:bg-slate-800/30 px-6 py-3 cursor-pointer active:translate-x-1 flex items-center gap-3 hover:text-blue-300 transition-all">
+<span class="material-symbols-outlined" data-icon="radar">radar</span>
+<span>Shared Scans</span>
+</div>
+<div class="text-slate-400 hover:bg-slate-800/30 px-6 py-3 cursor-pointer active:translate-x-1 flex items-center gap-3 hover:text-blue-300 transition-all">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+<span>Report Logs</span>
+</div>
+<div class="text-slate-400 hover:bg-slate-800/30 px-6 py-3 cursor-pointer active:translate-x-1 flex items-center gap-3 hover:text-blue-300 transition-all">
+<span class="material-symbols-outlined" data-icon="alternate_email">alternate_email</span>
+<span>Mentions</span>
+</div>
+<div class="text-slate-400 hover:bg-slate-800/30 px-6 py-3 cursor-pointer active:translate-x-1 flex items-center gap-3 hover:text-blue-300 transition-all">
+<span class="material-symbols-outlined" data-icon="tune">tune</span>
+<span>Settings</span>
+</div>
+</div>
+<div class="px-6 mb-4">
+<button class="w-full py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-lg flex items-center justify-center gap-2 transition-all active:scale-95">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+                New Scan
+            </button>
+</div>
+<div class="border-t border-slate-800 pt-4 px-6 space-y-2">
+<div class="text-slate-400 hover:text-blue-300 flex items-center gap-3 text-sm cursor-pointer transition-all">
+<span class="material-symbols-outlined text-sm" data-icon="help">help</span>
+                Support
+            </div>
+<div class="text-slate-400 hover:text-blue-300 flex items-center gap-3 text-sm cursor-pointer transition-all">
+<span class="material-symbols-outlined text-sm" data-icon="menu_book">menu_book</span>
+                Documentation
+            </div>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="pt-20 pb-12 md:pl-72 pr-6">
+<div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
+<!-- Feed Section -->
+<div class="lg:col-span-8 space-y-8">
+<!-- Header & Filters -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+<div>
+<h1 class="text-4xl font-bold tracking-tight font-headline text-on-surface">Team Activity</h1>
+<p class="text-on-surface-variant mt-1 font-body">Real-time collaborative intelligence across all sectors.</p>
+</div>
+<div class="flex flex-wrap gap-3">
+<select class="bg-surface-container-low border-none rounded-lg text-sm px-4 py-2 text-on-surface focus:ring-1 focus:ring-primary/40">
+<option>Team: All</option>
+<option>Red Team</option>
+<option>SOC-1</option>
+</select>
+<select class="bg-surface-container-low border-none rounded-lg text-sm px-4 py-2 text-on-surface focus:ring-1 focus:ring-primary/40">
+<option>Last 24 Hours</option>
+<option>Last 7 Days</option>
+</select>
+<button class="bg-surface-container-highest hover:bg-surface-bright px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                            Activity Type
+                        </button>
+</div>
+</div>
+<!-- Feed -->
+<div class="space-y-6">
+<!-- Activity Item 1 -->
+<div class="bg-surface-container-low rounded-xl p-6 relative overflow-hidden">
+<div class="absolute left-0 top-0 w-1 h-full bg-primary"></div>
+<div class="flex gap-4">
+<div class="flex-shrink-0">
+<img alt="Sarah C." class="w-10 h-10 rounded-full border border-outline-variant" data-alt="close-up portrait of a professional woman in technical gear with soft blue backlighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCA3xorjkgznu_KbcSZAH7TJc8aBIeA3TGv8jbBcXv2hcTf181edC_sBJg5FkdRDtXOBKaQI2I97ZkZz-gQ6wTKa-d-gs4I_f8cbIcaP4I0RFAHeqlAczwvd89ox0GvTeUNsZDLPukSQNglvt9uUtTPojuYKUp9jc-ejq96hGbyXhloKUAN32E51FsuOvlXENTk9VF-tMrTOFVOinNbFNcYzr7jdC946EOxg4vRL0js4CTo0UsF0B7wjSJK2qrdhGCsnem86I0eAlV9"/>
+</div>
+<div class="flex-1">
+<div class="flex items-center justify-between mb-1">
+<h3 class="font-semibold text-on-surface">Sarah C. <span class="font-normal text-on-surface-variant">shared a technical report</span></h3>
+<span class="text-xs text-on-surface-variant">14m ago</span>
+</div>
+<div class="bg-surface-container-highest/50 p-4 rounded-lg mt-3 border border-outline-variant/10">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary" data-icon="description">description</span>
+<div>
+<div class="text-sm font-medium text-primary">vulnerability_report_prod-db-01.pdf</div>
+<div class="text-xs text-on-surface-variant">3.4 MB • Critical Vulnerability Scan</div>
+</div>
+</div>
+</div>
+<div class="mt-4 flex items-center gap-4 text-xs text-on-surface-variant">
+<button class="flex items-center gap-1 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="chat_bubble">chat_bubble</span> 3 comments
+                                    </button>
+<button class="flex items-center gap-1 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="share">share</span> forward
+                                    </button>
+</div>
+<!-- Threaded Comment -->
+<div class="mt-4 pl-6 border-l border-outline-variant/30 space-y-4">
+<div class="flex gap-3">
+<img alt="Marcus L." class="w-6 h-6 rounded-full" data-alt="small avatar of a man with glasses in a professional tech setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDE_31YASToKqHpfnUnF1LsbRrw-8BcmeNaGZJTszKBAcmdaNrsgukWN0dxH5tSn1D4SRncOh3h51jrMLTMI8p5rrl6_DoZHP8_tjHzjxTFqWcXnySha-yPTuXMMJBrjB_6OKjw49jaGZA_0Zd7ChycEPUZGg9qLHsBe_QXv7bcgamyZAb6FwB9QLuQk5BSghO2WFbCQNoD8dD8JqyHZSqHPG-NpPkVMHBH9yxsugKrYCRfApXlLcBhTk1vRn3vC8QIobUnVb8Se1Ag"/>
+<div class="text-sm bg-surface-container-highest p-3 rounded-lg flex-1">
+<p><span class="font-bold text-primary">@Marcus L.</span> Looks solid, Sarah. I’ll check the SQL injection vectors on <span class="text-primary font-mono bg-primary/10 px-1 rounded">prod-db-01</span> tonight.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Activity Item 2 -->
+<div class="bg-surface-container-low rounded-xl p-6 relative overflow-hidden">
+<div class="absolute left-0 top-0 w-1 h-full bg-blue-500"></div>
+<div class="flex gap-4">
+<div class="flex-shrink-0">
+<img alt="Marcus L." class="w-10 h-10 rounded-full border border-outline-variant" data-alt="portrait of a focused cyber security specialist looking at computer screens" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAjbG_JKIrvJGnnR_gvBah2DBlhMs0f5nCOhjAyE8RureLSxL1q1TtyJxRWk2VS_U3qIZ5fbg-9VFPWjqgdJQMXarXm4MlrnbAzpgyk8qv0EGO-okaskw_aQlQkVcEiRoHRvyw3vr_RChOeKAChecQvQjlWUHINTHJIgGMpUinQ2iyDwvOioianCgxrjoQ5waVbBb3HPj0-r0TqPxtOhyCmaSVA9U749si-IlVJRkok3YdASpLNm8sM9ipS2aenTwlHrxIxWJuUzeUQ"/>
+</div>
+<div class="flex-1">
+<div class="flex items-center justify-between mb-1">
+<h3 class="font-semibold text-on-surface">Marcus L. <span class="font-normal text-on-surface-variant">initiated an aggressive scan</span></h3>
+<span class="text-xs text-on-surface-variant">1h ago</span>
+</div>
+<div class="mt-3 flex items-center gap-2">
+<span class="bg-primary/20 text-primary-fixed-dim text-[10px] font-bold px-2 py-0.5 rounded tracking-wider uppercase">Running</span>
+<span class="text-sm font-mono text-on-surface-variant">Target: 10.0.4.0/24</span>
+</div>
+<div class="mt-4 p-4 rounded bg-surface-container-highest/30 border border-outline-variant/10">
+<div class="flex justify-between items-center text-xs mb-2">
+<span class="text-on-surface-variant">Scan Progress: Phase 2/4</span>
+<span class="text-primary font-bold">42%</span>
+</div>
+<div class="w-full bg-surface-container-highest h-1 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[42%]"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Activity Item 3 -->
+<div class="bg-surface-container-low rounded-xl p-6 relative overflow-hidden">
+<div class="absolute left-0 top-0 w-1 h-full bg-error"></div>
+<div class="flex gap-4">
+<div class="w-10 h-10 rounded-full bg-error/20 flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-error" data-icon="security">security</span>
+</div>
+<div class="flex-1">
+<div class="flex items-center justify-between mb-1">
+<h3 class="font-semibold text-error">System Alert</h3>
+<span class="text-xs text-on-surface-variant">2h ago</span>
+</div>
+<p class="text-on-surface mt-1">New open port <span class="text-error font-mono font-bold">(3306)</span> detected on <span class="font-semibold underline decoration-error/30">web-front-02</span> by <span class="text-tertiary">Auto-Scanner</span>.</p>
+<div class="mt-4 flex gap-2">
+<button class="bg-error-container text-on-error-container px-3 py-1.5 rounded text-xs font-bold transition-all active:scale-95">REMEDIATE</button>
+<button class="bg-surface-container-highest px-3 py-1.5 rounded text-xs font-bold transition-all hover:bg-surface-bright">DISMISS</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Sidebar Widgets -->
+<div class="lg:col-span-4 space-y-6">
+<!-- Active Collaborators -->
+<div class="bg-surface-container-low rounded-xl p-6">
+<h2 class="text-lg font-bold font-headline mb-4 flex items-center gap-2">
+                        Active Collaborators
+                        <span class="w-2 h-2 bg-tertiary rounded-full status-pulse"></span>
+</h2>
+<div class="space-y-4">
+<div class="flex items-center justify-between group cursor-pointer">
+<div class="flex items-center gap-3">
+<div class="relative">
+<img alt="Sarah C." class="w-10 h-10 rounded-full" data-alt="avatar of sarah" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDmUohX599fmq827OiYSZFVHN8a0tQ9YGu1EWs9lfqAJkBp9amtbc4XmS8EHPvYsHhc0nFWki2hSSQusU5ed06-Sbyhtc2Oz0HucDaUkILT_SHZtNyL31A4ApdPWbLQMOFkNReXTI6bSB9rhdEAZrEhiBlxU4Ben97Nt52TjJvX0rn2dgar2ZTGXG8yOFzyHai-C1sbrmD2uDU6tXc_RrEmqKpnjIRRCS2eb58M0VQ4jl-Um1jKnslWTQJCd40VZo2oA1TzrvUG36D5"/>
+<div class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-surface-container-low rounded-full"></div>
+</div>
+<div>
+<div class="text-sm font-semibold group-hover:text-primary transition-colors">Sarah C.</div>
+<div class="text-[10px] text-on-surface-variant">Analyzing Logs...</div>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant text-sm" data-icon="chat">chat</span>
+</div>
+<div class="flex items-center justify-between group cursor-pointer">
+<div class="flex items-center gap-3">
+<div class="relative">
+<img alt="Marcus L." class="w-10 h-10 rounded-full" data-alt="avatar of marcus" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCpiWSilTCc4_SfZkJ-mI02J8ajtA5D79rVs1XmeonwF4p0e-doZailiWNxdcQk7TTouEFrIPH-3Focaw_HFTz4_DQ236k2oX-MYsvrP0MDz07hMqdXbQCmzn6TsGt-rQ8Fzf9b6BOPDEqOYfE1f2opBxkJXrP8joDP8PuSqi12bGIafindwyDY7FePSeVry75_LwicAfds94uawz5M4pPJ7VJIXPdW-DADMPIyh1cQnhPPikBxF86T8_saaa48NA__V7-HcP0vEyu9"/>
+<div class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-surface-container-low rounded-full"></div>
+</div>
+<div>
+<div class="text-sm font-semibold group-hover:text-primary transition-colors">Marcus L.</div>
+<div class="text-[10px] text-on-surface-variant">Scanning Subnet</div>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant text-sm" data-icon="chat">chat</span>
+</div>
+<div class="flex items-center justify-between group cursor-pointer opacity-50">
+<div class="flex items-center gap-3">
+<div class="relative">
+<img alt="Admin" class="w-10 h-10 rounded-full" data-alt="avatar of admin user" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBHMN1VVGEZScDC6SO_h6FOblt58tnij4HOfB_GowlCKMFLTH3QijHUjSkfrJMT8woca5NGEonlUaN3jcc1oWbOWCMB0LZlWe5NahRKbu3YNSi-XJImwZGGMgPkkptzRBGwMW7LvUNIdzaO_NJ-A0RLRDgFYLSPLQbL6yyfp-qy3NeupOMmSE50C_y477ddVvH06sUzrZwauxAWdX8O0cGfB6gNrGUbEy0v_r3Kmj_c9vvKSO41UyJ1gk9na6nj6xHBRqdSbrMIFwdk"/>
+<div class="absolute bottom-0 right-0 w-3 h-3 bg-slate-500 border-2 border-surface-container-low rounded-full"></div>
+</div>
+<div>
+<div class="text-sm font-semibold">David R.</div>
+<div class="text-[10px] text-on-surface-variant">Offline</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Recent Shared Scans -->
+<div class="bg-surface-container-low rounded-xl p-6">
+<h2 class="text-lg font-bold font-headline mb-4">Recent Shared Scans</h2>
+<div class="space-y-3">
+<div class="p-3 bg-surface-container-highest/30 rounded-lg border border-outline-variant/10">
+<div class="flex justify-between items-start mb-2">
+<span class="text-xs font-mono text-on-surface">EXT-SURFACE-ALPHA</span>
+<span class="bg-green-500/20 text-green-400 text-[9px] px-1.5 py-0.5 rounded font-bold uppercase">Completed</span>
+</div>
+<div class="text-[10px] text-on-surface-variant">Initiated by @SarahC • 2h ago</div>
+</div>
+<div class="p-3 bg-surface-container-highest/30 rounded-lg border border-outline-variant/10">
+<div class="flex justify-between items-start mb-2">
+<span class="text-xs font-mono text-on-surface">IOT-VLAN-SEC</span>
+<span class="bg-primary/20 text-primary-fixed-dim text-[9px] px-1.5 py-0.5 rounded font-bold uppercase">Running</span>
+</div>
+<div class="text-[10px] text-on-surface-variant">Initiated by @MarcusL • 45m ago</div>
+</div>
+<div class="p-3 bg-surface-container-highest/30 rounded-lg border border-outline-variant/10">
+<div class="flex justify-between items-start mb-2">
+<span class="text-xs font-mono text-on-surface">API-GW-STAGING</span>
+<span class="bg-error/20 text-error text-[9px] px-1.5 py-0.5 rounded font-bold uppercase">Failed</span>
+</div>
+<div class="text-[10px] text-on-surface-variant">Initiated by System • 6h ago</div>
+</div>
+</div>
+</div>
+<!-- Shared Report Actions -->
+<div class="bg-surface-container-low rounded-xl p-6">
+<h2 class="text-lg font-bold font-headline mb-4">Report Actions</h2>
+<div class="grid grid-cols-2 gap-3">
+<button class="flex flex-col items-center justify-center p-4 bg-surface-container-highest rounded-lg hover:bg-surface-bright transition-all group">
+<span class="material-symbols-outlined text-primary mb-2 group-hover:scale-110 transition-transform" data-icon="visibility">visibility</span>
+<span class="text-[10px] font-bold">PREVIEW</span>
+</button>
+<button class="flex flex-col items-center justify-center p-4 bg-surface-container-highest rounded-lg hover:bg-surface-bright transition-all group">
+<span class="material-symbols-outlined text-primary mb-2 group-hover:scale-110 transition-transform" data-icon="download">download</span>
+<span class="text-[10px] font-bold">DOWNLOAD</span>
+</button>
+</div>
+</div>
+<!-- Comments Summary -->
+<div class="bg-surface-container-low rounded-xl p-6 overflow-hidden relative">
+<div class="absolute top-0 right-0 w-24 h-24 bg-primary/5 rounded-full -mr-12 -mt-12 blur-3xl"></div>
+<h2 class="text-lg font-bold font-headline mb-4">Mentions &amp; Threads</h2>
+<div class="space-y-4">
+<div class="flex gap-3 items-start">
+<div class="w-8 h-8 rounded bg-primary/10 flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-primary text-sm" data-icon="alternate_email">alternate_email</span>
+</div>
+<div class="text-xs">
+<p class="text-on-surface">You were mentioned in <span class="text-primary">Cloud Config Audit</span></p>
+<p class="text-on-surface-variant mt-1 italic">"Can you review the S3 policies?"</p>
+</div>
+</div>
+<div class="flex gap-3 items-start">
+<div class="w-8 h-8 rounded bg-surface-container-highest flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-on-surface-variant text-sm" data-icon="forum">forum</span>
+</div>
+<div class="text-xs">
+<p class="text-on-surface">New thread in <span class="text-primary">Red Team Ops</span></p>
+<p class="text-on-surface-variant mt-1">4 new replies to Sarah's report.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Contextual FAB -->
+<button class="fixed bottom-8 right-8 w-14 h-14 bg-primary text-on-primary rounded-full shadow-2xl shadow-primary/40 flex items-center justify-center hover:scale-110 active:scale-95 transition-all z-50">
+<span class="material-symbols-outlined text-3xl" data-icon="add_comment">add_comment</span>
+</button>
+</body></html>

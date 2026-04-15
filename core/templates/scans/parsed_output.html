@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% load scanops_tags %}
+
+{% block title %}Parsed Output | ScanOps{% endblock %}
+
+{% block content %}
+    {% include "includes/breadcrumbs.html" with breadcrumbs=breadcrumbs %}
+    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6">
+        <div>
+            <h1 class="text-3xl font-bold text-white tracking-tight">Parsed Output Analysis</h1>
+            <p class="text-slate-400 mt-1 font-mono">{{ result.execution.execution_id }} • {{ result.target_snapshot }}</p>
+        </div>
+        <div class="flex gap-2">
+            <a href="{% url 'scans:result-detail' result.pk %}" class="px-3 py-2 rounded-lg bg-slate-800 border border-slate-700 text-sm text-slate-100 hover:bg-slate-700">Back to Detail</a>
+            <a href="{% url 'scans:result-raw' result.pk %}" class="px-3 py-2 rounded-lg bg-slate-800 border border-slate-700 text-sm text-slate-100 hover:bg-slate-700">Raw Output</a>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <div class="scanops-panel p-4">
+            <p class="text-[10px] uppercase tracking-widest text-slate-500">Host</p>
+            <p class="text-sm text-slate-100 mt-2 font-mono">{{ parsed.host.target|default:result.target_snapshot }}</p>
+        </div>
+        <div class="scanops-panel p-4">
+            <p class="text-[10px] uppercase tracking-widest text-slate-500">Status</p>
+            <p class="mt-2"><span class="px-2 py-1 rounded text-[10px] uppercase font-semibold {{ result.host_status|status_badge }}">{{ result.get_host_status_display }}</span></p>
+        </div>
+        <div class="scanops-panel p-4">
+            <p class="text-[10px] uppercase tracking-widest text-slate-500">Latency</p>
+            <p class="text-lg font-semibold text-cyan-300 mt-2">{{ parsed.host.latency_ms|default:"-" }} ms</p>
+        </div>
+        <div class="scanops-panel p-4">
+            <p class="text-[10px] uppercase tracking-widest text-slate-500">OS Guess</p>
+            <p class="text-sm font-semibold text-slate-100 mt-2">{{ parsed.host.os_guess|default:result.os_guess|default:"Unknown" }}</p>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
+        <div class="xl:col-span-8 space-y-6">
+            <div class="scanops-panel overflow-hidden">
+                <div class="px-5 py-4 border-b border-slate-800 bg-slate-900/60">
+                    <h2 class="text-base font-semibold text-white">Port Findings</h2>
+                </div>
+                {% include "partials/result_ports_table.html" with port_results=result.port_results.all %}
+            </div>
+
+            <div class="scanops-panel p-5">
+                <h2 class="text-base font-semibold text-white mb-4">Traceroute</h2>
+                <div class="overflow-x-auto">
+                    <table class="w-full min-w-[560px] text-left border-collapse">
+                        <thead>
+                        <tr class="border-b border-slate-800 bg-slate-900/60">
+                            <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">Hop</th>
+                            <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">Address</th>
+                            <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">Latency</th>
+                        </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-800/70">
+                        {% for hop in result.traceroute_data_json %}
+                            <tr>
+                                <td class="px-4 py-3 text-sm text-slate-200">{{ hop.hop }}</td>
+                                <td class="px-4 py-3 text-sm font-mono text-blue-300">{{ hop.host }}</td>
+                                <td class="px-4 py-3 text-sm text-slate-300">{{ hop.latency_ms }} ms</td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="3" class="px-4 py-8 text-center text-slate-500">No traceroute records available.</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="xl:col-span-4 space-y-6">
+            <div class="scanops-panel p-5">
+                <h2 class="text-base font-semibold text-white mb-3">Summary</h2>
+                <p class="text-sm text-slate-300">Open ports: {{ parsed.summary.open_ports|default:result.total_open_ports }}</p>
+                <p class="text-sm text-slate-300">Closed ports: {{ parsed.summary.closed_ports|default:result.total_closed_ports }}</p>
+                <p class="text-sm text-slate-300">Filtered ports: {{ parsed.summary.filtered_ports|default:result.total_filtered_ports }}</p>
+                <p class="text-sm text-slate-300">Services detected: {{ result.total_services_detected }}</p>
+            </div>
+
+            <div class="scanops-panel p-5">
+                <h2 class="text-base font-semibold text-white mb-3">Script Output</h2>
+                {% for script in result.script_output_json.safe_scripts %}
+                    <p class="text-sm text-slate-200 font-mono mb-1">{{ script }}</p>
+                {% empty %}
+                    <p class="text-sm text-slate-500">No safe scripts listed.</p>
+                {% endfor %}
+                <div class="mt-4">
+                    <p class="text-[11px] uppercase tracking-widest text-slate-500 mb-2">Alerts</p>
+                    {% for alert in result.script_output_json.alerts %}
+                        <div class="mb-3">
+                            <p class="text-sm text-white">{{ alert.name }}</p>
+                            <p class="text-xs text-slate-400">{{ alert.detail }}</p>
+                            <span class="inline-block mt-1 px-2 py-0.5 rounded text-[10px] uppercase {{ alert.severity|risk_badge }}">{{ alert.severity }}</span>
+                        </div>
+                    {% empty %}
+                        <p class="text-sm text-slate-500">No script alerts.</p>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="scanops-panel p-5">
+                <h2 class="text-base font-semibold text-white mb-3">JSON Snapshot</h2>
+                <pre class="bg-slate-950 border border-slate-800 rounded-lg p-3 text-xs text-slate-300 overflow-auto max-h-[340px]">{{ parsed|default:"{}" }}</pre>
+            </div>
+        </div>
+    </div>
+{% endblock %}

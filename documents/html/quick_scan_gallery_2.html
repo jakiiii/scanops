@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ScanOps - Quick Scan</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-tint": "#adc6ff",
+                      "surface": "#0c1324",
+                      "tertiary-container": "#df7412",
+                      "on-tertiary-container": "#461f00",
+                      "inverse-primary": "#005ac2",
+                      "on-surface-variant": "#c2c6d6",
+                      "secondary": "#b7c8e1",
+                      "surface-container-lowest": "#070d1f",
+                      "on-primary-fixed-variant": "#004395",
+                      "secondary-fixed-dim": "#b7c8e1",
+                      "on-secondary-fixed-variant": "#38485d",
+                      "on-secondary": "#213145",
+                      "inverse-on-surface": "#2a3043",
+                      "on-primary-container": "#00285d",
+                      "surface-bright": "#33394c",
+                      "on-primary-fixed": "#001a42",
+                      "primary": "#adc6ff",
+                      "tertiary-fixed": "#ffdcc6",
+                      "background": "#0c1324",
+                      "on-error": "#690005",
+                      "on-surface": "#dce1fb",
+                      "on-primary": "#002e6a",
+                      "primary-container": "#4d8eff",
+                      "on-tertiary-fixed-variant": "#723600",
+                      "tertiary-fixed-dim": "#ffb786",
+                      "surface-dim": "#0c1324",
+                      "secondary-container": "#3a4a5f",
+                      "surface-container-highest": "#2e3447",
+                      "primary-fixed-dim": "#adc6ff",
+                      "on-tertiary": "#502400",
+                      "on-secondary-fixed": "#0b1c30",
+                      "on-secondary-container": "#a9bad3",
+                      "on-error-container": "#ffdad6",
+                      "surface-variant": "#2e3447",
+                      "surface-container": "#191f31",
+                      "on-background": "#dce1fb",
+                      "error-container": "#93000a",
+                      "surface-container-low": "#151b2d",
+                      "error": "#ffb4ab",
+                      "outline": "#8c909f",
+                      "surface-container-high": "#23293c",
+                      "inverse-surface": "#dce1fb",
+                      "on-tertiary-fixed": "#311400",
+                      "tertiary": "#ffb786",
+                      "primary-fixed": "#d8e2ff",
+                      "secondary-fixed": "#d3e4fe",
+                      "outline-variant": "#424754"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "fontFamily": {
+                      "headline": ["Space Grotesk"],
+                      "body": ["Inter"],
+                      "label": ["Inter"]
+              }
+            },
+          }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .beacon-pulse {
+            position: relative;
+        }
+        .beacon-pulse::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 8px;
+            height: 8px;
+            background: #ffb786;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 0 0 rgba(255, 183, 134, 0.7);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 183, 134, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(255, 183, 134, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 183, 134, 0); }
+        }
+    </style>
+</head>
+<body class="bg-surface font-body text-on-surface antialiased selection:bg-primary/30 selection:text-primary">
+<nav class="fixed top-0 w-full z-50 bg-slate-950/60 backdrop-blur-xl shadow-2xl shadow-black/50 flex justify-between items-center px-6 h-16 w-full">
+<div class="flex items-center gap-4">
+<span class="text-xl font-bold tracking-tighter text-blue-400 font-headline">ScanOps</span>
+</div>
+<div class="flex items-center gap-6">
+<div class="hidden md:flex items-center gap-2 bg-surface-container-low px-4 py-1.5 rounded-lg">
+<span class="material-symbols-outlined text-sm text-outline">search</span>
+<input class="bg-transparent border-none text-sm focus:ring-0 placeholder:text-outline w-64" placeholder="Global search..." type="text"/>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-slate-400 hover:text-blue-300 transition-colors active:scale-95 duration-200">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="text-slate-400 hover:text-blue-300 transition-colors active:scale-95 duration-200">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+<div class="w-8 h-8 rounded-full overflow-hidden bg-surface-container-highest">
+<img alt="Security Analyst Profile" class="w-full h-full object-cover" data-alt="Security Analyst Profile close up professional portrait with cinematic blue and orange lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB_gTweaGuUf1V89NompSgeZ3p8ab9N2XgwO4Ow0H38iIezk3gRmXrmfgrUdg1X7liHNp1eoFu6HKuOz6oab1kJZEf5a3vpR3tts7JZ5cwwQgUA7_5YuoThE2gP-h75qkMj-ysNTb3h90troPdyLTYVh-kxeKcv9jGyt8YajEY8OIopgcqv15sFnkyIDKYM654WbDKSfw_7d_mb5taaMBi3QVRmmZikLSoECPcJ2--Bat3aTrf6xDeW9eibXgiMrBSwSGVxxsLPZaMq"/>
+</div>
+</div>
+</div>
+</nav>
+<aside class="fixed left-0 top-0 h-full w-64 z-40 bg-slate-950 flex flex-col pt-20 pb-6 font-headline">
+<div class="px-6 mb-8">
+<h2 class="text-lg font-black text-blue-500 uppercase tracking-widest">Tactical Command</h2>
+<p class="text-xs text-slate-500 font-medium">Level 4 Clearance</p>
+</div>
+<div class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-6 py-3 text-slate-500 hover:bg-slate-900/80 hover:text-blue-300 transition-all active:translate-x-1 duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-blue-400 bg-blue-400/10 border-r-2 border-blue-500 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="biotech">biotech</span>
+<span class="text-sm font-medium">Scan Gallery</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-slate-500 hover:bg-slate-900/80 hover:text-blue-300 transition-all active:translate-x-1 duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="shield">shield</span>
+<span class="text-sm font-medium">Vulnerability Lab</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-slate-500 hover:bg-slate-900/80 hover:text-blue-300 transition-all active:translate-x-1 duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="hub">hub</span>
+<span class="text-sm font-medium">Network Map</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-slate-500 hover:bg-slate-900/80 hover:text-blue-300 transition-all active:translate-x-1 duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="terminal">terminal</span>
+<span class="text-sm font-medium">Incident Logs</span>
+</a>
+</div>
+<div class="mt-auto space-y-1">
+<a class="flex items-center gap-3 px-6 py-3 text-slate-500 hover:bg-slate-900/80 hover:text-blue-300 transition-all active:translate-x-1 duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="help_center">help_center</span>
+<span class="text-sm font-medium">Support</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-slate-500 hover:bg-slate-900/80 hover:text-blue-300 transition-all active:translate-x-1 duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span class="text-sm font-medium">Sign Out</span>
+</a>
+</div>
+</aside>
+<main class="ml-64 pt-24 px-8 pb-12">
+<header class="mb-10 flex justify-between items-end">
+<div>
+<div class="flex items-center gap-3 mb-2">
+<div class="beacon-pulse w-2 h-2"></div>
+<span class="text-tertiary-fixed-dim text-xs font-bold tracking-[0.2em] uppercase">Tactical Operations: Active</span>
+</div>
+<h1 class="text-6xl font-headline font-bold tracking-tighter text-on-surface">Quick Scan</h1>
+<p class="text-on-surface-variant max-w-xl mt-2 text-lg">Execute pre-configured rapid diagnostics. Deploy sensors across the perimeter with single-click automation.</p>
+</div>
+<div class="bg-surface-container-low p-4 rounded-xl flex items-center gap-6">
+<div class="text-right">
+<p class="text-xs text-outline font-bold uppercase tracking-widest">Active Sensors</p>
+<p class="text-2xl font-headline font-bold text-primary">1,242</p>
+</div>
+<div class="w-px h-10 bg-outline-variant opacity-20"></div>
+<div class="text-right">
+<p class="text-xs text-outline font-bold uppercase tracking-widest">Avg Time</p>
+<p class="text-2xl font-headline font-bold text-primary">~4.2m</p>
+</div>
+</div>
+</header>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+<div class="bg-surface-container-low hover:bg-surface-container-high transition-all duration-300 rounded-xl p-6 group relative overflow-hidden flex flex-col h-full">
+<div class="flex justify-between items-start mb-6">
+<div class="bg-primary-container/20 p-2 rounded-lg">
+<span class="material-symbols-outlined text-primary" data-icon="radar">radar</span>
+</div>
+<span class="text-xs font-bold text-primary bg-primary/10 px-2 py-1 rounded">~2m</span>
+</div>
+<h3 class="text-xl font-headline font-bold mb-2 group-hover:text-primary transition-colors">Host Discovery</h3>
+<p class="text-on-surface-variant text-sm mb-4 flex-grow">Identifies active machines on the target network without intensive port interrogation.</p>
+<div class="space-y-3 mb-6">
+<div class="flex justify-between text-xs">
+<span class="text-outline uppercase tracking-wider font-bold">Options</span>
+<code class="text-primary-fixed-dim bg-slate-950 px-2 py-0.5 rounded">-sn</code>
+</div>
+<div class="flex flex-col gap-1">
+<span class="text-outline uppercase tracking-widest text-[10px] font-bold">Recommended Use</span>
+<span class="text-sm text-secondary">Initial reconnaissance of new subnets.</span>
+</div>
+</div>
+<button class="w-full py-3 bg-surface-container-highest group-hover:bg-primary group-hover:text-on-primary transition-all rounded-lg font-bold text-sm uppercase tracking-widest flex items-center justify-center gap-2">
+                    Run Now
+                    <span class="material-symbols-outlined text-sm" data-icon="play_arrow">play_arrow</span>
+</button>
+</div>
+<div class="bg-surface-container-low hover:bg-surface-container-high transition-all duration-300 rounded-xl p-6 group relative overflow-hidden flex flex-col h-full">
+<div class="flex justify-between items-start mb-6">
+<div class="bg-primary-container/20 p-2 rounded-lg">
+<span class="material-symbols-outlined text-primary" data-icon="speed">speed</span>
+</div>
+<span class="text-xs font-bold text-primary bg-primary/10 px-2 py-1 rounded">~5m</span>
+</div>
+<h3 class="text-xl font-headline font-bold mb-2 group-hover:text-primary transition-colors">Quick Port Scan</h3>
+<p class="text-on-surface-variant text-sm mb-4 flex-grow">Standard SYN stealth scan against the most common ports for immediate exposure mapping.</p>
+<div class="space-y-3 mb-6">
+<div class="flex justify-between text-xs">
+<span class="text-outline uppercase tracking-wider font-bold">Options</span>
+<code class="text-primary-fixed-dim bg-slate-950 px-2 py-0.5 rounded">-sS -T4</code>
+</div>
+<div class="flex flex-col gap-1">
+<span class="text-outline uppercase tracking-widest text-[10px] font-bold">Recommended Use</span>
+<span class="text-sm text-secondary">Daily check of external gateways.</span>
+</div>
+</div>
+<button class="w-full py-3 bg-surface-container-highest group-hover:bg-primary group-hover:text-on-primary transition-all rounded-lg font-bold text-sm uppercase tracking-widest flex items-center justify-center gap-2">
+                    Run Now
+                    <span class="material-symbols-outlined text-sm" data-icon="play_arrow">play_arrow</span>
+</button>
+</div>
+<div class="bg-surface-container-low hover:bg-surface-container-high transition-all duration-300 rounded-xl p-6 group relative overflow-hidden flex flex-col h-full">
+<div class="flex justify-between items-start mb-6">
+<div class="bg-primary-container/20 p-2 rounded-lg">
+<span class="material-symbols-outlined text-primary" data-icon="format_list_numbered">format_list_numbered</span>
+</div>
+<span class="text-xs font-bold text-primary bg-primary/10 px-2 py-1 rounded">~1m</span>
+</div>
+<h3 class="text-xl font-headline font-bold mb-2 group-hover:text-primary transition-colors">Top 100 Ports</h3>
+<p class="text-on-surface-variant text-sm mb-4 flex-grow">Rapid fire scan targeting only the 100 most high-value attack vectors.</p>
+<div class="space-y-3 mb-6">
+<div class="flex justify-between text-xs">
+<span class="text-outline uppercase tracking-wider font-bold">Options</span>
+<code class="text-primary-fixed-dim bg-slate-950 px-2 py-0.5 rounded">-F --top-ports 100</code>
+</div>
+<div class="flex flex-col gap-1">
+<span class="text-outline uppercase tracking-widest text-[10px] font-bold">Recommended Use</span>
+<span class="text-sm text-secondary">Pre-deployment health checks.</span>
+</div>
+</div>
+<button class="w-full py-3 bg-surface-container-highest group-hover:bg-primary group-hover:text-on-primary transition-all rounded-lg font-bold text-sm uppercase tracking-widest flex items-center justify-center gap-2">
+                    Run Now
+                    <span class="material-symbols-outlined text-sm" data-icon="play_arrow">play_arrow</span>
+</button>
+</div>
+<div class="bg-surface-container-low hover:bg-surface-container-high transition-all duration-300 rounded-xl p-6 group relative overflow-hidden flex flex-col h-full border border-primary/20">
+<div class="flex justify-between items-start mb-6">
+<div class="bg-primary-container/20 p-2 rounded-lg">
+<span class="material-symbols-outlined text-primary" data-icon="search_insights">search_insights</span>
+</div>
+<span class="text-xs font-bold text-primary bg-primary/10 px-2 py-1 rounded">~8m</span>
+</div>
+<h3 class="text-xl font-headline font-bold mb-2 group-hover:text-primary transition-colors">Service Detection</h3>
+<p class="text-on-surface-variant text-sm mb-4 flex-grow">Deep inspection to determine service versions and banner information on open ports.</p>
+<div class="space-y-3 mb-6">
+<div class="flex justify-between text-xs">
+<span class="text-outline uppercase tracking-wider font-bold">Options</span>
+<code class="text-primary-fixed-dim bg-slate-950 px-2 py-0.5 rounded">-sV --version-intensity 5</code>
+</div>
+<div class="flex flex-col gap-1">
+<span class="text-outline uppercase tracking-widest text-[10px] font-bold">Recommended Use</span>
+<span class="text-sm text-secondary">Verifying patch levels of services.</span>
+</div>
+</div>
+<button class="w-full py-3 bg-primary text-on-primary transition-all rounded-lg font-bold text-sm uppercase tracking-widest flex items-center justify-center gap-2 shadow-lg shadow-primary/20">
+                    Run Now
+                    <span class="material-symbols-outlined text-sm" data-icon="play_arrow">play_arrow</span>
+</button>
+</div>
+<div class="bg-surface-container-low hover:bg-surface-container-high transition-all duration-300 rounded-xl p-6 group relative overflow-hidden flex flex-col h-full">
+<div class="flex justify-between items-start mb-6">
+<div class="bg-primary-container/20 p-2 rounded-lg">
+<span class="material-symbols-outlined text-primary" data-icon="memory">memory</span>
+</div>
+<span class="text-xs font-bold text-primary bg-primary/10 px-2 py-1 rounded">~6m</span>
+</div>
+<h3 class="text-xl font-headline font-bold mb-2 group-hover:text-primary transition-colors">OS Detection</h3>
+<p class="text-on-surface-variant text-sm mb-4 flex-grow">Remote fingerprinting to identify the operating system of the target infrastructure.</p>
+<div class="space-y-3 mb-6">
+<div class="flex justify-between text-xs">
+<span class="text-outline uppercase tracking-wider font-bold">Options</span>
+<code class="text-primary-fixed-dim bg-slate-950 px-2 py-0.5 rounded">-O --osscan-guess</code>
+</div>
+<div class="flex flex-col gap-1">
+<span class="text-outline uppercase tracking-widest text-[10px] font-bold">Recommended Use</span>
+<span class="text-sm text-secondary">Asset classification and mapping.</span>
+</div>
+</div>
+<button class="w-full py-3 bg-surface-container-highest group-hover:bg-primary group-hover:text-on-primary transition-all rounded-lg font-bold text-sm uppercase tracking-widest flex items-center justify-center gap-2">
+                    Run Now
+                    <span class="material-symbols-outlined text-sm" data-icon="play_arrow">play_arrow</span>
+</button>
+</div>
+<div class="bg-surface-container-low hover:bg-surface-container-high transition-all duration-300 rounded-xl p-6 group relative overflow-hidden flex flex-col h-full">
+<div class="flex justify-between items-start mb-6">
+<div class="bg-primary-container/20 p-2 rounded-lg">
+<span class="material-symbols-outlined text-primary" data-icon="lock_open">lock_open</span>
+</div>
+<span class="text-xs font-bold text-primary bg-primary/10 px-2 py-1 rounded">~15m</span>
+</div>
+<h3 class="text-xl font-headline font-bold mb-2 group-hover:text-primary transition-colors">Internal Audit Scan</h3>
+<p class="text-on-surface-variant text-sm mb-4 flex-grow">Comprehensive scan utilizing default scripts for discovering common misconfigurations.</p>
+<div class="space-y-3 mb-6">
+<div class="flex justify-between text-xs">
+<span class="text-outline uppercase tracking-wider font-bold">Options</span>
+<code class="text-primary-fixed-dim bg-slate-950 px-2 py-0.5 rounded">-sC -p-</code>
+</div>
+<div class="flex flex-col gap-1">
+<span class="text-outline uppercase tracking-widest text-[10px] font-bold">Recommended Use</span>
+<span class="text-sm text-secondary">Monthly internal security review.</span>
+</div>
+</div>
+<button class="w-full py-3 bg-surface-container-highest group-hover:bg-primary group-hover:text-on-primary transition-all rounded-lg font-bold text-sm uppercase tracking-widest flex items-center justify-center gap-2">
+                    Run Now
+                    <span class="material-symbols-outlined text-sm" data-icon="play_arrow">play_arrow</span>
+</button>
+</div>
+<div class="bg-surface-container-low hover:bg-surface-container-high transition-all duration-300 rounded-xl p-6 group relative overflow-hidden flex flex-col h-full">
+<div class="flex justify-between items-start mb-6">
+<div class="bg-primary-container/20 p-2 rounded-lg">
+<span class="material-symbols-outlined text-primary" data-icon="verified_user">verified_user</span>
+</div>
+<span class="text-xs font-bold text-primary bg-primary/10 px-2 py-1 rounded">~4m</span>
+</div>
+<h3 class="text-xl font-headline font-bold mb-2 group-hover:text-primary transition-colors">Safe Scan</h3>
+<p class="text-on-surface-variant text-sm mb-4 flex-grow">Minimal impact scan designed for fragile legacy systems and sensitive OT environments.</p>
+<div class="space-y-3 mb-6">
+<div class="flex justify-between text-xs">
+<span class="text-outline uppercase tracking-wider font-bold">Options</span>
+<code class="text-primary-fixed-dim bg-slate-950 px-2 py-0.5 rounded">-sT --top-ports 20</code>
+</div>
+<div class="flex flex-col gap-1">
+<span class="text-outline uppercase tracking-widest text-[10px] font-bold">Recommended Use</span>
+<span class="text-sm text-secondary">Legacy mainframes or IoT devices.</span>
+</div>
+</div>
+<button class="w-full py-3 bg-surface-container-highest group-hover:bg-primary group-hover:text-on-primary transition-all rounded-lg font-bold text-sm uppercase tracking-widest flex items-center justify-center gap-2">
+                    Run Now
+                    <span class="material-symbols-outlined text-sm" data-icon="play_arrow">play_arrow</span>
+</button>
+</div>
+<div class="bg-surface-container-low hover:bg-surface-container-high transition-all duration-300 rounded-xl p-6 group relative overflow-hidden flex flex-col h-full">
+<div class="flex justify-between items-start mb-6">
+<div class="bg-primary-container/20 p-2 rounded-lg">
+<span class="material-symbols-outlined text-primary" data-icon="public">public</span>
+</div>
+<span class="text-xs font-bold text-primary bg-primary/10 px-2 py-1 rounded">~7m</span>
+</div>
+<h3 class="text-xl font-headline font-bold mb-2 group-hover:text-primary transition-colors">Web Server Scan</h3>
+<p class="text-on-surface-variant text-sm mb-4 flex-grow">Focused scanning on ports 80, 443, and 8080 with HTTP enumeration enabled.</p>
+<div class="space-y-3 mb-6">
+<div class="flex justify-between text-xs">
+<span class="text-outline uppercase tracking-wider font-bold">Options</span>
+<code class="text-primary-fixed-dim bg-slate-950 px-2 py-0.5 rounded">-p 80,443,8080 -sV</code>
+</div>
+<div class="flex flex-col gap-1">
+<span class="text-outline uppercase tracking-widest text-[10px] font-bold">Recommended Use</span>
+<span class="text-sm text-secondary">Web tier infrastructure audit.</span>
+</div>
+</div>
+<button class="w-full py-3 bg-surface-container-highest group-hover:bg-primary group-hover:text-on-primary transition-all rounded-lg font-bold text-sm uppercase tracking-widest flex items-center justify-center gap-2">
+                    Run Now
+                    <span class="material-symbols-outlined text-sm" data-icon="play_arrow">play_arrow</span>
+</button>
+</div>
+</div>
+<section class="mt-12 grid grid-cols-1 lg:grid-cols-3 gap-8">
+<div class="lg:col-span-2 bg-surface-container rounded-2xl p-8 relative overflow-hidden">
+<div class="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl -mr-32 -mt-32"></div>
+<div class="relative z-10">
+<h2 class="text-3xl font-headline font-bold mb-4">Tactical Log Feed</h2>
+<div class="space-y-4">
+<div class="flex items-start gap-4 p-4 bg-surface-container-low rounded-xl">
+<div class="mt-1 w-2 h-2 rounded-full bg-primary shrink-0"></div>
+<div class="flex-1">
+<div class="flex justify-between">
+<span class="text-sm font-bold text-primary">Host Discovery Complete</span>
+<span class="text-xs text-outline font-mono">14:22:05</span>
+</div>
+<p class="text-xs text-on-surface-variant mt-1">192.168.1.0/24 scanned. 12 active hosts identified. No latency spikes detected.</p>
+</div>
+</div>
+<div class="flex items-start gap-4 p-4 bg-surface-container-low rounded-xl">
+<div class="mt-1 w-2 h-2 rounded-full bg-tertiary shrink-0"></div>
+<div class="flex-1">
+<div class="flex justify-between">
+<span class="text-sm font-bold text-tertiary">Quick Port Scan Initialized</span>
+<span class="text-xs text-outline font-mono">14:15:32</span>
+</div>
+<p class="text-xs text-on-surface-variant mt-1">Target: dmz-edge-01. Intensity: Aggressive. 1000 ports queued.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-highest rounded-2xl p-8 border border-primary/10">
+<h3 class="text-xl font-headline font-bold mb-6">Scan Parameters</h3>
+<div class="space-y-6">
+<div>
+<label class="text-[10px] uppercase font-black text-outline tracking-widest block mb-2">Scan Mode</label>
+<div class="grid grid-cols-2 gap-2">
+<button class="bg-primary text-on-primary py-2 px-3 rounded text-xs font-bold">Stealth</button>
+<button class="bg-surface-container-low text-on-surface-variant py-2 px-3 rounded text-xs font-bold hover:bg-surface-container-high transition-colors">Aggressive</button>
+</div>
+</div>
+<div>
+<label class="text-[10px] uppercase font-black text-outline tracking-widest block mb-2">Interface</label>
+<select class="w-full bg-surface-container-low border-none text-sm text-on-surface rounded-lg focus:ring-1 focus:ring-primary/40">
+<option>eth0 (10.0.0.12)</option>
+<option>wlan0 (192.168.1.55)</option>
+<option>tun0 (VPN active)</option>
+</select>
+</div>
+<div>
+<label class="text-[10px] uppercase font-black text-outline tracking-widest block mb-2">Timing Template</label>
+<div class="flex items-center justify-between text-xs text-on-surface-variant">
+<span>T0 (Paranoid)</span>
+<span class="text-primary font-bold">T4 (Aggressive)</span>
+<span>T5 (Insane)</span>
+</div>
+<input class="w-full h-1 bg-surface-container-low rounded-lg appearance-none cursor-pointer accent-primary mt-3" max="5" min="0" type="range" value="4"/>
+</div>
+</div>
+</div>
+</section>
+</main>
+<div class="fixed bottom-8 right-8 z-50">
+<button class="w-14 h-14 bg-primary text-on-primary rounded-full shadow-2xl shadow-primary/40 flex items-center justify-center hover:scale-110 active:scale-95 transition-all duration-300 group">
+<span class="material-symbols-outlined text-3xl group-hover:rotate-90 transition-transform duration-500" data-icon="add">add</span>
+</button>
+</div>
+</body></html>

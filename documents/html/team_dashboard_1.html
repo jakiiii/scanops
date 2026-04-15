@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Team Dashboard | ScanOps</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800;900&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {},
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    spacing: {},
+                    fontFamily: {
+                        "headline": ["Public Sans"],
+                        "body": ["Public Sans"],
+                        "label": ["Public Sans"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #020617; /* slate-950 */
+            color: #f8fafc;
+            font-family: 'Public Sans', sans-serif;
+        }
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(51, 65, 85, 0.5);
+        }
+    </style>
+</head>
+<body class="antialiased">
+<!-- SideNavBar Shell -->
+<aside class="fixed left-0 top-0 h-full flex flex-col z-40 h-screen w-64 border-r border-slate-800 dark:border-slate-900 bg-slate-950 dark:bg-black shadow-xl">
+<div class="p-6">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 bg-blue-600 rounded flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-sm" style="font-variation-settings: 'FILL' 1;">security</span>
+</div>
+<div>
+<h1 class="text-xl font-black tracking-tighter text-white">ScanOps</h1>
+<p class="text-[10px] font-semibold tracking-widest text-slate-500 uppercase">Enterprise Security</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 px-2 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-900 transition-colors duration-150 scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-xs font-semibold tracking-wide Inter">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-900 transition-colors duration-150 scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="text-xs font-semibold tracking-wide Inter">Assets</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-900 transition-colors duration-150 scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined">radar</span>
+<span class="text-xs font-semibold tracking-wide Inter">Scans</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-900 transition-colors duration-150 scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined">security</span>
+<span class="text-xs font-semibold tracking-wide Inter">Vulnerabilities</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 bg-blue-600/10 text-blue-400 border-r-2 border-blue-500 transition-colors duration-150 scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">group</span>
+<span class="text-xs font-semibold tracking-wide Inter">Team Activity</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-900 transition-colors duration-150 scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="text-xs font-semibold tracking-wide Inter">Reports</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-900 transition-colors duration-150 scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined">terminal</span>
+<span class="text-xs font-semibold tracking-wide Inter">Integration</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-900 transition-colors duration-150 scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-xs font-semibold tracking-wide Inter">Settings</span>
+</a>
+</nav>
+<div class="px-2 pb-4 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-900 transition-colors duration-150" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="text-xs font-semibold tracking-wide Inter">Help Center</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-900 transition-colors duration-150" href="#">
+<span class="material-symbols-outlined text-red-400">logout</span>
+<span class="text-xs font-semibold tracking-wide Inter">Log Out</span>
+</a>
+</div>
+</aside>
+<!-- TopNavBar Shell -->
+<header class="sticky top-0 ml-64 flex justify-between items-center px-6 py-3 z-30 bg-slate-900/50 dark:bg-slate-950/50 backdrop-blur-md border-b border-slate-800 dark:border-slate-900">
+<div class="flex items-center gap-4 flex-1 max-w-md">
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-sm">search</span>
+<input class="w-full bg-slate-800/50 border-none rounded-lg py-1.5 pl-10 pr-4 text-xs focus:ring-1 focus:ring-blue-500 text-slate-200" placeholder="Search team assets, scans, or collaborators..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-4">
+<button class="relative opacity-80 hover:opacity-100 transition-colors text-slate-400 hover:text-white">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-0 right-0 w-2 h-2 bg-blue-500 rounded-full border-2 border-slate-950"></span>
+</button>
+<button class="opacity-80 hover:opacity-100 transition-colors text-slate-400 hover:text-white">
+<span class="material-symbols-outlined">history</span>
+</button>
+<button class="opacity-80 hover:opacity-100 transition-colors text-slate-400 hover:text-white">
+<span class="material-symbols-outlined">chat_bubble</span>
+</button>
+</div>
+<div class="h-6 w-px bg-slate-800"></div>
+<div class="flex items-center gap-3">
+<div class="text-right">
+<p class="text-xs font-medium text-slate-200">Alex Rivera</p>
+<p class="text-[10px] text-slate-500">Security Lead</p>
+</div>
+<img class="w-8 h-8 rounded-lg object-cover ring-2 ring-slate-800" data-alt="professional portrait of a security engineer in dark clothing with neutral lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAO-wWR6BKmb4tt6kWA3YhUUelWG-UfHUY6rnr1i09OWC4fjZDQGLdxDdEqCdsKo9BnV6s_bW8R4MHOU1XR8RYl4u8W6I4yIz0sHigd7JvgcQACkExIcztvDuTNeJJGbrtpWmu6XxU9h4v8ySf-xW04x0yt-IkxxYCT07AUafZKTLoQaCkffMdTkxyz2PgrLvH_8kImLKP6z5I4TnlZAw-0YCGG_-mvw_Fl5dGynU51FwP0Lwa3MGG7z_DXGvXqiuV3z5Av6vB1LK-p"/>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="ml-64 p-8 min-h-screen">
+<!-- Dashboard Header -->
+<div class="flex justify-between items-end mb-8">
+<div>
+<h2 class="text-3xl font-bold tracking-tight text-white mb-1">Team Overview</h2>
+<p class="text-slate-400 text-sm">Real-time collaborative security monitoring for the Core Infrastructure team.</p>
+</div>
+<div class="flex gap-3">
+<button class="bg-slate-800 hover:bg-slate-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">share</span>
+                    Share Board
+                </button>
+<button class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">add</span>
+                    New Team Scan
+                </button>
+</div>
+</div>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-12 gap-6">
+<!-- Metrics Row -->
+<div class="col-span-12 md:col-span-4 glass-panel p-6 rounded-xl">
+<div class="flex items-center justify-between mb-4">
+<span class="text-xs font-bold text-slate-500 uppercase tracking-widest">Total Scans (7d)</span>
+<span class="text-emerald-400 text-xs font-bold flex items-center">
+<span class="material-symbols-outlined text-xs">trending_up</span> +14%
+                    </span>
+</div>
+<div class="flex items-end gap-3">
+<span class="text-4xl font-black text-white">1,284</span>
+<span class="text-slate-500 text-sm mb-1">across 12 clusters</span>
+</div>
+<div class="mt-6 flex gap-1 h-1">
+<div class="h-full bg-blue-500 w-1/4 rounded-full"></div>
+<div class="h-full bg-blue-500/50 w-1/5 rounded-full"></div>
+<div class="h-full bg-blue-500 w-1/6 rounded-full"></div>
+<div class="h-full bg-slate-700 w-1/3 rounded-full"></div>
+</div>
+</div>
+<div class="col-span-12 md:col-span-4 glass-panel p-6 rounded-xl">
+<div class="flex items-center justify-between mb-4">
+<span class="text-xs font-bold text-slate-500 uppercase tracking-widest">Collaborators</span>
+<span class="text-slate-400 text-xs font-bold">8 Active Now</span>
+</div>
+<div class="flex -space-x-3 mt-2">
+<img class="inline-block h-10 w-10 rounded-full ring-2 ring-slate-900 object-cover" data-alt="headshot of a man with short hair in a tech office setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDeyIg_lPyXKET_2y5LO7cDy3QL04cpBhHzmx7hNRfT3YfObiQ7lJEhsMIBHO-LdtsC37emgts-vnMcp6Czx_ySQ0xhKSFGjTwe20BEiZ2yub6C3y_aF6KqxLCS55CTBYscnXIDIHmlmCbVVAK14SVhL2Ztwo-vM0hq4wXCUVY6n5pKam02LEWzh1oMa8GtJEGtzuHMMYTgY_Wa-GG3fIq94p8a-jpoN2jJN3WdoB6flUYQkUo4u9hDPRI-HYZXCva3UWf35zvXr7Zc"/>
+<img class="inline-block h-10 w-10 rounded-full ring-2 ring-slate-900 object-cover" data-alt="headshot of a woman with long hair in a tech office setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAs6aKACDHjHfG4is1QVwRAZiMwyv5tDO8wbr-6SJEeJKGgAGonNKr8G0rMDbPCrhDkrTssRFOP471aakzme5rKOQMk6cfQUX4vH6FgC-_1FtACcw-DzN7KwukSR-mggB9vatokGMFjWtrFEmesh6I4bulrYu6enkKqHthIsKZtToxkUMdhT15n9NwOvaerAgykgdbzyhRr9P5B23xuPvhjrX9o7_h3PtG3tiVOVO-YwViuS00fcOAlHbVSz3aqZtsyeX6D1dEB-p6_"/>
+<img class="inline-block h-10 w-10 rounded-full ring-2 ring-slate-900 object-cover" data-alt="headshot of a young man with glasses in a tech office setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB1JV3C9b7DgXgIpFG_PcUaXBVh5kOxETqzOizFtA-W_GTNqKuuUTa27chfTEC8Y_KoJxQaR0ZDvzkrDAW84lxFJJqEA15V7IjIK1NSCmkTSLnpX36C0c9R7qEnP1IL9oV_-kxkmDlRx_6odl-LsbION9freSS3h9cY_jp0TzcHAt2fHLPR2dO6aZd9FHTXfbVBVjCoD9_dQtM0MTtTR_e-QTzfD_fIjF8Yyx5Wo7iPpGhvLVetLWiEOoYlRQ6j2CN1hsCsBfw3bF2L"/>
+<img class="inline-block h-10 w-10 rounded-full ring-2 ring-slate-900 object-cover" data-alt="headshot of a woman with glasses and short hair in a professional tech environment" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDOkVUrS3hqjDXN2kP9Iq8HJDeE6SYp_qIjRzwuVct6kAU9Vg3cwLDBOEkgw5qv6lh6pa3X2YGi1496WBofRe6wD7zeV6wVPnviC_3QMWkMCOWRZbmLT9N2sKFKYg1igG06WAlwFNadxzkN3AFCSXjs5qDhOls22WTASO6QbqG6TVcujnWphvm0OSAcFlwrDd_Rw7Z8ABFHMhMErazOfKYShcaIOrUKkP-rF1ytLnBzH_3qlReKailthugTh_X-HmktoRaZKJJRWcTS"/>
+<div class="h-10 w-10 rounded-full ring-2 ring-slate-900 bg-slate-800 flex items-center justify-center text-[10px] font-bold text-slate-400">+4</div>
+</div>
+<p class="text-[11px] text-slate-500 mt-4 leading-relaxed">
+                    Most active: <span class="text-blue-400">Sarah J.</span> triggered 42 scans this week.
+                </p>
+</div>
+<div class="col-span-12 md:col-span-4 glass-panel p-6 rounded-xl bg-gradient-to-br from-slate-900 to-blue-900/20">
+<div class="flex items-center justify-between mb-4">
+<span class="text-xs font-bold text-blue-300 uppercase tracking-widest">Active Vulnerabilities</span>
+<span class="bg-red-500/20 text-red-400 px-2 py-0.5 rounded-full text-[10px] font-bold">CRITICAL</span>
+</div>
+<div class="flex items-end justify-between">
+<div>
+<span class="text-4xl font-black text-white">24</span>
+<p class="text-slate-400 text-xs mt-1">Pending resolution</p>
+</div>
+<button class="text-blue-400 text-xs font-bold hover:underline">View All Alerts →</button>
+</div>
+</div>
+<!-- Activity Feed -->
+<div class="col-span-12 lg:col-span-8 glass-panel rounded-xl overflow-hidden">
+<div class="p-6 border-b border-slate-800 flex justify-between items-center">
+<h3 class="text-lg font-bold text-white flex items-center gap-2">
+<span class="material-symbols-outlined text-blue-500">forum</span>
+                        Collaborative Activity
+                    </h3>
+<div class="flex gap-2">
+<button class="px-3 py-1 bg-slate-800 rounded-md text-[10px] font-bold text-slate-400 uppercase">Filters</button>
+</div>
+</div>
+<div class="divide-y divide-slate-800/50">
+<!-- Activity Item 1 -->
+<div class="p-6 hover:bg-slate-800/30 transition-colors">
+<div class="flex gap-4">
+<img class="h-10 w-10 rounded-lg object-cover flex-shrink-0" data-alt="professional portrait of a cybersecurity researcher" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDzsD8gGfZIerFefOfXGX2kMunXS6nu9nYT7S4J-ZaHssv2RBys2bzh2K-OIgfNniknsZ4WuXbetiCLzAaLA5p6WPwhoB2rfJQ1Px2gT24B6tg4Q6d5Fw0BW97RFEp-iv0i17N3wnZkxcHBWg8GR0HuHcnL_0MZSIt80zkezwRJtVw3OSWPhmY3ITn1iYa8J1UyvDg_X5kWIwSzlNXCgEqfiSGPuy0xYSOBkBS-c8HgLZyEieZzUXmn4wfq-erxbvNwqEEhOx8CLiN7"/>
+<div class="flex-1">
+<div class="flex items-center gap-2 mb-1">
+<span class="text-sm font-bold text-white">Sarah Jenkins</span>
+<span class="text-[10px] text-slate-500">24m ago</span>
+</div>
+<p class="text-sm text-slate-300 mb-3">
+                                    Marked <span class="bg-blue-500/10 text-blue-400 px-1.5 py-0.5 rounded font-mono text-[11px]">CVE-2023-5231</span> as <span class="text-emerald-400">Fixed</span> in production cluster.
+                                </p>
+<div class="bg-slate-900/80 rounded-lg p-3 border border-slate-800">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-slate-500 text-sm mt-1">chat_bubble</span>
+<div>
+<p class="text-xs text-slate-400 italic">"Verified the patch on node-04. Latency returned to baseline."</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Activity Item 2 -->
+<div class="p-6 hover:bg-slate-800/30 transition-colors">
+<div class="flex gap-4">
+<div class="h-10 w-10 rounded-lg bg-blue-600/20 flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-blue-500">rocket_launch</span>
+</div>
+<div class="flex-1">
+<div class="flex items-center gap-2 mb-1">
+<span class="text-sm font-bold text-white">System Automator</span>
+<span class="text-[10px] text-slate-500">2h ago</span>
+</div>
+<p class="text-sm text-slate-300">
+                                    Scheduled daily scan <span class="text-blue-400 font-medium">"PCI-DSS Compliance Check"</span> completed successfully. 
+                                </p>
+<div class="mt-3 flex gap-4">
+<div class="flex items-center gap-1 text-[10px] font-bold text-slate-500">
+<span class="material-symbols-outlined text-sm">thumb_up</span> 12 Likes
+                                    </div>
+<div class="flex items-center gap-1 text-[10px] font-bold text-slate-500">
+<span class="material-symbols-outlined text-sm">comment</span> 3 Comments
+                                    </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Shared Scan Profiles -->
+<div class="col-span-12 lg:col-span-4 space-y-6">
+<div class="glass-panel rounded-xl p-6">
+<h3 class="text-sm font-bold text-white mb-4 uppercase tracking-widest">Shared Profiles</h3>
+<div class="space-y-3">
+<div class="flex items-center justify-between p-3 bg-slate-800/50 rounded-lg border border-slate-700/50 group cursor-pointer hover:border-blue-500/50 transition-colors">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-blue-400">shield</span>
+<div>
+<p class="text-xs font-bold text-slate-200">Full Audit</p>
+<p class="text-[10px] text-slate-500">242 nodes • Deep Scan</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-slate-600 group-hover:text-blue-400 transition-colors text-sm">play_arrow</span>
+</div>
+<div class="flex items-center justify-between p-3 bg-slate-800/50 rounded-lg border border-slate-700/50 group cursor-pointer hover:border-blue-500/50 transition-colors">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-amber-400">bolt</span>
+<div>
+<p class="text-xs font-bold text-slate-200">Quick Surface</p>
+<p class="text-[10px] text-slate-500">Top 10 ports • Stealth</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-slate-600 group-hover:text-blue-400 transition-colors text-sm">play_arrow</span>
+</div>
+<div class="flex items-center justify-between p-3 bg-slate-800/50 rounded-lg border border-slate-700/50 group cursor-pointer hover:border-blue-500/50 transition-colors">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-purple-400">terminal</span>
+<div>
+<p class="text-xs font-bold text-slate-200">API Pentest</p>
+<p class="text-[10px] text-slate-500">GraphQL endpoints</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-slate-600 group-hover:text-blue-400 transition-colors text-sm">play_arrow</span>
+</div>
+</div>
+<button class="w-full mt-4 py-2 border border-dashed border-slate-700 rounded-lg text-[10px] font-bold text-slate-500 hover:text-slate-300 transition-colors uppercase tracking-widest">
+                        + Create Shared Profile
+                    </button>
+</div>
+<!-- Recent Reports -->
+<div class="glass-panel rounded-xl p-6">
+<h3 class="text-sm font-bold text-white mb-4 uppercase tracking-widest">Recent Reports</h3>
+<div class="space-y-4">
+<div class="relative pl-4 border-l-2 border-slate-800 hover:border-blue-500 transition-colors group">
+<p class="text-xs font-bold text-slate-200 group-hover:text-blue-400 cursor-pointer">Quarterly Security Posture</p>
+<p class="text-[10px] text-slate-500">PDF • 12.4MB • Generated by Marcus</p>
+<span class="text-[10px] text-slate-600">Yesterday at 4:12 PM</span>
+</div>
+<div class="relative pl-4 border-l-2 border-slate-800 hover:border-blue-500 transition-colors group">
+<p class="text-xs font-bold text-slate-200 group-hover:text-blue-400 cursor-pointer">AWS Infrastructure Audit</p>
+<p class="text-[10px] text-slate-500">JSON • 2.1MB • Generated by System</p>
+<span class="text-[10px] text-slate-600">Oct 24, 2023</span>
+</div>
+<div class="relative pl-4 border-l-2 border-slate-800 hover:border-blue-500 transition-colors group">
+<p class="text-xs font-bold text-slate-200 group-hover:text-blue-400 cursor-pointer">Edge Node Vulnerabilities</p>
+<p class="text-[10px] text-slate-500">CSV • 840KB • Generated by Sarah</p>
+<span class="text-[10px] text-slate-600">Oct 22, 2023</span>
+</div>
+</div>
+<a class="block text-center mt-6 text-[11px] font-bold text-blue-400 hover:text-blue-300" href="#">View All Team Reports</a>
+</div>
+</div>
+<!-- Team Performance Graph Placeholder -->
+<div class="col-span-12 glass-panel p-6 rounded-xl relative overflow-hidden">
+<div class="flex items-center justify-between mb-8">
+<div>
+<h3 class="text-lg font-bold text-white">Team Remediation Velocity</h3>
+<p class="text-xs text-slate-500">Average time to fix critical vulnerabilities over 30 days.</p>
+</div>
+<div class="flex gap-4">
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 rounded-full bg-blue-500"></span>
+<span class="text-[10px] font-bold text-slate-400">Team Alpha</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 rounded-full bg-slate-700"></span>
+<span class="text-[10px] font-bold text-slate-400">Global Avg</span>
+</div>
+</div>
+</div>
+<!-- SVG Graph Simulation -->
+<div class="h-48 w-full relative">
+<svg class="w-full h-full" viewbox="0 0 1000 200">
+<!-- Grid Lines -->
+<line stroke="#1e293b" stroke-width="1" x1="0" x2="1000" y1="50" y2="50"></line>
+<line stroke="#1e293b" stroke-width="1" x1="0" x2="1000" y1="100" y2="100"></line>
+<line stroke="#1e293b" stroke-width="1" x1="0" x2="1000" y1="150" y2="150"></line>
+<!-- Main Area Path -->
+<path d="M0 180 Q 100 150, 200 160 T 400 120 T 600 140 T 800 80 T 1000 100 V 200 H 0 Z" fill="url(#gradient-blue)" opacity="0.3"></path>
+<path d="M0 180 Q 100 150, 200 160 T 400 120 T 600 140 T 800 80 T 1000 100" fill="none" stroke="#3b82f6" stroke-width="3"></path>
+<!-- Secondary Line -->
+<path d="M0 160 Q 150 160, 300 140 T 600 130 T 1000 120" fill="none" stroke="#475569" stroke-dasharray="8,4" stroke-width="2"></path>
+<defs>
+<lineargradient id="gradient-blue" x1="0%" x2="0%" y1="0%" y2="100%">
+<stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1"></stop>
+<stop offset="100%" style="stop-color:#3b82f6;stop-opacity:0"></stop>
+</lineargradient>
+</defs>
+</svg>
+<!-- Data Points -->
+<div class="absolute top-[35%] left-[80%] -translate-x-1/2 -translate-y-1/2">
+<div class="bg-blue-600 text-white text-[10px] font-bold px-2 py-1 rounded shadow-lg">
+                            Peak: 2.4 hrs
+                        </div>
+</div>
+</div>
+<div class="flex justify-between mt-4 text-[10px] font-bold text-slate-600 uppercase tracking-widest px-2">
+<span>Oct 01</span>
+<span>Oct 08</span>
+<span>Oct 15</span>
+<span>Oct 22</span>
+<span>Today</span>
+</div>
+</div>
+</div>
+</main>
+</body></html>

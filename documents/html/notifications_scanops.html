@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ScanOps Sentinel | Notifications</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-surface": "#dce1fb",
+                        "on-secondary-fixed-variant": "#38485d",
+                        "tertiary-fixed-dim": "#ffb786",
+                        "surface": "#0c1324",
+                        "surface-dim": "#0c1324",
+                        "on-surface-variant": "#c2c6d6",
+                        "outline": "#8c909f",
+                        "on-primary-container": "#00285d",
+                        "surface-container-highest": "#2e3447",
+                        "error-container": "#93000a",
+                        "on-error": "#690005",
+                        "on-error-container": "#ffdad6",
+                        "tertiary-fixed": "#ffdcc6",
+                        "on-tertiary": "#502400",
+                        "surface-container-high": "#23293c",
+                        "secondary": "#b7c8e1",
+                        "inverse-primary": "#005ac2",
+                        "background": "#0c1324",
+                        "primary-fixed": "#d8e2ff",
+                        "surface-bright": "#33394c",
+                        "outline-variant": "#424754",
+                        "on-tertiary-container": "#461f00",
+                        "on-primary-fixed-variant": "#004395",
+                        "primary": "#adc6ff",
+                        "inverse-on-surface": "#2a3043",
+                        "primary-container": "#4d8eff",
+                        "secondary-fixed": "#d3e4fe",
+                        "on-primary-fixed": "#001a42",
+                        "on-secondary-fixed": "#0b1c30",
+                        "secondary-fixed-dim": "#b7c8e1",
+                        "error": "#ffb4ab",
+                        "surface-variant": "#2e3447",
+                        "surface-tint": "#adc6ff",
+                        "on-tertiary-fixed": "#311400",
+                        "surface-container": "#191f31",
+                        "secondary-container": "#3a4a5f",
+                        "inverse-surface": "#dce1fb",
+                        "tertiary": "#ffb786",
+                        "on-secondary": "#213145",
+                        "surface-container-lowest": "#070d1f",
+                        "on-background": "#dce1fb",
+                        "primary-fixed-dim": "#adc6ff",
+                        "on-tertiary-fixed-variant": "#723600",
+                        "surface-container-low": "#151b2d",
+                        "on-primary": "#002e6a",
+                        "tertiary-container": "#df7412",
+                        "on-secondary-container": "#a9bad3"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Space Grotesk"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #0c1324;
+            color: #dce1fb;
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-surface font-body selection:bg-primary/30">
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full z-50 bg-[#0c1324] shadow-[0px_24px_48px_rgba(0,0,0,0.5)]">
+<div class="flex items-center justify-between px-6 h-16 w-full">
+<div class="flex items-center gap-8">
+<span class="text-xl font-bold tracking-tighter text-blue-400 font-headline">ScanOps Sentinel</span>
+<nav class="hidden md:flex gap-6 font-headline tracking-tight text-sm">
+<a class="text-slate-400 hover:text-blue-200 transition-colors" href="#">Dashboard</a>
+<a class="text-slate-400 hover:text-blue-200 transition-colors" href="#">Monitors</a>
+<a class="text-slate-400 hover:text-blue-200 transition-colors" href="#">Archives</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative flex items-center bg-[#151b2d] rounded-lg px-3 py-1.5 focus-within:ring-1 ring-primary/40 transition-all">
+<span class="material-symbols-outlined text-slate-500 text-sm mr-2">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-sm text-on-surface placeholder:text-slate-500 w-48" placeholder="Search events..." type="text"/>
+</div>
+<div class="flex items-center gap-3">
+<button class="p-2 text-blue-400 hover:bg-[#2e3447] transition-all duration-200 rounded-lg relative">
+<span class="material-symbols-outlined">notifications_active</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full ring-2 ring-surface"></span>
+</button>
+<button class="p-2 text-slate-400 hover:bg-[#2e3447] transition-all duration-200 rounded-lg">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<div class="h-8 w-8 rounded-full overflow-hidden bg-surface-container-highest border border-outline-variant/30 ml-2">
+<img alt="Operator Profile" data-alt="professional portrait of a cybersecurity operator with dark background and cool blue lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCRjYxliU_HXeS8BgkXhk1hnD9FceuFWJKooEK5WToZLlfc5WAQaSgcyyARB---lisF8AdLKUSbgPp9f3kY0NoBfRtZgRIpX2RgnYYfHfNdZ3XxAQkt2qSFVmYIS0oIArPmgyd5VqdiW-ag4uUoa5ja8_FTqHgTWaMcImV4qgLZsp_2Nx2b7J_Rj2OvRpsBB_bsEbLbb8hZ4C0JXSJYRvVvCOejcvtSzTRZqhuxqhrd9VZTmIE-BL0P3q119qaMucpmpQnOkLoKNkWg"/>
+</div>
+</div>
+</div>
+</div>
+</header>
+<!-- SideNavBar -->
+<aside class="h-screen w-64 fixed left-0 top-0 pt-16 bg-[#0c1324] border-r border-slate-800/20 flex flex-col font-body text-sm antialiased z-40">
+<div class="p-6 flex flex-col gap-6">
+<div class="flex items-center gap-3 p-3 bg-surface-container-low rounded-xl">
+<div class="h-10 w-10 rounded bg-primary-container/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">terminal</span>
+</div>
+<div>
+<div class="text-blue-400 font-bold block">Terminal_01</div>
+<div class="text-[10px] text-slate-500 uppercase tracking-widest font-semibold">Status: Operational</div>
+</div>
+</div>
+<nav class="space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-500 hover:text-slate-200 hover:bg-[#151b2d] transition-all duration-300" href="#">
+<span class="material-symbols-outlined">radar</span>
+<span>Threat Feed</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-500 hover:text-slate-200 hover:bg-[#151b2d] transition-all duration-300" href="#">
+<span class="material-symbols-outlined">security</span>
+<span>System Health</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-500 hover:text-slate-200 hover:bg-[#151b2d] transition-all duration-300" href="#">
+<span class="material-symbols-outlined">hub</span>
+<span>Network Map</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg bg-[#2e3447] text-blue-400 border-r-4 border-blue-500 transition-all duration-300" href="#">
+<span class="material-symbols-outlined">notifications</span>
+<span>Alerts Log</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-500 hover:text-slate-200 hover:bg-[#151b2d] transition-all duration-300" href="#">
+<span class="material-symbols-outlined">tune</span>
+<span>Settings</span>
+</a>
+</nav>
+<button class="mt-4 w-full bg-primary text-on-primary font-semibold py-2.5 rounded-lg active:scale-95 transition-transform">
+                Deploy Patch
+            </button>
+</div>
+<div class="mt-auto p-6 border-t border-slate-800/20">
+<a class="flex items-center gap-3 px-4 py-2 text-slate-500 hover:text-slate-200 transition-colors" href="#">
+<span class="material-symbols-outlined">help_outline</span>
+<span>Support</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-slate-500 hover:text-slate-200 transition-colors" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span>Logout</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-64 pt-16 min-h-screen bg-surface">
+<div class="p-8 max-w-7xl mx-auto">
+<!-- Page Header -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
+<div>
+<h1 class="text-4xl font-headline font-bold tracking-tight text-on-surface">Notifications</h1>
+<p class="text-on-surface-variant/70 mt-2 font-body">Operational intelligence and security alerts for Terminal_01</p>
+</div>
+<div class="flex items-center gap-3">
+<button class="px-4 py-2 rounded-lg bg-surface-container-high hover:bg-surface-container-highest text-on-surface text-sm font-medium transition-all flex items-center gap-2">
+<span class="material-symbols-outlined text-lg">check_circle</span>
+                        Mark all as read
+                    </button>
+<button class="px-4 py-2 rounded-lg bg-error-container/20 hover:bg-error-container/40 text-error text-sm font-medium transition-all flex items-center gap-2">
+<span class="material-symbols-outlined text-lg">delete_sweep</span>
+                        Delete selected
+                    </button>
+</div>
+</div>
+<!-- Dashboard Grid (High Density Filter Section) -->
+<div class="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8">
+<!-- Filters Column -->
+<div class="lg:col-span-1 space-y-6">
+<div class="bg-surface-container-low p-6 rounded-xl space-y-6">
+<div>
+<h3 class="text-xs font-bold uppercase tracking-widest text-slate-500 mb-4 font-headline">Status</h3>
+<div class="space-y-2">
+<label class="flex items-center gap-3 group cursor-pointer">
+<input checked="" class="w-4 h-4 rounded-full border-outline-variant bg-surface-container text-primary focus:ring-primary/40" name="status" type="radio"/>
+<span class="text-sm text-on-surface-variant group-hover:text-on-surface transition-colors">All Notifications</span>
+</label>
+<label class="flex items-center gap-3 group cursor-pointer">
+<input class="w-4 h-4 rounded-full border-outline-variant bg-surface-container text-primary focus:ring-primary/40" name="status" type="radio"/>
+<span class="text-sm text-on-surface-variant group-hover:text-on-surface transition-colors">Unread Only</span>
+</label>
+</div>
+</div>
+<div>
+<h3 class="text-xs font-bold uppercase tracking-widest text-slate-500 mb-4 font-headline">Event Type</h3>
+<div class="space-y-3">
+<label class="flex items-center justify-between group cursor-pointer">
+<div class="flex items-center gap-3">
+<input checked="" class="w-4 h-4 rounded border-outline-variant bg-surface-container text-primary focus:ring-primary/40" type="checkbox"/>
+<span class="text-sm text-on-surface-variant group-hover:text-on-surface">Security Scans</span>
+</div>
+<span class="text-[10px] bg-surface-container-highest px-1.5 py-0.5 rounded text-slate-400">12</span>
+</label>
+<label class="flex items-center justify-between group cursor-pointer">
+<div class="flex items-center gap-3">
+<input checked="" class="w-4 h-4 rounded border-outline-variant bg-surface-container text-primary focus:ring-primary/40" type="checkbox"/>
+<span class="text-sm text-on-surface-variant group-hover:text-on-surface">System Updates</span>
+</div>
+<span class="text-[10px] bg-surface-container-highest px-1.5 py-0.5 rounded text-slate-400">05</span>
+</label>
+<label class="flex items-center justify-between group cursor-pointer">
+<div class="flex items-center gap-3">
+<input checked="" class="w-4 h-4 rounded border-outline-variant bg-surface-container text-primary focus:ring-primary/40" type="checkbox"/>
+<span class="text-sm text-on-surface-variant group-hover:text-on-surface">Access Logs</span>
+</div>
+<span class="text-[10px] bg-surface-container-highest px-1.5 py-0.5 rounded text-slate-400">08</span>
+</label>
+</div>
+</div>
+<div>
+<h3 class="text-xs font-bold uppercase tracking-widest text-slate-500 mb-4 font-headline">Severity</h3>
+<div class="flex flex-wrap gap-2">
+<button class="px-3 py-1 rounded text-[11px] font-bold bg-error/10 text-error border border-error/20">CRITICAL</button>
+<button class="px-3 py-1 rounded text-[11px] font-bold bg-tertiary/10 text-tertiary border border-tertiary/20">HIGH</button>
+<button class="px-3 py-1 rounded text-[11px] font-bold bg-primary/10 text-primary border border-primary/20">MEDIUM</button>
+<button class="px-3 py-1 rounded text-[11px] font-bold bg-surface-container-highest text-slate-400">LOW</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Inbox Content -->
+<div class="lg:col-span-3">
+<div class="bg-surface-container-low rounded-xl overflow-hidden">
+<!-- Table Header -->
+<div class="flex items-center gap-4 px-6 py-4 bg-surface-container border-b border-outline-variant/10">
+<input class="w-4 h-4 rounded border-outline-variant bg-surface-container text-primary focus:ring-primary/40" type="checkbox"/>
+<span class="text-xs font-bold uppercase tracking-widest text-slate-500 font-headline">Recent Alerts</span>
+</div>
+<!-- Notification Rows -->
+<div class="divide-y divide-outline-variant/5">
+<!-- Critical Alert -->
+<div class="group flex items-start md:items-center gap-4 px-6 py-5 bg-error-container/5 hover:bg-surface-container-high transition-all">
+<input class="mt-1 md:mt-0 w-4 h-4 rounded border-outline-variant bg-surface-container text-primary" type="checkbox"/>
+<div class="relative flex-shrink-0">
+<div class="h-10 w-10 rounded-lg bg-error/10 flex items-center justify-center text-error">
+<span class="material-symbols-outlined">gpp_maybe</span>
+</div>
+<div class="absolute -top-1 -right-1 w-3 h-3 bg-error rounded-full animate-pulse shadow-[0_0_8px_rgba(255,180,171,0.6)]"></div>
+</div>
+<div class="flex-grow min-w-0">
+<div class="flex items-center justify-between gap-4 mb-1">
+<h4 class="text-sm font-bold text-on-surface truncate">Unauthorized Access Attempt: North Wing Firewall</h4>
+<span class="text-[10px] font-medium text-slate-500 font-label whitespace-nowrap">2 MINS AGO</span>
+</div>
+<p class="text-sm text-on-surface-variant line-clamp-1">Multiple brute-force attempts detected from origin 192.168.1.104. IP automatically blacklisted for 24 hours.</p>
+</div>
+<div class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-2 rounded-lg text-slate-400 hover:text-primary hover:bg-surface-container-highest" title="Mark as Read">
+<span class="material-symbols-outlined text-lg">drafts</span>
+</button>
+<button class="p-2 rounded-lg text-slate-400 hover:text-error hover:bg-surface-container-highest" title="Delete">
+<span class="material-symbols-outlined text-lg">delete</span>
+</button>
+</div>
+</div>
+<!-- High Priority Scan -->
+<div class="group flex items-start md:items-center gap-4 px-6 py-5 bg-surface-container-lowest/50 hover:bg-surface-container-high transition-all">
+<input class="mt-1 md:mt-0 w-4 h-4 rounded border-outline-variant bg-surface-container text-primary" type="checkbox"/>
+<div class="flex-shrink-0 h-10 w-10 rounded-lg bg-tertiary/10 flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined">biotech</span>
+</div>
+<div class="flex-grow min-w-0">
+<div class="flex items-center justify-between gap-4 mb-1">
+<h4 class="text-sm font-bold text-on-surface truncate">Vulnerability Scan Completed: Core Assets</h4>
+<span class="text-[10px] font-medium text-slate-500 font-label whitespace-nowrap">14 MINS AGO</span>
+</div>
+<p class="text-sm text-on-surface-variant line-clamp-1">Scan ID #8920 finished. 3 High, 12 Medium vulnerabilities found. Review required.</p>
+</div>
+<div class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-2 rounded-lg text-slate-400 hover:text-primary hover:bg-surface-container-highest">
+<span class="material-symbols-outlined text-lg">drafts</span>
+</button>
+<button class="p-2 rounded-lg text-slate-400 hover:text-error hover:bg-surface-container-highest">
+<span class="material-symbols-outlined text-lg">delete</span>
+</button>
+</div>
+</div>
+<!-- System Update -->
+<div class="group flex items-start md:items-center gap-4 px-6 py-5 bg-surface-container-lowest/50 hover:bg-surface-container-high transition-all">
+<input class="mt-1 md:mt-0 w-4 h-4 rounded border-outline-variant bg-surface-container text-primary" type="checkbox"/>
+<div class="flex-shrink-0 h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">system_update</span>
+</div>
+<div class="flex-grow min-w-0">
+<div class="flex items-center justify-between gap-4 mb-1">
+<h4 class="text-sm font-bold text-on-surface truncate">System Patch Ready for Deployment</h4>
+<span class="text-[10px] font-medium text-slate-500 font-label whitespace-nowrap">1 HOUR AGO</span>
+</div>
+<p class="text-sm text-on-surface-variant line-clamp-1">Sentinel OS v2.4.1 stable release is available. Patch includes critical kernel security improvements.</p>
+</div>
+<div class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-2 rounded-lg text-slate-400 hover:text-primary hover:bg-surface-container-highest">
+<span class="material-symbols-outlined text-lg">drafts</span>
+</button>
+<button class="p-2 rounded-lg text-slate-400 hover:text-error hover:bg-surface-container-highest">
+<span class="material-symbols-outlined text-lg">delete</span>
+</button>
+</div>
+</div>
+<!-- Regular Log -->
+<div class="group flex items-start md:items-center gap-4 px-6 py-5 opacity-60 grayscale-[0.5] hover:opacity-100 hover:grayscale-0 hover:bg-surface-container-high transition-all">
+<input class="mt-1 md:mt-0 w-4 h-4 rounded border-outline-variant bg-surface-container text-primary" type="checkbox"/>
+<div class="flex-shrink-0 h-10 w-10 rounded-lg bg-slate-800 flex items-center justify-center text-slate-400">
+<span class="material-symbols-outlined">vpn_key</span>
+</div>
+<div class="flex-grow min-w-0">
+<div class="flex items-center justify-between gap-4 mb-1">
+<h4 class="text-sm font-bold text-on-surface truncate">User Login: 'Operator_K' (Verified)</h4>
+<span class="text-[10px] font-medium text-slate-500 font-label whitespace-nowrap">2 HOURS AGO</span>
+</div>
+<p class="text-sm text-on-surface-variant line-clamp-1">Standard session established from secure workstation ALPHA-09. No anomalies detected.</p>
+</div>
+<div class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-2 rounded-lg text-slate-400 hover:text-primary hover:bg-surface-container-highest">
+<span class="material-symbols-outlined text-lg">mail</span>
+</button>
+<button class="p-2 rounded-lg text-slate-400 hover:text-error hover:bg-surface-container-highest">
+<span class="material-symbols-outlined text-lg">delete</span>
+</button>
+</div>
+</div>
+<!-- Critical Alert 2 -->
+<div class="group flex items-start md:items-center gap-4 px-6 py-5 bg-error-container/5 hover:bg-surface-container-high transition-all">
+<input class="mt-1 md:mt-0 w-4 h-4 rounded border-outline-variant bg-surface-container text-primary" type="checkbox"/>
+<div class="relative flex-shrink-0">
+<div class="h-10 w-10 rounded-lg bg-error/10 flex items-center justify-center text-error">
+<span class="material-symbols-outlined">warning</span>
+</div>
+<div class="absolute -top-1 -right-1 w-3 h-3 bg-error rounded-full animate-pulse shadow-[0_0_8px_rgba(255,180,171,0.6)]"></div>
+</div>
+<div class="flex-grow min-w-0">
+<div class="flex items-center justify-between gap-4 mb-1">
+<h4 class="text-sm font-bold text-on-surface truncate">Hardware Alert: UPS Battery Failure</h4>
+<span class="text-[10px] font-medium text-slate-500 font-label whitespace-nowrap">4 HOURS AGO</span>
+</div>
+<p class="text-sm text-on-surface-variant line-clamp-1">UPS Unit #04 reporting critical battery degradation. Immediate replacement recommended to maintain redundancy.</p>
+</div>
+<div class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-2 rounded-lg text-slate-400 hover:text-primary hover:bg-surface-container-highest">
+<span class="material-symbols-outlined text-lg">drafts</span>
+</button>
+<button class="p-2 rounded-lg text-slate-400 hover:text-error hover:bg-surface-container-highest">
+<span class="material-symbols-outlined text-lg">delete</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Pagination/Footer -->
+<div class="flex items-center justify-between px-6 py-4 bg-surface-container/30">
+<span class="text-xs text-slate-500 font-medium">Showing 1-25 of 248 alerts</span>
+<div class="flex items-center gap-1">
+<button class="p-1.5 rounded bg-surface-container-high text-slate-500 hover:text-on-surface disabled:opacity-30" disabled="">
+<span class="material-symbols-outlined text-sm">chevron_left</span>
+</button>
+<button class="h-8 w-8 rounded bg-primary text-on-primary text-xs font-bold">1</button>
+<button class="h-8 w-8 rounded bg-surface-container-high text-on-surface text-xs font-bold hover:bg-surface-container-highest">2</button>
+<button class="h-8 w-8 rounded bg-surface-container-high text-on-surface text-xs font-bold hover:bg-surface-container-highest">3</button>
+<span class="text-slate-500 px-1">...</span>
+<button class="h-8 w-8 rounded bg-surface-container-high text-on-surface text-xs font-bold hover:bg-surface-container-highest">10</button>
+<button class="p-1.5 rounded bg-surface-container-high text-slate-500 hover:text-on-surface">
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Contextual Insight Panel (Bento Style) -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="bg-surface-container-low p-6 rounded-xl border-l-4 border-error/50">
+<div class="flex justify-between items-start mb-4">
+<span class="text-xs font-bold uppercase tracking-widest text-error/80 font-headline">Threat Status</span>
+<span class="material-symbols-outlined text-error">policy</span>
+</div>
+<div class="text-3xl font-headline font-bold text-on-surface mb-1">Elevated</div>
+<p class="text-xs text-on-surface-variant">System wide threat level increased due to 4 critical alerts in the last 12 hours.</p>
+</div>
+<div class="bg-surface-container-low p-6 rounded-xl border-l-4 border-primary/50">
+<div class="flex justify-between items-start mb-4">
+<span class="text-xs font-bold uppercase tracking-widest text-primary font-headline">Avg. Resolution</span>
+<span class="material-symbols-outlined text-primary">timer</span>
+</div>
+<div class="text-3xl font-headline font-bold text-on-surface mb-1">14.2m</div>
+<p class="text-xs text-on-surface-variant">Time to triage and resolve critical alerts has improved by 4% this week.</p>
+</div>
+<div class="bg-surface-container-low p-6 rounded-xl border-l-4 border-tertiary/50">
+<div class="flex justify-between items-start mb-4">
+<span class="text-xs font-bold uppercase tracking-widest text-tertiary font-headline">Scan Coverage</span>
+<span class="material-symbols-outlined text-tertiary">done_all</span>
+</div>
+<div class="text-3xl font-headline font-bold text-on-surface mb-1">98.4%</div>
+<p class="text-xs text-on-surface-variant">Of all network nodes have been scanned within the last 24-hour cycle.</p>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full bg-[#0c1324] flex items-center justify-around h-16 border-t border-slate-800/20 z-50">
+<a class="flex flex-col items-center gap-1 text-slate-500" href="#">
+<span class="material-symbols-outlined">radar</span>
+<span class="text-[10px]">Threats</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-500" href="#">
+<span class="material-symbols-outlined">security</span>
+<span class="text-[10px]">Health</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-blue-400" href="#">
+<span class="material-symbols-outlined">notifications</span>
+<span class="text-[10px]">Alerts</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-500" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px]">Profile</span>
+</a>
+</nav>
+</body></html>

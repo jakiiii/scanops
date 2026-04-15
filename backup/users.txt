@@ -1,0 +1,60 @@
+--------------------------------------------------
+Development Demo Users Only — Do Not Use in Production
+Generated for local ScanOps demo/testing
+--------------------------------------------------
+
+Name: Super Admin
+Username: superadmin
+Email: superadmin@scanops.local
+Role: Super Admin
+Password: ScanOps@Super123
+Status: Active
+--------------------------------------------------
+
+Name: Security Admin
+Username: securityadmin
+Email: securityadmin@scanops.local
+Role: Security Admin
+Password: ScanOps@Security123
+Status: Active
+--------------------------------------------------
+
+Name: Analyst One
+Username: analyst1
+Email: analyst1@scanops.local
+Role: Analyst
+Password: ScanOps@Analyst123
+Status: Active
+--------------------------------------------------
+
+Name: Analyst Two
+Username: analyst2
+Email: analyst2@scanops.local
+Role: Analyst
+Password: ScanOps@Analyst123
+Status: Active
+--------------------------------------------------
+
+Name: Operator One
+Username: operator1
+Email: operator1@scanops.local
+Role: Operator
+Password: ScanOps@Operator123
+Status: Active
+--------------------------------------------------
+
+Name: Operator Two
+Username: operator2
+Email: operator2@scanops.local
+Role: Operator
+Password: ScanOps@Operator123
+Status: Active
+--------------------------------------------------
+
+Name: Viewer One
+Username: viewer1
+Email: viewer1@scanops.local
+Role: Viewer
+Password: ScanOps@Viewer123
+Status: Active
+--------------------------------------------------

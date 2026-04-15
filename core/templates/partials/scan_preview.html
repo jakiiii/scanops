@@ -1,0 +1,108 @@
+{% load scanops_tags %}
+{% if summary %}
+    {% with data=summary %}
+        <div class="scanops-panel overflow-hidden">
+            <div class="p-5 bg-blue-600/10 border-b border-blue-500/20">
+                <h3 class="font-bold text-blue-300 uppercase tracking-wider text-sm">Scan Summary</h3>
+            </div>
+            <div class="p-5 space-y-4 text-sm">
+                <div class="flex justify-between gap-3">
+                    <span class="text-slate-500">Target</span>
+                    <span class="text-slate-200 text-right font-mono">{{ data.target_label|default:"Not selected" }}</span>
+                </div>
+                <div class="flex justify-between gap-3">
+                    <span class="text-slate-500">Scan Type</span>
+                    <span class="text-slate-200">{{ data.scan_type|default:"safe_basic" }}</span>
+                </div>
+                <div class="flex justify-between gap-3">
+                    <span class="text-slate-500">Timing</span>
+                    <span class="text-slate-200">{{ data.timing_profile|default:"normal" }}</span>
+                </div>
+                <div class="flex justify-between gap-3">
+                    <span class="text-slate-500">Ports</span>
+                    <span class="text-slate-200 font-mono">{{ data.port_input|default:"default" }}</span>
+                </div>
+
+                <div class="border-t border-slate-800 pt-4">
+                    <p class="text-xs uppercase tracking-wider text-slate-500 mb-2">Enabled Options</p>
+                    <div class="flex flex-wrap gap-2">
+                        {% if data.host_discovery %}<span class="px-2 py-1 text-[10px] rounded bg-slate-800 text-slate-300 border border-slate-700">Host Discovery</span>{% endif %}
+                        {% if data.service_detection %}<span class="px-2 py-1 text-[10px] rounded bg-slate-800 text-slate-300 border border-slate-700">Service Detection</span>{% endif %}
+                        {% if data.version_detection %}<span class="px-2 py-1 text-[10px] rounded bg-slate-800 text-slate-300 border border-slate-700">Version Detection</span>{% endif %}
+                        {% if data.os_detection %}<span class="px-2 py-1 text-[10px] rounded bg-slate-800 text-slate-300 border border-slate-700">OS Detection</span>{% endif %}
+                        {% if data.traceroute %}<span class="px-2 py-1 text-[10px] rounded bg-slate-800 text-slate-300 border border-slate-700">Traceroute</span>{% endif %}
+                        {% if data.dns_resolution %}<span class="px-2 py-1 text-[10px] rounded bg-slate-800 text-slate-300 border border-slate-700">DNS Resolution</span>{% endif %}
+                    </div>
+                </div>
+
+                {% if data.errors %}
+                    <div class="border-t border-slate-800 pt-4">
+                        {% for error in data.errors %}
+                            <p class="text-xs text-rose-300 mb-1">• {{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                {% if data.warnings %}
+                    <div>
+                        {% for warning in data.warnings %}
+                            <p class="text-xs text-amber-300 mb-1">• {{ warning }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    {% endwith %}
+{% else %}
+    {% with data=scan_preview %}
+<div class="scanops-panel overflow-hidden">
+    <div class="p-5 bg-blue-600/10 border-b border-blue-500/20">
+        <h3 class="font-bold text-blue-300 uppercase tracking-wider text-sm">Scan Summary</h3>
+    </div>
+    <div class="p-5 space-y-4 text-sm">
+        <div class="flex justify-between gap-3">
+            <span class="text-slate-500">Target</span>
+            <span class="text-slate-200 text-right font-mono">{{ data.target_label|default:"Not selected" }}</span>
+        </div>
+        <div class="flex justify-between gap-3">
+            <span class="text-slate-500">Scan Type</span>
+            <span class="text-slate-200">{{ data.scan_type|default:"safe_basic" }}</span>
+        </div>
+        <div class="flex justify-between gap-3">
+            <span class="text-slate-500">Timing</span>
+            <span class="text-slate-200">{{ data.timing_profile|default:"normal" }}</span>
+        </div>
+        <div class="flex justify-between gap-3">
+            <span class="text-slate-500">Ports</span>
+            <span class="text-slate-200 font-mono">{{ data.port_input|default:"default" }}</span>
+        </div>
+
+        <div class="border-t border-slate-800 pt-4">
+            <p class="text-xs uppercase tracking-wider text-slate-500 mb-2">Enabled Options</p>
+            <div class="flex flex-wrap gap-2">
+                {% if data.host_discovery %}<span class="px-2 py-1 text-[10px] rounded bg-slate-800 text-slate-300 border border-slate-700">Host Discovery</span>{% endif %}
+                {% if data.service_detection %}<span class="px-2 py-1 text-[10px] rounded bg-slate-800 text-slate-300 border border-slate-700">Service Detection</span>{% endif %}
+                {% if data.version_detection %}<span class="px-2 py-1 text-[10px] rounded bg-slate-800 text-slate-300 border border-slate-700">Version Detection</span>{% endif %}
+                {% if data.os_detection %}<span class="px-2 py-1 text-[10px] rounded bg-slate-800 text-slate-300 border border-slate-700">OS Detection</span>{% endif %}
+                {% if data.traceroute %}<span class="px-2 py-1 text-[10px] rounded bg-slate-800 text-slate-300 border border-slate-700">Traceroute</span>{% endif %}
+                {% if data.dns_resolution %}<span class="px-2 py-1 text-[10px] rounded bg-slate-800 text-slate-300 border border-slate-700">DNS Resolution</span>{% endif %}
+            </div>
+        </div>
+
+        {% if data.errors %}
+            <div class="border-t border-slate-800 pt-4">
+                {% for error in data.errors %}
+                    <p class="text-xs text-rose-300 mb-1">• {{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+        {% if data.warnings %}
+            <div>
+                {% for warning in data.warnings %}
+                    <p class="text-xs text-amber-300 mb-1">• {{ warning }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+</div>
+    {% endwith %}
+{% endif %}

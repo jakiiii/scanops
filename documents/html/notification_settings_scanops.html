@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Notification Settings | The Sentinel</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(46, 52, 71, 0.6);
+            backdrop-filter: blur(24px);
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0c1324;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #2e3447;
+            border-radius: 4px;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary-fixed-variant": "#004395",
+                        "on-secondary-container": "#a9bad3",
+                        "on-tertiary-fixed": "#311400",
+                        "surface-container": "#191f31",
+                        "primary-fixed": "#d8e2ff",
+                        "tertiary": "#ffb786",
+                        "primary": "#adc6ff",
+                        "on-tertiary-container": "#461f00",
+                        "surface-bright": "#33394c",
+                        "surface-container-highest": "#2e3447",
+                        "tertiary-fixed": "#ffdcc6",
+                        "on-primary-container": "#00285d",
+                        "on-error-container": "#ffdad6",
+                        "on-secondary-fixed": "#0b1c30",
+                        "on-tertiary-fixed-variant": "#723600",
+                        "on-surface": "#dce1fb",
+                        "surface-container-high": "#23293c",
+                        "error-container": "#93000a",
+                        "surface-variant": "#2e3447",
+                        "primary-fixed-dim": "#adc6ff",
+                        "on-primary-fixed": "#001a42",
+                        "tertiary-fixed-dim": "#ffb786",
+                        "surface-tint": "#adc6ff",
+                        "surface": "#0c1324",
+                        "on-secondary": "#213145",
+                        "secondary-fixed-dim": "#b7c8e1",
+                        "primary-container": "#4d8eff",
+                        "surface-dim": "#0c1324",
+                        "on-tertiary": "#502400",
+                        "surface-container-lowest": "#070d1f",
+                        "on-surface-variant": "#c2c6d6",
+                        "secondary": "#b7c8e1",
+                        "tertiary-container": "#df7412",
+                        "on-error": "#690005",
+                        "inverse-primary": "#005ac2",
+                        "surface-container-low": "#151b2d",
+                        "background": "#0c1324",
+                        "error": "#ffb4ab",
+                        "on-secondary-fixed-variant": "#38485d",
+                        "on-primary": "#002e6a",
+                        "inverse-surface": "#dce1fb",
+                        "on-background": "#dce1fb",
+                        "outline-variant": "#424754",
+                        "secondary-container": "#3a4a5f",
+                        "inverse-on-surface": "#2a3043",
+                        "outline": "#8c909f",
+                        "secondary-fixed": "#d3e4fe"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Space Grotesk"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-surface text-on-surface font-body selection:bg-primary/30">
+<!-- SideNavBar -->
+<aside class="h-screen w-64 fixed left-0 top-0 bg-[#0c1324] border-r border-[#2e3447]/15 flex flex-col z-50">
+<div class="p-6">
+<div class="flex items-center gap-3 mb-8">
+<div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary text-xl" data-icon="security" style="font-variation-settings: 'FILL' 1;">security</span>
+</div>
+<div>
+<h1 class="text-xl font-black text-blue-500 font-headline leading-none">Tactical Command</h1>
+<p class="text-[10px] uppercase tracking-widest text-slate-500 font-bold">Vanguard-01</p>
+</div>
+</div>
+<nav class="space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-slate-200 hover:bg-[#151b2d] transition-all duration-300 ease-in-out group" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="grid_view">grid_view</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-slate-200 hover:bg-[#151b2d] transition-all duration-300 ease-in-out group" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="psychology">psychology</span>
+<span class="text-sm font-medium">Threat Intelligence</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-slate-200 hover:bg-[#151b2d] transition-all duration-300 ease-in-out group" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="error_outline">error_outline</span>
+<span class="text-sm font-medium">Incidents</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-slate-200 hover:bg-[#151b2d] transition-all duration-300 ease-in-out group" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="shield">shield</span>
+<span class="text-sm font-medium">Security Posture</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 bg-blue-500/10 text-blue-400 border-r-2 border-blue-500 transition-all duration-300 ease-in-out group" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="settings">settings</span>
+<span class="text-sm font-medium">Settings</span>
+</a>
+</nav>
+</div>
+<div class="mt-auto p-6 space-y-1 border-t border-[#2e3447]/15">
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-slate-200 hover:bg-[#151b2d] transition-all duration-300" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="help_outline">help_outline</span>
+<span class="text-sm font-medium">Support</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-slate-200 hover:bg-[#151b2d] transition-all duration-300" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="logout">logout</span>
+<span class="text-sm font-medium">Logout</span>
+</a>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="ml-64 min-h-screen">
+<!-- TopAppBar -->
+<header class="w-full top-0 sticky z-40 bg-[#0c1324] flex justify-between items-center px-8 py-4">
+<div class="flex items-center gap-4">
+<h2 class="text-2xl font-bold tracking-tighter text-blue-500 font-headline">The Sentinel</h2>
+<div class="h-6 w-px bg-outline-variant/30"></div>
+<nav class="flex gap-6">
+<a class="text-slate-400 hover:text-blue-400 transition-colors duration-200 text-sm font-medium" href="#">General</a>
+<a class="text-blue-400 font-bold transition-colors duration-200 text-sm" href="#">Notifications</a>
+<a class="text-slate-400 hover:text-blue-400 transition-colors duration-200 text-sm font-medium" href="#">Team</a>
+<a class="text-slate-400 hover:text-blue-400 transition-colors duration-200 text-sm font-medium" href="#">Integrations</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-slate-400 hover:bg-[#2e3447] rounded-lg transition-colors active:scale-95">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<div class="flex items-center gap-3 pl-4 border-l border-[#2e3447]/30">
+<img alt="Security Analyst Profile" class="w-8 h-8 rounded-full border border-blue-500/30" data-alt="Close-up portrait of a professional security analyst in a dimly lit office with blue screens in background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAvB2ANax277NEHIbCunhLA342omtKzfM5mQHFUP2AxXJQeTVSFu57is0pfcAEFzkBzTPQxPyp5CjJlCkwfaarCDetx_N1wkvuAhr54CcwFcyMys3DmmgL4DOnPGTymgQ4rmko5j-NAej2aNJSJmkzj5KuTawascwkgrkxKGVp57KI9HQuph8-C_orqN0in1lCpMm7EF8lsC7ahDuxUxe1Nmw1Lu5Rhg6C6rOaIj2t6TMlD9pCXM3sRLNLoCP4fZHW5qnxwx7-la9I2"/>
+<div class="hidden lg:block">
+<p class="text-xs font-bold text-on-surface leading-none">A. VANCE</p>
+<p class="text-[10px] text-on-surface-variant uppercase tracking-tighter">Senior Analyst</p>
+</div>
+</div>
+</div>
+</header>
+<div class="px-12 py-10 max-w-6xl mx-auto">
+<!-- Header Section -->
+<div class="mb-12">
+<div class="flex items-center gap-3 mb-2">
+<div class="w-2 h-2 bg-primary rounded-full animate-pulse shadow-[0_0_12px_#adc6ff]"></div>
+<span class="text-xs font-bold tracking-widest text-primary uppercase font-headline">Configuration Module</span>
+</div>
+<h3 class="text-5xl font-bold font-headline text-on-surface tracking-tight mb-4">Notification Settings</h3>
+<p class="text-on-surface-variant max-w-2xl leading-relaxed">
+                    Define the telemetry and alerting protocols for your ScanOps instances. Tactical alerts can be routed via in-app dashboard, secure email, or critical priority channels.
+                </p>
+</div>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+<!-- In-App Notifications -->
+<section class="md:col-span-7 bg-surface-container-low rounded-xl p-8 border-b border-transparent">
+<div class="flex items-center justify-between mb-8">
+<div>
+<h4 class="text-xl font-bold text-primary font-headline">In-App Notifications</h4>
+<p class="text-xs text-on-surface-variant">Real-time alerts within the Sentinel interface</p>
+</div>
+<span class="material-symbols-outlined text-primary-container" data-icon="settings_input_component">settings_input_component</span>
+</div>
+<div class="space-y-6">
+<!-- Toggle Item -->
+<div class="flex items-center justify-between group p-4 rounded-lg hover:bg-surface-container-high transition-colors">
+<div class="flex gap-4">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors" data-icon="check_circle">check_circle</span>
+<div>
+<p class="font-medium text-on-surface">Scan Completion</p>
+<p class="text-xs text-on-surface-variant">Notify when automated vulnerability scans finish</p>
+</div>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+<!-- Toggle Item -->
+<div class="flex items-center justify-between group p-4 rounded-lg hover:bg-surface-container-high transition-colors">
+<div class="flex gap-4">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors" data-icon="search">search</span>
+<div>
+<p class="font-medium text-on-surface">New Findings</p>
+<p class="text-xs text-on-surface-variant">Instant alert for any new vulnerability detected</p>
+</div>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+<!-- Toggle Item -->
+<div class="flex items-center justify-between group p-4 rounded-lg hover:bg-surface-container-high transition-colors">
+<div class="flex gap-4">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors" data-icon="warning">warning</span>
+<div>
+<p class="font-medium text-on-surface">System Alerts</p>
+<p class="text-xs text-on-surface-variant">Critical kernel and orchestration health warnings</p>
+</div>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+<!-- Toggle Item -->
+<div class="flex items-center justify-between group p-4 rounded-lg hover:bg-surface-container-high transition-colors">
+<div class="flex gap-4">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors" data-icon="alternate_email">alternate_email</span>
+<div>
+<p class="font-medium text-on-surface">Team Mentions</p>
+<p class="text-xs text-on-surface-variant">Activity alerts when colleagues tag you in reports</p>
+</div>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+</div>
+</section>
+<!-- Severity Preferences -->
+<section class="md:col-span-5 bg-[#151b2d] rounded-xl overflow-hidden flex flex-col">
+<div class="p-8 pb-4">
+<h4 class="text-xl font-bold text-primary font-headline">Severity Filter</h4>
+<p class="text-xs text-on-surface-variant">Minimum detection level for triggering alerts</p>
+</div>
+<div class="flex-1 px-8 py-4 space-y-4">
+<div class="p-4 bg-surface-container-lowest rounded-lg border-l-4 border-error/50 flex items-center justify-between">
+<span class="text-sm font-bold text-error uppercase tracking-widest">High Severity</span>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-9 h-5 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-error"></div>
+</label>
+</div>
+<div class="p-4 bg-surface-container-lowest rounded-lg border-l-4 border-tertiary/50 flex items-center justify-between">
+<span class="text-sm font-bold text-tertiary uppercase tracking-widest">Medium Severity</span>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-9 h-5 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-tertiary"></div>
+</label>
+</div>
+<div class="p-4 bg-surface-container-lowest rounded-lg border-l-4 border-primary/50 flex items-center justify-between">
+<span class="text-sm font-bold text-primary uppercase tracking-widest">Low Severity</span>
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer" type="checkbox"/>
+<div class="w-9 h-5 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+</div>
+<div class="mt-auto h-32 relative group overflow-hidden">
+<img alt="Cybersecurity data visualization" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 opacity-40" data-alt="Abstract glowing network of lines and nodes in dark blue and cyan over a black background representing data connections" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAhzEKpTMAvXUBt-e0bVI6Kdfl6MXQTYTdZe2SCIFh333OTgOIDhFWjH1b5qhc18jc4Ugg9Y2h1kGKvQ5cJ49sHI4tLIkcB0XrLp-Q_8eYoBhDP-QbkLuPG_sl_5INo5EbFLt13P0gFV9dPfWXh03gVxtGWE9WuP1fsGxI_D2Be2LYrxgSvq7euo5Em0gayKsY_RiyV9YGlHm_3NIBKWZ4c3XsVPyUoIfXlwPHbPlJY8QZgMRjWfyc3_VsmMU4zk-FOzNQcJ8ak3bfe"/>
+<div class="absolute inset-0 bg-gradient-to-t from-[#151b2d] to-transparent"></div>
+</div>
+</section>
+<!-- Email Notifications -->
+<section class="md:col-span-12 lg:col-span-8 bg-surface-container-low rounded-xl p-8">
+<div class="flex items-center justify-between mb-8">
+<div>
+<h4 class="text-xl font-bold text-primary font-headline">Email Intelligence</h4>
+<p class="text-xs text-on-surface-variant">Scheduled and high-priority reporting</p>
+</div>
+<span class="material-symbols-outlined text-primary-container" data-icon="mail">mail</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="bg-surface-container-highest p-6 rounded-lg flex flex-col justify-between group hover:bg-primary/5 transition-colors">
+<div>
+<h5 class="font-bold text-on-surface mb-1">Daily Digest</h5>
+<p class="text-[10px] text-on-surface-variant mb-4 uppercase tracking-tighter">Summary of operations</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer self-start">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-container peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+<div class="bg-surface-container-highest p-6 rounded-lg flex flex-col justify-between group hover:bg-primary/5 transition-colors">
+<div>
+<h5 class="font-bold text-on-surface mb-1">Performance</h5>
+<p class="text-[10px] text-on-surface-variant mb-4 uppercase tracking-tighter">Weekly KPI report</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer self-start">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-container peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+<div class="bg-surface-container-highest p-6 rounded-lg flex flex-col justify-between group hover:bg-error/10 border-l-2 border-transparent hover:border-error transition-all">
+<div>
+<h5 class="font-bold text-error mb-1">Critical Alerts</h5>
+<p class="text-[10px] text-on-surface-variant mb-4 uppercase tracking-tighter">Zero-day vulnerability</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer self-start">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-container peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-error"></div>
+</label>
+</div>
+</div>
+</section>
+<!-- Digest Settings -->
+<section class="md:col-span-12 lg:col-span-4 glass-panel rounded-xl p-8 border border-primary/10">
+<h4 class="text-xl font-bold text-primary font-headline mb-6">Cadence Protocol</h4>
+<div class="space-y-6">
+<div>
+<label class="block text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mb-2">Frequency</label>
+<div class="relative">
+<select class="w-full bg-surface-container-lowest border-none rounded-lg text-sm p-4 appearance-none focus:ring-1 focus:ring-primary/40">
+<option>Real-time</option>
+<option selected="">Daily</option>
+<option>Weekly</option>
+<option>Monthly (Batch)</option>
+</select>
+<span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant" data-icon="expand_more">expand_more</span>
+</div>
+</div>
+<div>
+<label class="block text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mb-2">Delivery Time (UTC)</label>
+<div class="grid grid-cols-2 gap-4">
+<div class="relative">
+<select class="w-full bg-surface-container-lowest border-none rounded-lg text-sm p-4 appearance-none focus:ring-1 focus:ring-primary/40">
+<option>08:00</option>
+<option selected="">09:00</option>
+<option>17:00</option>
+<option>22:00</option>
+</select>
+<span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant text-xs" data-icon="schedule">schedule</span>
+</div>
+<div class="flex items-center justify-center bg-surface-container-lowest rounded-lg text-[10px] font-mono text-primary border border-primary/20">
+                                    GMT +00:00
+                                </div>
+</div>
+</div>
+</div>
+<div class="mt-8 pt-6 border-t border-primary/10">
+<div class="flex items-center gap-3 text-on-surface-variant italic">
+<span class="material-symbols-outlined text-sm" data-icon="info">info</span>
+<span class="text-[10px]">Digests include summarized metadata only.</span>
+</div>
+</div>
+</section>
+</div>
+<!-- Footer Actions -->
+<div class="mt-12 flex flex-col md:flex-row items-center justify-between gap-6 p-8 bg-surface-container-low rounded-xl">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-3xl text-primary/40" data-icon="security_update_good">security_update_good</span>
+<div>
+<p class="font-bold text-on-surface">Configuration Integrity</p>
+<p class="text-xs text-on-surface-variant">Changes will propagate to all tactical nodes instantly.</p>
+</div>
+</div>
+<div class="flex items-center gap-4 w-full md:w-auto">
+<button class="flex-1 md:flex-none px-6 py-3 text-sm font-bold text-slate-400 bg-surface-container-highest hover:bg-primary-fixed-dim hover:text-on-primary-fixed transition-colors rounded-md active:scale-95">
+                        Reset to Defaults
+                    </button>
+<button class="flex-1 md:flex-none px-10 py-3 text-sm font-bold text-on-primary bg-primary hover:bg-primary-container transition-all shadow-[0_0_20px_rgba(173,198,255,0.2)] rounded-md active:scale-95">
+                        Save Preferences
+                    </button>
+</div>
+</div>
+</div>
+</main>
+<!-- Contextual Toast Notification (Mock) -->
+<div class="fixed bottom-8 right-8 flex items-center gap-4 bg-surface-container-highest border-l-4 border-primary p-4 rounded shadow-2xl z-[100] max-w-sm pointer-events-none opacity-0 translate-y-4">
+<span class="material-symbols-outlined text-primary" data-icon="cloud_done">cloud_done</span>
+<div>
+<p class="text-sm font-bold">Preferences Synced</p>
+<p class="text-[10px] text-on-surface-variant">Configuration pushed to Vanguard-01</p>
+</div>
+</div>
+</body></html>

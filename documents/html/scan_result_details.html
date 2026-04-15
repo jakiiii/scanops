@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Tactical Intelligence | ScanOps Result</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Space+Grotesk:wght@500;700&amp;family=JetBrains+Mono&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-fixed-dim": "#b1c6f9",
+                        "surface-container-high": "#272a31",
+                        "surface-bright": "#363940",
+                        "on-secondary": "#182f59",
+                        "error-container": "#93000a",
+                        "tertiary": "#ffb786",
+                        "surface-container-lowest": "#0b0e14",
+                        "on-secondary-fixed-variant": "#304671",
+                        "surface-variant": "#32353c",
+                        "primary": "#adc6ff",
+                        "on-secondary-fixed": "#001a42",
+                        "inverse-on-surface": "#2e3037",
+                        "error": "#ffb4ab",
+                        "inverse-primary": "#005ac2",
+                        "outline": "#8c909f",
+                        "surface-tint": "#adc6ff",
+                        "on-tertiary-fixed": "#311400",
+                        "inverse-surface": "#e1e2eb",
+                        "on-primary": "#002e6a",
+                        "tertiary-container": "#df7412",
+                        "primary-fixed": "#d8e2ff",
+                        "on-tertiary": "#502400",
+                        "secondary-container": "#304671",
+                        "primary-fixed-dim": "#adc6ff",
+                        "on-error": "#690005",
+                        "tertiary-fixed-dim": "#ffb786",
+                        "primary-container": "#4d8eff",
+                        "on-tertiary-fixed-variant": "#723600",
+                        "on-surface-variant": "#c2c6d6",
+                        "surface-container-low": "#191c22",
+                        "surface-container": "#1d2026",
+                        "on-surface": "#e1e2eb",
+                        "background": "#10131a",
+                        "surface-dim": "#10131a",
+                        "on-primary-fixed": "#001a42",
+                        "secondary-fixed": "#d8e2ff",
+                        "tertiary-fixed": "#ffdcc6",
+                        "surface-container-highest": "#32353c",
+                        "surface": "#10131a",
+                        "on-tertiary-container": "#461f00",
+                        "on-primary-fixed-variant": "#004395",
+                        "outline-variant": "#424754",
+                        "on-primary-container": "#00285d",
+                        "on-background": "#e1e2eb",
+                        "secondary": "#b1c6f9",
+                        "on-secondary-container": "#9fb5e7",
+                        "on-error-container": "#ffdad6"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Space Grotesk"],
+                        "body": ["Inter"],
+                        "label": ["Inter"],
+                        "mono": ["JetBrains Mono"]
+                    }
+                },
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .ghost-border {
+            outline: 1px solid rgba(66, 71, 84, 0.15);
+        }
+        .pulse-indicator {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body selection:bg-primary selection:text-on-primary">
+<!-- Top Navigation Anchor -->
+<header class="fixed top-0 w-full z-50 bg-[#10131a] flex justify-between items-center px-6 h-16 bg-[#1d2026] flat no shadows">
+<div class="flex items-center gap-4">
+<span class="text-xl font-bold tracking-tighter text-white font-['Space_Grotesk']">Tactical Intelligence</span>
+<nav class="hidden md:flex gap-6 ml-8">
+<a class="font-['Space_Grotesk'] tracking-tight text-slate-400 hover:text-white transition-colors" href="#">Dashboard</a>
+<a class="font-['Space_Grotesk'] tracking-tight text-blue-500 border-b-2 border-blue-500 pb-1" href="#">Scans</a>
+<a class="font-['Space_Grotesk'] tracking-tight text-slate-400 hover:text-white transition-colors" href="#">Assets</a>
+<a class="font-['Space_Grotesk'] tracking-tight text-slate-400 hover:text-white transition-colors" href="#">Reports</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-slate-400 hover:bg-[#32353c] transition-all duration-200 active:scale-95">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 text-slate-400 hover:bg-[#32353c] transition-all duration-200 active:scale-95">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant">
+<img alt="User profile" data-alt="Close-up portrait of a professional male analyst in a dimly lit office with cool blue screen reflections" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA1eDwBq0d6hkXCgBZABt5KHDGv_evFJQQVHRbLWR0_xRy-qURHAcc5HnMYBV6PwWKogZbNTITdddE-TEQ_VhLQ-Kgg3I-utvjE3lvz3y7ZDRyy3GaW7nAJVKRaKtblI6-xQ1AUrWRyrEG-65g3tfnqSD6BzUicJ0sysxDWsQLt3Wm22OZJaxcM-oPYUwSMisigwNHFnc9OLTHWwWYHMx3BIk4sOLdWJ3ZuQG0ijUuCyIHKVbqsR36iKNv_z4LCPeNOa586Sp8wpUVT"/>
+</div>
+</div>
+</header>
+<!-- Sidebar Navigation -->
+<aside class="fixed left-0 top-16 h-[calc(100vh-64px)] w-64 bg-[#0b0e14] flex flex-col py-4 font-['Inter'] text-sm font-medium">
+<div class="px-6 mb-8">
+<div class="flex items-center gap-3">
+<div class="w-2 h-2 rounded-full bg-primary pulse-indicator"></div>
+<div>
+<p class="text-white font-bold leading-none">Scanner v4.2</p>
+<p class="text-[10px] text-slate-500 uppercase tracking-widest mt-1">Active Session</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-6 py-3 text-slate-500 hover:bg-[#1d2026] transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="radar">radar</span>
+                Overview
+            </a>
+<a class="flex items-center gap-3 px-6 py-3 bg-[#1d2026] text-white border-l-4 border-blue-500 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="lan">lan</span>
+                Ports
+            </a>
+<a class="flex items-center gap-3 px-6 py-3 text-slate-500 hover:bg-[#1d2026] transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="settings_input_component">settings_input_component</span>
+                Services
+            </a>
+<a class="flex items-center gap-3 px-6 py-3 text-slate-500 hover:bg-[#1d2026] transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="security">security</span>
+                Vulnerabilities
+            </a>
+<a class="flex items-center gap-3 px-6 py-3 text-slate-500 hover:bg-[#1d2026] transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="terminal">terminal</span>
+                Raw Output
+            </a>
+</nav>
+<div class="mt-auto space-y-1">
+<a class="flex items-center gap-3 px-6 py-3 text-slate-500 hover:bg-[#1d2026] transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+                Help
+            </a>
+<a class="flex items-center gap-3 px-6 py-3 text-slate-500 hover:bg-[#1d2026] transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+                Logout
+            </a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-64 mt-16 p-8 min-h-screen">
+<!-- Header: Scan Identity -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+<div>
+<nav class="flex items-center gap-2 text-xs font-mono text-on-surface-variant mb-2">
+<span>SCANS</span>
+<span class="material-symbols-outlined text-[12px]" data-icon="chevron_right">chevron_right</span>
+<span class="text-primary">SCANOPS-7742</span>
+</nav>
+<h1 class="font-headline text-4xl font-bold tracking-tight text-on-surface">Target: 192.168.1.104</h1>
+<div class="flex items-center gap-4 mt-4">
+<div class="flex items-center gap-2 bg-secondary-container px-3 py-1 rounded-sm">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+<span class="text-xs font-bold text-on-secondary-container uppercase tracking-wider">COMPLETED</span>
+</div>
+<span class="text-xs font-mono text-on-surface-variant">ID: f47ac10b-58cc-4372</span>
+<span class="text-xs font-mono text-on-surface-variant">DUR: 14.2s</span>
+</div>
+</div>
+<div class="flex gap-3">
+<button class="flex items-center gap-2 px-4 py-2 border border-outline-variant text-on-surface hover:bg-surface-container-highest transition-colors rounded-md text-sm font-medium active:scale-95">
+<span class="material-symbols-outlined text-sm" data-icon="compare_arrows">compare_arrows</span>
+                    Compare
+                </button>
+<button class="flex items-center gap-2 px-4 py-2 border border-outline-variant text-on-surface hover:bg-surface-container-highest transition-colors rounded-md text-sm font-medium active:scale-95">
+<span class="material-symbols-outlined text-sm" data-icon="download">download</span>
+                    Export Result
+                </button>
+<button class="flex items-center gap-2 px-6 py-2 bg-gradient-to-br from-primary-container to-primary text-on-primary font-bold rounded-md text-sm active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-sm" data-icon="refresh">refresh</span>
+                    Re-run Scan
+                </button>
+</div>
+</div>
+<!-- Summary Metric Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
+<!-- Host Status -->
+<div class="bg-surface-container p-6 relative overflow-hidden group">
+<div class="absolute left-0 top-0 w-1 h-full bg-primary"></div>
+<p class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mb-4">Host Status</p>
+<div class="flex items-end justify-between">
+<span class="font-headline text-5xl font-bold text-on-surface tracking-tighter">Online</span>
+<span class="material-symbols-outlined text-primary text-3xl opacity-20 group-hover:opacity-100 transition-opacity" data-icon="check_circle">check_circle</span>
+</div>
+</div>
+<!-- Open Ports -->
+<div class="bg-surface-container p-6 relative overflow-hidden group">
+<div class="absolute left-0 top-0 w-1 h-full bg-primary"></div>
+<p class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mb-4">Open Ports</p>
+<div class="flex items-end justify-between">
+<span class="font-headline text-5xl font-bold text-on-surface tracking-tighter">12</span>
+<span class="material-symbols-outlined text-primary text-3xl opacity-20 group-hover:opacity-100 transition-opacity" data-icon="lan">lan</span>
+</div>
+</div>
+<!-- Services -->
+<div class="bg-surface-container p-6 relative overflow-hidden group">
+<div class="absolute left-0 top-0 w-1 h-full bg-primary"></div>
+<p class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mb-4">Services</p>
+<div class="flex items-end justify-between">
+<span class="font-headline text-5xl font-bold text-on-surface tracking-tighter">08</span>
+<span class="material-symbols-outlined text-primary text-3xl opacity-20 group-hover:opacity-100 transition-opacity" data-icon="settings_suggest">settings_suggest</span>
+</div>
+</div>
+<!-- OS Guess -->
+<div class="bg-surface-container p-6 relative overflow-hidden group">
+<div class="absolute left-0 top-0 w-1 h-full bg-tertiary-container"></div>
+<p class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mb-4">OS Detection</p>
+<div class="flex items-end justify-between">
+<div>
+<span class="font-headline text-2xl font-bold text-on-surface block leading-tight">Ubuntu</span>
+<span class="text-xs font-mono text-on-surface-variant">Kernel 22.04 LTS</span>
+</div>
+<span class="material-symbols-outlined text-tertiary text-3xl opacity-20 group-hover:opacity-100 transition-opacity" data-icon="desktop_windows">desktop_windows</span>
+</div>
+</div>
+</div>
+<!-- Tabbed Content Section -->
+<div class="bg-surface-container rounded-lg overflow-hidden">
+<div class="flex border-b border-outline-variant/10">
+<button class="px-8 py-4 text-xs font-bold uppercase tracking-widest text-on-surface-variant border-b-2 border-transparent hover:text-on-surface transition-colors">Overview</button>
+<button class="px-8 py-4 text-xs font-bold uppercase tracking-widest text-primary border-b-2 border-primary bg-surface-container-high transition-colors">Open Ports</button>
+<button class="px-8 py-4 text-xs font-bold uppercase tracking-widest text-on-surface-variant border-b-2 border-transparent hover:text-on-surface transition-colors">Services</button>
+<button class="px-8 py-4 text-xs font-bold uppercase tracking-widest text-on-surface-variant border-b-2 border-transparent hover:text-on-surface transition-colors">Raw Output</button>
+</div>
+<div class="p-8">
+<div class="flex items-center justify-between mb-8">
+<h2 class="font-headline text-xl font-medium text-on-surface">Port Analysis Detail</h2>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-sm text-on-surface-variant" data-icon="search">search</span>
+<input class="bg-surface-container-low border-0 border-b-2 border-transparent focus:border-primary focus:ring-0 text-sm pl-10 pr-4 py-2 w-64 placeholder:text-outline-variant transition-all" placeholder="Filter ports..." type="text"/>
+</div>
+</div>
+<!-- Ports Table -->
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead>
+<tr class="bg-surface-container-lowest text-[10px] uppercase tracking-widest text-on-surface-variant">
+<th class="px-6 py-4 font-semibold">Port / Protocol</th>
+<th class="px-6 py-4 font-semibold">State</th>
+<th class="px-6 py-4 font-semibold">Service</th>
+<th class="px-6 py-4 font-semibold">Version</th>
+<th class="px-6 py-4 font-semibold">Risk Tag</th>
+<th class="px-6 py-4 font-semibold text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="text-sm font-mono divide-y divide-outline-variant/10">
+<!-- Row 1 -->
+<tr class="hover:bg-surface-container-highest/50 transition-colors">
+<td class="px-6 py-5">
+<span class="text-on-surface font-bold">22</span><span class="text-on-surface-variant">/tcp</span>
+</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-2">
+<div class="w-1.5 h-1.5 rounded-full bg-green-400"></div>
+<span class="text-on-surface">Open</span>
+</div>
+</td>
+<td class="px-6 py-5 text-on-surface-variant">ssh</td>
+<td class="px-6 py-5 text-on-surface-variant">OpenSSH 8.9p1</td>
+<td class="px-6 py-5">
+<span class="bg-primary/10 text-primary text-[10px] px-2 py-1 rounded-sm font-bold uppercase">Low Risk</span>
+</td>
+<td class="px-6 py-5 text-right">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-white" data-icon="more_vert">more_vert</button>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface-container-highest/50 transition-colors">
+<td class="px-6 py-5">
+<span class="text-on-surface font-bold">80</span><span class="text-on-surface-variant">/tcp</span>
+</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-2">
+<div class="w-1.5 h-1.5 rounded-full bg-green-400"></div>
+<span class="text-on-surface">Open</span>
+</div>
+</td>
+<td class="px-6 py-5 text-on-surface-variant">http</td>
+<td class="px-6 py-5 text-on-surface-variant">Apache httpd 2.4.52</td>
+<td class="px-6 py-5">
+<span class="bg-tertiary-container/10 text-tertiary text-[10px] px-2 py-1 rounded-sm font-bold uppercase">Outdated</span>
+</td>
+<td class="px-6 py-5 text-right">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-white" data-icon="more_vert">more_vert</button>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-surface-container-highest/50 transition-colors border-l-4 border-error/50">
+<td class="px-6 py-5">
+<span class="text-on-surface font-bold">443</span><span class="text-on-surface-variant">/tcp</span>
+</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-2">
+<div class="w-1.5 h-1.5 rounded-full bg-green-400"></div>
+<span class="text-on-surface">Open</span>
+</div>
+</td>
+<td class="px-6 py-5 text-on-surface-variant">ssl/http</td>
+<td class="px-6 py-5 text-on-surface-variant">Apache httpd 2.4.52</td>
+<td class="px-6 py-5">
+<span class="bg-error-container/20 text-error text-[10px] px-2 py-1 rounded-sm font-bold uppercase">Critical Vuln</span>
+</td>
+<td class="px-6 py-5 text-right">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-white" data-icon="more_vert">more_vert</button>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-surface-container-highest/50 transition-colors">
+<td class="px-6 py-5">
+<span class="text-on-surface font-bold">5432</span><span class="text-on-surface-variant">/tcp</span>
+</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-2">
+<div class="w-1.5 h-1.5 rounded-full bg-green-400"></div>
+<span class="text-on-surface">Open</span>
+</div>
+</td>
+<td class="px-6 py-5 text-on-surface-variant">postgresql</td>
+<td class="px-6 py-5 text-on-surface-variant">PostgreSQL 14.8</td>
+<td class="px-6 py-5">
+<span class="bg-primary/10 text-primary text-[10px] px-2 py-1 rounded-sm font-bold uppercase">Internal Only</span>
+</td>
+<td class="px-6 py-5 text-right">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-white" data-icon="more_vert">more_vert</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Footnote/Raw Preview -->
+<div class="mt-8 bg-surface-container-lowest p-4 rounded-sm ghost-border">
+<p class="text-[10px] font-mono text-on-surface-variant mb-2">LAST NMAP COMMAND EXECUTION:</p>
+<code class="text-xs font-mono text-primary/80">nmap -sV -sC -O -oA scan_results_192.168.1.104 192.168.1.104</code>
+</div>
+</div>
+</div>
+</main>
+<!-- Contextual FAB (Hidden on this transactional page per instructions) -->
+<!-- Suppression logic applied: Focused task page implies FAB removal -->
+</body></html>

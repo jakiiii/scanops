@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ScanOps - My Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {},
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    fontFamily: {
+                        "headline": ["Public Sans"],
+                        "body": ["Public Sans"],
+                        "label": ["Public Sans"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Public Sans', sans-serif; }
+        .material-symbols-outlined { font-size: 20px; }
+        .glass-card { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(8px); }
+        .dark .glass-card { background: rgba(15, 23, 42, 0.8); }
+    </style>
+</head>
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans antialiased">
+<!-- SideNavBar (Shared Component) -->
+<aside class="fixed left-0 top-0 h-full flex flex-col p-4 bg-slate-50 dark:bg-slate-950 h-screen w-64 border-r border-slate-200 dark:border-slate-800 z-50">
+<div class="mb-8 px-4 flex items-center gap-3">
+<div class="w-8 h-8 bg-blue-600 rounded flex items-center justify-center">
+<span class="material-symbols-outlined text-white" style="font-variation-settings: 'FILL' 1;">security</span>
+</div>
+<div>
+<h1 class="text-lg font-black tracking-tight text-blue-600">ScanOps</h1>
+<p class="text-[10px] text-slate-500 uppercase tracking-widest font-bold">v2.4.0</p>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-900/30 rounded-lg transition-all transform active:scale-95" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-300 hover:bg-slate-100 dark:hover:bg-slate-900 transition-all transform active:scale-95" href="#">
+<span class="material-symbols-outlined">history</span>
+<span class="text-sm font-medium">Scan History</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-300 hover:bg-slate-100 dark:hover:bg-slate-900 transition-all transform active:scale-95" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="text-sm font-medium">Metrics</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-300 hover:bg-slate-100 dark:hover:bg-slate-900 transition-all transform active:scale-95" href="#">
+<span class="material-symbols-outlined">pulse_alert</span>
+<span class="text-sm font-medium">Activity</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-300 hover:bg-slate-100 dark:hover:bg-slate-900 transition-all transform active:scale-95" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-sm font-medium">Settings</span>
+</a>
+</nav>
+<div class="mt-auto space-y-4">
+<button class="w-full py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-lg flex items-center justify-center gap-2 transition-colors">
+<span class="material-symbols-outlined">add</span>
+                New Scan
+            </button>
+<div class="pt-4 border-t border-slate-200 dark:border-slate-800">
+<a class="flex items-center gap-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-300 hover:bg-slate-100 dark:hover:bg-slate-900 transition-all transform active:scale-95" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="text-sm font-medium">Logout</span>
+</a>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="ml-64 min-h-screen">
+<!-- TopNavBar (Shared Component Integration) -->
+<header class="sticky top-0 z-40 flex justify-between items-center px-8 h-16 w-full bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800">
+<div class="flex items-center gap-4">
+<h2 class="text-xl font-bold text-slate-900 dark:text-white">My Dashboard</h2>
+<div class="h-6 w-px bg-slate-200 dark:bg-slate-700"></div>
+<div class="relative">
+<span class="absolute inset-y-0 left-3 flex items-center text-slate-400">
+<span class="material-symbols-outlined text-lg">search</span>
+</span>
+<input class="pl-10 pr-4 py-1.5 bg-slate-100 dark:bg-slate-800 border-none rounded-full text-sm w-64 focus:ring-2 focus:ring-blue-500" placeholder="Search scans, IPs, or assets..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-full transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-full transition-colors">
+<span class="material-symbols-outlined">help</span>
+</button>
+<div class="flex items-center gap-3 ml-2">
+<div class="text-right hidden sm:block">
+<p class="text-sm font-bold text-slate-900 dark:text-white leading-tight">Analyst Prime</p>
+<p class="text-xs text-slate-500">Senior Security Engineer</p>
+</div>
+<img alt="Analyst profile photo" class="w-10 h-10 rounded-full border-2 border-slate-200 dark:border-slate-700" data-alt="Close-up professional portrait of a tech analyst in a dark studio setting with soft blue rim lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBanpItb2wE7KMBLaAlx2J2jaUhTVjPrzqlDG-DEFvgmrKG5ako2ZrR7NTOBHFoN8qQFy6GpFMnFPT_svGIOY6lsbUQu6K1kfc1FZYY7-49__HXgHN5S53_rsRuMb6C45CLfdLmnKEMyUATsD0HDjEj-6sJULmUqBt2ckbQfdmfuJCcuh1el-ioGtBGAhL_aKFMpoARKVDiaICF2SHyJ3q_LxP9CIzSaciyzHzwMlU0HQwDmEsMmhQnwh-DsUAeG5ZowCT11IM2FQnl"/>
+</div>
+</div>
+</header>
+<div class="p-8 space-y-8">
+<!-- Stat Cards - Grid Layout -->
+<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+<!-- My Scans -->
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-blue-50 dark:bg-blue-900/20 rounded-lg text-blue-600 dark:text-blue-400">
+<span class="material-symbols-outlined">troubleshoot</span>
+</div>
+<span class="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-tighter">+4 today</span>
+</div>
+<p class="text-sm font-medium text-slate-500 dark:text-slate-400">My Scans</p>
+<h3 class="text-3xl font-extrabold text-slate-900 dark:text-white">48</h3>
+</div>
+<!-- My Running Jobs -->
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-emerald-50 dark:bg-emerald-900/20 rounded-lg text-emerald-600 dark:text-emerald-400">
+<span class="material-symbols-outlined">sync</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+<span class="text-xs font-bold text-emerald-600 uppercase tracking-tighter">Active</span>
+</div>
+</div>
+<p class="text-sm font-medium text-slate-500 dark:text-slate-400">My Running Jobs</p>
+<h3 class="text-3xl font-extrabold text-slate-900 dark:text-white">3</h3>
+</div>
+<!-- My Scheduled Scans -->
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-indigo-50 dark:bg-indigo-900/20 rounded-lg text-indigo-600 dark:text-indigo-400">
+<span class="material-symbols-outlined">calendar_today</span>
+</div>
+</div>
+<p class="text-sm font-medium text-slate-500 dark:text-slate-400">My Scheduled Scans</p>
+<h3 class="text-3xl font-extrabold text-slate-900 dark:text-white">12</h3>
+</div>
+<!-- My Alerts -->
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border-l-4 border-l-red-500 border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-red-50 dark:bg-red-900/20 rounded-lg text-red-600 dark:text-red-400">
+<span class="material-symbols-outlined">warning</span>
+</div>
+<span class="text-xs font-bold text-red-600 dark:text-red-400 uppercase tracking-tighter">Action Required</span>
+</div>
+<p class="text-sm font-medium text-slate-500 dark:text-slate-400">My Alerts</p>
+<h3 class="text-3xl font-extrabold text-red-600 dark:text-red-500">7</h3>
+</div>
+</section>
+<!-- Main Content Bento Grid -->
+<section class="grid grid-cols-12 gap-6">
+<!-- Left Column: Scan History & Metrics -->
+<div class="col-span-12 lg:col-span-8 space-y-6">
+<!-- My Scan History -->
+<div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden">
+<div class="px-6 py-4 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center">
+<h4 class="font-bold text-slate-900 dark:text-white">My Scan History</h4>
+<button class="text-xs font-bold text-blue-600 hover:underline">View All</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead class="bg-slate-50 dark:bg-slate-800/50">
+<tr>
+<th class="px-6 py-3 text-[11px] font-bold text-slate-500 uppercase tracking-wider">Target</th>
+<th class="px-6 py-3 text-[11px] font-bold text-slate-500 uppercase tracking-wider">Profile</th>
+<th class="px-6 py-3 text-[11px] font-bold text-slate-500 uppercase tracking-wider">Status</th>
+<th class="px-6 py-3 text-[11px] font-bold text-slate-500 uppercase tracking-wider">Timestamp</th>
+<th class="px-6 py-3 text-[11px] font-bold text-slate-500 uppercase tracking-wider text-right">Action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+<td class="px-6 py-4 text-sm font-mono font-medium text-slate-700 dark:text-slate-300">192.168.1.105</td>
+<td class="px-6 py-4 text-xs font-medium">Full Port Scan</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 uppercase">Completed</span>
+</td>
+<td class="px-6 py-4 text-xs text-slate-500">2023-11-24 14:32</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-400 hover:text-blue-600"><span class="material-symbols-outlined text-lg">more_vert</span></button>
+</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+<td class="px-6 py-4 text-sm font-mono font-medium text-slate-700 dark:text-slate-300">internal-db-01.local</td>
+<td class="px-6 py-4 text-xs font-medium">Service Detection</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 uppercase">Running</span>
+</td>
+<td class="px-6 py-4 text-xs text-slate-500">2023-11-24 16:10</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-400 hover:text-blue-600"><span class="material-symbols-outlined text-lg">more_vert</span></button>
+</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+<td class="px-6 py-4 text-sm font-mono font-medium text-slate-700 dark:text-slate-300">8.8.8.8</td>
+<td class="px-6 py-4 text-xs font-medium">OS Fingerprinting</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 uppercase">Failed</span>
+</td>
+<td class="px-6 py-4 text-xs text-slate-500">2023-11-23 09:15</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-400 hover:text-blue-600"><span class="material-symbols-outlined text-lg">more_vert</span></button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Personal Scan Trend Chart Widget -->
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm h-64 relative overflow-hidden">
+<div class="flex justify-between items-center mb-8">
+<div>
+<h4 class="font-bold text-slate-900 dark:text-white">Personal Scan Trend</h4>
+<p class="text-xs text-slate-500">Last 7 days of activity</p>
+</div>
+<div class="flex gap-2">
+<span class="px-2 py-1 bg-slate-100 dark:bg-slate-800 text-[10px] font-bold rounded">DAILY</span>
+</div>
+</div>
+<!-- Mockup Visual for Chart -->
+<div class="absolute bottom-0 left-0 w-full px-6 h-32 flex items-end justify-between">
+<div class="w-8 bg-blue-100 dark:bg-blue-900/30 rounded-t h-12"></div>
+<div class="w-8 bg-blue-200 dark:bg-blue-800/40 rounded-t h-20"></div>
+<div class="w-8 bg-blue-300 dark:bg-blue-700/50 rounded-t h-16"></div>
+<div class="w-8 bg-blue-400 dark:bg-blue-600/60 rounded-t h-24"></div>
+<div class="w-8 bg-blue-500 dark:bg-blue-500/70 rounded-t h-28"></div>
+<div class="w-8 bg-blue-600 dark:bg-blue-400/80 rounded-t h-32"></div>
+<div class="w-8 bg-blue-700 dark:bg-blue-300 rounded-t h-20"></div>
+</div>
+<div class="absolute bottom-16 left-6 right-6 border-b border-dashed border-slate-200 dark:border-slate-700 pointer-events-none"></div>
+<div class="absolute bottom-24 left-6 right-6 border-b border-dashed border-slate-200 dark:border-slate-700 pointer-events-none opacity-50"></div>
+</div>
+</div>
+<!-- Right Column: Notifications & Activity -->
+<div class="col-span-12 lg:col-span-4 space-y-6">
+<!-- Quick Actions Section -->
+<div class="bg-blue-600 dark:bg-blue-700 p-6 rounded-xl shadow-lg text-white">
+<h4 class="font-bold mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined">bolt</span>
+                            Quick Actions
+                        </h4>
+<div class="grid grid-cols-1 gap-3">
+<button class="w-full flex items-center justify-between px-4 py-3 bg-white/10 hover:bg-white/20 rounded-lg transition-colors group">
+<span class="text-sm font-bold">New Scan</span>
+<span class="material-symbols-outlined text-white/50 group-hover:text-white">add_circle</span>
+</button>
+<button class="w-full flex items-center justify-between px-4 py-3 bg-white/10 hover:bg-white/20 rounded-lg transition-colors group">
+<span class="text-sm font-bold">Schedule Scan</span>
+<span class="material-symbols-outlined text-white/50 group-hover:text-white">event</span>
+</button>
+<button class="w-full flex items-center justify-between px-4 py-3 bg-white/10 hover:bg-white/20 rounded-lg transition-colors group">
+<span class="text-sm font-bold">Manage Profiles</span>
+<span class="material-symbols-outlined text-white/50 group-hover:text-white">tune</span>
+</button>
+</div>
+</div>
+<!-- My Recent Notifications -->
+<div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
+<div class="px-6 py-4 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center">
+<h4 class="font-bold text-slate-900 dark:text-white">Notifications</h4>
+<span class="px-2 py-0.5 bg-red-500 text-white text-[10px] font-bold rounded-full">3 NEW</span>
+</div>
+<div class="p-2">
+<div class="p-3 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors cursor-pointer border-l-2 border-red-500 mb-1">
+<p class="text-xs font-bold text-slate-800 dark:text-white">Critical vulnerability found on 10.0.0.45</p>
+<p class="text-[10px] text-slate-500 mt-1">14 mins ago • Scan #4829</p>
+</div>
+<div class="p-3 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors cursor-pointer mb-1">
+<p class="text-xs font-medium text-slate-800 dark:text-slate-300">Weekly report ready for download</p>
+<p class="text-[10px] text-slate-500 mt-1">2 hours ago</p>
+</div>
+<div class="p-3 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors cursor-pointer opacity-70">
+<p class="text-xs font-medium text-slate-800 dark:text-slate-300">System maintenance tomorrow at 02:00 UTC</p>
+<p class="text-[10px] text-slate-500 mt-1">5 hours ago</p>
+</div>
+</div>
+</div>
+<!-- Personal Activity Feed -->
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<h4 class="font-bold text-slate-900 dark:text-white mb-6">Activity Feed</h4>
+<div class="relative space-y-6 before:absolute before:left-2 before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-100 dark:before:bg-slate-800">
+<div class="relative pl-8">
+<div class="absolute left-0 top-1 w-4 h-4 bg-blue-500 rounded-full border-2 border-white dark:border-slate-900 z-10"></div>
+<p class="text-xs font-bold text-slate-800 dark:text-white leading-tight">Started a scan on 192.168.1.1</p>
+<p class="text-[10px] text-slate-500">Today, 10:45 AM</p>
+</div>
+<div class="relative pl-8">
+<div class="absolute left-0 top-1 w-4 h-4 bg-slate-300 dark:bg-slate-700 rounded-full border-2 border-white dark:border-slate-900 z-10"></div>
+<p class="text-xs font-medium text-slate-800 dark:text-slate-300 leading-tight">Generated a weekly report</p>
+<p class="text-[10px] text-slate-500">Yesterday, 4:20 PM</p>
+</div>
+<div class="relative pl-8">
+<div class="absolute left-0 top-1 w-4 h-4 bg-emerald-500 rounded-full border-2 border-white dark:border-slate-900 z-10"></div>
+<p class="text-xs font-medium text-slate-800 dark:text-slate-300 leading-tight">Completed target audit for 'Project Zeta'</p>
+<p class="text-[10px] text-slate-500">Nov 22, 11:30 AM</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Bottom Row: Profiles and Recent Targets -->
+<section class="grid grid-cols-12 gap-6">
+<!-- My Most Used Profiles -->
+<div class="col-span-12 md:col-span-6 bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<h4 class="font-bold text-slate-900 dark:text-white mb-4">My Most Used Profiles</h4>
+<div class="flex flex-wrap gap-3">
+<div class="flex items-center gap-3 px-4 py-3 bg-slate-50 dark:bg-slate-800/50 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg cursor-pointer border border-slate-100 dark:border-slate-800 transition-all">
+<span class="material-symbols-outlined text-blue-600">rocket_launch</span>
+<span class="text-sm font-bold">Full Port Scan</span>
+</div>
+<div class="flex items-center gap-3 px-4 py-3 bg-slate-50 dark:bg-slate-800/50 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg cursor-pointer border border-slate-100 dark:border-slate-800 transition-all">
+<span class="material-symbols-outlined text-indigo-600">lan</span>
+<span class="text-sm font-bold">Service Detection</span>
+</div>
+<div class="flex items-center gap-3 px-4 py-3 bg-slate-50 dark:bg-slate-800/50 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg cursor-pointer border border-slate-100 dark:border-slate-800 transition-all">
+<span class="material-symbols-outlined text-emerald-600">fingerprint</span>
+<span class="text-sm font-bold">OS Fingerprinting</span>
+</div>
+<button class="flex items-center gap-2 px-4 py-3 text-blue-600 border border-dashed border-blue-200 dark:border-blue-800 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/10 transition-colors">
+<span class="material-symbols-outlined">add</span>
+<span class="text-xs font-bold uppercase">Add New</span>
+</button>
+</div>
+</div>
+<!-- My Recent Targets -->
+<div class="col-span-12 md:col-span-6 bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<h4 class="font-bold text-slate-900 dark:text-white mb-4">My Recent Targets</h4>
+<div class="space-y-3">
+<div class="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-slate-100 dark:border-slate-700/50">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 flex items-center justify-center bg-white dark:bg-slate-700 rounded text-slate-400">
+<span class="material-symbols-outlined text-sm">dns</span>
+</div>
+<div>
+<p class="text-sm font-mono font-bold text-slate-700 dark:text-slate-200">10.0.0.12</p>
+<p class="text-[10px] text-slate-500 uppercase font-medium">Production DMZ</p>
+</div>
+</div>
+<span class="text-[10px] font-bold text-slate-400">Last scanned: 2h ago</span>
+</div>
+<div class="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-slate-100 dark:border-slate-700/50">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 flex items-center justify-center bg-white dark:bg-slate-700 rounded text-slate-400">
+<span class="material-symbols-outlined text-sm">public</span>
+</div>
+<div>
+<p class="text-sm font-mono font-bold text-slate-700 dark:text-slate-200">api-stage.scanops.io</p>
+<p class="text-[10px] text-slate-500 uppercase font-medium">Staging Environment</p>
+</div>
+</div>
+<span class="text-[10px] font-bold text-slate-400">Last scanned: 5h ago</span>
+</div>
+</div>
+</div>
+</section>
+</div>
+<footer class="p-8 mt-8 border-t border-slate-200 dark:border-slate-800 text-center">
+<p class="text-xs text-slate-500 font-medium tracking-tight">ScanOps Security Intelligence Platform © 2023. Unauthorized access is strictly prohibited.</p>
+</footer>
+</main>
+</body></html>

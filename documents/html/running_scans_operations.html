@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Running Scans | Sentinel Command</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary-container": "#a9bad3",
+                    "outline": "#8c909f",
+                    "background": "#0c1324",
+                    "surface-container-highest": "#2e3447",
+                    "surface": "#0c1324",
+                    "on-tertiary": "#502400",
+                    "surface-container-lowest": "#070d1f",
+                    "on-tertiary-container": "#461f00",
+                    "tertiary-fixed-dim": "#ffb786",
+                    "on-secondary-fixed": "#0b1c30",
+                    "on-primary-fixed-variant": "#004395",
+                    "surface-container-low": "#151b2d",
+                    "secondary-fixed-dim": "#b7c8e1",
+                    "surface-container-high": "#23293c",
+                    "secondary": "#b7c8e1",
+                    "on-primary-fixed": "#001a42",
+                    "tertiary": "#ffb786",
+                    "primary-container": "#4d8eff",
+                    "on-error-container": "#ffdad6",
+                    "on-error": "#690005",
+                    "tertiary-fixed": "#ffdcc6",
+                    "primary-fixed": "#d8e2ff",
+                    "inverse-primary": "#005ac2",
+                    "on-primary": "#002e6a",
+                    "secondary-fixed": "#d3e4fe",
+                    "error-container": "#93000a",
+                    "secondary-container": "#3a4a5f",
+                    "inverse-on-surface": "#2a3043",
+                    "error": "#ffb4ab",
+                    "tertiary-container": "#df7412",
+                    "surface-tint": "#adc6ff",
+                    "on-secondary": "#213145",
+                    "on-primary-container": "#00285d",
+                    "surface-container": "#191f31",
+                    "primary-fixed-dim": "#adc6ff",
+                    "surface-dim": "#0c1324",
+                    "surface-variant": "#2e3447",
+                    "surface-bright": "#33394c",
+                    "on-tertiary-fixed": "#311400",
+                    "on-surface": "#dce1fb",
+                    "on-background": "#dce1fb",
+                    "on-secondary-fixed-variant": "#38485d",
+                    "inverse-surface": "#dce1fb",
+                    "on-tertiary-fixed-variant": "#723600",
+                    "outline-variant": "#424754",
+                    "on-surface-variant": "#c2c6d6",
+                    "primary": "#adc6ff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "fontFamily": {
+                    "headline": ["Space Grotesk"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; background-color: #0c1324; }
+        .font-headline { font-family: 'Space Grotesk', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .glass-panel { background: rgba(51, 57, 76, 0.6); backdrop-filter: blur(24px); }
+        .status-pulse { animation: pulse-aura 2s infinite; }
+        @keyframes pulse-aura {
+            0% { box-shadow: 0 0 0 0 rgba(173, 198, 255, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(173, 198, 255, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(173, 198, 255, 0); }
+        }
+    </style>
+</head>
+<body class="text-on-surface antialiased flex min-h-screen">
+<!-- SideNavBar (Authority: JSON) -->
+<aside class="hidden md:flex h-screen w-64 left-0 sticky bg-[#0c1324] flex-col border-r border-slate-800/20 font-['Inter'] text-sm">
+<div class="p-6">
+<h1 class="text-lg font-black text-white tracking-tighter">Sentinel Command</h1>
+<div class="mt-2">
+<p class="text-xs font-bold text-primary uppercase tracking-widest">Operations</p>
+<p class="text-[10px] text-on-surface-variant">Active Session: Alpha-9</p>
+</div>
+</div>
+<nav class="flex-1 px-4 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-500 hover:bg-[#151b2d] hover:text-slate-200 transition-all duration-150" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="radar">radar</span>
+<span>Live Monitoring</span>
+</a>
+<!-- Active Tab: Scans/Scan History mapping -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg bg-[#2e3447] text-white font-semibold transition-all duration-150" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="history">history</span>
+<span>Scan History</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-500 hover:bg-[#151b2d] hover:text-slate-200 transition-all duration-150" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="dns">dns</span>
+<span>Node Health</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-500 hover:bg-[#151b2d] hover:text-slate-200 transition-all duration-150" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="database">database</span>
+<span>Vulnerability DB</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-500 hover:bg-[#151b2d] hover:text-slate-200 transition-all duration-150" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="group">group</span>
+<span>Team Access</span>
+</a>
+</nav>
+<div class="p-4 space-y-4">
+<button class="w-full py-2.5 px-4 bg-primary text-on-primary font-bold rounded-md flex items-center justify-center gap-2 hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined text-sm" data-icon="add">add</span>
+                New Scan
+            </button>
+<div class="pt-4 border-t border-outline-variant/20 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 hover:text-slate-200" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="help_outline">help_outline</span>
+<span>Support</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 hover:text-slate-200" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="terminal">terminal</span>
+<span>Terminal</span>
+</a>
+</div>
+</div>
+</aside>
+<div class="flex-1 flex flex-col min-w-0">
+<!-- TopNavBar (Authority: JSON) -->
+<header class="w-full top-0 sticky z-40 bg-[#0c1324] flex justify-between items-center px-6 h-16 w-full font-['Space_Grotesk'] tracking-tight">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-4 bg-[#151b2d] rounded-full px-4 py-1.5 border border-outline-variant/10">
+<span class="material-symbols-outlined text-on-surface-variant text-lg" data-icon="search">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-sm w-48 text-on-surface" placeholder="Global node search..." type="text"/>
+</div>
+<nav class="hidden lg:flex items-center gap-6 text-sm font-medium">
+<a class="text-slate-400 hover:text-blue-300 transition-colors" href="#">Dashboard</a>
+<a class="text-blue-400 border-b-2 border-blue-500 pb-1 hover:text-blue-300 transition-colors" href="#">Scans</a>
+<a class="text-slate-400 hover:text-blue-300 transition-colors" href="#">Assets</a>
+<a class="text-slate-400 hover:text-blue-300 transition-colors" href="#">Reports</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+<div class="h-8 w-8 rounded-full overflow-hidden border border-primary/20">
+<img class="w-full h-full object-cover" data-alt="Close-up portrait of a professional male security operator in a dimly lit high-tech command center" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA69BpxrJIfSrIPhrzHHWTMQ_53vS6EDe8YT0HeI14yci_DvaQj4yZysXEjVlqyd34pwfsZOmHHTlNJJKCrSXd-f7Ls1qk_3wGxJfEcXrzxeypxgtPNHfMLPIF9yLTFYuhxzgcDkCc5jz63EASlZjIc4GmX1MQKtSwzAxCAd49UVF71cmSKymnLV0j4LXtmb649g23Ml5nIZVJVZkhzArw-fRz_0ZTC8ASR_yaBPT9JRu1FlxUaD6NXDY6A-cBTanHQfJYc7LHDyPIB"/>
+</div>
+</div>
+</header>
+<main class="p-8 space-y-8 flex-1 overflow-y-auto bg-surface">
+<!-- Hero Header Section -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div class="space-y-1">
+<div class="flex items-center gap-3">
+<h2 class="text-5xl font-headline font-bold tracking-tighter text-on-surface">Running Scans</h2>
+<div class="flex items-center gap-2 bg-primary/10 border border-primary/20 px-3 py-1 rounded-full">
+<span class="w-2 h-2 rounded-full bg-primary status-pulse"></span>
+<span class="text-[10px] font-bold uppercase tracking-widest text-primary">Live Refresh</span>
+</div>
+</div>
+<p class="text-on-surface-variant font-body">Operational overview of all active execution pipelines across globally distributed nodes.</p>
+</div>
+<div class="flex gap-2">
+<div class="bg-surface-container-low p-4 rounded-lg flex flex-col min-w-[120px]">
+<span class="text-[10px] uppercase tracking-widest text-on-surface-variant font-bold">Active</span>
+<span class="text-2xl font-headline font-bold text-primary">24</span>
+</div>
+<div class="bg-surface-container-low p-4 rounded-lg flex flex-col min-w-[120px]">
+<span class="text-[10px] uppercase tracking-widest text-on-surface-variant font-bold">Queued</span>
+<span class="text-2xl font-headline font-bold text-tertiary">12</span>
+</div>
+</div>
+</div>
+<!-- Tactical Search & Filters -->
+<div class="bg-surface-container-low p-2 rounded-xl flex flex-wrap gap-4 items-center">
+<div class="flex-1 min-w-[280px] bg-surface-container-lowest rounded-lg flex items-center px-4 py-2 border border-outline-variant/10">
+<span class="material-symbols-outlined text-on-surface-variant mr-3" data-icon="filter_list">filter_list</span>
+<input class="bg-transparent border-none focus:ring-0 text-sm w-full text-on-surface" placeholder="Filter by Target IP, Worker ID, or Profile..." type="text"/>
+</div>
+<div class="flex gap-2">
+<select class="bg-surface-container-highest border-none text-xs font-bold uppercase tracking-wider px-4 py-2.5 rounded-lg focus:ring-primary text-on-surface">
+<option>All Statuses</option>
+<option>Running</option>
+<option>Queued</option>
+<option>Failed</option>
+<option>Completed</option>
+</select>
+<select class="bg-surface-container-highest border-none text-xs font-bold uppercase tracking-wider px-4 py-2.5 rounded-lg focus:ring-primary text-on-surface">
+<option>All Analysts</option>
+<option>Operator Alpha</option>
+<option>Operator Beta</option>
+</select>
+<select class="bg-surface-container-highest border-none text-xs font-bold uppercase tracking-wider px-4 py-2.5 rounded-lg focus:ring-primary text-on-surface">
+<option>All Worker Nodes</option>
+<option>Node-US-East-1</option>
+<option>Node-EU-West-2</option>
+</select>
+</div>
+<button class="bg-surface-container-highest p-2.5 rounded-lg text-on-surface hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="refresh">refresh</span>
+</button>
+</div>
+<!-- Primary Data Table (Bento Style Layout) -->
+<div class="overflow-x-auto">
+<table class="w-full border-separate border-spacing-y-3">
+<thead>
+<tr class="text-left">
+<th class="px-6 pb-2 text-[10px] uppercase tracking-widest text-outline font-bold">Scan ID</th>
+<th class="px-6 pb-2 text-[10px] uppercase tracking-widest text-outline font-bold">Target</th>
+<th class="px-6 pb-2 text-[10px] uppercase tracking-widest text-outline font-bold">Profile</th>
+<th class="px-6 pb-2 text-[10px] uppercase tracking-widest text-outline font-bold">Started At</th>
+<th class="px-6 pb-2 text-[10px] uppercase tracking-widest text-outline font-bold">Progress</th>
+<th class="px-6 pb-2 text-[10px] uppercase tracking-widest text-outline font-bold">Status</th>
+<th class="px-6 pb-2 text-[10px] uppercase tracking-widest text-outline font-bold">Actions</th>
+</tr>
+</thead>
+<tbody>
+<!-- Row 1: Running -->
+<tr class="group hover:bg-surface-container-high transition-colors">
+<td class="bg-surface-container-low px-6 py-5 rounded-l-xl border-y border-l border-outline-variant/10">
+<span class="font-headline font-bold text-primary">SCN-8821</span>
+</td>
+<td class="bg-surface-container-low px-6 py-5 border-y border-outline-variant/10">
+<div class="flex flex-col">
+<span class="font-bold text-on-surface">192.168.1.105</span>
+<span class="text-[10px] text-on-surface-variant font-medium">prod-db-cluster-01</span>
+</div>
+</td>
+<td class="bg-surface-container-low px-6 py-5 border-y border-outline-variant/10">
+<span class="bg-secondary-container/30 text-secondary px-2 py-1 rounded text-[10px] font-bold uppercase tracking-tight">Full Audit</span>
+</td>
+<td class="bg-surface-container-low px-6 py-5 border-y border-outline-variant/10 text-xs font-mono text-on-surface-variant">
+                                14:02:45 UTC
+                            </td>
+<td class="bg-surface-container-low px-6 py-5 border-y border-outline-variant/10 min-w-[200px]">
+<div class="space-y-1.5">
+<div class="flex justify-between text-[10px] font-bold">
+<span class="text-primary">68%</span>
+<span class="text-on-surface-variant">04:12 elapsed</span>
+</div>
+<div class="h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary shadow-[0_0_12px_rgba(173,198,255,0.6)]" style="width: 68%"></div>
+</div>
+</div>
+</td>
+<td class="bg-surface-container-low px-6 py-5 border-y border-outline-variant/10">
+<div class="flex items-center gap-2 text-primary font-bold text-xs">
+<span class="material-symbols-outlined text-sm" data-icon="sync">sync</span>
+                                    RUNNING
+                                </div>
+</td>
+<td class="bg-surface-container-low px-6 py-5 rounded-r-xl border-y border-r border-outline-variant/10">
+<div class="flex gap-2">
+<button class="p-2 bg-surface-container-highest rounded hover:text-error transition-colors">
+<span class="material-symbols-outlined text-lg" data-icon="cancel">cancel</span>
+</button>
+<button class="p-2 bg-surface-container-highest rounded hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-lg" data-icon="visibility">visibility</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 2: Queued -->
+<tr class="group hover:bg-surface-container-high transition-colors">
+<td class="bg-surface-container-low px-6 py-5 rounded-l-xl border-y border-l border-outline-variant/10">
+<span class="font-headline font-bold text-on-surface">SCN-8822</span>
+</td>
+<td class="bg-surface-container-low px-6 py-5 border-y border-outline-variant/10">
+<div class="flex flex-col">
+<span class="font-bold text-on-surface">10.0.4.12</span>
+<span class="text-[10px] text-on-surface-variant font-medium">internal-api-gateway</span>
+</div>
+</td>
+<td class="bg-surface-container-low px-6 py-5 border-y border-outline-variant/10">
+<span class="bg-secondary-container/30 text-secondary px-2 py-1 rounded text-[10px] font-bold uppercase tracking-tight">Quick Recon</span>
+</td>
+<td class="bg-surface-container-low px-6 py-5 border-y border-outline-variant/10 text-xs font-mono text-on-surface-variant">
+                                14:15:00 UTC
+                            </td>
+<td class="bg-surface-container-low px-6 py-5 border-y border-outline-variant/10 min-w-[200px]">
+<div class="space-y-1.5">
+<div class="flex justify-between text-[10px] font-bold">
+<span class="text-tertiary">0%</span>
+<span class="text-on-surface-variant">Pending Node</span>
+</div>
+<div class="h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-tertiary/20" style="width: 5%"></div>
+</div>
+</div>
+</td>
+<td class="bg-surface-container-low px-6 py-5 border-y border-outline-variant/10">
+<div class="flex items-center gap-2 text-tertiary font-bold text-xs">
+<span class="material-symbols-outlined text-sm" data-icon="schedule">schedule</span>
+                                    QUEUED
+                                </div>
+</td>
+<td class="bg-surface-container-low px-6 py-5 rounded-r-xl border-y border-r border-outline-variant/10">
+<div class="flex gap-2">
+<button class="p-2 bg-surface-container-highest rounded hover:text-error transition-colors">
+<span class="material-symbols-outlined text-lg" data-icon="cancel">cancel</span>
+</button>
+<button class="p-2 bg-surface-container-highest rounded hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-lg" data-icon="visibility">visibility</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 3: Failed -->
+<tr class="group hover:bg-surface-container-high transition-colors">
+<td class="bg-surface-container-low px-6 py-5 rounded-l-xl border-y border-l border-outline-variant/10">
+<span class="font-headline font-bold text-error">SCN-8819</span>
+</td>
+<td class="bg-surface-container-low px-6 py-5 border-y border-outline-variant/10">
+<div class="flex flex-col">
+<span class="font-bold text-on-surface">vault.secure.io</span>
+<span class="text-[10px] text-on-surface-variant font-medium">external-facing-vault</span>
+</div>
+</td>
+<td class="bg-surface-container-low px-6 py-5 border-y border-outline-variant/10">
+<span class="bg-secondary-container/30 text-secondary px-2 py-1 rounded text-[10px] font-bold uppercase tracking-tight">Full Audit</span>
+</td>
+<td class="bg-surface-container-low px-6 py-5 border-y border-outline-variant/10 text-xs font-mono text-on-surface-variant">
+                                13:45:12 UTC
+                            </td>
+<td class="bg-surface-container-low px-6 py-5 border-y border-outline-variant/10 min-w-[200px]">
+<div class="space-y-1.5">
+<div class="flex justify-between text-[10px] font-bold">
+<span class="text-error">Failed at 42%</span>
+<span class="text-error/60">Timeout Error</span>
+</div>
+<div class="h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-error" style="width: 42%"></div>
+</div>
+</div>
+</td>
+<td class="bg-surface-container-low px-6 py-5 border-y border-outline-variant/10">
+<div class="flex items-center gap-2 text-error font-bold text-xs">
+<span class="material-symbols-outlined text-sm" data-icon="error_outline">error_outline</span>
+                                    FAILED
+                                </div>
+</td>
+<td class="bg-surface-container-low px-6 py-5 rounded-r-xl border-y border-r border-outline-variant/10">
+<div class="flex gap-2">
+<button class="p-2 bg-surface-container-highest rounded hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-lg" data-icon="refresh">refresh</span>
+</button>
+<button class="p-2 bg-surface-container-highest rounded hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-lg" data-icon="visibility">visibility</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 4: Running -->
+<tr class="group hover:bg-surface-container-high transition-colors">
+<td class="bg-surface-container-low px-6 py-5 rounded-l-xl border-y border-l border-outline-variant/10">
+<span class="font-headline font-bold text-primary">SCN-8824</span>
+</td>
+<td class="bg-surface-container-low px-6 py-5 border-y border-outline-variant/10">
+<div class="flex flex-col">
+<span class="font-bold text-on-surface">172.16.88.42</span>
+<span class="text-[10px] text-on-surface-variant font-medium">stg-app-node-04</span>
+</div>
+</td>
+<td class="bg-surface-container-low px-6 py-5 border-y border-outline-variant/10">
+<span class="bg-secondary-container/30 text-secondary px-2 py-1 rounded text-[10px] font-bold uppercase tracking-tight">Port Scan</span>
+</td>
+<td class="bg-surface-container-low px-6 py-5 border-y border-outline-variant/10 text-xs font-mono text-on-surface-variant">
+                                14:18:22 UTC
+                            </td>
+<td class="bg-surface-container-low px-6 py-5 border-y border-outline-variant/10 min-w-[200px]">
+<div class="space-y-1.5">
+<div class="flex justify-between text-[10px] font-bold">
+<span class="text-primary">12%</span>
+<span class="text-on-surface-variant">00:45 elapsed</span>
+</div>
+<div class="h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary shadow-[0_0_12px_rgba(173,198,255,0.6)]" style="width: 12%"></div>
+</div>
+</div>
+</td>
+<td class="bg-surface-container-low px-6 py-5 border-y border-outline-variant/10">
+<div class="flex items-center gap-2 text-primary font-bold text-xs">
+<span class="material-symbols-outlined text-sm" data-icon="sync">sync</span>
+                                    RUNNING
+                                </div>
+</td>
+<td class="bg-surface-container-low px-6 py-5 rounded-r-xl border-y border-r border-outline-variant/10">
+<div class="flex gap-2">
+<button class="p-2 bg-surface-container-highest rounded hover:text-error transition-colors">
+<span class="material-symbols-outlined text-lg" data-icon="cancel">cancel</span>
+</button>
+<button class="p-2 bg-surface-container-highest rounded hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-lg" data-icon="visibility">visibility</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Footer Stats / Meta -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="bg-surface-container-low p-6 rounded-xl space-y-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary" data-icon="hub">hub</span>
+<h4 class="font-headline font-bold text-on-surface">Worker Utilization</h4>
+</div>
+<div class="flex items-end gap-4">
+<div class="flex-1 space-y-2">
+<div class="flex justify-between text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">
+<span>Global Capacity</span>
+<span>82%</span>
+</div>
+<div class="h-2 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary" style="width: 82%"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-low p-6 rounded-xl space-y-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-tertiary" data-icon="speed">speed</span>
+<h4 class="font-headline font-bold text-on-surface">Average Throughput</h4>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="text-3xl font-headline font-bold text-on-surface">1,402</span>
+<span class="text-xs font-medium text-on-surface-variant">requests/sec</span>
+</div>
+</div>
+<div class="bg-surface-container-low p-6 rounded-xl space-y-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-error" data-icon="warning">warning</span>
+<h4 class="font-headline font-bold text-on-surface">Failure Rate (1h)</h4>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="text-3xl font-headline font-bold text-error">0.42%</span>
+<span class="text-xs font-medium text-on-surface-variant">System-wide</span>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- Responsive Mobile Navigation (Authority: JSON) -->
+<nav class="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-surface-container-low border-t border-outline-variant/10 flex items-center justify-around z-50">
+<button class="flex flex-col items-center gap-1 text-primary">
+<span class="material-symbols-outlined" data-icon="radar">radar</span>
+<span class="text-[10px] font-bold uppercase">Live</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-slate-400">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+<span class="text-[10px] font-bold uppercase">History</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-slate-400">
+<span class="material-symbols-outlined" data-icon="add_circle">add_circle</span>
+<span class="text-[10px] font-bold uppercase">Scan</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-slate-400">
+<span class="material-symbols-outlined" data-icon="dns">dns</span>
+<span class="text-[10px] font-bold uppercase">Nodes</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-slate-400">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="text-[10px] font-bold uppercase">Config</span>
+</button>
+</nav>
+</body></html>

@@ -1,0 +1,13 @@
+{% load scanops_tags %}
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+    {% for service in services %}
+        <div class="scanops-panel p-5 border-l-4 {% if service.status == 'healthy' %}border-l-emerald-500{% elif service.status == 'warning' %}border-l-amber-500{% elif service.status == 'error' %}border-l-rose-500{% else %}border-l-slate-500{% endif %}">
+            <div class="flex items-center justify-between gap-3">
+                <p class="text-xs uppercase tracking-widest text-slate-500">{{ service.service_name|title|cut:"_" }}</p>
+                <span class="px-2 py-1 rounded text-[11px] {{ service.status|status_badge }}">{{ service.status|title }}</span>
+            </div>
+            <p class="text-sm text-slate-300 mt-3">{{ service.summary }}</p>
+            <p class="text-[11px] text-slate-500 mt-3">Checked {{ service.checked_at|date:"Y-m-d H:i:s" }}</p>
+        </div>
+    {% endfor %}
+</div>

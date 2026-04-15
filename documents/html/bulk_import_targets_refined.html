@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Bulk Import Targets | CyberSentinel</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {},
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    fontFamily: {
+                        "headline": ["Public Sans", "sans-serif"],
+                        "body": ["Public Sans", "sans-serif"],
+                        "label": ["Public Sans", "sans-serif"],
+                        "mono": ["JetBrains Mono", "monospace"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Public Sans', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 antialiased min-h-screen">
+<!-- TopNavBar -->
+<nav class="bg-slate-900 dark:bg-black text-slate-400 font-sans antialiased text-sm flex justify-between items-center h-14 px-6 w-full z-50 fixed top-0 border-b border-slate-800 flat no shadows">
+<div class="flex items-center gap-8">
+<span class="text-xl font-mono font-bold tracking-tighter text-white">CyberSentinel</span>
+<div class="hidden md:flex items-center gap-6">
+<a class="text-slate-400 hover:bg-slate-800 transition-colors cursor-pointer active:opacity-80 px-2 py-1" href="#">Dashboard</a>
+<a class="text-blue-400 border-b-2 border-blue-400 transition-colors cursor-pointer active:opacity-80 px-2 py-1" href="#">Targets</a>
+<a class="text-slate-400 hover:bg-slate-800 transition-colors cursor-pointer active:opacity-80 px-2 py-1" href="#">Scans</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative flex items-center bg-slate-800 rounded px-3 py-1.5 w-64 group focus-within:ring-1 ring-blue-500">
+<span class="material-symbols-outlined text-sm mr-2" data-icon="search">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-xs text-white w-full" placeholder="Quick search..." type="text"/>
+</div>
+<div class="flex gap-2">
+<button class="p-2 hover:bg-slate-800 transition-colors text-slate-400 rounded"><span class="material-symbols-outlined" data-icon="notifications">notifications</span></button>
+<button class="p-2 hover:bg-slate-800 transition-colors text-slate-400 rounded"><span class="material-symbols-outlined" data-icon="help">help</span></button>
+<button class="p-2 hover:bg-slate-800 transition-colors text-slate-400 rounded"><span class="material-symbols-outlined" data-icon="settings">settings</span></button>
+</div>
+<img alt="User profile" class="w-8 h-8 rounded-full border border-slate-700" data-alt="professional portrait of a cybersecurity engineer with focused expression in a dimly lit tech environment" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD0xf7ZYNMUfqDaK0LdQ9UYaGiSN73GFw8XwEBL5l0uBtq29dodvcrs57uHbwbpHMJDF0bvo4pTXs9y20qH5qUuI7xk1QUeD6Dvo4yqpTQN2FgXl7RgmfLbCpUKxWY1957Fuk2rliSbj-nvWUTQZ2aaR0mwbMk-HSUmZxn-XXtJFJVHVIw33l4Xh0v5dJSu6hjDqwFB2QigZtAK6VTvTz6Msi5N9akTCMT0ZjvNTtumaURg4up2ET2nKRLMDoEyjHUITvIkXPJ8DXZ3"/>
+</div>
+</nav>
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-14 bottom-0 flex flex-col w-64 z-40 bg-slate-950 dark:bg-slate-950 border-r border-slate-800 font-mono text-xs uppercase tracking-widest flat no shadows">
+<div class="p-4 border-b border-slate-900">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded bg-blue-500/10 flex items-center justify-center border border-blue-500/20">
+<span class="material-symbols-outlined text-blue-400" data-icon="security">security</span>
+</div>
+<div>
+<div class="text-slate-200 font-bold">Operations</div>
+<div class="text-[10px] text-slate-500">Vulnerability Mgmt</div>
+</div>
+</div>
+</div>
+<nav class="flex-1 py-4">
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-slate-300 hover:bg-slate-900 transition-all duration-150 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-slate-300 hover:bg-slate-900 transition-all duration-150 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="radar">radar</span>
+<span>Scans</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 bg-blue-500/10 text-blue-400 border-l-4 border-blue-500 transition-all duration-150 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="target">target</span>
+<span>Targets</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-slate-300 hover:bg-slate-900 transition-all duration-150 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+<span>Assets</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-slate-300 hover:bg-slate-900 transition-all duration-150 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="assessment">assessment</span>
+<span>Reports</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-slate-300 hover:bg-slate-900 transition-all duration-150 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span>Team</span>
+</a>
+</nav>
+<div class="p-4 border-t border-slate-900">
+<button class="w-full bg-blue-600 hover:bg-blue-500 text-white py-2.5 rounded font-bold transition-colors flex items-center justify-center gap-2 mb-4">
+<span class="material-symbols-outlined text-sm" data-icon="add">add</span>
+                New Scan
+            </button>
+<div class="flex flex-col gap-1">
+<a class="flex items-center gap-3 px-2 py-2 text-slate-500 hover:text-slate-300 hover:bg-slate-900 transition-all duration-150 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="menu_book">menu_book</span>
+<span>Docs</span>
+</a>
+<a class="flex items-center gap-3 px-2 py-2 text-slate-500 hover:text-slate-300 hover:bg-slate-900 transition-all duration-150 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="support_agent">support_agent</span>
+<span>Support</span>
+</a>
+</div>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="ml-64 mt-14 p-8">
+<!-- Breadcrumbs & Title -->
+<div class="mb-8">
+<nav class="flex text-xs text-slate-500 gap-2 items-center mb-2 font-mono uppercase tracking-wider">
+<a class="hover:text-blue-500 transition-colors" href="#">Targets</a>
+<span class="material-symbols-outlined text-xs" data-icon="chevron_right">chevron_right</span>
+<span class="text-slate-400">Bulk Import</span>
+</nav>
+<h1 class="text-3xl font-extrabold tracking-tight text-slate-900">Bulk Import Targets</h1>
+</div>
+<div class="grid grid-cols-12 gap-8">
+<!-- Left Column: Input Methods -->
+<div class="col-span-12 lg:col-span-8 space-y-6">
+<!-- Tabs -->
+<div class="bg-white border border-slate-200 rounded-lg overflow-hidden shadow-sm">
+<div class="flex border-b border-slate-100">
+<button class="px-6 py-4 text-sm font-semibold border-b-2 border-blue-600 text-blue-600 bg-blue-50/30">
+                            Paste Targets
+                        </button>
+<button class="px-6 py-4 text-sm font-semibold text-slate-500 hover:text-slate-700 hover:bg-slate-50 border-b-2 border-transparent transition-colors">
+                            Upload File
+                        </button>
+</div>
+<!-- Paste View -->
+<div class="p-6">
+<label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">IP Addresses, Hostnames, or CIDR Ranges</label>
+<div class="relative font-mono">
+<textarea class="w-full h-64 p-4 bg-slate-50 border border-slate-200 rounded text-sm text-slate-800 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none resize-none leading-relaxed" placeholder="e.g.
+192.168.1.1
+example.com
+10.0.0.0/24"></textarea>
+<div class="absolute bottom-4 right-4 bg-white/80 backdrop-blur px-2 py-1 rounded border border-slate-200 text-[10px] text-slate-400">
+                                142 entries detected
+                            </div>
+</div>
+<div class="mt-4 flex items-center justify-between">
+<span class="text-xs text-slate-500 italic flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="info">info</span>
+                                One target per line. Supports IPv4, IPv6, and standard domain names.
+                            </span>
+<div class="flex gap-3">
+<button class="px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-100 rounded transition-colors">Cancel</button>
+<button class="px-6 py-2 text-sm font-bold bg-slate-900 text-white rounded hover:bg-slate-800 transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="search_check">search_check</span>
+                                    Validate
+                                </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Preview Table Section -->
+<div class="bg-white border border-slate-200 rounded-lg shadow-sm overflow-hidden">
+<div class="px-6 py-4 border-b border-slate-100 flex justify-between items-center">
+<h3 class="text-sm font-bold uppercase tracking-widest text-slate-500">Preview &amp; Verification</h3>
+<div class="flex gap-2">
+<span class="text-[10px] font-bold px-2 py-0.5 rounded bg-slate-100 text-slate-600">Showing 10 of 142</span>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-slate-50 border-b border-slate-100">
+<th class="px-6 py-3 text-[11px] font-bold text-slate-500 uppercase">Target</th>
+<th class="px-6 py-3 text-[11px] font-bold text-slate-500 uppercase">Detected Type</th>
+<th class="px-6 py-3 text-[11px] font-bold text-slate-500 uppercase">Status</th>
+<th class="px-6 py-3 text-[11px] font-bold text-slate-500 uppercase text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="text-sm font-mono">
+<tr class="border-b border-slate-50 hover:bg-slate-50 transition-colors">
+<td class="px-6 py-4 text-slate-900">192.168.1.1</td>
+<td class="px-6 py-4 text-slate-500">IPv4</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Valid
+                                        </span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-400 hover:text-red-600 transition-colors">
+<span class="material-symbols-outlined text-[18px]" data-icon="delete">delete</span>
+</button>
+</td>
+</tr>
+<tr class="border-b border-slate-50 bg-amber-50/30 hover:bg-amber-50 transition-colors">
+<td class="px-6 py-4 text-slate-900 font-medium">internal-api.prod</td>
+<td class="px-6 py-4 text-slate-500">Domain</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-700">
+<span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span> Duplicate
+                                        </span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-400 hover:text-red-600 transition-colors">
+<span class="material-symbols-outlined text-[18px]" data-icon="delete">delete</span>
+</button>
+</td>
+</tr>
+<tr class="border-b border-slate-50 hover:bg-slate-50 transition-colors">
+<td class="px-6 py-4 text-slate-900">10.0.0.0/24</td>
+<td class="px-6 py-4 text-slate-500">CIDR</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Valid
+                                        </span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-400 hover:text-red-600 transition-colors">
+<span class="material-symbols-outlined text-[18px]" data-icon="delete">delete</span>
+</button>
+</td>
+</tr>
+<tr class="border-b border-slate-50 bg-red-50/30 hover:bg-red-50 transition-colors">
+<td class="px-6 py-4 text-slate-900 font-medium">invalid_ip_999</td>
+<td class="px-6 py-4 text-slate-500">Unknown</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-red-100 text-red-700">
+<span class="w-1.5 h-1.5 rounded-full bg-red-500"></span> Invalid Format
+                                        </span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-400 hover:text-red-600 transition-colors">
+<span class="material-symbols-outlined text-[18px]" data-icon="delete">delete</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="px-6 py-4 bg-slate-50 flex justify-between items-center text-xs text-slate-500 font-medium">
+<div>Showing 1-10 of 142 items</div>
+<div class="flex gap-2">
+<button class="p-1 hover:bg-slate-200 rounded border border-slate-200 bg-white"><span class="material-symbols-outlined text-sm" data-icon="chevron_left">chevron_left</span></button>
+<button class="p-1 hover:bg-slate-200 rounded border border-slate-200 bg-white"><span class="material-symbols-outlined text-sm" data-icon="chevron_right">chevron_right</span></button>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Stats & Actions -->
+<div class="col-span-12 lg:col-span-4 space-y-6">
+<!-- Validation Summary Panel -->
+<div class="bg-slate-900 text-white rounded-lg p-6 shadow-xl relative overflow-hidden">
+<div class="absolute top-0 right-0 p-4 opacity-10">
+<span class="material-symbols-outlined text-6xl" data-icon="analytics">analytics</span>
+</div>
+<h3 class="text-sm font-bold uppercase tracking-widest text-slate-400 mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-lg" data-icon="verified">verified</span>
+                        Validation Summary
+                    </h3>
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-slate-800/50 p-4 rounded-lg border border-slate-800">
+<div class="text-[10px] text-slate-400 uppercase font-bold mb-1">Total Detected</div>
+<div class="text-2xl font-mono font-bold">142</div>
+</div>
+<div class="bg-emerald-500/10 p-4 rounded-lg border border-emerald-500/20">
+<div class="text-[10px] text-emerald-400 uppercase font-bold mb-1">Valid Entries</div>
+<div class="text-2xl font-mono font-bold text-emerald-400">138</div>
+</div>
+<div class="bg-amber-500/10 p-4 rounded-lg border border-amber-500/20">
+<div class="text-[10px] text-amber-400 uppercase font-bold mb-1">Duplicates</div>
+<div class="text-2xl font-mono font-bold text-amber-400">2</div>
+</div>
+<div class="bg-red-500/10 p-4 rounded-lg border border-red-500/20">
+<div class="text-[10px] text-red-400 uppercase font-bold mb-1">Invalid</div>
+<div class="text-2xl font-mono font-bold text-red-400">2</div>
+</div>
+</div>
+<div class="mt-6 pt-6 border-t border-slate-800">
+<div class="flex justify-between items-center mb-4">
+<span class="text-sm text-slate-300">Ready for Import</span>
+<span class="text-sm font-mono font-bold">138 / 142</span>
+</div>
+<div class="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
+<div class="bg-blue-500 h-full w-[97%]" role="progressbar"></div>
+</div>
+</div>
+</div>
+<!-- Final Actions -->
+<div class="bg-white border border-slate-200 rounded-lg p-6 shadow-sm">
+<h4 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-4">Import Settings</h4>
+<div class="space-y-4 mb-6">
+<div class="flex items-center gap-3">
+<input checked="" class="rounded border-slate-300 text-blue-600 focus:ring-blue-500" id="dedupe" type="checkbox"/>
+<label class="text-sm text-slate-700" for="dedupe">Skip existing duplicates</label>
+</div>
+<div class="flex items-center gap-3">
+<input class="rounded border-slate-300 text-blue-600 focus:ring-blue-500" id="scan" type="checkbox"/>
+<label class="text-sm text-slate-700" for="scan">Trigger scan immediately</label>
+</div>
+<div>
+<label class="block text-[10px] font-bold text-slate-400 uppercase mb-2">Target Group</label>
+<select class="w-full bg-slate-50 border-slate-200 rounded text-sm text-slate-700 focus:ring-blue-500">
+<option>Production API Cluster</option>
+<option>Internal Subnets</option>
+<option>Client Facing Assets</option>
+</select>
+</div>
+</div>
+<button class="w-full py-3 bg-blue-600 hover:bg-blue-500 text-white font-extrabold rounded-lg shadow-lg shadow-blue-500/20 transition-all flex items-center justify-center gap-2 mb-3 active:scale-[0.98]">
+<span class="material-symbols-outlined" data-icon="cloud_upload">cloud_upload</span>
+                        Import 138 Targets
+                    </button>
+<p class="text-[10px] text-slate-400 text-center leading-relaxed">
+                        By importing, you confirm authorization to scan these targets according to our Terms of Service.
+                    </p>
+</div>
+<!-- Help Card -->
+<div class="bg-blue-50 border border-blue-100 rounded-lg p-4">
+<div class="flex gap-3">
+<span class="material-symbols-outlined text-blue-500" data-icon="lightbulb">lightbulb</span>
+<div>
+<h5 class="text-sm font-bold text-blue-900">Pro Tip</h5>
+<p class="text-xs text-blue-700 mt-1 leading-relaxed">
+                                You can also import targets via the CLI using <code class="bg-blue-100 px-1 rounded">sentinel-cli target add --bulk file.csv</code>
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Hidden State for Drag and Drop (Demo purpose) -->
+<div class="hidden mt-12 bg-white border-2 border-dashed border-slate-200 rounded-xl p-12 text-center flex flex-col items-center justify-center">
+<div class="w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-4xl text-slate-400" data-icon="upload_file" style="font-variation-settings: 'FILL' 1;">upload_file</span>
+</div>
+<h3 class="text-lg font-bold text-slate-900">Drag &amp; Drop Files</h3>
+<p class="text-slate-500 text-sm mt-2 max-w-sm">Support for CSV, TXT, or JSON files. Max file size 50MB.</p>
+<button class="mt-8 px-8 py-3 bg-white border border-slate-200 text-slate-900 font-bold rounded-lg hover:bg-slate-50 transition-colors">
+                Browse Files
+            </button>
+</div>
+</main>
+<!-- FAB Suppression Rule: Not rendered on focus task screen -->
+</body></html>

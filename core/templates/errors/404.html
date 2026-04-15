@@ -1,0 +1,47 @@
+{% load static %}
+<!doctype html>
+<html class="no-js" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Page not found</title>
+    <meta name="robots" content="noindex, follow" />
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'assets/images/favicon.ico' %}">
+
+    {% include 'base/css.html' %}
+
+</head>
+
+<body class="skin-dark">
+
+    <div class="main-wrapper">
+
+        <div class="content-body m-0 p-0">
+            <div class="error-wrap">
+                <div class="container">
+                    <div class="row ">
+
+                        <div class="error-image text-center col-12"><img src="{% static 'assets/images/error/error-1.png' %}" alt=""></div>
+
+                        <div class="error-content col-12">
+                            <h1 class="title">404 — Page not found</h1>
+                            <h4>The page you requested could not be found.</h4>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    {% include 'base/js.html' %}
+
+</body>
+
+</html>
+

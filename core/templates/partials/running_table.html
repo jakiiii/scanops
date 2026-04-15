@@ -1,0 +1,103 @@
+{% load scanops_tags %}
+<div class="scanops-panel overflow-hidden">
+    <div class="overflow-x-auto">
+        <table class="w-full min-w-[980px] text-left border-collapse">
+            <thead>
+            <tr class="border-b border-slate-800 bg-slate-900/70">
+                <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">Scan ID</th>
+                <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">Target</th>
+                <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">Profile</th>
+                <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">Started</th>
+                <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">Duration</th>
+                <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">Progress</th>
+                <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">Status</th>
+                <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">Worker</th>
+                <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500 text-right">Actions</th>
+            </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-800/60">
+            {% for execution in executions %}
+                <tr class="hover:bg-slate-800/30 transition-colors">
+                    <td class="px-4 py-4">
+                        <span class="font-mono text-blue-300 text-sm">{{ execution.execution_id }}</span>
+                    </td>
+                    <td class="px-4 py-4">
+                        <a href="{% url 'targets:detail' execution.scan_request.target_id %}" class="text-sm text-slate-100 font-semibold hover:text-blue-300">
+                            {{ execution.scan_request.target.target_value }}
+                        </a>
+                        <p class="text-[11px] text-slate-500">{{ execution.scan_request.target.name|default:"-" }}</p>
+                    </td>
+                    <td class="px-4 py-4 text-sm text-slate-300">
+                        {{ execution.scan_request.profile.name|default:execution.scan_request.get_scan_type_display }}
+                    </td>
+                    <td class="px-4 py-4 text-xs text-slate-300">
+                        {% if execution.started_at %}{{ execution.started_at|date:"M d, H:i" }}{% else %}<span class="text-slate-500">Not started</span>{% endif %}
+                    </td>
+                    <td class="px-4 py-4 text-xs text-slate-300">
+                        {{ execution.duration_seconds|default:0 }}s
+                    </td>
+                    <td class="px-4 py-4">
+                        <div class="w-40">
+                            <div class="flex justify-between text-[10px] text-slate-500 mb-1">
+                                <span>{{ execution.progress_percent }}%</span>
+                                <span>{{ execution.current_stage|default:"-" }}</span>
+                            </div>
+                            <div class="h-1.5 rounded-full bg-slate-800 overflow-hidden">
+                                <div class="h-full bg-blue-500" style="width: {{ execution.progress_percent }}%;"></div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-4 py-4">
+                        <div class="flex flex-col gap-1">
+                            <span class="px-2 py-1 rounded text-[10px] uppercase font-semibold {{ execution.status|status_badge }}">{{ execution.get_status_display }}</span>
+                            <span class="px-2 py-1 rounded text-[10px] uppercase font-semibold {{ execution.queue_status|status_badge }}">{{ execution.get_queue_status_display }}</span>
+                        </div>
+                    </td>
+                    <td class="px-4 py-4 text-xs text-slate-300">
+                        {{ execution.worker_name|default:"Unassigned" }}
+                    </td>
+                    <td class="px-4 py-4">
+                        <div class="flex justify-end items-center gap-2">
+                            <a href="{% url 'scans:monitor' execution.pk %}" class="px-2.5 py-1.5 rounded bg-slate-800 hover:bg-slate-700 text-[11px] text-slate-200">Monitor</a>
+                            {% if execution.status == 'queued' or execution.status == 'running' %}
+                                <form method="post" action="{% url 'scans:execution-cancel' execution.pk %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="px-2.5 py-1.5 rounded bg-rose-500/20 hover:bg-rose-500/30 text-[11px] text-rose-200">Cancel</button>
+                                </form>
+                            {% endif %}
+                            {% if execution.status == 'failed' or execution.status == 'cancelled' %}
+                                <form method="post" action="{% url 'scans:execution-retry' execution.pk %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="px-2.5 py-1.5 rounded bg-emerald-500/20 hover:bg-emerald-500/30 text-[11px] text-emerald-200">Retry</button>
+                                </form>
+                            {% endif %}
+                        </div>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="9" class="px-4 py-14 text-center">
+                        <span class="material-symbols-outlined text-4xl text-slate-600">sync</span>
+                        <p class="text-sm text-slate-300 mt-2">No running executions found.</p>
+                        <p class="text-xs text-slate-500 mt-1">Create scan requests to populate running operations.</p>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% if is_paginated %}
+        <div class="px-4 py-3 border-t border-slate-800 bg-slate-900/40 flex justify-between items-center">
+            <p class="text-xs text-slate-500">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</p>
+            <div class="flex gap-2">
+                {% if page_obj.has_previous %}
+                    <a href="?page={{ page_obj.previous_page_number }}" hx-get="?page={{ page_obj.previous_page_number }}" hx-include="#running-filter-form" hx-target="#running-table-container" hx-push-url="true" class="px-3 py-1.5 text-xs rounded bg-slate-800 hover:bg-slate-700 text-slate-200">Previous</a>
+                {% endif %}
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}" hx-get="?page={{ page_obj.next_page_number }}" hx-include="#running-filter-form" hx-target="#running-table-container" hx-push-url="true" class="px-3 py-1.5 text-xs rounded bg-slate-800 hover:bg-slate-700 text-slate-200">Next</a>
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+</div>

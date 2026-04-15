@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}{% if asset %}{{ asset.name }} Change History{% else %}Asset Change History{% endif %} | ScanOps{% endblock %}
+
+{% block content %}
+    {% include "includes/breadcrumbs.html" with breadcrumbs=breadcrumbs %}
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+        <div>
+            <h1 class="text-4xl font-bold text-white tracking-tight">
+                {% if asset %}{{ asset.name }} Change History{% else %}Asset Change History{% endif %}
+            </h1>
+            <p class="text-slate-400 mt-1">Timeline of detected asset-level changes from scan snapshot diffs.</p>
+        </div>
+        <div class="flex gap-3">
+            {% if asset %}
+                <a href="{% url 'assets:detail' asset.pk %}" class="px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-sm font-semibold text-slate-100 hover:bg-slate-700">Back to Asset</a>
+            {% else %}
+                <a href="{% url 'assets:list' %}" class="px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-sm font-semibold text-slate-100 hover:bg-slate-700">Back to Assets</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
+        <div class="scanops-panel p-5 border-l-4 border-l-blue-500">
+            <p class="text-xs uppercase tracking-widest text-slate-500">Total</p>
+            <p class="text-3xl font-bold text-blue-300 mt-2">{{ summary.total }}</p>
+        </div>
+        <div class="scanops-panel p-5 border-l-4 border-l-emerald-500">
+            <p class="text-xs uppercase tracking-widest text-slate-500">Ports Added</p>
+            <p class="text-3xl font-bold text-emerald-300 mt-2">{{ summary.ports_added }}</p>
+        </div>
+        <div class="scanops-panel p-5 border-l-4 border-l-amber-500">
+            <p class="text-xs uppercase tracking-widest text-slate-500">Ports Removed</p>
+            <p class="text-3xl font-bold text-amber-300 mt-2">{{ summary.ports_removed }}</p>
+        </div>
+        <div class="scanops-panel p-5 border-l-4 border-l-rose-500">
+            <p class="text-xs uppercase tracking-widest text-slate-500">Service / OS Changes</p>
+            <p class="text-3xl font-bold text-rose-300 mt-2">{{ summary.service_or_os }}</p>
+        </div>
+    </div>
+
+    <form class="scanops-panel p-4 mb-6" method="get">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+                <label class="block text-[10px] uppercase tracking-widest text-slate-500 mb-1.5">Search</label>
+                <input type="text" name="q" value="{{ request.GET.q }}" class="scanops-input" placeholder="Asset name or summary..."/>
+            </div>
+            <div>
+                <label class="block text-[10px] uppercase tracking-widest text-slate-500 mb-1.5">Change Type</label>
+                <select name="change_type" class="scanops-input">
+                    <option value="">All Change Types</option>
+                    {% for value, label in change_type_choices %}
+                        <option value="{{ value }}" {% if request.GET.change_type == value %}selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="flex items-end">
+                <button type="submit" class="w-full px-4 py-2 rounded-lg bg-blue-600 text-white text-sm font-semibold hover:bg-blue-500">Apply Filters</button>
+            </div>
+        </div>
+    </form>
+
+    {% include "partials/asset_changes_timeline.html" with changes=changes %}
+{% endblock %}

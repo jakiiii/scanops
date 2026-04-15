@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block title %}Add Target | ScanOps{% endblock %}
+
+{% block content %}
+    {% include "includes/breadcrumbs.html" with breadcrumbs=breadcrumbs %}
+    <div class="max-w-6xl mx-auto">
+        <header class="mb-8">
+            <h1 class="text-3xl font-bold text-white tracking-tight">Add Target</h1>
+            <p class="text-slate-400 mt-1">Create a validated target for controlled scan operations.</p>
+        </header>
+
+        {% if form.non_field_errors %}
+            <div class="scanops-panel p-4 border-rose-500/30 mb-6">
+                {% for error in form.non_field_errors %}
+                    <p class="text-sm text-rose-200">{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
+            <div class="xl:col-span-8">
+                <div class="scanops-panel p-6 md:p-8">
+                    <div class="mb-6 p-4 bg-blue-500/5 border border-blue-500/20 rounded-xl flex gap-3">
+                        <span class="material-symbols-outlined text-blue-400">policy</span>
+                        <p class="text-sm text-slate-300">
+                            Only add internal assets or explicitly authorized external targets.
+                        </p>
+                    </div>
+                    <form method="post" class="space-y-5">
+                        {% csrf_token %}
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                            <div class="md:col-span-2">
+                                <label for="{{ form.name.id_for_label }}" class="block text-sm text-slate-300 mb-1.5">Friendly Name</label>
+                                {{ form.name }}
+                                {% if form.name.errors %}<p class="text-xs text-rose-300 mt-1">{{ form.name.errors|striptags }}</p>{% endif %}
+                            </div>
+                            <div class="md:col-span-2">
+                                <label for="{{ form.target_value.id_for_label }}" class="block text-sm text-slate-300 mb-1.5">Target Value</label>
+                                {{ form.target_value }}
+                                {% if form.target_value.errors %}<p class="text-xs text-rose-300 mt-1">{{ form.target_value.errors|striptags }}</p>{% endif %}
+                            </div>
+                            <div>
+                                <label for="{{ form.target_type.id_for_label }}" class="block text-sm text-slate-300 mb-1.5">Target Type</label>
+                                {{ form.target_type }}
+                                {% if form.target_type.errors %}<p class="text-xs text-rose-300 mt-1">{{ form.target_type.errors|striptags }}</p>{% endif %}
+                            </div>
+                            <div>
+                                <label for="{{ form.owner.id_for_label }}" class="block text-sm text-slate-300 mb-1.5">Owner</label>
+                                {{ form.owner }}
+                                {% if form.owner.errors %}<p class="text-xs text-rose-300 mt-1">{{ form.owner.errors|striptags }}</p>{% endif %}
+                            </div>
+                            <div>
+                                <label for="{{ form.status.id_for_label }}" class="block text-sm text-slate-300 mb-1.5">Status</label>
+                                {{ form.status }}
+                                {% if form.status.errors %}<p class="text-xs text-rose-300 mt-1">{{ form.status.errors|striptags }}</p>{% endif %}
+                            </div>
+                            <div>
+                                <label for="{{ form.tags.id_for_label }}" class="block text-sm text-slate-300 mb-1.5">Tags</label>
+                                {{ form.tags }}
+                                {% if form.tags.errors %}<p class="text-xs text-rose-300 mt-1">{{ form.tags.errors|striptags }}</p>{% endif %}
+                            </div>
+                            <div class="md:col-span-2">
+                                <label for="{{ form.notes.id_for_label }}" class="block text-sm text-slate-300 mb-1.5">Notes</label>
+                                {{ form.notes }}
+                                {% if form.notes.errors %}<p class="text-xs text-rose-300 mt-1">{{ form.notes.errors|striptags }}</p>{% endif %}
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-end gap-3 pt-4 border-t border-slate-800">
+                            <a href="{% url 'targets:list' %}" class="px-4 py-2 text-sm font-semibold text-slate-400 hover:text-white">Cancel</a>
+                            <button type="submit" class="px-6 py-2.5 text-sm font-bold bg-blue-600 text-white rounded-lg hover:bg-blue-500 transition-all">Save Target</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="xl:col-span-4 space-y-6">
+                <div class="scanops-panel p-6 border-l-4 border-l-emerald-500">
+                    <h3 class="font-bold text-white mb-3">Validation Pipeline</h3>
+                    <ul class="space-y-2 text-sm text-slate-400">
+                        <li>Syntax validation for IP/Domain/CIDR/IPv6</li>
+                        <li>Duplicate detection by normalized value</li>
+                        <li>Policy check layer ready for allow-list rules</li>
+                    </ul>
+                </div>
+                <div class="scanops-panel p-6">
+                    <h3 class="font-bold text-white mb-3">Target Guidance</h3>
+                    <p class="text-sm text-slate-400">Use `restricted` status for high-sensitivity assets and enforce extra review before running requests.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

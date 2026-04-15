@@ -1,0 +1,73 @@
+{% load scanops_tags %}
+<div class="scanops-panel overflow-hidden">
+    <div class="overflow-x-auto">
+        <table class="w-full min-w-[1120px] text-left border-collapse">
+            <thead>
+            <tr class="border-b border-slate-800 bg-slate-900/70">
+                <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">Asset Name</th>
+                <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">IP/Host</th>
+                <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">OS</th>
+                <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500 text-center">Open Ports</th>
+                <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">Risk</th>
+                <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">Last Scanned</th>
+                <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">Owner</th>
+                <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">Status</th>
+                <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500 text-right">Actions</th>
+            </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-800/60">
+            {% for asset in assets %}
+                <tr class="hover:bg-slate-800/30 transition-colors">
+                    <td class="px-4 py-4">
+                        <p class="text-sm font-semibold text-slate-100">{{ asset.name }}</p>
+                        <p class="text-[11px] text-slate-500">{{ asset.canonical_identifier|default:"-" }}</p>
+                    </td>
+                    <td class="px-4 py-4 text-xs text-slate-300">
+                        <p>{{ asset.ip_address|default:"-" }}</p>
+                        <p class="text-slate-500">{{ asset.hostname|default:"-" }}</p>
+                    </td>
+                    <td class="px-4 py-4 text-xs text-slate-300">{{ asset.operating_system|default:"Unknown" }}</td>
+                    <td class="px-4 py-4 text-center text-sm text-slate-200">{{ asset.current_open_ports_count }}</td>
+                    <td class="px-4 py-4">
+                        <span class="px-2 py-1 rounded text-[10px] uppercase font-semibold {{ asset.risk_level|risk_badge }}">{{ asset.get_risk_level_display }}</span>
+                    </td>
+                    <td class="px-4 py-4 text-xs text-slate-300">{{ asset.last_scanned_at|date:"M d, Y H:i"|default:"-" }}</td>
+                    <td class="px-4 py-4 text-xs text-slate-300">{{ asset.owner_name|default:"-" }}</td>
+                    <td class="px-4 py-4">
+                        <span class="px-2 py-1 rounded text-[10px] uppercase font-semibold {{ asset.status|status_badge }}">{{ asset.get_status_display }}</span>
+                    </td>
+                    <td class="px-4 py-4">
+                        <div class="flex justify-end gap-2">
+                            <a href="{% url 'assets:detail' asset.pk %}" class="px-2.5 py-1.5 rounded bg-slate-800 hover:bg-slate-700 text-[11px] text-slate-200">Open</a>
+                            <a href="{% url 'assets:detail-changes' asset.pk %}" class="px-2.5 py-1.5 rounded bg-indigo-500/20 hover:bg-indigo-500/30 text-[11px] text-indigo-200">Changes</a>
+                            {% if asset.target %}
+                                <a href="{% url 'targets:detail' asset.target.pk %}" class="px-2.5 py-1.5 rounded bg-blue-500/20 hover:bg-blue-500/30 text-[11px] text-blue-200">Target</a>
+                            {% endif %}
+                        </div>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="9" class="px-4 py-14 text-center">
+                        <span class="material-symbols-outlined text-4xl text-slate-600">inventory_2</span>
+                        <p class="text-sm text-slate-300 mt-2">No assets found.</p>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% if is_paginated %}
+        <div class="px-4 py-3 border-t border-slate-800 bg-slate-900/40 flex justify-between items-center">
+            <p class="text-xs text-slate-500">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</p>
+            <div class="flex gap-2">
+                {% if page_obj.has_previous %}
+                    <a href="?page={{ page_obj.previous_page_number }}" hx-get="?page={{ page_obj.previous_page_number }}" hx-include="#asset-filter-form" hx-target="#assets-table-container" hx-push-url="true" class="px-3 py-1.5 text-xs rounded bg-slate-800 hover:bg-slate-700 text-slate-200">Previous</a>
+                {% endif %}
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}" hx-get="?page={{ page_obj.next_page_number }}" hx-include="#asset-filter-form" hx-target="#assets-table-container" hx-push-url="true" class="px-3 py-1.5 text-xs rounded bg-slate-800 hover:bg-slate-700 text-slate-200">Next</a>
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+</div>

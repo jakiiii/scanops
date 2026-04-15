@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-error": "#690005",
+                        "surface-container-high": "#23293c",
+                        "on-secondary-container": "#a9bad3",
+                        "inverse-surface": "#dce1fb",
+                        "primary-fixed-dim": "#adc6ff",
+                        "tertiary-fixed-dim": "#ffb786",
+                        "tertiary-fixed": "#ffdcc6",
+                        "on-tertiary-fixed": "#311400",
+                        "surface-container-highest": "#2e3447",
+                        "surface-container-low": "#151b2d",
+                        "primary-container": "#4d8eff",
+                        "surface-variant": "#2e3447",
+                        "surface-container-lowest": "#070d1f",
+                        "error": "#ffb4ab",
+                        "secondary-container": "#3a4a5f",
+                        "surface-container": "#191f31",
+                        "outline-variant": "#424754",
+                        "surface": "#0c1324",
+                        "on-secondary": "#213145",
+                        "on-error-container": "#ffdad6",
+                        "on-tertiary": "#502400",
+                        "secondary-fixed-dim": "#b7c8e1",
+                        "on-tertiary-container": "#461f00",
+                        "primary": "#adc6ff",
+                        "on-surface-variant": "#c2c6d6",
+                        "tertiary": "#ffb786",
+                        "on-background": "#dce1fb",
+                        "on-primary-container": "#00285d",
+                        "on-secondary-fixed-variant": "#38485d",
+                        "on-primary-fixed": "#001a42",
+                        "surface-tint": "#adc6ff",
+                        "on-surface": "#dce1fb",
+                        "on-secondary-fixed": "#0b1c30",
+                        "inverse-primary": "#005ac2",
+                        "on-primary-fixed-variant": "#004395",
+                        "on-tertiary-fixed-variant": "#723600",
+                        "inverse-on-surface": "#2a3043",
+                        "primary-fixed": "#d8e2ff",
+                        "secondary-fixed": "#d3e4fe",
+                        "background": "#0c1324",
+                        "secondary": "#b7c8e1",
+                        "on-primary": "#002e6a",
+                        "error-container": "#93000a",
+                        "surface-dim": "#0c1324",
+                        "surface-bright": "#33394c",
+                        "outline": "#8c909f",
+                        "tertiary-container": "#df7412"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Space Grotesk"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, .brand-font { font-family: 'Space Grotesk', sans-serif; }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex overflow-hidden">
+<!-- SideNavBar -->
+<aside class="hidden md:flex flex-col h-screen sticky left-0 w-64 bg-[#0c1324] shadow-[24px_0_48px_rgba(0,0,0,0.5)] z-20">
+<div class="flex flex-col h-full py-6">
+<div class="px-6 mb-8">
+<div class="text-lg font-black text-blue-400 tracking-tighter brand-font">ScanOps</div>
+<div class="mt-4 flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" data-icon="shield">shield</span>
+</div>
+<div>
+<div class="text-xs font-bold text-on-surface uppercase tracking-widest">Tactical Command</div>
+<div class="text-[10px] text-primary">Active Ops: 12</div>
+</div>
+</div>
+</div>
+<nav class="flex-1 space-y-1 px-3">
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:bg-[#151b2d] hover:text-white transition-all duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-['Inter'] text-sm">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:bg-[#151b2d] hover:text-white transition-all duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="radar">radar</span>
+<span class="font-['Inter'] text-sm">Live Scans</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:bg-[#151b2d] hover:text-white transition-all duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="security">security</span>
+<span class="font-['Inter'] text-sm">Vulnerabilities</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 bg-[#2e3447] text-blue-400 border-r-4 border-blue-500 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="assignment">assignment</span>
+<span class="font-['Inter'] text-sm">Audit Logs</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:bg-[#151b2d] hover:text-white transition-all duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="verified_user">verified_user</span>
+<span class="font-['Inter'] text-sm">Compliance</span>
+</a>
+</nav>
+<div class="px-6 mt-auto">
+<button class="w-full py-3 bg-primary text-on-primary font-bold rounded-lg text-sm transition-transform active:scale-95">
+                    Initiate Scan
+                </button>
+<div class="mt-6 flex flex-col gap-2">
+<a class="flex items-center gap-3 text-xs text-slate-400 hover:text-white" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="help">help</span> Support
+                    </a>
+<a class="flex items-center gap-3 text-xs text-slate-400 hover:text-white" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="code">code</span> API
+                    </a>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col min-w-0 h-screen overflow-y-auto bg-surface">
+<!-- TopNavBar -->
+<header class="w-full top-0 sticky z-10 bg-[#0c1324] flex items-center justify-between px-6 py-3 border-none">
+<div class="flex items-center flex-1">
+<div class="relative w-full max-w-md">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg" data-icon="search">search</span>
+<input class="w-full bg-surface-container-low border-none rounded-lg pl-10 pr-4 py-2 text-sm text-on-surface focus:ring-1 focus:ring-primary/40 placeholder:text-slate-500" placeholder="Search security logs..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4 ml-4">
+<button class="p-2 text-slate-400 hover:bg-[#2e3447] transition-colors rounded-lg">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 text-slate-400 hover:bg-[#2e3447] transition-colors rounded-lg">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+<div class="h-8 w-8 rounded-full overflow-hidden border border-primary/20">
+<img alt="Security Analyst Avatar" class="h-full w-full object-cover" data-alt="Close-up portrait of a professional security analyst with a serious expression in high-contrast cinematic lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDqaaxY3hNPJPUNXDtpTF9BKXT1AWJ-2qQNk_xwjiAEbuLQoKiPNz1GVzT5wwcp9AQCoS1KIjHTvKtu7nb3Df0ny8xOq8GnwagiSGYNXiff4p_u2xlYXTOD5TCp5U-XpaEB2XnnBNictGRXdQfQn-oAXLdS2zOQJESn2Cj_zdkgYiIYWAdMmX1mUXcO8G4KfqPz7cOUFuV6w-2Kab69jHw14aj7M9nvaguznC9O8gFID5J6etjQsWoXLvFq_zNPPLMaeMcEhMFLGeIb"/>
+</div>
+</div>
+</header>
+<!-- Content Canvas -->
+<div class="p-8">
+<!-- Page Header -->
+<div class="mb-10">
+<h1 class="text-4xl font-bold tracking-tight text-on-surface brand-font mb-2">Security Audit</h1>
+<p class="text-on-surface-variant text-sm font-medium">Sensitive events and policy violation monitor</p>
+</div>
+<!-- Summary Widgets -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
+<!-- Card 1 -->
+<div class="bg-surface-container-low p-6 rounded-xl relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4 opacity-10 text-error scale-150">
+<span class="material-symbols-outlined text-6xl" data-icon="no_accounts">no_accounts</span>
+</div>
+<div class="flex flex-col">
+<span class="text-on-surface-variant text-xs font-bold uppercase tracking-widest mb-1">Failed Logins</span>
+<div class="flex items-baseline gap-2">
+<span class="text-4xl font-bold text-error brand-font">42</span>
+<span class="text-xs text-error/60 font-medium">/ 24h</span>
+</div>
+<div class="mt-4 flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-error animate-pulse"></span>
+<span class="text-[10px] text-on-surface-variant">Active surge detected</span>
+</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface-container-low p-6 rounded-xl relative overflow-hidden">
+<div class="absolute top-0 right-0 p-4 opacity-10 text-tertiary scale-150">
+<span class="material-symbols-outlined text-6xl" data-icon="block">block</span>
+</div>
+<div class="flex flex-col">
+<span class="text-on-surface-variant text-xs font-bold uppercase tracking-widest mb-1">Denied Scans</span>
+<div class="flex items-baseline gap-2">
+<span class="text-4xl font-bold text-tertiary brand-font">12</span>
+<span class="text-xs text-tertiary/60 font-medium">/ 24h</span>
+</div>
+<div class="mt-4 flex items-center gap-1">
+<span class="text-[10px] text-on-surface-variant">3 unauthorized sources blocked</span>
+</div>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-surface-container-low p-6 rounded-xl relative overflow-hidden">
+<div class="absolute top-0 right-0 p-4 opacity-10 text-tertiary scale-150">
+<span class="material-symbols-outlined text-6xl" data-icon="rule">rule</span>
+</div>
+<div class="flex flex-col">
+<span class="text-on-surface-variant text-xs font-bold uppercase tracking-widest mb-1">Restricted Options</span>
+<div class="flex items-baseline gap-2">
+<span class="text-4xl font-bold text-tertiary brand-font">05</span>
+<span class="text-xs text-tertiary/60 font-medium">/ 24h</span>
+</div>
+<div class="mt-4 flex items-center gap-1 text-on-surface-variant">
+<span class="text-[10px]">Aggressive mode bypass attempts</span>
+</div>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="bg-surface-container-low p-6 rounded-xl relative overflow-hidden">
+<div class="absolute top-0 right-0 p-4 opacity-10 text-primary scale-150">
+<span class="material-symbols-outlined text-6xl" data-icon="gavel">gavel</span>
+</div>
+<div class="flex flex-col">
+<span class="text-on-surface-variant text-xs font-bold uppercase tracking-widest mb-1">Policy Alerts</span>
+<div class="flex items-baseline gap-2">
+<span class="text-4xl font-bold text-primary brand-font">High</span>
+</div>
+<div class="mt-4 flex items-center gap-1">
+<span class="text-[10px] text-primary font-bold">Compliant with Policy v2.4</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Dashboard Body: Asymmetric Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<!-- Left: Audit Event Table -->
+<div class="lg:col-span-2 flex flex-col gap-6">
+<div class="bg-surface-container-low rounded-xl overflow-hidden shadow-2xl">
+<div class="px-6 py-4 flex items-center justify-between bg-surface-container">
+<h3 class="text-sm font-bold uppercase tracking-widest text-primary">Live Audit Stream</h3>
+<button class="text-xs text-primary font-semibold hover:underline">Export Report</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="text-[10px] uppercase tracking-tighter text-on-surface-variant bg-surface-container-low">
+<th class="px-6 py-3 font-semibold">Timestamp</th>
+<th class="px-6 py-3 font-semibold">User / Entity</th>
+<th class="px-6 py-3 font-semibold">Action</th>
+<th class="px-6 py-3 font-semibold">Severity</th>
+<th class="px-6 py-3 font-semibold">Status</th>
+</tr>
+</thead>
+<tbody class="text-sm">
+<!-- Row 1 -->
+<tr class="hover:bg-surface-container-high transition-colors group">
+<td class="px-6 py-4 text-xs font-mono text-on-surface-variant">2023-10-24 14:22:01</td>
+<td class="px-6 py-4">
+<div class="flex flex-col">
+<span class="font-bold">admin_root</span>
+<span class="text-[10px] text-on-surface-variant font-mono">192.168.1.104</span>
+</div>
+</td>
+<td class="px-6 py-4 font-medium">Unauthorized CIDR Scan Attempt</td>
+<td class="px-6 py-4">
+<span class="px-2 py-1 text-[10px] font-black rounded bg-error-container text-on-error-container uppercase">Critical</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="w-1.5 h-1.5 rounded-full bg-error"></span>
+<span class="text-xs text-error font-medium">Blocked</span>
+</div>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface-container-high transition-colors">
+<td class="px-6 py-4 text-xs font-mono text-on-surface-variant">2023-10-24 14:18:45</td>
+<td class="px-6 py-4">
+<div class="flex flex-col">
+<span class="font-bold">analyst_dev_02</span>
+<span class="text-[10px] text-on-surface-variant font-mono">45.22.112.9</span>
+</div>
+</td>
+<td class="px-6 py-4 font-medium">Aggressive Mode Restriction Bypass</td>
+<td class="px-6 py-4">
+<span class="px-2 py-1 text-[10px] font-black rounded bg-tertiary-container text-white uppercase">High</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+<span class="text-xs text-tertiary font-medium">Flagged</span>
+</div>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-surface-container-high transition-colors">
+<td class="px-6 py-4 text-xs font-mono text-on-surface-variant">2023-10-24 14:15:10</td>
+<td class="px-6 py-4">
+<div class="flex flex-col">
+<span class="font-bold">external_api</span>
+<span class="text-[10px] text-on-surface-variant font-mono">8.8.8.8</span>
+</div>
+</td>
+<td class="px-6 py-4 font-medium">Repeated Authentication Failure</td>
+<td class="px-6 py-4">
+<span class="px-2 py-1 text-[10px] font-black rounded bg-secondary-container text-on-secondary-container uppercase">Medium</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+<span class="text-xs text-secondary font-medium">Throttled</span>
+</div>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-surface-container-high transition-colors">
+<td class="px-6 py-4 text-xs font-mono text-on-surface-variant">2023-10-24 14:10:02</td>
+<td class="px-6 py-4">
+<div class="flex flex-col">
+<span class="font-bold">sys_internal</span>
+<span class="text-[10px] text-on-surface-variant font-mono">localhost</span>
+</div>
+</td>
+<td class="px-6 py-4 font-medium">Policy Update: Scan Frequency</td>
+<td class="px-6 py-4">
+<span class="px-2 py-1 text-[10px] font-black rounded bg-surface-container-highest text-slate-400 uppercase">Info</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+<span class="text-xs text-primary font-medium">Applied</span>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="px-6 py-3 bg-surface-container-lowest border-t border-outline-variant/10 flex items-center justify-between">
+<span class="text-[10px] text-on-surface-variant">Showing 4 of 2,492 entries</span>
+<div class="flex gap-2">
+<button class="p-1 hover:bg-surface-container-high rounded text-slate-400"><span class="material-symbols-outlined text-sm" data-icon="chevron_left">chevron_left</span></button>
+<button class="p-1 hover:bg-surface-container-high rounded text-slate-400"><span class="material-symbols-outlined text-sm" data-icon="chevron_right">chevron_right</span></button>
+</div>
+</div>
+</div>
+</div>
+<!-- Right: Flagged Behavior Timeline -->
+<div class="lg:col-span-1">
+<div class="bg-surface-container-lowest border border-outline-variant/10 rounded-xl p-6 h-full">
+<div class="flex items-center gap-3 mb-6">
+<span class="material-symbols-outlined text-tertiary" data-icon="timeline">timeline</span>
+<h3 class="text-sm font-bold uppercase tracking-widest text-on-surface">Suspicious Activity Feed</h3>
+</div>
+<div class="space-y-6 relative">
+<!-- Timeline line -->
+<div class="absolute left-[11px] top-2 bottom-2 w-[2px] bg-outline-variant/20"></div>
+<!-- Feed Item 1 -->
+<div class="relative pl-10">
+<div class="absolute left-0 top-1 w-6 h-6 rounded-full bg-error-container flex items-center justify-center z-10 shadow-lg">
+<span class="material-symbols-outlined text-[14px] text-on-error-container" data-icon="priority_high">priority_high</span>
+</div>
+<div>
+<span class="text-[10px] font-mono text-on-surface-variant block mb-1">02:44 PM</span>
+<p class="text-sm font-bold text-on-surface mb-1">Port Scan Detected</p>
+<p class="text-xs text-on-surface-variant leading-relaxed mb-2">Multiple rapid connection attempts targeting high-value assets from unknown IP segment.</p>
+<button class="text-[10px] font-black text-primary uppercase tracking-wider hover:underline">Investigate Node</button>
+</div>
+</div>
+<!-- Feed Item 2 -->
+<div class="relative pl-10">
+<div class="absolute left-0 top-1 w-6 h-6 rounded-full bg-tertiary-container flex items-center justify-center z-10 shadow-lg">
+<span class="material-symbols-outlined text-[14px] text-white" data-icon="vpn_key">vpn_key</span>
+</div>
+<div>
+<span class="text-[10px] font-mono text-on-surface-variant block mb-1">02:15 PM</span>
+<p class="text-sm font-bold text-on-surface mb-1">Brute Force Alert</p>
+<p class="text-xs text-on-surface-variant leading-relaxed mb-2">15 failed SSH logins within 30 seconds. Automatic IP suspension initiated.</p>
+<div class="flex gap-2">
+<span class="px-2 py-0.5 rounded-full bg-surface-container-high text-[9px] text-slate-400 font-mono">usr_admin_dev</span>
+</div>
+</div>
+</div>
+<!-- Feed Item 3 -->
+<div class="relative pl-10">
+<div class="absolute left-0 top-1 w-6 h-6 rounded-full bg-surface-container-highest flex items-center justify-center z-10">
+<span class="material-symbols-outlined text-[14px] text-primary" data-icon="settings_input_component">settings_input_component</span>
+</div>
+<div>
+<span class="text-[10px] font-mono text-on-surface-variant block mb-1">01:50 PM</span>
+<p class="text-sm font-bold text-on-surface mb-1">Config Manipulation</p>
+<p class="text-xs text-on-surface-variant leading-relaxed mb-2">Internal firewall rule modified by authenticated user in region US-EAST.</p>
+<button class="text-[10px] font-black text-primary uppercase tracking-wider hover:underline">Rollback Change</button>
+</div>
+</div>
+<!-- Feed Item 4 -->
+<div class="relative pl-10">
+<div class="absolute left-0 top-1 w-6 h-6 rounded-full bg-tertiary-container flex items-center justify-center z-10 shadow-lg">
+<span class="material-symbols-outlined text-[14px] text-white" data-icon="warning">warning</span>
+</div>
+<div>
+<span class="text-[10px] font-mono text-on-surface-variant block mb-1">01:12 PM</span>
+<p class="text-sm font-bold text-on-surface mb-1">Exfiltration Hazard</p>
+<p class="text-xs text-on-surface-variant leading-relaxed">Large outbound data transfer detected to unverified endpoint. Monitoring active.</p>
+</div>
+</div>
+</div>
+<div class="mt-10 p-4 rounded-lg bg-primary/5 border border-primary/10">
+<div class="flex items-center gap-3 mb-2">
+<div class="relative flex">
+<span class="w-2 h-2 rounded-full bg-primary animate-ping absolute inline-flex opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+</div>
+<span class="text-[10px] font-bold text-primary uppercase">Tactical AI Analysis</span>
+</div>
+<p class="text-xs text-on-surface leading-normal">Behavioral patterns suggest a coordinated reconnaissance effort targeting the sub-domain cluster B.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Sticky Status Footer (Tactical Instrument Look) -->
+<footer class="mt-auto bg-surface-container-lowest border-t border-outline-variant/10 px-6 py-2 flex items-center justify-between text-[10px] font-mono text-slate-500 uppercase tracking-widest">
+<div class="flex items-center gap-6">
+<span class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-primary rounded-full"></span> System: Operational</span>
+<span class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-primary rounded-full"></span> Latency: 22ms</span>
+</div>
+<div class="flex items-center gap-6">
+<span>Encryption: AES-256-GCM</span>
+<span class="text-on-surface-variant font-bold">Node ID: SC-7729-ALPHA</span>
+</div>
+</footer>
+</main>
+<!-- BottomNavBar for Mobile -->
+<nav class="md:hidden fixed bottom-0 left-0 right-0 bg-[#0c1324] flex justify-around py-3 z-50">
+<button class="flex flex-col items-center gap-1 text-slate-400">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="text-[10px]">Home</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-slate-400">
+<span class="material-symbols-outlined" data-icon="radar">radar</span>
+<span class="text-[10px]">Scans</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-blue-400 font-bold">
+<span class="material-symbols-outlined" data-icon="assignment">assignment</span>
+<span class="text-[10px]">Audit</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-slate-400">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="text-[10px]">Profile</span>
+</button>
+</nav>
+</body></html>

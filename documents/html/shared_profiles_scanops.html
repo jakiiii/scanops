@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Shared Profiles | Sentinel Tactical</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-on-surface": "#2a3043",
+                        "secondary-fixed-dim": "#b7c8e1",
+                        "surface-tint": "#adc6ff",
+                        "on-secondary-fixed": "#0b1c30",
+                        "surface-container-low": "#151b2d",
+                        "surface-dim": "#0c1324",
+                        "primary": "#adc6ff",
+                        "on-tertiary-container": "#461f00",
+                        "surface-bright": "#33394c",
+                        "primary-container": "#4d8eff",
+                        "on-secondary": "#213145",
+                        "on-background": "#dce1fb",
+                        "background": "#0c1324",
+                        "tertiary": "#ffb786",
+                        "surface-container-high": "#23293c",
+                        "surface-container-highest": "#2e3447",
+                        "on-surface-variant": "#c2c6d6",
+                        "on-tertiary": "#502400",
+                        "on-primary-container": "#00285d",
+                        "primary-fixed-dim": "#adc6ff",
+                        "surface-container": "#191f31",
+                        "on-tertiary-fixed-variant": "#723600",
+                        "error-container": "#93000a",
+                        "secondary-fixed": "#d3e4fe",
+                        "on-secondary-container": "#a9bad3",
+                        "inverse-primary": "#005ac2",
+                        "on-surface": "#dce1fb",
+                        "on-error-container": "#ffdad6",
+                        "on-primary-fixed-variant": "#004395",
+                        "secondary-container": "#3a4a5f",
+                        "primary-fixed": "#d8e2ff",
+                        "surface-variant": "#2e3447",
+                        "on-tertiary-fixed": "#311400",
+                        "on-primary-fixed": "#001a42",
+                        "inverse-surface": "#dce1fb",
+                        "surface-container-lowest": "#070d1f",
+                        "tertiary-fixed-dim": "#ffb786",
+                        "tertiary-fixed": "#ffdcc6",
+                        "outline-variant": "#424754",
+                        "on-secondary-fixed-variant": "#38485d",
+                        "on-error": "#690005",
+                        "secondary": "#b7c8e1",
+                        "outline": "#8c909f",
+                        "tertiary-container": "#df7412",
+                        "surface": "#0c1324",
+                        "on-primary": "#002e6a",
+                        "error": "#ffb4ab"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Space Grotesk"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .headline-font { font-family: 'Space Grotesk', sans-serif; }
+        .glass-panel {
+            background: rgba(51, 57, 76, 0.6);
+            backdrop-filter: blur(24px);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen">
+<!-- SideNavBar Shell -->
+<aside class="h-screen w-64 fixed left-0 top-0 bg-[#0c1324] flex flex-col py-8 shadow-2xl shadow-black/50 z-50">
+<div class="px-6 mb-10">
+<h1 class="text-lg font-black text-white headline-font tracking-tight">Command Center</h1>
+<p class="text-xs text-slate-500 font-medium">Active Surveillance</p>
+</div>
+<nav class="flex-1 px-4 space-y-2">
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-[#151b2d] hover:text-slate-200 transition-all duration-200 ease-in-out group rounded-lg" href="#">
+<span class="material-symbols-outlined">grid_view</span>
+<span class="font-medium text-sm">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-blue-400 font-semibold border-r-2 border-blue-500 bg-blue-500/5 transition-all duration-200 ease-in-out group rounded-lg" href="#">
+<span class="material-symbols-outlined">security</span>
+<span class="font-medium text-sm">Scan Profiles</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-[#151b2d] hover:text-slate-200 transition-all duration-200 ease-in-out group rounded-lg" href="#">
+<span class="material-symbols-outlined">list_alt</span>
+<span class="font-medium text-sm">Vulnerability Log</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-[#151b2d] hover:text-slate-200 transition-all duration-200 ease-in-out group rounded-lg" href="#">
+<span class="material-symbols-outlined">hub</span>
+<span class="font-medium text-sm">Network Map</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-[#151b2d] hover:text-slate-200 transition-all duration-200 ease-in-out group rounded-lg" href="#">
+<span class="material-symbols-outlined">monitor_heart</span>
+<span class="font-medium text-sm">System Health</span>
+</a>
+</nav>
+<div class="px-4 mt-auto space-y-2">
+<button class="w-full py-3 bg-primary text-on-primary font-bold text-sm rounded-lg hover:brightness-110 transition-all mb-6">
+                New Scan
+            </button>
+<a class="flex items-center gap-3 px-4 py-2 text-slate-500 hover:text-slate-200 text-sm" href="#">
+<span class="material-symbols-outlined text-lg">description</span>
+<span>Documentation</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-slate-500 hover:text-slate-200 text-sm" href="#">
+<span class="material-symbols-outlined text-lg">help</span>
+<span>Support</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Wrapper -->
+<main class="ml-64 flex flex-col min-h-screen">
+<!-- TopAppBar -->
+<header class="w-full h-16 flex justify-between items-center px-8 bg-[#151b2d] border-none sticky top-0 z-40">
+<div class="flex items-center gap-4">
+<span class="text-xl font-bold text-blue-500 headline-font tracking-tight">Sentinel Tactical</span>
+<div class="h-6 w-[1px] bg-outline-variant/30 ml-2"></div>
+<h2 class="headline-font text-on-surface font-medium">Shared Profiles</h2>
+</div>
+<div class="flex items-center gap-6">
+<div class="relative group">
+<span class="material-symbols-outlined text-slate-400 group-hover:text-primary transition-colors cursor-pointer">notifications</span>
+<span class="absolute -top-1 -right-1 w-2 h-2 bg-error rounded-full border-2 border-[#151b2d]"></span>
+</div>
+<span class="material-symbols-outlined text-slate-400 hover:text-primary transition-colors cursor-pointer">settings</span>
+<div class="w-8 h-8 rounded-full bg-surface-container-highest overflow-hidden border border-outline-variant/50">
+<img alt="User profile" data-alt="close up professional portrait of a tech security analyst in a modern office setting, soft blue ambient lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDSF9vWU5C_mTyyXTuTtPFxeeA-JJgJR0YWR66Sx2pX90qHKnimjW5_lX443c66gzynMUvNQd72cULeoW-o102fbgd81acNVp06wl0sd9Ycq36oTFOzbNJD0v7hN8A4C2d9Wp_n5KYNvBXydJKJka4UxjPQb6JEBK4YFV06vLgXHvQLIlUgC_CJqSCqMlS0DhqR0yCVsdY_aW2HbhvNtecwddRF7_1c84XGc9yPnUdyKJjplmsSELZS7-skoTpcpwReLMH3AHh7eGC-"/>
+</div>
+</div>
+</header>
+<!-- Content Canvas -->
+<div class="p-8 space-y-8">
+<!-- Hero Search & Filter Section -->
+<section class="flex flex-col md:flex-row gap-4 items-end">
+<div class="flex-1 w-full">
+<label class="block text-xs font-bold text-primary mb-2 headline-font uppercase tracking-widest">Global Repository</label>
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-4 text-outline">search</span>
+<input class="w-full bg-surface-container-low border-none rounded-xl py-4 pl-12 pr-4 text-on-surface focus:ring-1 focus:ring-primary/40 transition-all placeholder:text-outline/50" placeholder="Search templates by name, tags, or options..." type="text"/>
+</div>
+</div>
+<div class="flex gap-2">
+<button class="bg-surface-container-high px-6 py-4 rounded-xl text-on-surface-variant font-medium text-sm flex items-center gap-2 hover:bg-surface-container-highest transition-colors">
+<span class="material-symbols-outlined text-lg">filter_list</span>
+                        Filter
+                    </button>
+<button class="bg-surface-container-high px-6 py-4 rounded-xl text-on-surface-variant font-medium text-sm flex items-center gap-2 hover:bg-surface-container-highest transition-colors">
+<span class="material-symbols-outlined text-lg">sort</span>
+                        Sort
+                    </button>
+</div>
+</section>
+<!-- Profiles Grid -->
+<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<!-- Card 1 -->
+<div class="bg-surface-container-low group hover:bg-surface-container transition-all duration-300 rounded-xl overflow-hidden relative">
+<div class="p-6 space-y-4">
+<div class="flex justify-between items-start">
+<span class="bg-primary/10 text-primary text-[10px] font-bold px-2 py-1 rounded tracking-widest uppercase">Security</span>
+<div class="flex items-center gap-1 text-on-surface-variant text-xs">
+<span class="material-symbols-outlined text-sm">history</span>
+                                142 uses
+                            </div>
+</div>
+<div>
+<h3 class="headline-font text-lg font-bold text-white mb-1 group-hover:text-primary transition-colors">Internal Vulnerability Audit</h3>
+<p class="text-sm text-on-surface-variant leading-relaxed line-clamp-2">Full spectral analysis of internal network assets including service versioning and script-based vulnerability assessment.</p>
+</div>
+<div class="bg-surface-container-lowest p-3 rounded font-mono text-xs text-secondary flex items-center gap-2">
+<span class="material-symbols-outlined text-sm opacity-50">terminal</span>
+                            nmap -sV -sC -T4 -p-
+                        </div>
+<div class="flex items-center justify-between pt-4 border-t border-outline-variant/10">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-blue-900 flex items-center justify-center text-[10px] font-bold">JD</div>
+<span class="text-xs text-on-surface-variant font-medium">James Dalton</span>
+</div>
+<div class="flex gap-1">
+<button class="p-2 hover:bg-surface-container-highest rounded text-on-surface-variant transition-colors" title="Duplicate"><span class="material-symbols-outlined text-lg">content_copy</span></button>
+<button class="p-2 hover:bg-surface-container-highest rounded text-on-surface-variant transition-colors" title="Edit"><span class="material-symbols-outlined text-lg">edit</span></button>
+<button class="px-4 py-2 bg-primary/20 text-primary hover:bg-primary hover:text-on-primary rounded font-bold text-xs transition-all">USE</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface-container-low group hover:bg-surface-container transition-all duration-300 rounded-xl overflow-hidden relative">
+<div class="p-6 space-y-4">
+<div class="flex justify-between items-start">
+<span class="bg-tertiary/10 text-tertiary text-[10px] font-bold px-2 py-1 rounded tracking-widest uppercase">Compliance</span>
+<div class="flex items-center gap-1 text-on-surface-variant text-xs">
+<span class="material-symbols-outlined text-sm">history</span>
+                                89 uses
+                            </div>
+</div>
+<div>
+<h3 class="headline-font text-lg font-bold text-white mb-1 group-hover:text-tertiary transition-colors">PCI-DSS Rapid Scan</h3>
+<p class="text-sm text-on-surface-variant leading-relaxed line-clamp-2">Hardened compliance check for payment processing environments with aggressive timeout handling.</p>
+</div>
+<div class="bg-surface-container-lowest p-3 rounded font-mono text-xs text-secondary flex items-center gap-2">
+<span class="material-symbols-outlined text-sm opacity-50">terminal</span>
+                            nmap -sS -Pn -T2 --script pci-compliance
+                        </div>
+<div class="flex items-center justify-between pt-4 border-t border-outline-variant/10">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-amber-900 flex items-center justify-center text-[10px] font-bold">SC</div>
+<span class="text-xs text-on-surface-variant font-medium">Sarah Chen</span>
+</div>
+<div class="flex gap-1">
+<button class="p-2 hover:bg-surface-container-highest rounded text-on-surface-variant transition-colors" title="Duplicate"><span class="material-symbols-outlined text-lg">content_copy</span></button>
+<button class="p-2 hover:bg-surface-container-highest rounded text-on-surface-variant transition-colors" title="Edit"><span class="material-symbols-outlined text-lg">edit</span></button>
+<button class="px-4 py-2 bg-tertiary/20 text-tertiary hover:bg-tertiary hover:text-on-tertiary rounded font-bold text-xs transition-all">USE</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-surface-container-low group hover:bg-surface-container transition-all duration-300 rounded-xl overflow-hidden relative border border-primary/20 shadow-lg shadow-primary/5">
+<div class="p-6 space-y-4">
+<div class="flex justify-between items-start">
+<span class="bg-secondary/10 text-secondary text-[10px] font-bold px-2 py-1 rounded tracking-widest uppercase">Discovery</span>
+<div class="flex items-center gap-1 text-on-surface-variant text-xs">
+<span class="material-symbols-outlined text-sm">history</span>
+                                314 uses
+                            </div>
+</div>
+<div>
+<div class="flex items-center gap-2 mb-1">
+<h3 class="headline-font text-lg font-bold text-white group-hover:text-primary transition-colors">Ghost Asset Mapping</h3>
+<span class="bg-primary text-on-primary text-[8px] font-black px-1 rounded">SYSTEM</span>
+</div>
+<p class="text-sm text-on-surface-variant leading-relaxed line-clamp-2">Proprietary discovery algorithm for identifying unlisted IoT and stealth legacy hardware.</p>
+</div>
+<div class="bg-surface-container-lowest p-3 rounded font-mono text-xs text-secondary flex items-center gap-2">
+<span class="material-symbols-outlined text-sm opacity-50">terminal</span>
+                            sentinel --discover --stealth --deep
+                        </div>
+<div class="flex items-center justify-between pt-4 border-t border-outline-variant/10">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-slate-700 flex items-center justify-center text-[10px] font-bold">SO</div>
+<span class="text-xs text-on-surface-variant font-medium">ScanOps Core</span>
+</div>
+<div class="flex gap-1">
+<button class="p-2 hover:bg-surface-container-highest rounded text-on-surface-variant transition-colors" title="Duplicate"><span class="material-symbols-outlined text-lg">content_copy</span></button>
+<button class="p-2 hover:bg-surface-container-highest rounded text-on-surface-variant transition-colors" title="Edit"><span class="material-symbols-outlined text-lg">edit</span></button>
+<button class="px-4 py-2 bg-primary/20 text-primary hover:bg-primary hover:text-on-primary rounded font-bold text-xs transition-all">USE</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="bg-surface-container-low group hover:bg-surface-container transition-all duration-300 rounded-xl overflow-hidden relative">
+<div class="p-6 space-y-4">
+<div class="flex justify-between items-start">
+<span class="bg-error/10 text-error text-[10px] font-bold px-2 py-1 rounded tracking-widest uppercase">Security</span>
+<div class="flex items-center gap-1 text-on-surface-variant text-xs">
+<span class="material-symbols-outlined text-sm">history</span>
+                                56 uses
+                            </div>
+</div>
+<div>
+<h3 class="headline-font text-lg font-bold text-white mb-1 group-hover:text-error transition-colors">Critical Infrastructure Stress</h3>
+<p class="text-sm text-on-surface-variant leading-relaxed line-clamp-2">High-intensity scan profile for evaluating the resilience of SCADA and industrial controllers.</p>
+</div>
+<div class="bg-surface-container-lowest p-3 rounded font-mono text-xs text-secondary flex items-center gap-2">
+<span class="material-symbols-outlined text-sm opacity-50">terminal</span>
+                            nmap -T5 --script scada-stress -p 502
+                        </div>
+<div class="flex items-center justify-between pt-4 border-t border-outline-variant/10">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-red-900 flex items-center justify-center text-[10px] font-bold">MK</div>
+<span class="text-xs text-on-surface-variant font-medium">Marcus Kane</span>
+</div>
+<div class="flex gap-1">
+<button class="p-2 hover:bg-surface-container-highest rounded text-on-surface-variant transition-colors" title="Duplicate"><span class="material-symbols-outlined text-lg">content_copy</span></button>
+<button class="p-2 hover:bg-surface-container-highest rounded text-on-surface-variant transition-colors" title="Edit"><span class="material-symbols-outlined text-lg">edit</span></button>
+<button class="px-4 py-2 bg-error/20 text-error hover:bg-error hover:text-on-error rounded font-bold text-xs transition-all">USE</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Card 5 -->
+<div class="bg-surface-container-low group hover:bg-surface-container transition-all duration-300 rounded-xl overflow-hidden relative">
+<div class="p-6 space-y-4">
+<div class="flex justify-between items-start">
+<span class="bg-secondary/10 text-secondary text-[10px] font-bold px-2 py-1 rounded tracking-widest uppercase">Discovery</span>
+<div class="flex items-center gap-1 text-on-surface-variant text-xs">
+<span class="material-symbols-outlined text-sm">history</span>
+                                201 uses
+                            </div>
+</div>
+<div>
+<h3 class="headline-font text-lg font-bold text-white mb-1 group-hover:text-primary transition-colors">Quick Reconnaissance</h3>
+<p class="text-sm text-on-surface-variant leading-relaxed line-clamp-2">Standard ping sweep and top 1000 port discovery for rapid environment onboarding.</p>
+</div>
+<div class="bg-surface-container-lowest p-3 rounded font-mono text-xs text-secondary flex items-center gap-2">
+<span class="material-symbols-outlined text-sm opacity-50">terminal</span>
+                            nmap -sn 192.168.1.0/24 --top-ports 1000
+                        </div>
+<div class="flex items-center justify-between pt-4 border-t border-outline-variant/10">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-blue-800 flex items-center justify-center text-[10px] font-bold">AL</div>
+<span class="text-xs text-on-surface-variant font-medium">Anna Lopez</span>
+</div>
+<div class="flex gap-1">
+<button class="p-2 hover:bg-surface-container-highest rounded text-on-surface-variant transition-colors" title="Duplicate"><span class="material-symbols-outlined text-lg">content_copy</span></button>
+<button class="p-2 hover:bg-surface-container-highest rounded text-on-surface-variant transition-colors" title="Edit"><span class="material-symbols-outlined text-lg">edit</span></button>
+<button class="px-4 py-2 bg-primary/20 text-primary hover:bg-primary hover:text-on-primary rounded font-bold text-xs transition-all">USE</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Create New Card -->
+<div class="bg-surface-container-low/40 border-2 border-dashed border-outline-variant/30 rounded-xl flex flex-col items-center justify-center gap-4 group hover:border-primary/50 transition-all cursor-pointer min-h-[320px]">
+<div class="w-16 h-16 rounded-full bg-surface-container-highest flex items-center justify-center group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-3xl text-outline group-hover:text-primary transition-colors">add</span>
+</div>
+<div class="text-center">
+<h4 class="headline-font font-bold text-white">Create Custom Profile</h4>
+<p class="text-xs text-on-surface-variant mt-1">Design a tactical template from scratch</p>
+</div>
+</div>
+</section>
+<!-- Status Footer -->
+<footer class="mt-12 flex justify-between items-center text-xs text-outline headline-font tracking-wide uppercase font-bold">
+<div class="flex gap-8">
+<span class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span> Systems Operational</span>
+<span class="flex items-center gap-2">429 Active Templates</span>
+</div>
+<div>v4.2.0 Tactical Build</div>
+</footer>
+</div>
+</main>
+</body></html>

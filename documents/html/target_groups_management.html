@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Sentinel Tactical - Target Groups</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "tertiary": "#ffb786",
+            "secondary-fixed": "#d3e4fe",
+            "on-primary-fixed-variant": "#004395",
+            "surface-container-lowest": "#070d1f",
+            "primary-fixed-dim": "#adc6ff",
+            "surface-tint": "#adc6ff",
+            "on-primary-container": "#00285d",
+            "primary": "#adc6ff",
+            "surface-bright": "#33394c",
+            "secondary-container": "#3a4a5f",
+            "primary-fixed": "#d8e2ff",
+            "on-secondary-fixed": "#0b1c30",
+            "inverse-on-surface": "#2a3043",
+            "secondary": "#b7c8e1",
+            "background": "#0c1324",
+            "primary-container": "#4d8eff",
+            "on-surface-variant": "#c2c6d6",
+            "on-primary": "#002e6a",
+            "surface-dim": "#0c1324",
+            "on-surface": "#dce1fb",
+            "error": "#ffb4ab",
+            "surface-variant": "#2e3447",
+            "on-tertiary": "#502400",
+            "on-background": "#dce1fb",
+            "on-tertiary-fixed": "#311400",
+            "surface": "#0c1324",
+            "on-tertiary-fixed-variant": "#723600",
+            "on-primary-fixed": "#001a42",
+            "on-error": "#690005",
+            "surface-container-low": "#151b2d",
+            "error-container": "#93000a",
+            "tertiary-fixed-dim": "#ffb786",
+            "tertiary-fixed": "#ffdcc6",
+            "surface-container-high": "#23293c",
+            "inverse-primary": "#005ac2",
+            "on-secondary": "#213145",
+            "on-error-container": "#ffdad6",
+            "secondary-fixed-dim": "#b7c8e1",
+            "outline-variant": "#424754",
+            "on-secondary-container": "#a9bad3",
+            "on-tertiary-container": "#461f00",
+            "on-secondary-fixed-variant": "#38485d",
+            "surface-container-highest": "#2e3447",
+            "inverse-surface": "#dce1fb",
+            "outline": "#8c909f",
+            "tertiary-container": "#df7412",
+            "surface-container": "#191f31"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "fontFamily": {
+            "headline": ["Space Grotesk"],
+            "body": ["Inter"],
+            "label": ["Inter"]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    body { font-family: 'Inter', sans-serif; }
+    h1, h2, h3, .headline { font-family: 'Space Grotesk', sans-serif; }
+  </style>
+</head>
+<body class="bg-background text-on-background overflow-hidden">
+<!-- TopNavBar Implementation -->
+<header class="fixed top-0 w-full z-50 bg-slate-950/60 backdrop-blur-xl shadow-2xl shadow-black/50 flex justify-between items-center px-8 h-16 w-full">
+<div class="flex items-center gap-8">
+<span class="text-2xl font-bold tracking-tighter text-blue-400 font-['Space_Grotesk']">Sentinel Tactical</span>
+<nav class="hidden md:flex gap-6 items-center">
+<a class="text-slate-400 hover:text-blue-300 transition-colors duration-200 font-['Space_Grotesk'] tracking-tight" href="#">Dashboard</a>
+<a class="text-slate-400 hover:text-blue-300 transition-colors duration-200 font-['Space_Grotesk'] tracking-tight" href="#">Threat Intelligence</a>
+<a class="text-blue-400 border-b-2 border-blue-500 pb-1 font-['Space_Grotesk'] tracking-tight" href="#">Tactical Assets</a>
+<a class="text-slate-400 hover:text-blue-300 transition-colors duration-200 font-['Space_Grotesk'] tracking-tight" href="#">Incidents</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-slate-400 hover:text-blue-300 active:scale-95 transition-all"><span class="material-symbols-outlined">notifications</span></button>
+<button class="text-slate-400 hover:text-blue-300 active:scale-95 transition-all"><span class="material-symbols-outlined">settings</span></button>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant">
+<img alt="Security Operator Avatar" data-alt="Portrait of a modern security professional with a focused expression, cinematic lighting, dark background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDF1uJHie5F2ymSsOtCW9876ypwiDfdY9z6nKGh8H90j2r3FjmrQs6USwz6YDmy6JUUnisQaTcHlnhF-mYCtLnQ488y6FuXB505cK0Bg0mjOThvZH8I7M5_1Qkh2D-fivan6bVaqZ-4rGsYHtD9jFqdcoSAE1B8ONMhTCAN1D-fQyAn9sYWCw5Jd-euuEwfyIPJhQk8liiDvsJ_Mgkr9CRydFtYpsWdWKtHk37lt1Mk-6FfrqTnPk2y_btQWTKyU6nfaL-R83EaC7YB"/>
+</div>
+</div>
+</header>
+<div class="flex h-screen overflow-hidden">
+<!-- SideNavBar Implementation (Active Tab: Target Groups) -->
+<aside class="bg-slate-900 h-full w-64 flex flex-col h-screen pt-20 pb-8 px-4 font-['Inter'] text-sm font-medium">
+<div class="px-2 mb-8">
+<div class="flex items-center gap-3 mb-2">
+<div class="w-2 h-2 rounded-full bg-tertiary animate-pulse shadow-[0_0_10px_rgba(255,183,134,0.6)]"></div>
+<span class="text-lg font-black text-blue-500 uppercase tracking-widest">Operational Status</span>
+</div>
+<p class="text-xs text-slate-500 font-medium tracking-tight">Live Monitoring Active</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 hover:bg-slate-800 hover:text-slate-200 duration-150 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span> Asset Inventory
+        </a>
+<a class="flex items-center gap-3 px-3 py-2 bg-slate-800 text-blue-400 border-r-4 border-blue-500 duration-150 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="hub">hub</span> Target Groups
+        </a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 hover:bg-slate-800 hover:text-slate-200 duration-150 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="lan">lan</span> Network Topology
+        </a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 hover:bg-slate-800 hover:text-slate-200 duration-150 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="cloud_done">cloud_done</span> Cloud Security
+        </a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 hover:bg-slate-800 hover:text-slate-200 duration-150 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="verified_user">verified_user</span> Compliance
+        </a>
+</nav>
+<div class="mt-auto space-y-6">
+<button class="w-full bg-primary text-on-primary py-2.5 rounded-md font-bold text-xs uppercase tracking-widest hover:brightness-110 active:scale-95 transition-all">
+          Trigger Global Scan
+        </button>
+<div class="pt-4 border-t border-slate-800 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 hover:bg-slate-800 hover:text-slate-200 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span> Logout
+          </a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 hover:bg-slate-800 hover:text-slate-200 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="help">help</span> Help
+          </a>
+</div>
+</div>
+</aside>
+<!-- Main Content Split Layout -->
+<main class="flex-1 pt-16 flex overflow-hidden">
+<!-- Left Sidebar: Target Groups List -->
+<section class="w-80 bg-surface-container-low border-r border-outline-variant/10 flex flex-col">
+<div class="p-6 pb-4">
+<button class="w-full flex items-center justify-center gap-2 bg-surface-container-highest text-primary font-bold py-3 rounded-lg hover:bg-primary-container/20 transition-all border border-primary/20">
+<span class="material-symbols-outlined text-sm">add</span>
+<span class="text-xs uppercase tracking-widest">Create Group</span>
+</button>
+</div>
+<div class="flex-1 overflow-y-auto px-4 space-y-3 pb-8">
+<!-- Active Card -->
+<div class="bg-surface-container-highest p-4 rounded-xl border-l-4 border-primary shadow-lg shadow-black/20">
+<div class="flex justify-between items-start mb-2">
+<h3 class="text-on-surface font-bold text-sm">Production Web Servers</h3>
+<span class="bg-primary/10 text-primary text-[10px] font-bold px-2 py-0.5 rounded uppercase">Active</span>
+</div>
+<div class="flex items-center gap-4 text-on-surface-variant text-xs">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs">devices</span> 12 targets</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs text-tertiary">history</span> 2h ago</span>
+</div>
+</div>
+<!-- Inactive Cards -->
+<div class="bg-surface-container hover:bg-surface-container-high p-4 rounded-xl transition-colors cursor-pointer group">
+<div class="flex justify-between items-start mb-2">
+<h3 class="text-on-surface-variant group-hover:text-on-surface font-bold text-sm">Internal DB Cluster</h3>
+<span class="bg-slate-800 text-slate-500 text-[10px] font-bold px-2 py-0.5 rounded uppercase">Idle</span>
+</div>
+<div class="flex items-center gap-4 text-on-surface-variant text-xs">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs">database</span> 8 targets</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs">history</span> 1d ago</span>
+</div>
+</div>
+<div class="bg-surface-container hover:bg-surface-container-high p-4 rounded-xl transition-colors cursor-pointer group">
+<div class="flex justify-between items-start mb-2">
+<h3 class="text-on-surface-variant group-hover:text-on-surface font-bold text-sm">Office WiFi Clients</h3>
+<span class="bg-slate-800 text-slate-500 text-[10px] font-bold px-2 py-0.5 rounded uppercase">Idle</span>
+</div>
+<div class="flex items-center gap-4 text-on-surface-variant text-xs">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs">wifi</span> 142 targets</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs">history</span> 4h ago</span>
+</div>
+</div>
+<div class="bg-surface-container hover:bg-surface-container-high p-4 rounded-xl transition-colors cursor-pointer group">
+<div class="flex justify-between items-start mb-2">
+<h3 class="text-on-surface-variant group-hover:text-on-surface font-bold text-sm">Dev Staging Env</h3>
+<span class="bg-error/10 text-error text-[10px] font-bold px-2 py-0.5 rounded uppercase">Alert</span>
+</div>
+<div class="flex items-center gap-4 text-on-surface-variant text-xs">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs">code</span> 5 targets</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs text-error">warning</span> Critical</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Main Panel: Detailed View -->
+<section class="flex-1 bg-surface flex flex-col overflow-hidden">
+<!-- Header Section -->
+<header class="p-8 pb-4">
+<div class="flex justify-between items-start">
+<div>
+<div class="flex items-center gap-3 mb-1">
+<h1 class="text-4xl font-bold tracking-tighter text-on-surface headline">Production Web Servers</h1>
+<span class="material-symbols-outlined text-primary text-xl">verified</span>
+</div>
+<div class="flex items-center gap-4 text-on-surface-variant text-sm">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs">person</span> Created by Oper-042</span>
+<span class="text-outline-variant opacity-30">|</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs">calendar_today</span> Oct 12, 2023</span>
+</div>
+</div>
+<div class="flex gap-3">
+<button class="bg-surface-container-highest text-on-surface px-4 py-2 rounded-md text-xs font-bold uppercase tracking-widest hover:brightness-125 transition-all">Rename</button>
+<button class="bg-surface-container-highest text-on-surface px-4 py-2 rounded-md text-xs font-bold uppercase tracking-widest hover:brightness-125 transition-all">Add Targets</button>
+<button class="bg-primary text-on-primary px-6 py-2 rounded-md text-xs font-black uppercase tracking-widest shadow-lg shadow-primary/20 hover:scale-105 transition-all">Run Group Scan</button>
+</div>
+</div>
+<!-- Search and Filters -->
+<div class="mt-8 flex items-center justify-between gap-4">
+<div class="relative flex-1 max-w-md">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-lg">search</span>
+<input class="w-full bg-surface-container-low border-none focus:ring-1 focus:ring-primary/40 rounded-lg pl-10 text-sm text-on-surface py-2.5" placeholder="Search targets by IP, Hostname or OS..." type="text"/>
+</div>
+<div class="flex gap-2">
+<div class="bg-surface-container-low px-3 py-2 rounded-lg flex items-center gap-2 cursor-pointer hover:bg-surface-container-high transition-colors">
+<span class="text-[10px] font-bold uppercase tracking-widest text-slate-500">Status:</span>
+<span class="text-xs text-on-surface font-semibold">All</span>
+<span class="material-symbols-outlined text-sm text-slate-500">expand_more</span>
+</div>
+<div class="bg-surface-container-low px-3 py-2 rounded-lg flex items-center gap-2 cursor-pointer hover:bg-surface-container-high transition-colors">
+<span class="text-[10px] font-bold uppercase tracking-widest text-slate-500">Type:</span>
+<span class="text-xs text-on-surface font-semibold">Any</span>
+<span class="material-symbols-outlined text-sm text-slate-500">expand_more</span>
+</div>
+</div>
+</div>
+</header>
+<!-- Data Rich Table -->
+<div class="flex-1 overflow-y-auto px-8 pb-8">
+<div class="bg-surface-container-low rounded-2xl overflow-hidden shadow-2xl">
+<table class="w-full text-left">
+<thead>
+<tr class="text-[10px] uppercase tracking-[0.2em] text-slate-500 font-black border-b border-outline-variant/10">
+<th class="px-6 py-5">IP / Hostname</th>
+<th class="px-6 py-5">Operating System</th>
+<th class="px-6 py-5">Status</th>
+<th class="px-6 py-5">Last Scan</th>
+<th class="px-6 py-5 text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/5">
+<!-- Table Row 1 -->
+<tr class="hover:bg-surface-container-high transition-colors group">
+<td class="px-6 py-4">
+<div class="flex flex-col">
+<span class="text-on-surface font-bold font-mono">192.168.1.105</span>
+<span class="text-[10px] text-on-surface-variant font-medium">web-prod-01.local</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<img alt="Linux OS Logo" class="w-5 h-5 rounded-sm opacity-60" data-alt="Minimalist glowing icon of a linux penguin, high tech digital art style" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCKQFqePgKfw_sdOCEhN8QdBJOeAVLOhS2E42jlCQg4SvwX7YUDmrPvY9etpZbB3GRiZg1zNdaXqBcrYL12ad7qu9XnpejpzMOiIcnkB2xpNrqriPxAyNa6CEzmAJGn-zPuHuMwIdtUZsigV0I0fhwNXa2PbquEZgd1yszhfn47cZQRVvppgjN99e5JdYzSfBAMbrbgP_07NbtFhT4nRiZaWzPSHQtu5D7gTxVS6SixNcHQVQXwLLv3Tcjt-Cg56o5jTdeQjULczyYD"/>
+<span class="text-xs text-on-surface">Ubuntu 22.04 LTS</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="flex items-center gap-2 text-xs font-bold text-tertiary">
+<span class="w-2 h-2 rounded-full bg-tertiary shadow-[0_0_8px_#ffb786]"></span>
+                      ONLINE
+                    </span>
+</td>
+<td class="px-6 py-4">
+<span class="text-xs text-on-surface-variant">14 mins ago</span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-500 hover:text-error transition-colors p-1 rounded hover:bg-error/10">
+<span class="material-symbols-outlined text-lg">delete_forever</span>
+</button>
+</td>
+</tr>
+<!-- Table Row 2 -->
+<tr class="hover:bg-surface-container-high transition-colors group">
+<td class="px-6 py-4">
+<div class="flex flex-col">
+<span class="text-on-surface font-bold font-mono">192.168.1.108</span>
+<span class="text-[10px] text-on-surface-variant font-medium">web-prod-02.local</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<img alt="Linux OS Logo" class="w-5 h-5 rounded-sm opacity-60" data-alt="Minimalist glowing icon of a linux penguin, high tech digital art style" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDIoqp6tVcjFHWfs74sJRut0zfecbACdeNuRJds6jV20ee_P_-1RQszUYwl0Kga5IwxvsbiOhTUbKwCdO6bYWjSyEA-kMD_zrCOAQSMqmV14dCa98gKlRCAyH36hiIadLF1MnpMqzatDHRDWCybuVbIw2ofQs02IRRUDQiXcDqe6XUXo9wC7mF9VBak19oJ5R95dMkwwQsZ4MhZ-WVpPkoJg7obGO3xSF12EFM1qA16mpKBtqqzVeUruHjdd38oQHz5Biug8YzOQYle"/>
+<span class="text-xs text-on-surface">Ubuntu 22.04 LTS</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="flex items-center gap-2 text-xs font-bold text-error">
+<span class="w-2 h-2 rounded-full bg-error shadow-[0_0_8px_#ffb4ab]"></span>
+                      CRITICAL
+                    </span>
+</td>
+<td class="px-6 py-4">
+<span class="text-xs text-on-surface-variant">1d 4h ago</span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-500 hover:text-error transition-colors p-1 rounded hover:bg-error/10">
+<span class="material-symbols-outlined text-lg">delete_forever</span>
+</button>
+</td>
+</tr>
+<!-- Table Row 3 -->
+<tr class="hover:bg-surface-container-high transition-colors group">
+<td class="px-6 py-4">
+<div class="flex flex-col">
+<span class="text-on-surface font-bold font-mono">192.168.1.201</span>
+<span class="text-[10px] text-on-surface-variant font-medium">proxy-edge.internal</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<img alt="Cloud OS Logo" class="w-5 h-5 rounded-sm opacity-60" data-alt="Stylized cloud server icon, neon blue lighting, dark background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB8mwdSn8bezrJGBHZcuOdC60cdfmxNubLhtWrvIDYir51S4XoR9BfFYqwktA4EWQzK3FjfjW1Z_sdGV9oxkpvcojhX20gQyJ_4ZHp3VTMbUwepS6ZbVdHjoLAaEatfm5sDyzqt6dHgK5DkXNHG8_-_17MtuiTMnhru1OJb4Fb81G3bQMsooV_EO7JqyF7ffbKDxbRC3VG6KcIKTBw0foHCxpSJDFanB7T0ru7yAxS2sojT5CUtVZzkSNlcgM7PsQwj7QD0WtVKtjUu"/>
+<span class="text-xs text-on-surface">CloudOS Alpine</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="flex items-center gap-2 text-xs font-bold text-tertiary">
+<span class="w-2 h-2 rounded-full bg-tertiary shadow-[0_0_8px_#ffb786]"></span>
+                      ONLINE
+                    </span>
+</td>
+<td class="px-6 py-4">
+<span class="text-xs text-on-surface-variant">2h ago</span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-500 hover:text-error transition-colors p-1 rounded hover:bg-error/10">
+<span class="material-symbols-outlined text-lg">delete_forever</span>
+</button>
+</td>
+</tr>
+<!-- Table Row 4 -->
+<tr class="hover:bg-surface-container-high transition-colors group">
+<td class="px-6 py-4">
+<div class="flex flex-col">
+<span class="text-on-surface font-bold font-mono">10.0.4.12</span>
+<span class="text-[10px] text-on-surface-variant font-medium">legacy-node.legacy</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<img alt="Legacy OS Logo" class="w-5 h-5 rounded-sm opacity-60" data-alt="Old computer icon with digital noise, dark aesthetic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBhuIyNGpj-jV1j4CzIMoqrd08pFn1KdXKEp8K22a0AfGFi5-7q4OboL1FimcztJZxbInkD_KbgVXn5CFSAZ_XiLhDGcT2uUonKOUZjPLtEkvGb0E4vTtNj0PDXa1eKfUfLecK38D7myAW-nShVJYCJ2nHVnvOB_E4Kc93a9iYUjXFRJzBZuGt_Inrrmya2wTlOe7VnaCr9pX86ioDLLOQZGKaxuIdz1Dx7rZEdyZTC44Bt4G5_l8bnqcpLpMtdSktBXmZ9Zl9ntKlD"/>
+<span class="text-xs text-on-surface">Windows Server 2012</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="flex items-center gap-2 text-xs font-bold text-slate-500">
+<span class="w-2 h-2 rounded-full bg-slate-700"></span>
+                      OFFLINE
+                    </span>
+</td>
+<td class="px-6 py-4">
+<span class="text-xs text-on-surface-variant">Never</span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-500 hover:text-error transition-colors p-1 rounded hover:bg-error/10">
+<span class="material-symbols-outlined text-lg">delete_forever</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+</main>
+</div>
+<!-- Confirmation Dialog (Overlay) -->
+<div class="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-md hidden">
+<div class="bg-surface-container-low w-full max-w-md rounded-2xl p-8 border border-outline-variant/20 shadow-[0_24px_48px_rgba(0,0,0,0.5)]">
+<div class="w-12 h-12 bg-error/10 rounded-full flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-error text-3xl">warning</span>
+</div>
+<h3 class="text-2xl font-bold text-on-surface headline mb-2">Execute Group Scan?</h3>
+<p class="text-on-surface-variant text-sm mb-8 leading-relaxed">
+        You are about to initiate a tactical scan for <span class="text-primary font-bold">12 targets</span> in the 'Production Web Servers' group. This may impact network latency during execution.
+      </p>
+<div class="flex gap-4">
+<button class="flex-1 bg-surface-container-highest text-on-surface py-3 rounded-lg font-bold text-xs uppercase tracking-widest hover:brightness-125 transition-all">Cancel</button>
+<button class="flex-1 bg-primary text-on-primary py-3 rounded-lg font-black text-xs uppercase tracking-widest hover:scale-105 transition-all">Confirm Scan</button>
+</div>
+</div>
+</div>
+<!-- Bottom Nav for Mobile -->
+<nav class="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-slate-950/80 backdrop-blur-xl flex items-center justify-around z-50">
+<button class="flex flex-col items-center gap-1 text-slate-500">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-[10px] uppercase font-bold">Dash</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-blue-400">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">hub</span>
+<span class="text-[10px] uppercase font-bold">Groups</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-slate-500">
+<span class="material-symbols-outlined">shield_with_heart</span>
+<span class="text-[10px] uppercase font-bold">Threats</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-slate-500">
+<span class="material-symbols-outlined">account_circle</span>
+<span class="text-[10px] uppercase font-bold">Profile</span>
+</button>
+</nav>
+</body></html>

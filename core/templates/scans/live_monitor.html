@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load scanops_tags %}
+
+{% block title %}Live Monitor | ScanOps{% endblock %}
+
+{% block content %}
+    {% include "includes/breadcrumbs.html" with breadcrumbs=breadcrumbs %}
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+        <div>
+            <h1 class="text-4xl font-bold text-white tracking-tight">Live Scan Monitor</h1>
+            <p class="text-slate-400 mt-1">
+                {{ execution.scan_request.target.target_value }} • {{ execution.scan_request.profile.name|default:execution.scan_request.get_scan_type_display }}
+            </p>
+        </div>
+        <div class="flex items-center gap-3">
+            <span class="px-3 py-1 rounded text-xs uppercase tracking-widest font-semibold {{ execution.status|status_badge }}">{{ execution.get_status_display }}</span>
+            <a href="{% url 'scans:running' %}" class="px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-sm font-semibold text-slate-100 hover:bg-slate-700">Back</a>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
+        <div class="xl:col-span-4 space-y-6">
+            <div
+                id="live-status-panel"
+                hx-get="{% url 'scans:monitor-status' execution.pk %}"
+                hx-trigger="load, every 5s"
+                hx-swap="innerHTML"
+            >
+                {% include "partials/live_status_panel.html" %}
+            </div>
+        </div>
+        <div class="xl:col-span-8">
+            <div
+                id="live-log-panel"
+                hx-get="{% url 'scans:monitor-logs' execution.pk %}"
+                hx-trigger="load, every 4s"
+                hx-swap="innerHTML"
+            >
+                {% include "partials/live_log_panel.html" with logs=recent_events %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

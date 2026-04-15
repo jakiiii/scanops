@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ScanOps - Notification Detail</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-primary": "#005ac2",
+                        "tertiary-fixed": "#ffdcc6",
+                        "outline-variant": "#424754",
+                        "on-secondary-fixed-variant": "#38485d",
+                        "on-primary-container": "#00285d",
+                        "on-secondary": "#213145",
+                        "surface-bright": "#33394c",
+                        "primary-fixed": "#d8e2ff",
+                        "on-tertiary-fixed-variant": "#723600",
+                        "secondary-fixed": "#d3e4fe",
+                        "surface-container": "#191f31",
+                        "primary-fixed-dim": "#adc6ff",
+                        "tertiary-fixed-dim": "#ffb786",
+                        "on-background": "#dce1fb",
+                        "surface-variant": "#2e3447",
+                        "surface-container-high": "#23293c",
+                        "tertiary": "#ffb786",
+                        "surface": "#0c1324",
+                        "on-error": "#690005",
+                        "surface-container-highest": "#2e3447",
+                        "on-primary-fixed-variant": "#004395",
+                        "on-tertiary-container": "#461f00",
+                        "on-tertiary": "#502400",
+                        "on-surface": "#dce1fb",
+                        "on-secondary-container": "#a9bad3",
+                        "on-primary": "#002e6a",
+                        "background": "#0c1324",
+                        "inverse-on-surface": "#2a3043",
+                        "primary-container": "#4d8eff",
+                        "surface-container-lowest": "#070d1f",
+                        "surface-tint": "#adc6ff",
+                        "error": "#ffb4ab",
+                        "on-tertiary-fixed": "#311400",
+                        "error-container": "#93000a",
+                        "secondary": "#b7c8e1",
+                        "on-error-container": "#ffdad6",
+                        "inverse-surface": "#dce1fb",
+                        "secondary-fixed-dim": "#b7c8e1",
+                        "on-primary-fixed": "#001a42",
+                        "primary": "#adc6ff",
+                        "tertiary-container": "#df7412",
+                        "on-secondary-fixed": "#0b1c30",
+                        "secondary-container": "#3a4a5f",
+                        "surface-dim": "#0c1324",
+                        "on-surface-variant": "#c2c6d6",
+                        "surface-container-low": "#151b2d",
+                        "outline": "#8c909f"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Space Grotesk"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .glass-overlay {
+            background: rgba(46, 52, 71, 0.6);
+            backdrop-filter: blur(24px);
+        }
+        .status-pulse {
+            position: relative;
+        }
+        .status-pulse::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 8px;
+            height: 8px;
+            background: currentColor;
+            border-radius: 50%;
+            box-shadow: 0 0 10px 4px currentColor;
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopAppBar -->
+<header class="bg-[#0c1324] dark:bg-[#0c1324] font-['Space_Grotesk'] tracking-tight w-full top-0 sticky z-50">
+<div class="flex justify-between items-center px-6 py-4 w-full bg-[#151b2d]">
+<div class="flex items-center gap-8">
+<span class="text-2xl font-bold tracking-tighter text-blue-500">ScanOps</span>
+<nav class="hidden md:flex gap-6 items-center">
+<span class="text-slate-400 hover:bg-[#2e3447] transition-colors px-3 py-1 cursor-pointer">Command</span>
+<span class="text-blue-400 font-bold px-3 py-1">Scans</span>
+<span class="text-slate-400 hover:bg-[#2e3447] transition-colors px-3 py-1 cursor-pointer">Threats</span>
+<span class="text-slate-400 hover:bg-[#2e3447] transition-colors px-3 py-1 cursor-pointer">Assets</span>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative flex items-center bg-surface-container-low px-3 py-2 rounded-lg">
+<span class="material-symbols-outlined text-slate-400 text-sm">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-sm text-on-surface-variant w-48" placeholder="Search Node..." type="text"/>
+</div>
+<span class="material-symbols-outlined text-slate-400 hover:bg-[#2e3447] p-2 rounded transition-colors cursor-pointer" data-icon="settings">settings</span>
+<span class="material-symbols-outlined text-slate-400 hover:bg-[#2e3447] p-2 rounded transition-colors cursor-pointer" data-icon="help_outline">help_outline</span>
+<img alt="Operator Profile" class="w-8 h-8 rounded-full border border-outline-variant" data-alt="Close up portrait of a professional system operator in a dimly lit high-tech environment with blue screen glow" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB8d2Nmy3MGALfiTP_i-SyJaFQJS4M66BlUMzmxCt-rdQxbe6tV1bW1LhpRlrvlC4Y_HAvjNvdd0sYbmNm-8VIa188eYQG7zNcyxD2mk0ZtMRmWUgJEUv9VZ8_4byYbDMApjG_QGvAHFTp7MVz9DQFd5qnrYUGx94x5Ja061AIdOgYC8OML6Y1AVlWeENCqSb5kjQd9moXuJdU7rOz02_nxgZAy372GS4anhBESTV5eTPdEpRNnUdNOeZBG2Sl9XFl-mLXRq9ZKHRKl"/>
+</div>
+</div>
+</header>
+<div class="flex min-h-screen">
+<!-- SideNavBar -->
+<aside class="h-screen w-64 left-0 sticky hidden md:flex flex-col bg-[#0c1324] dark:bg-[#0c1324] border-r border-slate-800/20">
+<div class="p-6 flex items-center gap-3">
+<div class="w-10 h-10 bg-surface-container-highest flex items-center justify-center rounded">
+<span class="material-symbols-outlined text-blue-500" data-icon="terminal">terminal</span>
+</div>
+<div>
+<div class="text-blue-500 font-bold font-headline text-xs tracking-widest uppercase">Sentinel Prime</div>
+<div class="text-[10px] text-slate-500 uppercase tracking-widest">Sector 7-G</div>
+</div>
+</div>
+<nav class="flex-1 px-4 space-y-1">
+<div class="flex items-center gap-3 px-3 py-3 font-['Inter'] uppercase tracking-widest text-[10px] text-slate-500 hover:text-slate-300 hover:bg-[#151b2d] transition-all cursor-pointer rounded">
+<span class="material-symbols-outlined text-base" data-icon="terminal">terminal</span> Command
+                </div>
+<div class="flex items-center gap-3 px-3 py-3 font-['Inter'] uppercase tracking-widest text-[10px] text-blue-400 border-r-2 border-blue-500 bg-[#151b2d] transition-all cursor-pointer rounded">
+<span class="material-symbols-outlined text-base" data-icon="radar">radar</span> Scans
+                </div>
+<div class="flex items-center gap-3 px-3 py-3 font-['Inter'] uppercase tracking-widest text-[10px] text-slate-500 hover:text-slate-300 hover:bg-[#151b2d] transition-all cursor-pointer rounded">
+<span class="material-symbols-outlined text-base" data-icon="security" data-weight="fill" style="font-variation-settings: 'FILL' 1;">security</span> Threats
+                </div>
+<div class="flex items-center gap-3 px-3 py-3 font-['Inter'] uppercase tracking-widest text-[10px] text-slate-500 hover:text-slate-300 hover:bg-[#151b2d] transition-all cursor-pointer rounded">
+<span class="material-symbols-outlined text-base" data-icon="dns">dns</span> Assets
+                </div>
+<div class="flex items-center gap-3 px-3 py-3 font-['Inter'] uppercase tracking-widest text-[10px] text-slate-500 hover:text-slate-300 hover:bg-[#151b2d] transition-all cursor-pointer rounded">
+<span class="material-symbols-outlined text-base" data-icon="analytics">analytics</span> Reports
+                </div>
+</nav>
+<div class="p-4 border-t border-slate-800/20">
+<button class="w-full bg-primary text-on-primary py-3 rounded text-[10px] font-bold uppercase tracking-widest transition-all active:scale-95">Initiate Scan</button>
+</div>
+<div class="px-4 pb-6 space-y-1 mt-4">
+<div class="flex items-center gap-3 px-3 py-2 font-['Inter'] uppercase tracking-widest text-[10px] text-slate-500 hover:text-slate-300 cursor-pointer">
+<span class="material-symbols-outlined text-base" data-icon="history">history</span> Logs
+                </div>
+<div class="flex items-center gap-3 px-3 py-2 font-['Inter'] uppercase tracking-widest text-[10px] text-slate-500 hover:text-slate-300 cursor-pointer">
+<span class="material-symbols-outlined text-base" data-icon="code">code</span> Terminal
+                </div>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 bg-surface-container-low min-h-screen">
+<div class="p-8 max-w-7xl mx-auto space-y-8">
+<!-- Page Header & Breadcrumbs -->
+<div class="flex flex-col gap-2">
+<nav class="flex items-center gap-2 text-label text-xs text-on-surface-variant font-medium">
+<span class="hover:text-primary cursor-pointer transition-colors">Notifications</span>
+<span class="material-symbols-outlined text-xs">chevron_right</span>
+<span class="text-on-surface">NTF-8829</span>
+</nav>
+<div class="flex items-center justify-between">
+<h1 class="text-5xl font-headline font-bold tracking-tight text-on-surface">Notification Detail</h1>
+<div class="flex items-center gap-2 px-3 py-1 bg-error-container text-error rounded-full text-xs font-bold uppercase tracking-wider">
+<span class="w-2 h-2 rounded-full bg-error animate-pulse"></span>
+                            Live Incident
+                        </div>
+</div>
+</div>
+<!-- Bento Layout Grid -->
+<div class="grid grid-cols-12 gap-6">
+<!-- Event Summary Card -->
+<div class="col-span-12 lg:col-span-8 bg-surface p-8 rounded-xl relative overflow-hidden flex flex-col justify-between min-h-[400px]">
+<div class="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-error/10 to-transparent opacity-50 blur-3xl pointer-events-none"></div>
+<div class="relative z-10 flex flex-col gap-6">
+<div class="flex items-start justify-between">
+<div class="flex flex-col gap-1">
+<span class="text-xs font-bold uppercase tracking-widest text-primary">Alert Type</span>
+<h2 class="text-3xl font-headline font-bold text-on-surface leading-none">Vulnerability Detected</h2>
+</div>
+<div class="flex flex-col items-end gap-1">
+<span class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Severity</span>
+<span class="text-error font-headline text-2xl font-bold uppercase tracking-tighter">Critical</span>
+</div>
+</div>
+<div class="space-y-4">
+<p class="text-on-surface-variant text-lg max-w-2xl leading-relaxed">
+                                    A high-risk SQL injection vulnerability was identified on the production database cluster. Initial probing suggests potential unauthorized entry vector via the legacy reporting service.
+                                </p>
+<div class="flex gap-12 mt-8">
+<div class="flex flex-col gap-1">
+<span class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Status</span>
+<div class="flex items-center gap-2 text-on-surface font-medium">
+<span class="status-pulse text-error"></span>
+<span class="ml-4">Unresolved</span>
+</div>
+</div>
+<div class="flex flex-col gap-1">
+<span class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Detection Time</span>
+<div class="text-on-surface font-medium">2023-10-24 14:22:10 UTC</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Tactical Actions Integrated in Summary -->
+<div class="flex flex-wrap gap-3 mt-12 relative z-10">
+<button class="bg-primary text-on-primary px-6 py-3 rounded font-bold text-sm uppercase tracking-widest hover:brightness-110 transition-all flex items-center gap-2">
+<span class="material-symbols-outlined text-lg" data-icon="visibility">visibility</span>
+                                View Scan Results
+                            </button>
+<button class="bg-surface-container-highest text-on-surface px-6 py-3 rounded font-bold text-sm uppercase tracking-widest hover:bg-primary-fixed-dim hover:text-on-primary-fixed transition-all flex items-center gap-2">
+<span class="material-symbols-outlined text-lg" data-icon="task_alt">task_alt</span>
+                                Acknowledge Alert
+                            </button>
+<button class="bg-surface-container-highest text-on-surface px-6 py-3 rounded font-bold text-sm uppercase tracking-widest hover:bg-primary-fixed-dim hover:text-on-primary-fixed transition-all flex items-center gap-2">
+<span class="material-symbols-outlined text-lg" data-icon="confirmation_number">confirmation_number</span>
+                                Create Incident Ticket
+                            </button>
+<button class="text-error px-4 py-3 rounded font-bold text-sm uppercase tracking-widest hover:bg-error/10 transition-all">
+                                Ignore
+                            </button>
+</div>
+</div>
+<!-- Linked Intel Cards (Asymmetric Stack) -->
+<div class="col-span-12 lg:col-span-4 flex flex-col gap-6">
+<div class="bg-surface-container-high p-6 rounded-xl border-l-2 border-primary">
+<div class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant mb-4">Linked Intel</div>
+<div class="space-y-6">
+<div class="flex items-center justify-between group cursor-pointer">
+<div class="flex flex-col">
+<span class="text-xs text-on-surface-variant">Scan ID</span>
+<span class="text-on-surface font-mono text-lg font-bold">#8829</span>
+</div>
+<span class="material-symbols-outlined text-primary opacity-0 group-hover:opacity-100 transition-opacity" data-icon="open_in_new">open_in_new</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex flex-col">
+<span class="text-xs text-on-surface-variant">Target IP</span>
+<span class="text-on-surface font-mono text-lg font-bold">10.0.4.155</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="lan">lan</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex flex-col">
+<span class="text-xs text-on-surface-variant">Owner</span>
+<span class="text-on-surface text-lg font-bold">Data Platform Team</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="groups">groups</span>
+</div>
+</div>
+</div>
+<!-- Target Context Map Graphic (Aesthetic) -->
+<div class="relative flex-1 bg-surface-container rounded-xl overflow-hidden min-h-[200px]">
+<img alt="System Architecture Diagram" class="absolute inset-0 w-full h-full object-cover opacity-20" data-alt="Abstract glowing network nodes and lines representing a server infrastructure on a dark blue background with digital glitch effects" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCF4UyTq46NIZ8wwtuYce9J1kklNHghGn2-3QFiKqj9FhROyvOGRj8nkEg0m5jCeFBxC-VERuBT4V0AtytA3krVUqQL7mn2_F9jv2pqUPXrqbA5rS8JMFxwrahn27jnKAvemXOGMhWscvOB6W9TC2OS_68TZwKfS6lbfKs696DG0KC3yAt9DX1JZqjcU3hJWaQcOTgkpCbbOSJ5meLjyiV_WVk1jjdBrtYYQ9zffa7lSawyhzrjldeLQMBdDSg2ytrU65Vi9a2bUw9B"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-low to-transparent"></div>
+<div class="absolute bottom-4 left-4">
+<span class="text-[10px] font-bold uppercase tracking-widest text-primary block mb-1">Infrastructure Node</span>
+<span class="text-on-surface font-headline font-bold">production-db-01.internal</span>
+</div>
+</div>
+</div>
+<!-- Activity Timeline -->
+<div class="col-span-12 bg-surface-container-low p-8 rounded-xl">
+<div class="flex items-center justify-between mb-12">
+<h3 class="text-2xl font-headline font-bold text-on-surface">Activity Timeline</h3>
+<div class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Real-time Log Feed</div>
+</div>
+<div class="relative space-y-0">
+<!-- Vertical Line -->
+<div class="absolute left-4 top-2 bottom-2 w-px bg-outline-variant/30"></div>
+<!-- Timeline Items -->
+<div class="relative pl-12 pb-12 group">
+<div class="absolute left-[11px] top-1.5 w-2.5 h-2.5 rounded-full bg-primary border-4 border-surface group-hover:scale-150 transition-transform"></div>
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div class="space-y-1">
+<h4 class="text-on-surface font-bold text-lg">Scan Started</h4>
+<p class="text-sm text-on-surface-variant">Automated weekly hygiene scan initiated by system scheduler.</p>
+</div>
+<div class="text-xs font-mono text-on-surface-variant bg-surface-container px-3 py-1 rounded">14:00:01 UTC</div>
+</div>
+</div>
+<div class="relative pl-12 pb-12 group">
+<div class="absolute left-[11px] top-1.5 w-2.5 h-2.5 rounded-full bg-primary border-4 border-surface group-hover:scale-150 transition-transform"></div>
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div class="space-y-1">
+<h4 class="text-on-surface font-bold text-lg">Probe Triggered</h4>
+<p class="text-sm text-on-surface-variant">SQL injection payload sequence 0x442-A executed against port 5432.</p>
+</div>
+<div class="text-xs font-mono text-on-surface-variant bg-surface-container px-3 py-1 rounded">14:15:44 UTC</div>
+</div>
+</div>
+<div class="relative pl-12 pb-12 group">
+<div class="absolute left-[11px] top-1.5 w-2.5 h-2.5 rounded-full bg-error border-4 border-surface group-hover:scale-150 transition-transform shadow-[0_0_10px_rgba(255,180,171,0.5)]"></div>
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div class="space-y-1">
+<h4 class="text-error font-bold text-lg">Vulnerability Identified</h4>
+<p class="text-sm text-on-surface-variant">Confirmation of 'CVE-2023-4421' vulnerability. Severity level mapped to Critical.</p>
+</div>
+<div class="text-xs font-mono text-on-surface-variant bg-surface-container px-3 py-1 rounded">14:22:10 UTC</div>
+</div>
+</div>
+<div class="relative pl-12 pb-12 group">
+<div class="absolute left-[11px] top-1.5 w-2.5 h-2.5 rounded-full bg-tertiary border-4 border-surface group-hover:scale-150 transition-transform"></div>
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div class="space-y-1">
+<h4 class="text-tertiary font-bold text-lg">Notification Sent</h4>
+<p class="text-sm text-on-surface-variant">SMS and Email alerts dispatched to Data Platform Team on-call rotation.</p>
+</div>
+<div class="text-xs font-mono text-on-surface-variant bg-surface-container px-3 py-1 rounded">14:22:15 UTC</div>
+</div>
+</div>
+<div class="relative pl-12 group">
+<div class="absolute left-[11px] top-1.5 w-2.5 h-2.5 rounded-full bg-outline border-4 border-surface group-hover:scale-150 transition-transform"></div>
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div class="space-y-1">
+<h4 class="text-on-surface-variant font-bold text-lg">Ticket Created</h4>
+<p class="text-sm text-on-surface-variant">Jira Issue <span class="text-primary underline cursor-pointer">SEC-99201</span> automatically generated and assigned.</p>
+</div>
+<div class="text-xs font-mono text-on-surface-variant bg-surface-container px-3 py-1 rounded">14:25:00 UTC</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- Mobile Navigation (Hidden on desktop) -->
+<footer class="md:hidden fixed bottom-0 left-0 right-0 bg-[#0c1324] flex justify-around items-center py-3 z-50">
+<div class="flex flex-col items-center gap-1 text-slate-500">
+<span class="material-symbols-outlined text-xl" data-icon="terminal">terminal</span>
+<span class="text-[9px] uppercase tracking-tighter">Command</span>
+</div>
+<div class="flex flex-col items-center gap-1 text-blue-400">
+<span class="material-symbols-outlined text-xl" data-icon="radar">radar</span>
+<span class="text-[9px] uppercase tracking-tighter">Scans</span>
+</div>
+<div class="flex flex-col items-center gap-1 text-slate-500">
+<span class="material-symbols-outlined text-xl" data-icon="security" data-weight="fill" style="font-variation-settings: 'FILL' 1;">security</span>
+<span class="text-[9px] uppercase tracking-tighter">Threats</span>
+</div>
+<div class="flex flex-col items-center gap-1 text-slate-500">
+<span class="material-symbols-outlined text-xl" data-icon="dns">dns</span>
+<span class="text-[9px] uppercase tracking-tighter">Assets</span>
+</div>
+<div class="flex flex-col items-center gap-1 text-slate-500">
+<span class="material-symbols-outlined text-xl" data-icon="analytics">analytics</span>
+<span class="text-[9px] uppercase tracking-tighter">Reports</span>
+</div>
+</footer>
+</body></html>

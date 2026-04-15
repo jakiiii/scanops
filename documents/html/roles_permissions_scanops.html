@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Roles &amp; Permissions | Sentinel IAM</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-variant": "#2e3447",
+                        "inverse-surface": "#dce1fb",
+                        "tertiary": "#ffb786",
+                        "surface-container": "#191f31",
+                        "on-surface-variant": "#c2c6d6",
+                        "on-tertiary-container": "#461f00",
+                        "background": "#0c1324",
+                        "outline": "#8c909f",
+                        "on-background": "#dce1fb",
+                        "on-tertiary-fixed": "#311400",
+                        "surface-container-lowest": "#070d1f",
+                        "tertiary-fixed-dim": "#ffb786",
+                        "tertiary-fixed": "#ffdcc6",
+                        "on-tertiary": "#502400",
+                        "on-surface": "#dce1fb",
+                        "surface-dim": "#0c1324",
+                        "on-secondary": "#213145",
+                        "surface-tint": "#adc6ff",
+                        "on-tertiary-fixed-variant": "#723600",
+                        "on-secondary-container": "#a9bad3",
+                        "primary": "#adc6ff",
+                        "error-container": "#93000a",
+                        "on-primary-fixed": "#001a42",
+                        "on-secondary-fixed": "#0b1c30",
+                        "inverse-on-surface": "#2a3043",
+                        "secondary-fixed": "#d3e4fe",
+                        "surface": "#0c1324",
+                        "secondary-fixed-dim": "#b7c8e1",
+                        "on-primary-fixed-variant": "#004395",
+                        "on-error": "#690005",
+                        "tertiary-container": "#df7412",
+                        "surface-container-low": "#151b2d",
+                        "surface-bright": "#33394c",
+                        "secondary-container": "#3a4a5f",
+                        "surface-container-highest": "#2e3447",
+                        "on-primary-container": "#00285d",
+                        "on-secondary-fixed-variant": "#38485d",
+                        "primary-fixed": "#d8e2ff",
+                        "secondary": "#b7c8e1",
+                        "surface-container-high": "#23293c",
+                        "primary-fixed-dim": "#adc6ff",
+                        "primary-container": "#4d8eff",
+                        "outline-variant": "#424754",
+                        "on-error-container": "#ffdad6",
+                        "inverse-primary": "#005ac2",
+                        "error": "#ffb4ab",
+                        "on-primary": "#002e6a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Space Grotesk"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(51, 57, 76, 0.6);
+            backdrop-filter: blur(24px);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .beacon-pulse {
+            position: relative;
+        }
+        .beacon-pulse::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #ffb786;
+            border-radius: 50%;
+            opacity: 0.4;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            z-index: -1;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body selection:bg-primary/30">
+<!-- TopNavBar -->
+<nav class="w-full sticky top-0 z-50 bg-[#0c1324] dark:bg-[#0c1324]">
+<div class="flex justify-between items-center px-6 h-16 w-full">
+<div class="flex items-center gap-8">
+<span class="text-2xl font-bold tracking-tighter text-blue-400 font-['Space_Grotesk']">Sentinel IAM</span>
+<div class="hidden md:flex gap-6 items-center">
+<a class="text-blue-400 font-bold border-b-2 border-blue-400 py-5 font-['Space_Grotesk'] tracking-tight" href="#">Access Control</a>
+<a class="text-[#2e3447] hover:text-blue-300 py-5 font-['Space_Grotesk'] tracking-tight transition-colors duration-200" href="#">Identity Management</a>
+<a class="text-[#2e3447] hover:text-blue-300 py-5 font-['Space_Grotesk'] tracking-tight transition-colors duration-200" href="#">Audit Logs</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 hover:bg-[#2e3447] transition-colors duration-200 rounded-lg">
+<span class="material-symbols-outlined text-on-surface-variant">notifications</span>
+</button>
+<button class="p-2 hover:bg-[#2e3447] transition-colors duration-200 rounded-lg">
+<span class="material-symbols-outlined text-on-surface-variant">help_outline</span>
+</button>
+<button class="p-2 hover:bg-[#2e3447] transition-colors duration-200 rounded-lg">
+<span class="material-symbols-outlined text-on-surface-variant">settings</span>
+</button>
+<div class="ml-2 w-8 h-8 rounded bg-surface-variant flex items-center justify-center overflow-hidden">
+<img alt="Administrator Profile" data-alt="minimal geometric avatar icon with cool blue and grey tones on a dark background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCycJJdt_mpyX6UyZhosKGJ0Lj2Fu1tW5amRJ1vnGAc-64EK9_1pLP2MLFkA_8y7_o6k6ekgFYzYbAntuRhuNAo-mrGVPkfEKzahl28EhQK5pGK8gf_D-7SjZT6G1tjYtpdxVW8x4IOXW8IJB6vShKZ6t_aYNxnoCBY0H3IirJr9wlxnJ2l7_PtKftQxfTGO5zGnzjHfu9bpcIm1LcPbqNKivCCAawWKq2q5YmtfM56_GykZVkQz5PIvlAF7cV6lgJZQYHz_OZZzJCT"/>
+</div>
+</div>
+</div>
+</nav>
+<div class="flex min-h-screen">
+<!-- SideNavBar -->
+<aside class="hidden md:flex h-screen w-64 fixed left-0 top-0 bg-[#151b2d] dark:bg-[#151b2d] flex-col py-4 gap-2 shadow-[24px_0_48px_rgba(0,0,0,0.5)] z-40">
+<div class="px-6 mb-8 mt-12">
+<h2 class="text-blue-400 font-bold font-['Space_Grotesk'] text-lg">Tactical Command</h2>
+<p class="text-xs text-slate-500 font-medium">v2.4.0-stable</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-6 py-3 text-slate-400 hover:bg-[#2e3447]/50 hover:text-white transition-all font-medium text-sm" href="#">
+<span class="material-symbols-outlined text-lg">grid_view</span>
+                    Dashboard
+                </a>
+<a class="flex items-center gap-3 px-6 py-3 text-slate-400 hover:bg-[#2e3447]/50 hover:text-white transition-all font-medium text-sm" href="#">
+<span class="material-symbols-outlined text-lg">group</span>
+                    Identity Management
+                </a>
+<a class="flex items-center gap-3 px-6 py-3 bg-[#2e3447] text-blue-400 border-r-4 border-blue-500 transition-all font-medium text-sm" href="#">
+<span class="material-symbols-outlined text-lg">verified_user</span>
+                    Access Control
+                </a>
+<a class="flex items-center gap-3 px-6 py-3 text-slate-400 hover:bg-[#2e3447]/50 hover:text-white transition-all font-medium text-sm" href="#">
+<span class="material-symbols-outlined text-lg">assignment</span>
+                    Audit Logs
+                </a>
+<a class="flex items-center gap-3 px-6 py-3 text-slate-400 hover:bg-[#2e3447]/50 hover:text-white transition-all font-medium text-sm" href="#">
+<span class="material-symbols-outlined text-lg">policy</span>
+                    Security Policies
+                </a>
+</nav>
+<div class="px-4 mb-4">
+<button class="w-full bg-primary text-on-primary py-2.5 rounded font-bold text-sm active:scale-95 transition-transform flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm">add</span>
+                    Create New Role
+                </button>
+</div>
+<div class="mt-auto space-y-1 border-t border-outline-variant/10 pt-4">
+<a class="flex items-center gap-3 px-6 py-2 text-slate-400 hover:bg-[#2e3447]/50 hover:text-white transition-all font-medium text-sm" href="#">
+<span class="material-symbols-outlined text-lg">headset_mic</span>
+                    Support
+                </a>
+<a class="flex items-center gap-3 px-6 py-2 text-slate-400 hover:bg-[#2e3447]/50 hover:text-white transition-all font-medium text-sm" href="#">
+<span class="material-symbols-outlined text-lg">charging_station</span>
+                    System Status
+                </a>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 md:ml-64 p-8 bg-surface">
+<header class="flex justify-between items-end mb-12">
+<div>
+<h1 class="text-5xl font-headline font-bold tracking-tight text-on-surface mb-2">Roles &amp; Permissions</h1>
+<p class="text-on-surface-variant font-label text-sm uppercase tracking-widest">Global Security Configuration</p>
+</div>
+<div class="flex gap-4">
+<div class="flex items-center gap-2 bg-surface-container-low px-4 py-2 rounded">
+<div class="w-2 h-2 rounded-full bg-tertiary beacon-pulse"></div>
+<span class="text-xs font-label text-on-surface-variant">4 Roles Defined</span>
+</div>
+</div>
+</header>
+<!-- Role Cards Grid -->
+<section class="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-12">
+<!-- Administrator -->
+<div class="bg-surface-container-highest p-6 rounded-lg group hover:bg-surface-bright transition-colors cursor-pointer border-t-2 border-primary">
+<div class="flex justify-between items-start mb-6">
+<span class="material-symbols-outlined text-primary text-3xl">admin_panel_settings</span>
+<span class="text-[10px] font-headline font-bold text-primary bg-primary/10 px-2 py-0.5 rounded">SYSTEM</span>
+</div>
+<h3 class="text-xl font-headline font-bold text-on-surface mb-1">Administrator</h3>
+<p class="text-xs text-on-surface-variant font-body mb-4">Full system access and security policy enforcement.</p>
+<div class="text-[10px] font-label text-outline uppercase tracking-tighter">84 Active Users</div>
+</div>
+<!-- Senior Analyst -->
+<div class="bg-surface-container-low p-6 rounded-lg group hover:bg-surface-container-high transition-colors cursor-pointer">
+<div class="flex justify-between items-start mb-6">
+<span class="material-symbols-outlined text-on-surface-variant text-3xl">analytics</span>
+</div>
+<h3 class="text-xl font-headline font-bold text-on-surface mb-1">Senior Analyst</h3>
+<p class="text-xs text-on-surface-variant font-body mb-4">Read/Write access to scans and reporting modules.</p>
+<div class="text-[10px] font-label text-outline uppercase tracking-tighter">12 Active Users</div>
+</div>
+<!-- Security Operator -->
+<div class="bg-surface-container-low p-6 rounded-lg group hover:bg-surface-container-high transition-colors cursor-pointer">
+<div class="flex justify-between items-start mb-6">
+<span class="material-symbols-outlined text-on-surface-variant text-3xl">shield</span>
+</div>
+<h3 class="text-xl font-headline font-bold text-on-surface mb-1">Security Operator</h3>
+<p class="text-xs text-on-surface-variant font-body mb-4">Standard scan execution and basic triage tasks.</p>
+<div class="text-[10px] font-label text-outline uppercase tracking-tighter">45 Active Users</div>
+</div>
+<!-- Auditor -->
+<div class="bg-surface-container-low p-6 rounded-lg group hover:bg-surface-container-high transition-colors cursor-pointer">
+<div class="flex justify-between items-start mb-6">
+<span class="material-symbols-outlined text-on-surface-variant text-3xl">visibility</span>
+</div>
+<h3 class="text-xl font-headline font-bold text-on-surface mb-1">Auditor</h3>
+<p class="text-xs text-on-surface-variant font-body mb-4">Read-only access to audit logs and compliance data.</p>
+<div class="text-[10px] font-label text-outline uppercase tracking-tighter">3 Active Users</div>
+</div>
+</section>
+<!-- Permission Matrix -->
+<section class="bg-surface-container-low rounded-xl overflow-hidden mb-12">
+<div class="p-6 border-b border-outline-variant/10 flex justify-between items-center">
+<h2 class="text-sm font-headline font-bold text-primary uppercase tracking-widest">Permission Matrix</h2>
+<div class="flex gap-4">
+<div class="flex items-center gap-2 text-[10px] text-on-surface-variant uppercase tracking-tighter">
+<span class="material-symbols-outlined text-xs text-tertiary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                            Full Access
+                        </div>
+<div class="flex items-center gap-2 text-[10px] text-on-surface-variant uppercase tracking-tighter">
+<span class="material-symbols-outlined text-xs text-outline">check_circle</span>
+                            Read Only
+                        </div>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-lowest">
+<th class="px-8 py-5 text-xs font-headline font-bold text-outline-variant uppercase tracking-wider">Permission Category</th>
+<th class="px-6 py-5 text-xs font-headline font-bold text-on-surface-variant uppercase text-center">Admin</th>
+<th class="px-6 py-5 text-xs font-headline font-bold text-on-surface-variant uppercase text-center">Sr. Analyst</th>
+<th class="px-6 py-5 text-xs font-headline font-bold text-on-surface-variant uppercase text-center">Operator</th>
+<th class="px-6 py-5 text-xs font-headline font-bold text-on-surface-variant uppercase text-center">Auditor</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/5">
+<!-- Scan Execution -->
+<tr class="hover:bg-surface-container-high transition-colors">
+<td class="px-8 py-6">
+<div class="text-sm font-bold text-on-surface">Scan Execution</div>
+<div class="text-[10px] text-on-surface-variant">Initialize, pause, or terminate network scans</div>
+</td>
+<td class="px-6 py-6 text-center">
+<span class="material-symbols-outlined text-tertiary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</td>
+<td class="px-6 py-6 text-center">
+<span class="material-symbols-outlined text-tertiary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</td>
+<td class="px-6 py-6 text-center">
+<span class="material-symbols-outlined text-outline">check_circle</span>
+</td>
+<td class="px-6 py-6 text-center">
+<span class="material-symbols-outlined text-outline-variant/30">cancel</span>
+</td>
+</tr>
+<!-- Asset Management -->
+<tr class="hover:bg-surface-container-high transition-colors">
+<td class="px-8 py-6">
+<div class="text-sm font-bold text-on-surface">Asset Management</div>
+<div class="text-[10px] text-on-surface-variant">Onboard, tag, and modify network assets</div>
+</td>
+<td class="px-6 py-6 text-center">
+<span class="material-symbols-outlined text-tertiary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</td>
+<td class="px-6 py-6 text-center">
+<span class="material-symbols-outlined text-tertiary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</td>
+<td class="px-6 py-6 text-center">
+<span class="material-symbols-outlined text-outline">check_circle</span>
+</td>
+<td class="px-6 py-6 text-center">
+<span class="material-symbols-outlined text-outline">check_circle</span>
+</td>
+</tr>
+<!-- User Admin -->
+<tr class="hover:bg-surface-container-high transition-colors">
+<td class="px-8 py-6">
+<div class="text-sm font-bold text-on-surface">User Admin</div>
+<div class="text-[10px] text-on-surface-variant">Manage credentials, roles, and session keys</div>
+</td>
+<td class="px-6 py-6 text-center">
+<span class="material-symbols-outlined text-tertiary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</td>
+<td class="px-6 py-6 text-center">
+<span class="material-symbols-outlined text-outline-variant/30">cancel</span>
+</td>
+<td class="px-6 py-6 text-center">
+<span class="material-symbols-outlined text-outline-variant/30">cancel</span>
+</td>
+<td class="px-6 py-6 text-center">
+<span class="material-symbols-outlined text-outline-variant/30">cancel</span>
+</td>
+</tr>
+<!-- Reporting -->
+<tr class="hover:bg-surface-container-high transition-colors">
+<td class="px-8 py-6">
+<div class="text-sm font-bold text-on-surface">Reporting</div>
+<div class="text-[10px] text-on-surface-variant">Export vulnerability data and PDF summaries</div>
+</td>
+<td class="px-6 py-6 text-center">
+<span class="material-symbols-outlined text-tertiary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</td>
+<td class="px-6 py-6 text-center">
+<span class="material-symbols-outlined text-tertiary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</td>
+<td class="px-6 py-6 text-center">
+<span class="material-symbols-outlined text-outline">check_circle</span>
+</td>
+<td class="px-6 py-6 text-center">
+<span class="material-symbols-outlined text-outline">check_circle</span>
+</td>
+</tr>
+<!-- Logs -->
+<tr class="hover:bg-surface-container-high transition-colors">
+<td class="px-8 py-6">
+<div class="text-sm font-bold text-on-surface">Audit Logs</div>
+<div class="text-[10px] text-on-surface-variant">View system events and user action history</div>
+</td>
+<td class="px-6 py-6 text-center">
+<span class="material-symbols-outlined text-tertiary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</td>
+<td class="px-6 py-6 text-center">
+<span class="material-symbols-outlined text-outline">check_circle</span>
+</td>
+<td class="px-6 py-6 text-center">
+<span class="material-symbols-outlined text-outline">check_circle</span>
+</td>
+<td class="px-6 py-6 text-center">
+<span class="material-symbols-outlined text-tertiary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<!-- Granular Access Control UI -->
+<section class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-24">
+<div class="bg-surface-container-lowest p-8 rounded-xl border border-outline-variant/10">
+<h3 class="text-xl font-headline font-bold text-on-surface mb-6 flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">key_visualizer</span>
+                        Conditional Access Rules
+                    </h3>
+<div class="space-y-4">
+<div class="flex items-center justify-between p-4 bg-surface-container-low rounded">
+<div>
+<div class="text-sm font-bold text-on-surface">MFA Enforcement</div>
+<div class="text-[10px] text-on-surface-variant uppercase">Require for all Admin actions</div>
+</div>
+<div class="w-12 h-6 bg-primary rounded-full relative flex items-center px-1">
+<div class="w-4 h-4 bg-on-primary rounded-full ml-auto"></div>
+</div>
+</div>
+<div class="flex items-center justify-between p-4 bg-surface-container-low rounded opacity-60">
+<div>
+<div class="text-sm font-bold text-on-surface">Geo-Fencing</div>
+<div class="text-[10px] text-on-surface-variant uppercase">Restricted to VPC CIDR range</div>
+</div>
+<div class="w-12 h-6 bg-surface-variant rounded-full relative flex items-center px-1">
+<div class="w-4 h-4 bg-outline rounded-full"></div>
+</div>
+</div>
+<div class="flex items-center justify-between p-4 bg-surface-container-low rounded">
+<div>
+<div class="text-sm font-bold text-on-surface">Just-In-Time (JIT)</div>
+<div class="text-[10px] text-on-surface-variant uppercase">Temporary privilege elevation</div>
+</div>
+<div class="w-12 h-6 bg-primary rounded-full relative flex items-center px-1">
+<div class="w-4 h-4 bg-on-primary rounded-full ml-auto"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-highest p-8 rounded-xl relative overflow-hidden">
+<div class="absolute top-0 right-0 p-4 opacity-10">
+<span class="material-symbols-outlined text-8xl">verified</span>
+</div>
+<h3 class="text-xl font-headline font-bold text-primary mb-6">Security Baseline</h3>
+<p class="text-sm text-on-surface-variant mb-6 leading-relaxed">
+                        The current configuration adheres to <span class="text-on-surface font-bold">NIST SP 800-53</span> standards. Last baseline audit performed <span class="text-tertiary">2 hours ago</span>.
+                    </p>
+<div class="space-y-2">
+<div class="flex items-center gap-3">
+<div class="w-1 h-1 rounded-full bg-primary"></div>
+<span class="text-[10px] uppercase font-bold tracking-widest text-on-surface">Zero-Trust Verified</span>
+</div>
+<div class="flex items-center gap-3">
+<div class="w-1 h-1 rounded-full bg-primary"></div>
+<span class="text-[10px] uppercase font-bold tracking-widest text-on-surface">RBAC Enforcement Active</span>
+</div>
+<div class="flex items-center gap-3">
+<div class="w-1 h-1 rounded-full bg-primary"></div>
+<span class="text-[10px] uppercase font-bold tracking-widest text-on-surface">Encrypted Credential Store</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Sticky Bottom Actions -->
+<div class="fixed bottom-0 left-0 md:left-64 right-0 glass-panel border-t border-outline-variant/10 p-6 flex justify-between items-center z-50">
+<div class="hidden lg:flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary animate-pulse">sync</span>
+<span class="text-xs font-label text-on-surface-variant">Pending changes in 4 permission categories...</span>
+</div>
+<div class="flex gap-4 w-full lg:w-auto">
+<button class="flex-1 lg:flex-none px-8 py-3 bg-surface-container-highest text-on-surface font-bold text-sm rounded hover:bg-surface-bright transition-all active:scale-95">
+                        Reset
+                    </button>
+<button class="flex-1 lg:flex-none px-12 py-3 bg-primary text-on-primary font-bold text-sm rounded shadow-[0_8px_24px_rgba(173,198,255,0.2)] hover:opacity-90 transition-all active:scale-95">
+                        Save Changes
+                    </button>
+</div>
+</div>
+</main>
+</div>
+</body></html>

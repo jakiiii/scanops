@@ -1,0 +1,57 @@
+{% load static %}
+<!doctype html>
+<html class="no-js" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Permission denied</title>
+    <meta name="robots" content="noindex, follow" />
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'assets/images/favicon.ico' %}">
+
+    <!-- CSS
+	============================================ -->
+
+    {% include 'base/css.html' %}
+
+</head>
+
+<body class="skin-dark">
+
+    <div class="main-wrapper">
+
+        <!-- Content Body Start -->
+        <div class="content-body m-0 p-0">
+
+            <!--Error Start-->
+            <div class="error-wrap">
+                <div class="container">
+                    <div class="row ">
+
+                        <div class="error-image text-center col-12"><img src="{% static 'assets/images/error/error-1.png' %}" alt=""></div>
+
+                        <div class="error-content col-12">
+                            <h1 class="title">403 — Permission denied</h1>
+                            <h4>You do not have permission to access this resource.</h4>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <!--Error End-->
+
+        </div><!-- Content Body End -->
+
+    </div>
+
+    <!-- JS
+============================================ -->
+
+    {% include 'base/js.html' %}
+
+</body>
+
+</html>

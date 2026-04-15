@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block title %}New Scan | ScanOps{% endblock %}
+
+{% block content %}
+    {% include "includes/breadcrumbs.html" with breadcrumbs=breadcrumbs %}
+    <div class="mb-8">
+        <h1 class="text-3xl font-extrabold text-white tracking-tight">New Scan Request</h1>
+        <p class="text-slate-400 mt-1">Create a safe, controlled scan request with validated options.</p>
+    </div>
+
+    {% if form.non_field_errors %}
+        <div class="scanops-panel p-4 border-rose-500/30 mb-6">
+            {% for error in form.non_field_errors %}
+                <p class="text-sm text-rose-200">{{ error }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
+        <div class="xl:col-span-8">
+            <form id="scan-request-form" method="post" class="space-y-6">
+                {% csrf_token %}
+                <div
+                    class="scanops-panel p-6 space-y-5"
+                    hx-post="{% url 'scans:preview' %}"
+                    hx-target="#scan-preview-container"
+                    hx-trigger="change from:select, change from:input[type='checkbox'], keyup delay:500ms from:input[name='port_input']"
+                    hx-include="#scan-request-form"
+                >
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div>
+                            <label for="{{ form.target.id_for_label }}" class="block text-sm text-slate-300 mb-1.5">Target</label>
+                            {{ form.target }}
+                            {% if form.target.errors %}<p class="text-xs text-rose-300 mt-1">{{ form.target.errors|striptags }}</p>{% endif %}
+                        </div>
+                        <div>
+                            <label for="{{ form.profile.id_for_label }}" class="block text-sm text-slate-300 mb-1.5">Scan Profile (optional)</label>
+                            {{ form.profile }}
+                            {% if form.profile.errors %}<p class="text-xs text-rose-300 mt-1">{{ form.profile.errors|striptags }}</p>{% endif %}
+                        </div>
+                        <div>
+                            <label for="{{ form.scan_type.id_for_label }}" class="block text-sm text-slate-300 mb-1.5">Scan Type</label>
+                            {{ form.scan_type }}
+                            {% if form.scan_type.errors %}<p class="text-xs text-rose-300 mt-1">{{ form.scan_type.errors|striptags }}</p>{% endif %}
+                        </div>
+                        <div>
+                            <label for="{{ form.timing_profile.id_for_label }}" class="block text-sm text-slate-300 mb-1.5">Timing Profile</label>
+                            {{ form.timing_profile }}
+                            {% if form.timing_profile.errors %}<p class="text-xs text-rose-300 mt-1">{{ form.timing_profile.errors|striptags }}</p>{% endif %}
+                        </div>
+                        <div class="md:col-span-2">
+                            <label for="{{ form.port_input.id_for_label }}" class="block text-sm text-slate-300 mb-1.5">Port Scope</label>
+                            {{ form.port_input }}
+                            {% if form.port_input.errors %}<p class="text-xs text-rose-300 mt-1">{{ form.port_input.errors|striptags }}</p>{% endif %}
+                            <p class="text-[11px] text-slate-500 mt-1">Use comma-separated ports and ranges, e.g. <span class="font-mono">22,80,443,1000-2000</span>.</p>
+                        </div>
+                    </div>
+                    <div class="border-t border-slate-800 pt-5">
+                        <p class="text-xs uppercase tracking-widest text-slate-500 mb-3">Controlled Options</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <label class="flex items-center justify-between gap-3 p-3 rounded-lg bg-slate-900/70 border border-slate-800">
+                                <span class="text-sm text-slate-300">Host Discovery</span>
+                                {{ form.enable_host_discovery }}
+                            </label>
+                            <label class="flex items-center justify-between gap-3 p-3 rounded-lg bg-slate-900/70 border border-slate-800">
+                                <span class="text-sm text-slate-300">Service Detection</span>
+                                {{ form.enable_service_detection }}
+                            </label>
+                            <label class="flex items-center justify-between gap-3 p-3 rounded-lg bg-slate-900/70 border border-slate-800">
+                                <span class="text-sm text-slate-300">Version Detection</span>
+                                {{ form.enable_version_detection }}
+                            </label>
+                            <label class="flex items-center justify-between gap-3 p-3 rounded-lg bg-slate-900/70 border border-slate-800">
+                                <span class="text-sm text-slate-300">OS Detection</span>
+                                {{ form.enable_os_detection }}
+                            </label>
+                            <label class="flex items-center justify-between gap-3 p-3 rounded-lg bg-slate-900/70 border border-slate-800">
+                                <span class="text-sm text-slate-300">Traceroute</span>
+                                {{ form.enable_traceroute }}
+                            </label>
+                            <label class="flex items-center justify-between gap-3 p-3 rounded-lg bg-slate-900/70 border border-slate-800">
+                                <span class="text-sm text-slate-300">DNS Resolution</span>
+                                {{ form.enable_dns_resolution }}
+                            </label>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="{{ form.notes.id_for_label }}" class="block text-sm text-slate-300 mb-1.5">Notes</label>
+                        {{ form.notes }}
+                        {% if form.notes.errors %}<p class="text-xs text-rose-300 mt-1">{{ form.notes.errors|striptags }}</p>{% endif %}
+                    </div>
+                </div>
+                <div class="flex items-center justify-end gap-3">
+                    <a href="{% url 'dashboard:home' %}" class="px-4 py-2 text-sm font-semibold text-slate-400 hover:text-white">Cancel</a>
+                    <button type="submit" class="px-6 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-sm font-bold">Submit Scan Request</button>
+                </div>
+            </form>
+        </div>
+        <div class="xl:col-span-4" id="scan-preview-container">
+            {% include "partials/scan_preview.html" %}
+        </div>
+    </div>
+{% endblock %}

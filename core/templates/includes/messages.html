@@ -1,0 +1,14 @@
+{% if messages %}
+    <div class="space-y-2 mb-6" id="messages-container">
+        {% for message in messages %}
+            <div class="scanops-panel px-4 py-3 text-sm flex items-start justify-between gap-3
+                {% if message.level_tag == 'success' %}border-emerald-500/30 text-emerald-200{% endif %}
+                {% if message.level_tag == 'error' %}border-rose-500/30 text-rose-200{% endif %}
+                {% if message.level_tag == 'warning' %}border-amber-500/30 text-amber-200{% endif %}
+                {% if message.level_tag == 'info' %}border-blue-500/30 text-blue-200{% endif %}">
+                <div>{{ message }}</div>
+                <button type="button" class="text-slate-500 hover:text-white" onclick="this.parentElement.remove()">×</button>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}

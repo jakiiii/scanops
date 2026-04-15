@@ -1,0 +1,27 @@
+<form
+    id="target-filter-form"
+    class="scanops-panel p-4 mb-6"
+    hx-get="{% url 'targets:list' %}"
+    hx-target="#targets-table-container"
+    hx-trigger="keyup changed delay:350ms from:input, change from:select"
+    hx-push-url="true"
+>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+        <div class="lg:col-span-2">
+            <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1.5">Search Identifier</label>
+            {{ filter_form.q }}
+        </div>
+        <div>
+            <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1.5">Target Type</label>
+            {{ filter_form.target_type }}
+        </div>
+        <div>
+            <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1.5">Status</label>
+            {{ filter_form.status }}
+        </div>
+        <div>
+            <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1.5">Owner</label>
+            {{ filter_form.owner }}
+        </div>
+    </div>
+</form>

@@ -1,0 +1,97 @@
+{% load static %}
+
+
+<header id="topnav">
+    <div class="topbar-main">
+        <div class="container-fluid">
+
+            <!-- Logo container-->
+            <div class="logo">
+                <!-- Text Logo -->
+                <!--<a href="index.html" class="logo">-->
+                <!--Zoter-->
+                <!--</a>-->
+                <!-- Image Logo -->
+                <a href="
+
+
+                        {% if request.user.is_administrator %}{% url 'home:home' %}{% else %}{% url 'terminal:terminal_dashboard' %}{% endif %}"
+                   class="logo">
+                    <img src="{% static 'images/logo_2.png' %}" alt="incidentmatrix" style="width: 7rem; height: 3rem;"
+                         class="logo-large">
+                </a>
+            </div>
+            <!-- End Logo container-->
+
+
+            <div class="menu-extras topbar-custom">
+
+                <ul class="list-inline float-right mb-0">
+                    <a class="nav-link nav-user" href="#" role="button">
+                        <img src="{% static 'assets/images/users/avatar-1.jpg' %}" alt="user" class="rounded-circle">
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right profile-dropdown">
+                        <div class="dropdown-item noti-title">
+                            <h5>Welcome</h5>
+                        </div>
+                        <a class="dropdown-item" href="#"><i class="mdi mdi-account-circle"></i> Profile</a>
+                        <a class="dropdown-item" href="{% url 'accounts:password_changed' %}">
+                            <i class="mdi mdi-settings"></i> Password Change</a>
+                        <div class="dropdown-divider"></div>
+                        <form method="post" action="{% url 'accounts:logout' %}" class="m-0">
+                            {% csrf_token %}
+                            <button type="submit" class="dropdown-item border-0 bg-transparent text-left w-100">
+                                <i class="mdi mdi-logout"></i> Logout
+                            </button>
+                        </form>
+                    </div>
+                </ul>
+            </div>
+            <!-- end menu-extras -->
+
+            <div class="clearfix"></div>
+
+        </div> <!-- end container -->
+    </div>
+    <!-- end topbar-main -->
+
+    <!-- MENU Start -->
+    <div class="navbar-custom">
+        <div class="container-fluid">
+            <div id="navigation">
+                <!-- Navigation Menu-->
+                <ul class="navigation-menu text-center">
+                    {% if request.user.is_administrator %}
+                        <li class="has-submenu ">
+                            <a href="{% url 'home:home' %}"><i class="mdi mdi-airplay"></i>Home</a>
+                        </li>
+                        <li class="has-submenu ">
+                            <a href="{% url 'incident:incident_list' %}"><i class="mdi mdi-bullseye"></i>Incidents</a>
+                        </li>
+                    {% elif request.user.is_operator %}
+                        <li class="has-submenu ">
+                            <a href="{% url 'terminal:terminal_dashboard' %}"><i
+                                    class="mdi mdi-airplay"></i>Dashboard</a>
+                        </li>
+                        <li class="has-submenu ">
+                            <a href="{% url 'terminal:terminal_incident' %}"><i class="mdi mdi-alert-box"></i>Incidents</a>
+                        </li>
+                    {% endif %}
+                    <li class="has-submenu ">
+                        <a href="{% url 'incident:dgss_by_incident_list' %}"><i class="mdi mdi-cards"></i>DGSS</a>
+                    </li>
+                    <li class="has-submenu ">
+                        <a href="{% url 'terminal:incident_create' %}"><i class="mdi mdi-plus-box"></i>Incident</a>
+                    </li>
+                    <li class="has-submenu ">
+                        <a href="{% url 'incident:incident_list_maps' %}"><i class="mdi mdi-map-marker"></i>Map</a>
+                    </li>
+                    <li class="has-submenu ">
+                        <a href="{% url 'incident:incidents_calender' %}"><i class="mdi mdi-calendar"></i>Calender</a>
+                    </li>
+                </ul>
+                <!-- End navigation menu -->
+            </div> <!-- end #navigation -->
+        </div> <!-- end container -->
+    </div> <!-- end navbar-custom -->
+</header>

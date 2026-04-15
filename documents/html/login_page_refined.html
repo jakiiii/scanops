@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ScanOps | Secure Authentication</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts: Space Grotesk & Inter -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Space+Grotesk:wght@500;700&amp;family=Public+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        slate: {
+                            800: '#1e293b',
+                            900: '#0f172a',
+                            950: '#020617',
+                        },
+                        blue: {
+                            400: '#60a5fa',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                        }
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    fontFamily: {
+                        headline: ["Space Grotesk", "sans-serif"],
+                        body: ["Inter", "sans-serif"],
+                        label: ["Public Sans", "sans-serif"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .node-mesh {
+            background-image: radial-gradient(circle at 2px 2px, rgba(59, 130, 246, 0.15) 1px, transparent 0);
+            background-size: 40px 40px;
+        }
+    </style>
+</head>
+<body class="h-full bg-slate-950 font-body text-slate-200 overflow-hidden">
+<!-- Suppression of Nav Shells as per Mandatory Shell Visibility Rule (Transactional Page) -->
+<main class="relative min-h-screen flex items-center justify-center p-4 md:p-8">
+<!-- Tactical Infrastructure Background (Right Side Visual) -->
+<div class="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+<div class="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-950 to-blue-900/20"></div>
+<div class="absolute inset-0 node-mesh opacity-30"></div>
+<!-- Representing the low-poly/tactical node map -->
+<div class="absolute top-1/2 left-1/2 -translate-y-1/2 translate-x-1/4 w-[800px] h-[800px] opacity-40">
+<img class="w-full h-full object-contain mix-blend-screen" data-alt="abstract digital topography of a global cyber security network with glowing blue nodes and data streams on deep slate background tactical visualization" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCyOJMK71TCQ9TE2uf9pmvtXmre_htPw7g1ipXPfRMUXvGinZOV3wPvdopSmGbOUeBMXTCrmZiJoBM2tur2Awcd8JgTzknfogaehQ8Jy3ZT853VAXkxNh4fVpwpUxpVDlFIAabnRIOJSOloeIlAdY8Fox5qUVAP6zTnCjJFFAhms8mMbaJ0qGs_rXZBCNWM8vyCbOGiEephmS9SfSjN46htD6naf_uxgxonER1ELyTFJgq5r3zcs9yrbsPvgzJw49h75FGsJtEPHAJc"/>
+</div>
+</div>
+<!-- Auth Card -->
+<div class="relative z-10 w-full max-w-5xl grid grid-cols-1 lg:grid-cols-2 bg-slate-900/40 backdrop-blur-xl rounded-xl border border-slate-800 shadow-2xl overflow-hidden">
+<!-- Left Side: Login Form -->
+<div class="p-8 md:p-12 lg:p-16 flex flex-col justify-center">
+<header class="mb-10">
+<div class="flex items-center gap-3 mb-6">
+<div class="w-10 h-10 bg-blue-500 rounded flex items-center justify-center">
+<span class="material-symbols-outlined text-slate-950" style="font-variation-settings: 'FILL' 1;">security</span>
+</div>
+<h1 class="text-2xl font-bold tracking-tighter text-slate-50 font-headline">ScanOps</h1>
+</div>
+<h2 class="text-3xl font-bold text-slate-50 mb-2 font-headline">Enterprise Network Security Operations</h2>
+<p class="text-slate-400">Authorization required to access intelligence node.</p>
+</header>
+<form class="space-y-6">
+<div>
+<label class="block text-xs font-semibold tracking-wider uppercase text-slate-400 mb-2 font-label" for="operator-id">Operator ID</label>
+<div class="relative">
+<span class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-slate-500 text-lg">badge</span>
+<input class="w-full bg-slate-950/50 border border-slate-800 rounded-lg py-3 pl-10 pr-4 text-slate-100 focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all outline-none" id="operator-id" name="operator-id" placeholder="ENTER_UID_PROMPT" type="text"/>
+</div>
+</div>
+<div>
+<label class="block text-xs font-semibold tracking-wider uppercase text-slate-400 mb-2 font-label" for="protocol">Security Protocol</label>
+<div class="relative">
+<span class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-slate-500 text-lg">lock</span>
+<input class="w-full bg-slate-950/50 border border-slate-800 rounded-lg py-3 pl-10 pr-4 text-slate-100 focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all outline-none" id="protocol" name="protocol" placeholder="••••••••••••" type="password"/>
+</div>
+</div>
+<div class="flex items-center justify-between text-sm">
+<label class="flex items-center gap-2 cursor-pointer group">
+<input class="w-4 h-4 rounded border-slate-700 bg-slate-950 text-blue-600 focus:ring-blue-500/20 focus:ring-offset-slate-900" type="checkbox"/>
+<span class="text-slate-400 group-hover:text-slate-200 transition-colors">Maintain Persistence</span>
+</label>
+<a class="text-blue-400 hover:text-blue-300 transition-colors font-medium" href="#">Recover Access</a>
+</div>
+<button class="w-full bg-blue-600 hover:bg-blue-500 active:bg-blue-700 text-white font-bold py-4 px-6 rounded-lg transition-all transform active:scale-[0.98] flex items-center justify-center gap-2 shadow-lg shadow-blue-900/20" type="submit">
+<span>Initiate Authentication</span>
+<span class="material-symbols-outlined text-xl">login</span>
+</button>
+</form>
+<footer class="mt-12">
+<div class="p-4 bg-slate-950/50 rounded-lg border-l-4 border-blue-500">
+<p class="text-[10px] leading-relaxed text-slate-500 font-label">
+<span class="text-blue-400 font-bold">SYSTEM NOTICE:</span> This is a restricted ScanOps intelligence node. All connections are logged via MAC and IP fingerprinting. Unauthorized access attempts will trigger local defensive protocols and federal reporting.
+                        </p>
+</div>
+</footer>
+</div>
+<!-- Right Side: Secondary Visual/Info (Hidden on Mobile) -->
+<div class="hidden lg:block relative overflow-hidden bg-slate-950/40 border-l border-slate-800">
+<div class="absolute inset-0 flex flex-col justify-end p-12">
+<div class="mb-8 space-y-4">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-400 text-[10px] font-bold uppercase tracking-widest">
+<span class="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
+                            Live Node Active
+                        </div>
+<h3 class="text-4xl font-bold font-headline text-slate-50 leading-tight">Global Threat Detection Network</h3>
+<p class="text-slate-400 max-w-sm">ScanOps monitors over 4.2 million endpoints across 168 countries in real-time, providing millisecond-latency intelligence for enterprise security teams.</p>
+</div>
+<div class="grid grid-cols-2 gap-6 pt-8 border-t border-slate-800">
+<div>
+<p class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Encrypted Link</p>
+<p class="text-blue-400 font-mono text-sm">AES-256-GCM</p>
+</div>
+<div>
+<p class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Protocol Status</p>
+<p class="text-emerald-400 font-mono text-sm">SECURE_HANDSHAKE</p>
+</div>
+</div>
+</div>
+<!-- Decorative element -->
+<div class="absolute top-0 right-0 p-8 opacity-20">
+<span class="material-symbols-outlined text-[120px] text-blue-500 select-none">shield_lock</span>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Status Bar -->
+<div class="fixed bottom-0 left-0 w-full px-6 py-2 bg-slate-950/80 backdrop-blur-sm border-t border-slate-800/50 flex justify-between items-center text-[10px] font-mono text-slate-600 uppercase tracking-widest z-50">
+<div class="flex gap-4">
+<span>Lat: 37.7749° N</span>
+<span>Long: 122.4194° W</span>
+</div>
+<div class="flex gap-4">
+<span>Terminal: TTY_S001</span>
+<span>Node: SO-DX-902</span>
+</div>
+</div>
+</body></html>

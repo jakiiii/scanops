@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The Sentinel | Reports</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #0c1324;
+            color: #dce1fb;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "primary-fixed": "#d8e2ff",
+                      "on-tertiary-container": "#461f00",
+                      "on-secondary-fixed": "#0b1c30",
+                      "on-surface-variant": "#c2c6d6",
+                      "secondary": "#b7c8e1",
+                      "tertiary-container": "#df7412",
+                      "surface-variant": "#2e3447",
+                      "surface-container-highest": "#2e3447",
+                      "background": "#0c1324",
+                      "tertiary-fixed": "#ffdcc6",
+                      "surface-container": "#191f31",
+                      "primary-fixed-dim": "#adc6ff",
+                      "on-primary-container": "#00285d",
+                      "surface-container-lowest": "#070d1f",
+                      "on-secondary": "#213145",
+                      "on-tertiary-fixed": "#311400",
+                      "secondary-fixed": "#d3e4fe",
+                      "on-tertiary": "#502400",
+                      "on-tertiary-fixed-variant": "#723600",
+                      "surface": "#0c1324",
+                      "on-secondary-container": "#a9bad3",
+                      "secondary-fixed-dim": "#b7c8e1",
+                      "primary": "#adc6ff",
+                      "on-error": "#690005",
+                      "on-primary": "#002e6a",
+                      "surface-dim": "#0c1324",
+                      "on-secondary-fixed-variant": "#38485d",
+                      "error-container": "#93000a",
+                      "tertiary": "#ffb786",
+                      "outline-variant": "#424754",
+                      "surface-container-high": "#23293c",
+                      "on-surface": "#dce1fb",
+                      "on-background": "#dce1fb",
+                      "on-primary-fixed": "#001a42",
+                      "on-error-container": "#ffdad6",
+                      "primary-container": "#4d8eff",
+                      "inverse-primary": "#005ac2",
+                      "inverse-on-surface": "#2a3043",
+                      "surface-container-low": "#151b2d",
+                      "surface-bright": "#33394c",
+                      "secondary-container": "#3a4a5f",
+                      "outline": "#8c909f",
+                      "on-primary-fixed-variant": "#004395",
+                      "tertiary-fixed-dim": "#ffb786",
+                      "inverse-surface": "#dce1fb",
+                      "error": "#ffb4ab",
+                      "surface-tint": "#adc6ff"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "fontFamily": {
+                      "headline": ["Space Grotesk"],
+                      "body": ["Inter"],
+                      "label": ["Inter"]
+              }
+            },
+          }
+        }
+    </script>
+</head>
+<body class="font-body selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopNavBar Implementation from JSON -->
+<header class="fixed top-0 w-full bg-slate-950/80 backdrop-blur-xl shadow-2xl shadow-black/50 flex justify-between items-center px-8 h-16 z-50">
+<div class="flex items-center gap-8">
+<span class="text-2xl font-bold tracking-tighter text-blue-400 font-headline">The Sentinel</span>
+<nav class="hidden md:flex gap-6 font-headline tracking-tight">
+<a class="text-slate-400 hover:text-blue-300 transition-colors duration-200" href="#">Dashboard</a>
+<a class="text-slate-400 hover:text-blue-300 transition-colors duration-200" href="#">Threats</a>
+<a class="text-slate-400 hover:text-blue-300 transition-colors duration-200" href="#">Network</a>
+<a class="text-blue-400 border-b-2 border-blue-500 pb-1" href="#">Reports</a>
+<a class="text-slate-400 hover:text-blue-300 transition-colors duration-200" href="#">Assets</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative group">
+<span class="material-symbols-outlined text-slate-400 cursor-pointer p-2 hover:bg-slate-800 rounded-full transition-colors" data-icon="notifications">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-blue-500 rounded-full border border-slate-950"></span>
+</div>
+<span class="material-symbols-outlined text-slate-400 cursor-pointer p-2 hover:bg-slate-800 rounded-full transition-colors" data-icon="settings">settings</span>
+<div class="w-8 h-8 rounded-full overflow-hidden bg-slate-800 border border-slate-700">
+<img alt="User profile" data-alt="Close up portrait of a serious male cybersecurity analyst in a dark environment with blue technological light reflections" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAQ3-dQqEC2RC8P2hXqd9WfPccdxppYV39o8ZEKMGzx4PiKBc6A7eDoBpyvEkrqwnuKvPDwER0Lkt8bRB__x5WSDCfVFz36oEx4LShPFHxI9aKJvft5rkugDIIZ01fVFjagUTy7chzeMt61QGHSM9eSvPdVDlPBXzsKpoNFBjJzGZyn6mp4_vENDWW_N1OpRtEcfRaKmHHkwPi0j_ZX0n01k004RDP3MeccMUtR1WnEOq0WxahpXPWeFBmxIfT_RhXX-IUqY06iZyjW"/>
+</div>
+</div>
+</header>
+<div class="flex pt-16 min-h-screen">
+<!-- Main Canvas -->
+<main class="flex-1 p-8 lg:px-12 bg-surface">
+<!-- Header Section -->
+<div class="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
+<div>
+<h1 class="font-headline text-5xl font-bold tracking-tight text-on-surface mb-2">Reports</h1>
+<p class="text-on-surface-variant font-medium tracking-wide">Operational Intelligence &amp; Network Vulnerability Documentation</p>
+</div>
+<div class="flex gap-3">
+<button class="bg-surface-container-highest text-on-surface px-4 py-2.5 rounded flex items-center gap-2 hover:bg-primary-fixed-dim hover:text-on-primary-fixed transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="ios_share">ios_share</span>
+                        Bulk Export
+                    </button>
+<button class="bg-primary text-on-primary px-6 py-2.5 rounded font-semibold flex items-center gap-2 active:scale-95 transition-transform">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+                        Generate New Report
+                    </button>
+</div>
+</div>
+<!-- Summary Cards: Bento Style -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+<div class="bg-surface-container-low p-6 rounded-xl relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-6xl" data-icon="description">description</span>
+</div>
+<p class="label-sm text-on-surface-variant font-medium uppercase tracking-widest mb-1">Total Reports Generated</p>
+<h3 class="font-headline text-4xl font-bold text-primary">1,428</h3>
+<div class="mt-4 flex items-center gap-2 text-xs text-primary-fixed-dim">
+<span class="material-symbols-outlined text-xs" data-icon="trending_up">trending_up</span>
+<span>12% Increase from last cycle</span>
+</div>
+</div>
+<div class="bg-surface-container-low p-6 rounded-xl relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-6xl" data-icon="schedule">schedule</span>
+</div>
+<p class="label-sm text-on-surface-variant font-medium uppercase tracking-widest mb-1">Recently Created (24h)</p>
+<h3 class="font-headline text-4xl font-bold text-on-surface">24</h3>
+<div class="mt-4 flex items-center gap-2 text-xs text-on-surface-variant">
+<span>Latest: Technical_Scan_882.pdf</span>
+</div>
+</div>
+<div class="bg-surface-container-low p-6 rounded-xl relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity text-error">
+<span class="material-symbols-outlined text-6xl" data-icon="error">error</span>
+</div>
+<p class="label-sm text-on-surface-variant font-medium uppercase tracking-widest mb-1">Failed Generations</p>
+<h3 class="font-headline text-4xl font-bold text-error">03</h3>
+<div class="mt-4 flex items-center gap-2 text-xs text-error">
+<span class="w-2 h-2 rounded-full bg-error animate-pulse"></span>
+<span>Attention required for Scan-ID: 9921</span>
+</div>
+</div>
+</div>
+<!-- Filter Bar -->
+<div class="bg-surface-container-low p-4 rounded-xl mb-6 flex flex-wrap items-center gap-4">
+<div class="flex-1 min-w-[240px] relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-lg" data-icon="search">search</span>
+<input class="w-full bg-surface-container-lowest border-none focus:ring-1 focus:ring-primary/40 rounded py-2.5 pl-10 text-sm text-on-surface placeholder:text-outline" placeholder="Search reports, IPs, or analysts..." type="text"/>
+</div>
+<div class="flex items-center gap-3">
+<select class="bg-surface-container-lowest border-none focus:ring-1 focus:ring-primary/40 rounded py-2.5 px-4 text-sm text-on-surface min-w-[140px]">
+<option>Report Type</option>
+<option>Executive</option>
+<option>Technical</option>
+<option>Comparison</option>
+</select>
+<select class="bg-surface-container-lowest border-none focus:ring-1 focus:ring-primary/40 rounded py-2.5 px-4 text-sm text-on-surface min-w-[140px]">
+<option>Date Range</option>
+<option>Last 24h</option>
+<option>Last 7 Days</option>
+<option>Last 30 Days</option>
+</select>
+<button class="p-2.5 bg-surface-container-highest text-on-surface rounded hover:bg-surface-bright transition-colors">
+<span class="material-symbols-outlined" data-icon="filter_list">filter_list</span>
+</button>
+</div>
+</div>
+<!-- Data Table Container -->
+<div class="bg-surface-container-low rounded-xl overflow-hidden">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-high border-b border-outline-variant/10">
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-widest text-on-surface-variant">Report Name</th>
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-widest text-on-surface-variant">Type</th>
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-widest text-on-surface-variant">Target</th>
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-widest text-on-surface-variant">Generated At</th>
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-widest text-on-surface-variant">Format</th>
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-widest text-on-surface-variant">Analyst</th>
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-widest text-on-surface-variant text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/5">
+<!-- Row 1 -->
+<tr class="hover:bg-surface-container-highest/50 transition-colors group">
+<td class="px-6 py-4">
+<div class="flex flex-col">
+<span class="font-medium text-on-surface">Q3_Infrastructure_Audit</span>
+<span class="text-[10px] text-outline font-mono uppercase">ID: SC-9901-X</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="px-2 py-1 rounded bg-primary-container/20 text-primary text-[11px] font-bold uppercase tracking-tighter">Executive</span>
+</td>
+<td class="px-6 py-4">
+<span class="font-mono text-sm text-secondary-fixed-dim">172.16.254.1</span>
+</td>
+<td class="px-6 py-4 text-sm text-on-surface-variant">
+                                    Oct 24, 2023 · 14:32
+                                </td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-red-500"></span>
+<span class="text-xs font-bold text-on-surface-variant">PDF</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-surface-container-highest flex items-center justify-center text-[10px] font-bold">JD</div>
+<span class="text-xs text-on-surface-variant">John Doe</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex justify-end gap-1">
+<button class="p-2 hover:bg-primary/10 text-on-surface-variant hover:text-primary rounded transition-all" title="Preview">
+<span class="material-symbols-outlined text-lg" data-icon="visibility">visibility</span>
+</button>
+<button class="p-2 hover:bg-primary/10 text-on-surface-variant hover:text-primary rounded transition-all" title="Download">
+<span class="material-symbols-outlined text-lg" data-icon="download">download</span>
+</button>
+<button class="p-2 hover:bg-primary/10 text-on-surface-variant hover:text-primary rounded transition-all" title="Regenerate">
+<span class="material-symbols-outlined text-lg" data-icon="refresh">refresh</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface-container-highest/50 transition-colors group">
+<td class="px-6 py-4">
+<div class="flex flex-col">
+<span class="font-medium text-on-surface">Vuln_Deep_Dive_Edge</span>
+<span class="text-[10px] text-outline font-mono uppercase">ID: SC-8822-B</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="px-2 py-1 rounded bg-tertiary-container/10 text-tertiary text-[11px] font-bold uppercase tracking-tighter">Technical</span>
+</td>
+<td class="px-6 py-4">
+<span class="font-mono text-sm text-secondary-fixed-dim">aws-east-gw.internal</span>
+</td>
+<td class="px-6 py-4 text-sm text-on-surface-variant">
+                                    Oct 24, 2023 · 09:15
+                                </td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-blue-400"></span>
+<span class="text-xs font-bold text-on-surface-variant">JSON</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-surface-container-highest flex items-center justify-center text-[10px] font-bold">SK</div>
+<span class="text-xs text-on-surface-variant">Sarah Kern</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex justify-end gap-1">
+<button class="p-2 hover:bg-primary/10 text-on-surface-variant hover:text-primary rounded transition-all" title="Preview">
+<span class="material-symbols-outlined text-lg" data-icon="visibility">visibility</span>
+</button>
+<button class="p-2 hover:bg-primary/10 text-on-surface-variant hover:text-primary rounded transition-all" title="Download">
+<span class="material-symbols-outlined text-lg" data-icon="download">download</span>
+</button>
+<button class="p-2 hover:bg-primary/10 text-on-surface-variant hover:text-primary rounded transition-all" title="Regenerate">
+<span class="material-symbols-outlined text-lg" data-icon="refresh">refresh</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-surface-container-highest/50 transition-colors group">
+<td class="px-6 py-4">
+<div class="flex flex-col">
+<span class="font-medium text-on-surface">Weekly_Comparison_W42</span>
+<span class="text-[10px] text-outline font-mono uppercase">ID: SC-7761-A</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="px-2 py-1 rounded bg-secondary-container/30 text-on-secondary-container text-[11px] font-bold uppercase tracking-tighter">Comparison</span>
+</td>
+<td class="px-6 py-4">
+<span class="font-mono text-sm text-secondary-fixed-dim">Cluster-7A</span>
+</td>
+<td class="px-6 py-4 text-sm text-on-surface-variant">
+                                    Oct 23, 2023 · 18:00
+                                </td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-orange-400"></span>
+<span class="text-xs font-bold text-on-surface-variant">HTML</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-surface-container-highest flex items-center justify-center text-[10px] font-bold">AS</div>
+<span class="text-xs text-on-surface-variant">Alex Storm</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex justify-end gap-1">
+<button class="p-2 hover:bg-primary/10 text-on-surface-variant hover:text-primary rounded transition-all" title="Preview">
+<span class="material-symbols-outlined text-lg" data-icon="visibility">visibility</span>
+</button>
+<button class="p-2 hover:bg-primary/10 text-on-surface-variant hover:text-primary rounded transition-all" title="Download">
+<span class="material-symbols-outlined text-lg" data-icon="download">download</span>
+</button>
+<button class="p-2 hover:bg-primary/10 text-on-surface-variant hover:text-primary rounded transition-all" title="Regenerate">
+<span class="material-symbols-outlined text-lg" data-icon="refresh">refresh</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-surface-container-highest/50 transition-colors group">
+<td class="px-6 py-4">
+<div class="flex flex-col">
+<span class="font-medium text-on-surface">Compliance_GDPR_Check</span>
+<span class="text-[10px] text-outline font-mono uppercase">ID: SC-5541-Z</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="px-2 py-1 rounded bg-primary-container/20 text-primary text-[11px] font-bold uppercase tracking-tighter">Executive</span>
+</td>
+<td class="px-6 py-4">
+<span class="font-mono text-sm text-secondary-fixed-dim">DB-Prod-Main</span>
+</td>
+<td class="px-6 py-4 text-sm text-on-surface-variant">
+                                    Oct 22, 2023 · 11:20
+                                </td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-red-500"></span>
+<span class="text-xs font-bold text-on-surface-variant">PDF</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-surface-container-highest flex items-center justify-center text-[10px] font-bold">JD</div>
+<span class="text-xs text-on-surface-variant">John Doe</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex justify-end gap-1">
+<button class="p-2 hover:bg-primary/10 text-on-surface-variant hover:text-primary rounded transition-all" title="Preview">
+<span class="material-symbols-outlined text-lg" data-icon="visibility">visibility</span>
+</button>
+<button class="p-2 hover:bg-primary/10 text-on-surface-variant hover:text-primary rounded transition-all" title="Download">
+<span class="material-symbols-outlined text-lg" data-icon="download">download</span>
+</button>
+<button class="p-2 hover:bg-primary/10 text-on-surface-variant hover:text-primary rounded transition-all" title="Regenerate">
+<span class="material-symbols-outlined text-lg" data-icon="refresh">refresh</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination Controls -->
+<div class="px-6 py-4 bg-surface-container-high flex items-center justify-between">
+<span class="text-xs text-on-surface-variant font-medium">Showing 1 to 4 of 1,428 reports</span>
+<div class="flex items-center gap-2">
+<button class="w-8 h-8 flex items-center justify-center rounded bg-surface-container-lowest text-on-surface-variant hover:text-primary transition-colors disabled:opacity-30" disabled="">
+<span class="material-symbols-outlined text-sm" data-icon="chevron_left">chevron_left</span>
+</button>
+<div class="flex items-center gap-1">
+<button class="w-8 h-8 rounded bg-primary text-on-primary font-bold text-xs">1</button>
+<button class="w-8 h-8 rounded bg-surface-container-lowest text-on-surface hover:bg-surface-bright text-xs">2</button>
+<button class="w-8 h-8 rounded bg-surface-container-lowest text-on-surface hover:bg-surface-bright text-xs">3</button>
+<span class="text-on-surface-variant text-xs px-1">...</span>
+<button class="w-8 h-8 rounded bg-surface-container-lowest text-on-surface hover:bg-surface-bright text-xs">357</button>
+</div>
+<button class="w-8 h-8 flex items-center justify-center rounded bg-surface-container-lowest text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Footer Meta -->
+<div class="mt-12 border-t border-outline-variant/10 pt-6 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-on-surface-variant">
+<p>© 2023 The Sentinel Tactical Command. All scan reports are encrypted and stored in secondary-tier cold storage after 90 days.</p>
+<div class="flex gap-6">
+<a class="hover:text-primary transition-colors" href="#">Privacy Protocols</a>
+<a class="hover:text-primary transition-colors" href="#">Audit Logs</a>
+<a class="hover:text-primary transition-colors" href="#">API Documentation</a>
+</div>
+</div>
+</main>
+</div>
+<!-- Background Decoration -->
+<div class="fixed inset-0 pointer-events-none z-[-1] opacity-40">
+<div class="absolute top-[-10%] right-[-10%] w-[50%] h-[50%] bg-primary/10 blur-[120px] rounded-full"></div>
+<div class="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-900/10 blur-[100px] rounded-full"></div>
+</div>
+</body></html>

@@ -1,0 +1,80 @@
+{% load scanops_tags %}
+<div class="scanops-panel overflow-hidden">
+    <div class="overflow-x-auto">
+        <table class="w-full min-w-[1080px] text-left border-collapse">
+            <thead>
+            <tr class="border-b border-slate-800 bg-slate-900/70">
+                <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">Scan ID</th>
+                <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">Target</th>
+                <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">Profile</th>
+                <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">Execution Date</th>
+                <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500 text-center">Open Ports</th>
+                <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500 text-center">Services</th>
+                <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">Risk</th>
+                <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">Status</th>
+                <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500 text-right">Actions</th>
+            </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-800/60">
+            {% for result in results %}
+                <tr class="hover:bg-slate-800/30 transition-colors">
+                    <td class="px-4 py-4 font-mono text-sm text-blue-300">{{ result.execution.execution_id }}</td>
+                    <td class="px-4 py-4">
+                        <a href="{% url 'scans:host-detail' result.execution.scan_request.target_id %}" class="text-sm font-semibold text-slate-200 hover:text-blue-300">
+                            {{ result.target_snapshot }}
+                        </a>
+                    </td>
+                    <td class="px-4 py-4 text-sm text-slate-300">{{ result.execution.scan_request.profile.name|default:result.execution.scan_request.get_scan_type_display }}</td>
+                    <td class="px-4 py-4 text-xs text-slate-400">{{ result.generated_at|date:"M d, Y H:i" }}</td>
+                    <td class="px-4 py-4 text-center text-sm text-slate-200">{{ result.total_open_ports }}</td>
+                    <td class="px-4 py-4 text-center text-sm text-slate-200">{{ result.total_services_detected }}</td>
+                    <td class="px-4 py-4">
+                        {% if result.result_summary.critical_findings|default:0 > 0 %}
+                            <span class="px-2 py-1 rounded text-[10px] uppercase font-semibold {{ 'high'|risk_badge }}">High</span>
+                        {% elif result.port_results.all|length > 0 %}
+                            <span class="px-2 py-1 rounded text-[10px] uppercase font-semibold {{ 'low'|risk_badge }}">Low</span>
+                        {% else %}
+                            <span class="px-2 py-1 rounded text-[10px] uppercase font-semibold {{ 'info'|risk_badge }}">Info</span>
+                        {% endif %}
+                    </td>
+                    <td class="px-4 py-4">
+                        <span class="px-2 py-1 rounded text-[10px] uppercase font-semibold {{ result.execution.status|status_badge }}">{{ result.execution.get_status_display }}</span>
+                    </td>
+                    <td class="px-4 py-4">
+                        <div class="flex justify-end items-center gap-2">
+                            <a href="{% url 'scans:result-detail' result.pk %}" class="px-2.5 py-1.5 rounded bg-slate-800 hover:bg-slate-700 text-[11px] text-slate-200">Open</a>
+                            <a href="{% url 'scans:result-compare-current' result.pk %}" class="px-2.5 py-1.5 rounded bg-blue-500/20 hover:bg-blue-500/30 text-[11px] text-blue-200">Compare</a>
+                            <form method="post" action="{% url 'scans:history-rerun' result.execution.pk %}">
+                                {% csrf_token %}
+                                <button type="submit" class="px-2.5 py-1.5 rounded bg-emerald-500/20 hover:bg-emerald-500/30 text-[11px] text-emerald-200">Re-run</button>
+                            </form>
+                            <a href="{% url 'scans:result-raw' result.pk %}" class="px-2.5 py-1.5 rounded bg-slate-700/60 hover:bg-slate-700 text-[11px] text-slate-200">Export</a>
+                        </div>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="9" class="px-4 py-14 text-center">
+                        <span class="material-symbols-outlined text-4xl text-slate-600">analytics</span>
+                        <p class="text-sm text-slate-300 mt-2">No results matched your filters.</p>
+                        <p class="text-xs text-slate-500 mt-1">Completed executions will appear here with structured findings.</p>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% if is_paginated %}
+        <div class="px-4 py-3 border-t border-slate-800 bg-slate-900/40 flex justify-between items-center">
+            <p class="text-xs text-slate-500">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</p>
+            <div class="flex gap-2">
+                {% if page_obj.has_previous %}
+                    <a href="?page={{ page_obj.previous_page_number }}" hx-get="?page={{ page_obj.previous_page_number }}" hx-include="#results-filter-form" hx-target="#results-table-container" hx-push-url="true" class="px-3 py-1.5 text-xs rounded bg-slate-800 hover:bg-slate-700 text-slate-200">Previous</a>
+                {% endif %}
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}" hx-get="?page={{ page_obj.next_page_number }}" hx-include="#results-filter-form" hx-target="#results-table-container" hx-push-url="true" class="px-3 py-1.5 text-xs rounded bg-slate-800 hover:bg-slate-700 text-slate-200">Next</a>
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+</div>

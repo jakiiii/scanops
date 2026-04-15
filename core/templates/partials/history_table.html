@@ -1,0 +1,98 @@
+{% load scanops_tags %}
+<div class="scanops-panel overflow-hidden">
+    <div class="overflow-x-auto">
+        <table class="w-full min-w-[1040px] text-left border-collapse">
+            <thead>
+            <tr class="border-b border-slate-800 bg-slate-900/70">
+                <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">Execution</th>
+                <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">Target</th>
+                <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">Profile</th>
+                <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">Requested By</th>
+                <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">Created</th>
+                <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">Status</th>
+                <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">Archived</th>
+                <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500 text-right">Actions</th>
+            </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-800/60">
+            {% for execution in executions %}
+                <tr class="hover:bg-slate-800/30 transition-colors">
+                    <td class="px-4 py-4 font-mono text-sm text-blue-300">{{ execution.execution_id }}</td>
+                    <td class="px-4 py-4 text-sm text-slate-200">{{ execution.scan_request.target.target_value }}</td>
+                    <td class="px-4 py-4 text-sm text-slate-300">{{ execution.scan_request.profile.name|default:execution.scan_request.get_scan_type_display }}</td>
+                    <td class="px-4 py-4 text-sm text-slate-300">{{ execution.scan_request.requested_by|default:"System" }}</td>
+                    <td class="px-4 py-4 text-xs text-slate-400">{{ execution.created_at|date:"M d, Y H:i" }}</td>
+                    <td class="px-4 py-4">
+                        <span class="px-2 py-1 rounded text-[10px] uppercase font-semibold {{ execution.status|status_badge }}">{{ execution.get_status_display }}</span>
+                    </td>
+                    <td class="px-4 py-4">
+                        {% if execution.is_archived %}
+                            <span class="px-2 py-1 rounded text-[10px] uppercase font-semibold {{ 'done'|status_badge }}">Yes</span>
+                        {% else %}
+                            <span class="px-2 py-1 rounded text-[10px] uppercase font-semibold {{ 'waiting'|status_badge }}">No</span>
+                        {% endif %}
+                    </td>
+                    <td class="px-4 py-4">
+                        <div class="flex justify-end gap-2">
+                            {% if execution.status == 'running' or execution.status == 'queued' %}
+                                <a href="{% url 'scans:monitor' execution.pk %}" class="px-2.5 py-1.5 rounded bg-slate-800 hover:bg-slate-700 text-[11px] text-slate-200">Monitor</a>
+                            {% elif execution.result %}
+                                <a href="{% url 'scans:result-detail' execution.result.pk %}" class="px-2.5 py-1.5 rounded bg-slate-800 hover:bg-slate-700 text-[11px] text-slate-200">Result</a>
+                            {% endif %}
+                            {% if page_mode == 'archived' %}
+                                <form method="post" action="{% url 'scans:history-restore' execution.pk %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="px-2.5 py-1.5 rounded bg-emerald-500/20 hover:bg-emerald-500/30 text-[11px] text-emerald-200">Restore</button>
+                                </form>
+                                <form method="post" action="{% url 'scans:history-delete' execution.pk %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="px-2.5 py-1.5 rounded bg-rose-500/20 hover:bg-rose-500/30 text-[11px] text-rose-200">Delete</button>
+                                </form>
+                            {% else %}
+                                <form method="post" action="{% url 'scans:history-rerun' execution.pk %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="px-2.5 py-1.5 rounded bg-blue-500/20 hover:bg-blue-500/30 text-[11px] text-blue-200">Re-run</button>
+                                </form>
+                                <form method="post" action="{% url 'scans:history-clone' execution.pk %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="px-2.5 py-1.5 rounded bg-slate-700/50 hover:bg-slate-700 text-[11px] text-slate-200">Clone</button>
+                                </form>
+                                {% if execution.result %}
+                                    <form method="post" action="{% url 'scans:history-compare' execution.pk %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="px-2.5 py-1.5 rounded bg-indigo-500/20 hover:bg-indigo-500/30 text-[11px] text-indigo-200">Compare</button>
+                                    </form>
+                                {% endif %}
+                                <form method="post" action="{% url 'scans:history-archive' execution.pk %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="px-2.5 py-1.5 rounded bg-amber-500/20 hover:bg-amber-500/30 text-[11px] text-amber-200">Archive</button>
+                                </form>
+                            {% endif %}
+                        </div>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="8" class="px-4 py-14 text-center">
+                        <span class="material-symbols-outlined text-4xl text-slate-600">history</span>
+                        <p class="text-sm text-slate-300 mt-2">No history records found.</p>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% if is_paginated %}
+        <div class="px-4 py-3 border-t border-slate-800 bg-slate-900/40 flex justify-between items-center">
+            <p class="text-xs text-slate-500">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</p>
+            <div class="flex gap-2">
+                {% if page_obj.has_previous %}
+                    <a href="?page={{ page_obj.previous_page_number }}" hx-get="?page={{ page_obj.previous_page_number }}" hx-include="#history-filter-form" hx-target="#history-table-container" hx-push-url="true" class="px-3 py-1.5 text-xs rounded bg-slate-800 hover:bg-slate-700 text-slate-200">Previous</a>
+                {% endif %}
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}" hx-get="?page={{ page_obj.next_page_number }}" hx-include="#history-filter-form" hx-target="#history-table-container" hx-push-url="true" class="px-3 py-1.5 text-xs rounded bg-slate-800 hover:bg-slate-700 text-slate-200">Next</a>
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+</div>

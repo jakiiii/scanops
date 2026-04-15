@@ -1,0 +1,57 @@
+<div style="font-family: Public Sans, Inter, sans-serif; color: #e2e8f0;">
+    <h2 style="margin:0 0 8px 0; color:#fff;">{{ title }}</h2>
+    <p style="margin:0 0 16px 0; color:#94a3b8;">Generated at {{ payload.generated_at }}</p>
+
+    {% if payload.summary_notes %}
+        <div style="padding:12px; border:1px solid rgba(59,130,246,0.35); border-radius:8px; margin-bottom:16px;">
+            <strong>Analyst Notes:</strong> {{ payload.summary_notes }}
+        </div>
+    {% endif %}
+
+    {% if payload.result %}
+        <h3 style="color:#93c5fd;">Result Overview</h3>
+        <p>Target {{ payload.result.target }} returned {{ payload.result.open_ports }} open ports and {{ payload.result.services }} services.</p>
+    {% endif %}
+
+    {% if payload.execution %}
+        <h3 style="color:#93c5fd;">Execution Summary</h3>
+        <p>Execution {{ payload.execution.execution_id }} status: {{ payload.execution.status }} ({{ payload.execution.duration_seconds }}s).</p>
+    {% endif %}
+
+    {% if payload.asset %}
+        <h3 style="color:#93c5fd;">Asset Summary</h3>
+        <p>Asset {{ payload.asset.name }} has risk {{ payload.asset.risk_level }} (score {{ payload.asset.risk_score }}).</p>
+    {% endif %}
+
+    {% if payload.comparison.summary %}
+        <h3 style="color:#93c5fd;">Comparison Summary</h3>
+        <p>Total changes: {{ payload.comparison.summary.total_changes }}</p>
+        <p>Added ports: {{ payload.comparison.summary.added_count }}, Removed ports: {{ payload.comparison.summary.removed_count }}, Changed ports: {{ payload.comparison.summary.changed_count }}</p>
+    {% endif %}
+
+    {% if payload.sections.ports and payload.result.ports %}
+        <h3 style="color:#93c5fd;">Port Details</h3>
+        <table style="width:100%; border-collapse:collapse; font-size:12px;">
+            <thead>
+            <tr>
+                <th style="text-align:left; border-bottom:1px solid #334155; padding:6px;">Port</th>
+                <th style="text-align:left; border-bottom:1px solid #334155; padding:6px;">Protocol</th>
+                <th style="text-align:left; border-bottom:1px solid #334155; padding:6px;">State</th>
+                <th style="text-align:left; border-bottom:1px solid #334155; padding:6px;">Service</th>
+                <th style="text-align:left; border-bottom:1px solid #334155; padding:6px;">Risk</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for port in payload.result.ports %}
+                <tr>
+                    <td style="padding:6px; border-bottom:1px solid #1e293b;">{{ port.port }}</td>
+                    <td style="padding:6px; border-bottom:1px solid #1e293b;">{{ port.protocol }}</td>
+                    <td style="padding:6px; border-bottom:1px solid #1e293b;">{{ port.state }}</td>
+                    <td style="padding:6px; border-bottom:1px solid #1e293b;">{{ port.service_name }} {{ port.service_version }}</td>
+                    <td style="padding:6px; border-bottom:1px solid #1e293b;">{{ port.risk_level }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+</div>

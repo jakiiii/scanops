@@ -1,0 +1,47 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>{% block title %}ScanOps{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        slate: {
+                            950: "#0b0e14",
+                            900: "#11151d",
+                            800: "#1e2532",
+                            700: "#334155"
+                        }
+                    }
+                }
+            }
+        };
+    </script>
+    <link rel="stylesheet" href="{% static 'scanops/css/app.css' %}"/>
+    <script defer src="https://unpkg.com/htmx.org@1.9.12"></script>
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="scanops-shell antialiased min-h-screen">
+<aside class="fixed left-0 top-0 h-full w-64 bg-slate-900 border-r border-slate-800 hidden md:flex flex-col z-40">
+    {% include "includes/sidebar.html" %}
+</aside>
+<main class="md:ml-64 min-h-screen scanops-grid-bg">
+    {% include "includes/topbar.html" %}
+    <div class="p-4 md:p-8">
+        {% include "includes/messages.html" %}
+        {% block content %}{% endblock %}
+    </div>
+</main>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

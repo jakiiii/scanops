@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Team Dashboard - NetScan Pro</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {},
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    fontFamily: {
+                        "headline": ["Public Sans"],
+                        "body": ["Public Sans"],
+                        "label": ["Public Sans"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Public Sans', sans-serif; }
+        .material-symbols-outlined { font-size: 20px; }
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(51, 65, 85, 0.5);
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-200 antialiased">
+<!-- SideNavBar Component -->
+<aside class="fixed left-0 top-0 bottom-0 flex flex-col p-4 z-50 h-screen w-64 border-r border-slate-800 bg-slate-900">
+<div class="flex items-center gap-3 mb-8 px-2">
+<div class="w-10 h-10 rounded bg-blue-600 flex items-center justify-center">
+<span class="material-symbols-outlined text-white" style="font-variation-settings: 'FILL' 1;">security</span>
+</div>
+<div>
+<h2 class="text-lg font-black text-slate-100">Global Ops</h2>
+<p class="text-xs text-slate-400">Network Security</p>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-4 py-2 text-blue-300 bg-blue-900/30 rounded-lg" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-medium text-sm">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 transition-all duration-200 ease-in-out rounded-lg" href="#">
+<span class="material-symbols-outlined">radar</span>
+<span class="font-medium text-sm">Scans</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 transition-all duration-200 ease-in-out rounded-lg" href="#">
+<span class="material-symbols-outlined">lan</span>
+<span class="font-medium text-sm">Assets</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 transition-all duration-200 ease-in-out rounded-lg" href="#">
+<span class="material-symbols-outlined">assessment</span>
+<span class="font-medium text-sm">Reporting</span>
+</a>
+</nav>
+<div class="pt-4 mt-4 border-t border-slate-800 space-y-1">
+<a class="flex items-center gap-3 px-4 py-2 text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 transition-all duration-200 ease-in-out rounded-lg" href="#">
+<span class="material-symbols-outlined">help_outline</span>
+<span class="font-medium text-sm">Support</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 transition-all duration-200 ease-in-out rounded-lg" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-medium text-sm">Account</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-64 min-h-screen">
+<!-- TopNavBar Component -->
+<header class="sticky top-0 z-40 flex items-center justify-between px-6 h-16 w-full bg-slate-950 border-b border-slate-800 shadow-none">
+<div class="flex items-center gap-8">
+<h1 class="text-xl font-bold tracking-tight text-white">NetScan Pro</h1>
+<div class="relative hidden lg:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-sm">search</span>
+<input class="bg-slate-900 border-slate-800 rounded-lg pl-10 pr-4 py-1.5 text-sm w-80 focus:ring-blue-500 focus:border-blue-500 text-slate-300" placeholder="Search team assets..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2">
+<button class="p-2 text-slate-400 hover:bg-slate-900 transition-colors rounded-lg">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 text-slate-400 hover:bg-slate-900 transition-colors rounded-lg">
+<span class="material-symbols-outlined">group_add</span>
+</button>
+<button class="p-2 text-slate-400 hover:bg-slate-900 transition-colors rounded-lg">
+<span class="material-symbols-outlined">settings</span>
+</button>
+</div>
+<div class="h-8 w-px bg-slate-800 mx-2"></div>
+<img alt="User profile avatar" class="w-8 h-8 rounded-full border border-slate-700 cursor-pointer active:opacity-80 transition-opacity" data-alt="Close-up portrait of a professional male security analyst in a modern office environment with soft blue lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD5UH_tzLpMe1Vid77dQUnRHyxBKCsFOG9lHLzVBzaUP7dyRoYRxbR5YXyksQAuurmoh75RV6JiqA8XHFh8XQHvJ9TFIC1apGWBQ67oLC7t2pdVJJ22d2QCa20QZYf3JOZ5ieEwrI6eCZuEI3kKRIL-riGDCoXaTj5RqEMnEBDt7GVFQEx7I0o5LbtfC3CyFaBvmcn1ux0SY6DlQ2lOAsS4nmipC1tGgQ8t3ZF2oKo3nRnP2L5607_DzBT8KxpoBZHiWqJwziDp5sF4"/>
+</div>
+</header>
+<div class="p-8 space-y-8">
+<!-- Dashboard Header & Filters -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div>
+<h2 class="text-3xl font-extrabold text-white">Team Dashboard</h2>
+<p class="text-slate-400 mt-1">Real-time collaborative security insights for ScanOps.</p>
+</div>
+<div class="flex flex-wrap items-center gap-3">
+<select class="bg-slate-900 border-slate-800 rounded-lg text-sm px-3 py-2 focus:ring-blue-500 transition-colors cursor-pointer">
+<option>Red Team</option>
+<option>Compliance</option>
+<option>NetOps</option>
+</select>
+<select class="bg-slate-900 border-slate-800 rounded-lg text-sm px-3 py-2 focus:ring-blue-500 transition-colors cursor-pointer">
+<option>Last 30 Days</option>
+<option>Last 7 Days</option>
+<option>Custom Range</option>
+</select>
+<button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">filter_list</span>
+                        Filters
+                    </button>
+</div>
+</div>
+<!-- Metrics Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+<div class="glass-panel p-5 rounded-xl">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-blue-500/10 rounded-lg">
+<span class="material-symbols-outlined text-blue-400">monitoring</span>
+</div>
+<span class="text-xs font-bold text-green-400">+12%</span>
+</div>
+<p class="text-slate-400 text-sm font-medium">Total Team Scans</p>
+<h3 class="text-2xl font-bold text-white">12,842</h3>
+</div>
+<div class="glass-panel p-5 rounded-xl">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-purple-500/10 rounded-lg">
+<span class="material-symbols-outlined text-purple-400">share</span>
+</div>
+<span class="text-xs font-bold text-slate-500">Stable</span>
+</div>
+<p class="text-slate-400 text-sm font-medium">Shared Profiles</p>
+<h3 class="text-2xl font-bold text-white">48</h3>
+</div>
+<div class="glass-panel p-5 rounded-xl">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-orange-500/10 rounded-lg">
+<span class="material-symbols-outlined text-orange-400">group_work</span>
+</div>
+<span class="text-xs font-bold text-green-400">+5</span>
+</div>
+<p class="text-slate-400 text-sm font-medium">Collaborative Findings</p>
+<h3 class="text-2xl font-bold text-white">314</h3>
+</div>
+<div class="glass-panel p-5 rounded-xl">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-emerald-500/10 rounded-lg">
+<span class="material-symbols-outlined text-emerald-400">description</span>
+</div>
+<span class="text-xs font-bold text-red-400">-2%</span>
+</div>
+<p class="text-slate-400 text-sm font-medium">Active Reports</p>
+<h3 class="text-2xl font-bold text-white">89</h3>
+</div>
+</div>
+<!-- Main Dashboard Layout - Bento Grid Style -->
+<div class="grid grid-cols-12 gap-6">
+<!-- Activity Chart Card -->
+<div class="col-span-12 lg:col-span-8 glass-panel p-6 rounded-xl flex flex-col gap-6">
+<div class="flex items-center justify-between">
+<h4 class="text-lg font-bold text-white">Team Scan Activity</h4>
+<div class="flex items-center gap-2">
+<span class="flex items-center gap-1 text-xs text-slate-400"><span class="w-2 h-2 rounded-full bg-blue-500"></span> Successful</span>
+<span class="flex items-center gap-1 text-xs text-slate-400"><span class="w-2 h-2 rounded-full bg-slate-700"></span> Failed</span>
+</div>
+</div>
+<div class="h-64 w-full flex items-end justify-between gap-1 group">
+<!-- Mock Chart Bars -->
+<div class="flex-1 bg-blue-500/20 hover:bg-blue-500/40 transition-all rounded-t h-[40%] relative group/bar">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-slate-800 text-[10px] px-1 rounded opacity-0 group-hover/bar:opacity-100">42</div>
+</div>
+<div class="flex-1 bg-blue-500/30 hover:bg-blue-500/50 transition-all rounded-t h-[65%]"></div>
+<div class="flex-1 bg-blue-500/20 hover:bg-blue-500/40 transition-all rounded-t h-[35%]"></div>
+<div class="flex-1 bg-blue-500/40 hover:bg-blue-500/60 transition-all rounded-t h-[85%]"></div>
+<div class="flex-1 bg-blue-500/20 hover:bg-blue-500/40 transition-all rounded-t h-[55%]"></div>
+<div class="flex-1 bg-blue-500/50 hover:bg-blue-500/70 transition-all rounded-t h-[95%]"></div>
+<div class="flex-1 bg-blue-500/30 hover:bg-blue-500/50 transition-all rounded-t h-[60%]"></div>
+<div class="flex-1 bg-blue-500/20 hover:bg-blue-500/40 transition-all rounded-t h-[45%]"></div>
+<div class="flex-1 bg-blue-500/60 hover:bg-blue-500/80 transition-all rounded-t h-[75%]"></div>
+<div class="flex-1 bg-blue-500/30 hover:bg-blue-500/50 transition-all rounded-t h-[50%]"></div>
+<div class="flex-1 bg-blue-500/20 hover:bg-blue-500/40 transition-all rounded-t h-[40%]"></div>
+<div class="flex-1 bg-blue-500/40 hover:bg-blue-500/60 transition-all rounded-t h-[80%]"></div>
+<div class="flex-1 bg-blue-500/20 hover:bg-blue-500/40 transition-all rounded-t h-[30%]"></div>
+<div class="flex-1 bg-blue-500/50 hover:bg-blue-500/70 transition-all rounded-t h-[90%]"></div>
+<div class="flex-1 bg-blue-500/30 hover:bg-blue-500/50 transition-all rounded-t h-[60%]"></div>
+</div>
+<div class="flex justify-between text-[10px] text-slate-500 uppercase tracking-widest font-bold">
+<span>30 Days Ago</span>
+<span>15 Days Ago</span>
+<span>Today</span>
+</div>
+</div>
+<!-- Collaborative Notes -->
+<div class="col-span-12 lg:col-span-4 glass-panel p-6 rounded-xl overflow-hidden flex flex-col">
+<h4 class="text-lg font-bold text-white mb-4">Latest Discussions</h4>
+<div class="space-y-4 flex-1 overflow-y-auto">
+<div class="p-3 bg-slate-900/50 border border-slate-800 rounded-lg">
+<div class="flex items-center gap-2 mb-2">
+<img class="w-6 h-6 rounded-full" data-alt="Portrait of a young male professional wearing glasses in a brightly lit modern workspace" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBRitxvno8yg5ekWy13FP8qdxVLum5pO6Zj6tq6p88yPTHRDhgSZADep109R86YTU1Q4g-SqUtqNxMgFk2gp6MkVoTOKfVvlpugEaVTm93dKlZM945LAGaPpOlAZGcQKzwA7SBLzG_DZQr6HL44G_tV2Qjb4uIGx_piizNQuPADOyYbgChfWokoW7Vwe8TcDpZ4_7Ajpi3x06eUFnAfwW54ycPF2bHUmQb6V8jTD5bxUtbvQ74_qgjEtD52H4gU4nb28MVAxvepd8wJ"/>
+<span class="text-xs font-bold text-blue-400">Alex Chen</span>
+<span class="text-[10px] text-slate-500">2h ago</span>
+</div>
+<p class="text-xs text-slate-300 leading-relaxed italic">"Potential injection vector found on node 10.0.4.12. Needs validation."</p>
+<div class="mt-2 flex items-center gap-2">
+<span class="text-[10px] bg-red-500/20 text-red-400 px-2 py-0.5 rounded">High Risk</span>
+<span class="material-symbols-outlined text-xs text-slate-500">chat_bubble_outline</span>
+<span class="text-[10px] text-slate-500">3 replies</span>
+</div>
+</div>
+<div class="p-3 bg-slate-900/50 border border-slate-800 rounded-lg">
+<div class="flex items-center gap-2 mb-2">
+<img class="w-6 h-6 rounded-full" data-alt="Professional woman with a confident smile in a modern office with natural light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCvaZGEpRwWW5UiSdENl9etRdbrr48d_h215UERbnMtI02aOAJqJARH3qmw5lXD_QV3lMWdAvgH4K8ssKJIoE00Lkoplu_9UWfo9PU7GwNEtfEpMo6arWmmRQwJ8-EECfkr7QUa8cWYStEjrdNjgDoZ5YDVsM-KpFwbL8ocfiv-aQMWV_AjG_3G-uf20eRBh2SMgomOV6BdsUAdJwkdxLO1jao2fAqZUIpmKVPnl5JeorrUXvQ8X238B1eHjzdBZL4pQjzAz7xkkfDp"/>
+<span class="text-xs font-bold text-blue-400">Sarah Miller</span>
+<span class="text-[10px] text-slate-500">5h ago</span>
+</div>
+<p class="text-xs text-slate-300 leading-relaxed italic">"Compliance scan for Q3 completed. Review the attached PDF for discrepancies."</p>
+</div>
+</div>
+</div>
+<!-- Shared Profiles Widget -->
+<div class="col-span-12 md:col-span-6 lg:col-span-4 glass-panel p-6 rounded-xl">
+<h4 class="text-lg font-bold text-white mb-6">Shared Scan Profiles</h4>
+<div class="space-y-4">
+<div class="flex items-center justify-between p-3 border border-slate-800 rounded-lg bg-slate-900/30">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-blue-500">security_update_good</span>
+<div>
+<p class="text-sm font-bold text-slate-200">Full External Audit</p>
+<p class="text-[10px] text-slate-500">Created by admin_ops</p>
+</div>
+</div>
+<div class="text-right">
+<p class="text-xs font-bold text-white">1,240</p>
+<p class="text-[10px] text-slate-500">Uses</p>
+</div>
+</div>
+<div class="flex items-center justify-between p-3 border border-slate-800 rounded-lg bg-slate-900/30">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-purple-500">router</span>
+<div>
+<p class="text-sm font-bold text-slate-200">Internal IoT Sweep</p>
+<p class="text-[10px] text-slate-500">Created by red_t1</p>
+</div>
+</div>
+<div class="text-right">
+<p class="text-xs font-bold text-white">852</p>
+<p class="text-[10px] text-slate-500">Uses</p>
+</div>
+</div>
+<div class="flex items-center justify-between p-3 border border-slate-800 rounded-lg bg-slate-900/30">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-emerald-500">webhook</span>
+<div>
+<p class="text-sm font-bold text-slate-200">API Endpoint Stress</p>
+<p class="text-[10px] text-slate-500">Created by dev_sec</p>
+</div>
+</div>
+<div class="text-right">
+<p class="text-xs font-bold text-white">431</p>
+<p class="text-[10px] text-slate-500">Uses</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Team Usage Comparison -->
+<div class="col-span-12 md:col-span-6 lg:col-span-4 glass-panel p-6 rounded-xl">
+<h4 class="text-lg font-bold text-white mb-6">Scan Volume by Team</h4>
+<div class="space-y-6">
+<div class="space-y-2">
+<div class="flex justify-between text-xs font-medium">
+<span class="text-slate-300">Red Team</span>
+<span class="text-white">4,200 scans</span>
+</div>
+<div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+<div class="bg-blue-500 h-full w-[85%] rounded-full"></div>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-xs font-medium">
+<span class="text-slate-300">Compliance</span>
+<span class="text-white">2,840 scans</span>
+</div>
+<div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+<div class="bg-purple-500 h-full w-[55%] rounded-full"></div>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-xs font-medium">
+<span class="text-slate-300">NetOps</span>
+<span class="text-white">5,102 scans</span>
+</div>
+<div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+<div class="bg-emerald-500 h-full w-[95%] rounded-full"></div>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-xs font-medium">
+<span class="text-slate-300">DevSecOps</span>
+<span class="text-white">700 scans</span>
+</div>
+<div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+<div class="bg-orange-500 h-full w-[25%] rounded-full"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Recent Shared Reports -->
+<div class="col-span-12 lg:col-span-4 glass-panel p-6 rounded-xl">
+<h4 class="text-lg font-bold text-white mb-6">Recent Shared Reports</h4>
+<div class="grid grid-cols-1 gap-3">
+<div class="group flex items-center gap-4 p-3 border border-slate-800 rounded-lg hover:border-blue-500/50 transition-colors cursor-pointer">
+<div class="w-10 h-10 flex items-center justify-center bg-red-500/10 text-red-500 rounded-lg">
+<span class="material-symbols-outlined">picture_as_pdf</span>
+</div>
+<div class="flex-1">
+<p class="text-sm font-bold text-white">Q3_Vulnerability_Final.pdf</p>
+<p class="text-[10px] text-slate-500 uppercase font-bold">PDF • 14.2 MB • Oct 24</p>
+</div>
+<span class="material-symbols-outlined text-slate-600 group-hover:text-white transition-colors">download</span>
+</div>
+<div class="group flex items-center gap-4 p-3 border border-slate-800 rounded-lg hover:border-blue-500/50 transition-colors cursor-pointer">
+<div class="w-10 h-10 flex items-center justify-center bg-blue-500/10 text-blue-500 rounded-lg">
+<span class="material-symbols-outlined">html</span>
+</div>
+<div class="flex-1">
+<p class="text-sm font-bold text-white">Live_Dashboard_Asset_View</p>
+<p class="text-[10px] text-slate-500 uppercase font-bold">HTML • 2.1 MB • Oct 23</p>
+</div>
+<span class="material-symbols-outlined text-slate-600 group-hover:text-white transition-colors">open_in_new</span>
+</div>
+<div class="group flex items-center gap-4 p-3 border border-slate-800 rounded-lg hover:border-blue-500/50 transition-colors cursor-pointer">
+<div class="w-10 h-10 flex items-center justify-center bg-green-500/10 text-green-500 rounded-lg">
+<span class="material-symbols-outlined">table_view</span>
+</div>
+<div class="flex-1">
+<p class="text-sm font-bold text-white">Target_List_Export_v2</p>
+<p class="text-[10px] text-slate-500 uppercase font-bold">CSV • 0.8 MB • Oct 22</p>
+</div>
+<span class="material-symbols-outlined text-slate-600 group-hover:text-white transition-colors">download</span>
+</div>
+</div>
+</div>
+<!-- Real-time Activity Feed -->
+<div class="col-span-12 glass-panel p-6 rounded-xl">
+<h4 class="text-lg font-bold text-white mb-6">Team Activity Feed</h4>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead>
+<tr class="text-[10px] text-slate-500 uppercase tracking-widest border-b border-slate-800">
+<th class="pb-4 font-bold">Member</th>
+<th class="pb-4 font-bold">Action</th>
+<th class="pb-4 font-bold">Target / Project</th>
+<th class="pb-4 font-bold text-right">Time</th>
+</tr>
+</thead>
+<tbody class="text-sm">
+<tr class="border-b border-slate-900/50 hover:bg-slate-900/20 transition-colors">
+<td class="py-4">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-[10px] font-bold border border-slate-700">JD</div>
+<span class="text-slate-200">John Doe</span>
+</div>
+</td>
+<td class="py-4">
+<span class="bg-blue-500/10 text-blue-400 px-2 py-1 rounded text-[10px] font-bold uppercase">Scan Completed</span>
+</td>
+<td class="py-4 text-slate-400">Main API Cluster (US-East-1)</td>
+<td class="py-4 text-right text-slate-500">Just Now</td>
+</tr>
+<tr class="border-b border-slate-900/50 hover:bg-slate-900/20 transition-colors">
+<td class="py-4">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-[10px] font-bold border border-slate-700">ML</div>
+<span class="text-slate-200">Maria Lopez</span>
+</div>
+</td>
+<td class="py-4">
+<span class="bg-purple-500/10 text-purple-400 px-2 py-1 rounded text-[10px] font-bold uppercase">Report Generated</span>
+</td>
+<td class="py-4 text-slate-400">Quarterly Compliance Baseline</td>
+<td class="py-4 text-right text-slate-500">14m ago</td>
+</tr>
+<tr class="border-b border-slate-900/50 hover:bg-slate-900/20 transition-colors">
+<td class="py-4">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-[10px] font-bold border border-slate-700">KB</div>
+<span class="text-slate-200">Kevin Baker</span>
+</div>
+</td>
+<td class="py-4">
+<span class="bg-orange-500/10 text-orange-400 px-2 py-1 rounded text-[10px] font-bold uppercase">Target Added</span>
+</td>
+<td class="py-4 text-slate-400">staging-lb-04.internal.net</td>
+<td class="py-4 text-right text-slate-500">1h ago</td>
+</tr>
+<tr class="hover:bg-slate-900/20 transition-colors">
+<td class="py-4">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-[10px] font-bold border border-slate-700">RT</div>
+<span class="text-slate-200">Ryan T.</span>
+</div>
+</td>
+<td class="py-4">
+<span class="bg-emerald-500/10 text-emerald-400 px-2 py-1 rounded text-[10px] font-bold uppercase">Profile Shared</span>
+</td>
+<td class="py-4 text-slate-400">High-Intensity TCP Sweep</td>
+<td class="py-4 text-right text-slate-500">3h ago</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Floating Action Button (FAB) suppressed for Dashboard consistency as per instructions -->
+</body></html>

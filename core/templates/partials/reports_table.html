@@ -1,0 +1,86 @@
+{% load scanops_tags %}
+<div class="scanops-panel overflow-hidden">
+    <div class="overflow-x-auto">
+        <table class="w-full min-w-[1120px] text-left border-collapse">
+            <thead>
+            <tr class="border-b border-slate-800 bg-slate-900/70">
+                <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">Report Name</th>
+                <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">Type</th>
+                <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">Generated At</th>
+                <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">Source</th>
+                <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">Format</th>
+                <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">Created By</th>
+                <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">Status</th>
+                <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500 text-right">Actions</th>
+            </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-800/60">
+            {% for report in reports %}
+                <tr class="hover:bg-slate-800/30 transition-colors">
+                    <td class="px-4 py-4">
+                        <p class="text-sm font-semibold text-slate-100">{{ report.title }}</p>
+                        <p class="text-[11px] text-slate-500">#{{ report.pk }}</p>
+                    </td>
+                    <td class="px-4 py-4">
+                        <span class="px-2 py-1 rounded text-[10px] uppercase font-semibold {{ report.report_type|report_type_badge }}">{{ report.get_report_type_display }}</span>
+                    </td>
+                    <td class="px-4 py-4 text-xs text-slate-300">{{ report.created_at|date:"M d, Y H:i" }}</td>
+                    <td class="px-4 py-4 text-xs text-slate-300">
+                        {% if report.source_result %}
+                            Result • {{ report.source_result.target_snapshot }}
+                        {% elif report.source_execution %}
+                            Execution • {{ report.source_execution.execution_id }}
+                        {% elif report.asset %}
+                            Asset • {{ report.asset.name }}
+                        {% elif report.comparison_left_result and report.comparison_right_result %}
+                            Comparison • {{ report.comparison_left_result.execution.execution_id }} vs {{ report.comparison_right_result.execution.execution_id }}
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                    <td class="px-4 py-4 text-xs text-slate-300 uppercase">{{ report.get_format_display }}</td>
+                    <td class="px-4 py-4 text-xs text-slate-300">{{ report.generated_by|default:"System" }}</td>
+                    <td class="px-4 py-4">
+                        <span class="px-2 py-1 rounded text-[10px] uppercase font-semibold {{ report.status|status_badge }}">{{ report.get_status_display }}</span>
+                    </td>
+                    <td class="px-4 py-4">
+                        <div class="flex justify-end gap-2">
+                            <a href="{% url 'reports:detail' report.pk %}" class="px-2.5 py-1.5 rounded bg-slate-800 hover:bg-slate-700 text-[11px] text-slate-200">Preview</a>
+                            <a href="{% url 'reports:download' report.pk %}" class="px-2.5 py-1.5 rounded bg-blue-500/20 hover:bg-blue-500/30 text-[11px] text-blue-200">Download</a>
+                            <a href="{% url 'reports:print' report.pk %}" class="px-2.5 py-1.5 rounded bg-indigo-500/20 hover:bg-indigo-500/30 text-[11px] text-indigo-200">Print</a>
+                            <form method="post" action="{% url 'reports:regenerate' report.pk %}">
+                                {% csrf_token %}
+                                <button type="submit" class="px-2.5 py-1.5 rounded bg-emerald-500/20 hover:bg-emerald-500/30 text-[11px] text-emerald-200">Regenerate</button>
+                            </form>
+                            <form method="post" action="{% url 'reports:archive' report.pk %}">
+                                {% csrf_token %}
+                                <button type="submit" class="px-2.5 py-1.5 rounded bg-amber-500/20 hover:bg-amber-500/30 text-[11px] text-amber-200">Archive</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="8" class="px-4 py-14 text-center">
+                        <span class="material-symbols-outlined text-4xl text-slate-600">description</span>
+                        <p class="text-sm text-slate-300 mt-2">No reports found for the selected filters.</p>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% if is_paginated %}
+        <div class="px-4 py-3 border-t border-slate-800 bg-slate-900/40 flex justify-between items-center">
+            <p class="text-xs text-slate-500">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</p>
+            <div class="flex gap-2">
+                {% if page_obj.has_previous %}
+                    <a href="?page={{ page_obj.previous_page_number }}" hx-get="?page={{ page_obj.previous_page_number }}" hx-include="#report-filter-form" hx-target="#reports-table-container" hx-push-url="true" class="px-3 py-1.5 text-xs rounded bg-slate-800 hover:bg-slate-700 text-slate-200">Previous</a>
+                {% endif %}
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}" hx-get="?page={{ page_obj.next_page_number }}" hx-include="#report-filter-form" hx-target="#reports-table-container" hx-push-url="true" class="px-3 py-1.5 text-xs rounded bg-slate-800 hover:bg-slate-700 text-slate-200">Next</a>
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+</div>

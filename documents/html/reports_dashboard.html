@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Reports Module - ScanOps</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;family=Public+Sans:wght@300;400;500;600;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {},
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    fontFamily: {
+                        "headline": ["Space Grotesk", "Public Sans", "sans-serif"],
+                        "body": ["Inter", "Public Sans", "sans-serif"],
+                        "label": ["Inter", "Public Sans", "sans-serif"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+            text-transform: none;
+            letter-spacing: normal;
+            word-wrap: normal;
+            white-space: nowrap;
+            direction: ltr;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #020617; /* Slate 950 for tactical feel */
+        }
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(30, 41, 59, 0.5);
+        }
+    </style>
+</head>
+<body class="text-slate-200 antialiased">
+<!-- SideNavBar (Authority Source: JSON) -->
+<aside class="fixed left-0 top-0 h-full flex flex-col z-40 bg-slate-950 dark:bg-slate-950 h-screen w-64 border-r border-slate-800 dark:border-slate-800">
+<div class="p-6">
+<div class="flex items-center gap-3 mb-8">
+<div class="w-8 h-8 bg-blue-600 rounded flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-sm" data-icon="shield">shield</span>
+</div>
+<div>
+<h1 class="text-xl font-bold tracking-tighter text-slate-50 dark:text-slate-50 font-['Space_Grotesk']">ScanOps</h1>
+<p class="text-[10px] text-slate-500 font-semibold tracking-wider uppercase">Enterprise Network Security</p>
+</div>
+</div>
+<nav class="space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-900 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="text-xs font-semibold tracking-wider uppercase">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-900 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="add_circle">add_circle</span>
+<span class="text-xs font-semibold tracking-wider uppercase">New Scan</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-900 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="speed">speed</span>
+<span class="text-xs font-semibold tracking-wider uppercase">Quick Scan</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-900 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="text-xs font-semibold tracking-wider uppercase">Results</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-900 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+<span class="text-xs font-semibold tracking-wider uppercase">Assets</span>
+</a>
+<!-- Active Tab: Reports -->
+<a class="flex items-center gap-3 px-4 py-3 text-blue-400 bg-blue-500/10 border-r-2 border-blue-500 scale-95 duration-100 active:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+<span class="text-xs font-semibold tracking-wider uppercase">Reports</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-900 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="text-xs font-semibold tracking-wider uppercase">Settings</span>
+</a>
+</nav>
+</div>
+<div class="mt-auto p-6 border-t border-slate-800">
+<div class="flex items-center gap-3">
+<img alt="Administrator Profile" class="w-8 h-8 rounded-full border border-slate-700" data-alt="close-up portrait of a professional system administrator in a dark office environment with blue screen glow" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAQ5MxDuvlySpfUtUI_hqgNoUshy90743xUvVxNWk-_P-DI9VCF9HJSrTHIKtYbwMU85kXx7mZl6IIGzvawL6cVjoVOewS6A6Ca2t4NHNSu3YhNxK4k1jUfE8jcCcIEuu1uReBvqOeLps3ZG-3EumdpFLl5WqbQOGW5JFDz75Vb1AAMNSboAN82Hf1SgMjZygKOFfEDAziumvf5O0hM7wi4KxaTiLnkjG20XnWeCjM88Yr9uDPgPoRbBWWrQqxSbdHmeZ7Gr_j8Aees"/>
+<div class="overflow-hidden">
+<p class="text-xs font-bold text-slate-100 truncate">Admin_Root</p>
+<p class="text-[10px] text-slate-500 uppercase tracking-tighter">Level 4 Clearance</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- TopNavBar (Authority Source: JSON) -->
+<header class="fixed top-0 right-0 left-64 h-16 flex justify-between items-center px-6 z-30 bg-slate-950/80 backdrop-blur-md border-b border-slate-800 dark:border-slate-800 shadow-sm">
+<div class="flex items-center gap-4 flex-1">
+<div class="relative w-full max-w-md">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-sm" data-icon="search">search</span>
+<input class="w-full bg-slate-900/50 border border-slate-800 rounded-lg py-1.5 pl-10 pr-4 text-sm text-slate-300 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-all" placeholder="Search infrastructure reports..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-slate-400 hover:text-blue-400 hover:bg-slate-900/50 p-2 rounded-lg transition-all duration-200 ease-in-out">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<div class="h-6 w-[1px] bg-slate-800"></div>
+<button class="flex items-center gap-2 text-slate-400 hover:text-blue-400 px-2 py-1 transition-all">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+<span class="text-xs font-medium">Docs</span>
+</button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="pl-64 pt-16 min-h-screen bg-slate-950">
+<div class="p-8 max-w-7xl mx-auto space-y-8">
+<!-- Header Section -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div>
+<h2 class="text-3xl font-bold font-headline tracking-tight text-slate-50">Intelligence Reports</h2>
+<p class="text-slate-400 mt-1 font-body">Manage and analyze enterprise-grade security audit logs and vulnerability scans.</p>
+</div>
+<button class="bg-blue-600 hover:bg-blue-500 text-white px-5 py-2.5 rounded font-semibold text-sm flex items-center gap-2 transition-all active:scale-95">
+<span class="material-symbols-outlined text-sm" data-icon="add_chart">add_chart</span>
+                    Generate New Report
+                </button>
+</div>
+<!-- Bento Grid Summary Cards -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+<div class="glass-panel p-5 rounded-xl border border-slate-800/50 relative overflow-hidden group">
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-blue-500 bg-blue-500/10 p-2 rounded" data-icon="analytics">analytics</span>
+<span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Total Reports</span>
+</div>
+<div class="text-3xl font-bold text-slate-50 font-headline">1,284</div>
+<div class="mt-2 text-xs text-emerald-500 flex items-center gap-1">
+<span class="material-symbols-outlined text-xs" data-icon="trending_up">trending_up</span>
+<span>+12% from last month</span>
+</div>
+<div class="absolute -right-4 -bottom-4 opacity-5 group-hover:opacity-10 transition-opacity">
+<span class="material-symbols-outlined text-8xl" data-icon="bar_chart">bar_chart</span>
+</div>
+</div>
+<div class="glass-panel p-5 rounded-xl border border-slate-800/50 relative overflow-hidden group">
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-purple-500 bg-purple-500/10 p-2 rounded" data-icon="update">update</span>
+<span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Generated This Week</span>
+</div>
+<div class="text-3xl font-bold text-slate-50 font-headline">42</div>
+<div class="mt-2 text-xs text-blue-400">On track with quarterly target</div>
+<div class="absolute -right-4 -bottom-4 opacity-5 group-hover:opacity-10 transition-opacity">
+<span class="material-symbols-outlined text-8xl" data-icon="history">history</span>
+</div>
+</div>
+<div class="glass-panel p-5 rounded-xl border border-slate-800/50 relative overflow-hidden group">
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-amber-500 bg-amber-500/10 p-2 rounded" data-icon="event_repeat">event_repeat</span>
+<span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Scheduled Reports</span>
+</div>
+<div class="text-3xl font-bold text-slate-50 font-headline">15</div>
+<div class="mt-2 text-xs text-slate-400">Next: Security_Audit_Alpha at 02:00</div>
+<div class="absolute -right-4 -bottom-4 opacity-5 group-hover:opacity-10 transition-opacity">
+<span class="material-symbols-outlined text-8xl" data-icon="schedule">schedule</span>
+</div>
+</div>
+<div class="glass-panel p-5 rounded-xl border border-slate-800/50 relative overflow-hidden group">
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-rose-500 bg-rose-500/10 p-2 rounded" data-icon="database">database</span>
+<span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Storage Used</span>
+</div>
+<div class="text-3xl font-bold text-slate-50 font-headline">14.2 GB</div>
+<div class="mt-2 w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+<div class="bg-rose-500 h-full w-[68%]"></div>
+</div>
+<div class="absolute -right-4 -bottom-4 opacity-5 group-hover:opacity-10 transition-opacity">
+<span class="material-symbols-outlined text-8xl" data-icon="hard_drive">hard_drive</span>
+</div>
+</div>
+</div>
+<!-- Filters Bar -->
+<div class="flex flex-wrap items-center gap-4 bg-slate-900/40 p-4 rounded-xl border border-slate-800/50">
+<div class="flex items-center gap-2 text-slate-400 text-sm font-medium">
+<span class="material-symbols-outlined text-sm" data-icon="filter_list">filter_list</span>
+<span>Filters:</span>
+</div>
+<select class="bg-slate-950 border-slate-800 text-slate-300 text-xs rounded-lg py-1.5 focus:ring-blue-500 transition-all">
+<option>All Report Types</option>
+<option>Executive Summary</option>
+<option>Technical Deep Dive</option>
+<option>Differential Analysis</option>
+</select>
+<select class="bg-slate-950 border-slate-800 text-slate-300 text-xs rounded-lg py-1.5 focus:ring-blue-500 transition-all">
+<option>All Formats</option>
+<option>PDF Document</option>
+<option>JSON Raw Data</option>
+<option>HTML Interactive</option>
+</select>
+<select class="bg-slate-950 border-slate-800 text-slate-300 text-xs rounded-lg py-1.5 focus:ring-blue-500 transition-all">
+<option>Last 30 Days</option>
+<option>Last 7 Days</option>
+<option>Current Quarter</option>
+</select>
+<div class="ml-auto">
+<button class="text-xs text-slate-500 hover:text-slate-300 transition-colors">Clear All Filters</button>
+</div>
+</div>
+<!-- Data Table Section -->
+<div class="glass-panel rounded-xl border border-slate-800 overflow-hidden">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-slate-900/50 border-b border-slate-800">
+<th class="px-6 py-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest">Report Name</th>
+<th class="px-6 py-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest">Type</th>
+<th class="px-6 py-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest">Scan Source</th>
+<th class="px-6 py-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest">Format</th>
+<th class="px-6 py-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest">Date Generated</th>
+<th class="px-6 py-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest">Owner</th>
+<th class="px-6 py-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-800/50">
+<!-- Row 1 -->
+<tr class="hover:bg-blue-500/5 transition-colors group">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-blue-400" data-icon="description">description</span>
+<span class="text-sm font-semibold text-slate-200">Q3_Security_Audit_Full</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="text-[10px] px-2 py-0.5 rounded border border-blue-500/30 bg-blue-500/10 text-blue-400 font-bold uppercase">Executive</span>
+</td>
+<td class="px-6 py-4 text-xs text-slate-400 font-mono">cluster-prod-alpha</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-1.5 text-xs text-slate-300">
+<span class="material-symbols-outlined text-sm text-rose-400" data-icon="picture_as_pdf">picture_as_pdf</span>
+                                        PDF
+                                    </div>
+</td>
+<td class="px-6 py-4 text-xs text-slate-400">Oct 24, 2023 · 14:30</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<div class="w-5 h-5 rounded-full bg-slate-800 flex items-center justify-center text-[10px] font-bold text-slate-400">SR</div>
+<span class="text-xs text-slate-300">S. Rogers</span>
+</div>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="flex items-center justify-end gap-2">
+<button class="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800" title="View">
+<span class="material-symbols-outlined text-lg" data-icon="visibility">visibility</span>
+</button>
+<button class="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800" title="Download">
+<span class="material-symbols-outlined text-lg" data-icon="download">download</span>
+</button>
+<button class="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800" title="Share">
+<span class="material-symbols-outlined text-lg" data-icon="share">share</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-blue-500/5 transition-colors group">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-slate-400" data-icon="terminal">terminal</span>
+<span class="text-sm font-semibold text-slate-200">Vulnerability_Scan_Delta_002</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="text-[10px] px-2 py-0.5 rounded border border-purple-500/30 bg-purple-500/10 text-purple-400 font-bold uppercase">Technical</span>
+</td>
+<td class="px-6 py-4 text-xs text-slate-400 font-mono">edge-node-04</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-1.5 text-xs text-slate-300">
+<span class="material-symbols-outlined text-sm text-amber-400" data-icon="data_object">data_object</span>
+                                        JSON
+                                    </div>
+</td>
+<td class="px-6 py-4 text-xs text-slate-400">Oct 23, 2023 · 09:12</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<div class="w-5 h-5 rounded-full bg-slate-800 flex items-center justify-center text-[10px] font-bold text-slate-400">SYS</div>
+<span class="text-xs text-slate-300">System</span>
+</div>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="flex items-center justify-end gap-2">
+<button class="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800" title="View">
+<span class="material-symbols-outlined text-lg" data-icon="visibility">visibility</span>
+</button>
+<button class="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800" title="Download">
+<span class="material-symbols-outlined text-lg" data-icon="download">download</span>
+</button>
+<button class="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800" title="Share">
+<span class="material-symbols-outlined text-lg" data-icon="share">share</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-blue-500/5 transition-colors group">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-emerald-400" data-icon="compare_arrows">compare_arrows</span>
+<span class="text-sm font-semibold text-slate-200">Weekly_Diff_Report_W42</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="text-[10px] px-2 py-0.5 rounded border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 font-bold uppercase">Diff</span>
+</td>
+<td class="px-6 py-4 text-xs text-slate-400 font-mono">multi-zone-aggregator</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-1.5 text-xs text-slate-300">
+<span class="material-symbols-outlined text-sm text-blue-400" data-icon="html">html</span>
+                                        HTML
+                                    </div>
+</td>
+<td class="px-6 py-4 text-xs text-slate-400">Oct 21, 2023 · 23:59</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<div class="w-5 h-5 rounded-full bg-slate-800 flex items-center justify-center text-[10px] font-bold text-slate-400">JD</div>
+<span class="text-xs text-slate-300">J. Doe</span>
+</div>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="flex items-center justify-end gap-2">
+<button class="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800" title="View">
+<span class="material-symbols-outlined text-lg" data-icon="visibility">visibility</span>
+</button>
+<button class="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800" title="Download">
+<span class="material-symbols-outlined text-lg" data-icon="download">download</span>
+</button>
+<button class="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800" title="Share">
+<span class="material-symbols-outlined text-lg" data-icon="share">share</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-blue-500/5 transition-colors group">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-slate-400" data-icon="lock_reset">lock_reset</span>
+<span class="text-sm font-semibold text-slate-200">Compliance_PCI_DSS_Final</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="text-[10px] px-2 py-0.5 rounded border border-blue-500/30 bg-blue-500/10 text-blue-400 font-bold uppercase">Executive</span>
+</td>
+<td class="px-6 py-4 text-xs text-slate-400 font-mono">payment-gateway-vpc</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-1.5 text-xs text-slate-300">
+<span class="material-symbols-outlined text-sm text-rose-400" data-icon="picture_as_pdf">picture_as_pdf</span>
+                                        PDF
+                                    </div>
+</td>
+<td class="px-6 py-4 text-xs text-slate-400">Oct 19, 2023 · 11:45</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<div class="w-5 h-5 rounded-full bg-slate-800 flex items-center justify-center text-[10px] font-bold text-slate-400">AM</div>
+<span class="text-xs text-slate-300">A. Miller</span>
+</div>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="flex items-center justify-end gap-2">
+<button class="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800" title="View">
+<span class="material-symbols-outlined text-lg" data-icon="visibility">visibility</span>
+</button>
+<button class="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800" title="Download">
+<span class="material-symbols-outlined text-lg" data-icon="download">download</span>
+</button>
+<button class="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800" title="Share">
+<span class="material-symbols-outlined text-lg" data-icon="share">share</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination -->
+<div class="px-6 py-4 bg-slate-900/30 border-t border-slate-800 flex items-center justify-between">
+<span class="text-xs text-slate-500">Showing 1 to 4 of 1,284 reports</span>
+<div class="flex items-center gap-1">
+<button class="p-1 rounded bg-slate-800 text-slate-500 cursor-not-allowed">
+<span class="material-symbols-outlined text-sm" data-icon="chevron_left">chevron_left</span>
+</button>
+<button class="px-3 py-1 rounded bg-blue-600 text-white text-xs font-bold">1</button>
+<button class="px-3 py-1 rounded bg-slate-800 text-slate-400 text-xs hover:bg-slate-700">2</button>
+<button class="px-3 py-1 rounded bg-slate-800 text-slate-400 text-xs hover:bg-slate-700">3</button>
+<span class="text-slate-600 px-1">...</span>
+<button class="px-3 py-1 rounded bg-slate-800 text-slate-400 text-xs hover:bg-slate-700">321</button>
+<button class="p-1 rounded bg-slate-800 text-slate-400 hover:bg-slate-700">
+<span class="material-symbols-outlined text-sm" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Asymmetric Layout: Recent Activity & System Health -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<div class="lg:col-span-2 glass-panel p-6 rounded-xl border border-slate-800">
+<h3 class="text-sm font-bold text-slate-50 mb-6 uppercase tracking-widest flex items-center gap-2">
+<span class="material-symbols-outlined text-blue-500 text-base" data-icon="history">history</span>
+                        Recent Generation Activity
+                    </h3>
+<div class="space-y-6">
+<div class="flex gap-4 relative">
+<div class="absolute left-[11px] top-6 bottom-[-24px] w-[2px] bg-slate-800"></div>
+<div class="w-6 h-6 rounded-full bg-blue-500/20 border border-blue-500/50 flex items-center justify-center z-10">
+<span class="material-symbols-outlined text-[10px] text-blue-400" data-icon="check_circle" data-weight="fill">check_circle</span>
+</div>
+<div class="flex-1">
+<p class="text-sm font-medium text-slate-200">Executive Summary generated for <span class="text-blue-400 font-mono">cluster-prod-alpha</span></p>
+<p class="text-xs text-slate-500 mt-1">2 hours ago · S. Rogers</p>
+</div>
+</div>
+<div class="flex gap-4 relative">
+<div class="absolute left-[11px] top-6 bottom-[-24px] w-[2px] bg-slate-800"></div>
+<div class="w-6 h-6 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center z-10">
+<span class="material-symbols-outlined text-[10px] text-slate-400" data-icon="download">download</span>
+</div>
+<div class="flex-1">
+<p class="text-sm font-medium text-slate-200">PCI_DSS_Audit_Final.pdf downloaded</p>
+<p class="text-xs text-slate-500 mt-1">5 hours ago · A. Miller</p>
+</div>
+</div>
+<div class="flex gap-4">
+<div class="w-6 h-6 rounded-full bg-amber-500/20 border border-amber-500/50 flex items-center justify-center z-10">
+<span class="material-symbols-outlined text-[10px] text-amber-400" data-icon="warning">warning</span>
+</div>
+<div class="flex-1">
+<p class="text-sm font-medium text-slate-200">Scheduled report <span class="text-amber-400">Nightly_Scan_X</span> failed (Connection Timeout)</p>
+<p class="text-xs text-slate-500 mt-1">Yesterday · System</p>
+</div>
+</div>
+</div>
+</div>
+<div class="glass-panel p-6 rounded-xl border border-slate-800 bg-slate-900/20">
+<h3 class="text-sm font-bold text-slate-50 mb-6 uppercase tracking-widest flex items-center gap-2">
+<span class="material-symbols-outlined text-blue-500 text-base" data-icon="database_off">database_off</span>
+                        Storage Retention
+                    </h3>
+<div class="relative pt-1">
+<div class="flex mb-2 items-center justify-between">
+<div>
+<span class="text-[10px] font-semibold inline-block py-1 px-2 uppercase rounded-full text-blue-400 bg-blue-200/10">
+                                    Current Usage
+                                </span>
+</div>
+<div class="text-right">
+<span class="text-xs font-semibold inline-block text-blue-400">
+                                    71%
+                                </span>
+</div>
+</div>
+<div class="overflow-hidden h-2 mb-4 text-xs flex rounded bg-slate-800">
+<div class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-blue-500" style="width:71%"></div>
+</div>
+</div>
+<p class="text-xs text-slate-400 leading-relaxed">
+                        Your enterprise plan includes 20GB of report storage. At current growth rates, you will reach capacity in approximately 14 days. 
+                    </p>
+<button class="mt-6 w-full py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold rounded transition-colors uppercase tracking-widest">
+                        Clean Old Artifacts
+                    </button>
+</div>
+</div>
+</div>
+</main>
+</body></html>

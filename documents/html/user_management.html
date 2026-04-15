@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>User Management | ScanOps</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;family=Public+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        slate: {
+                            950: '#020617',
+                        }
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    fontFamily: {
+                        "headline": ["Space Grotesk", "Public Sans", "sans-serif"],
+                        "body": ["Inter", "Public Sans", "sans-serif"],
+                        "label": ["Inter", "Public Sans", "sans-serif"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #020617;
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-200 antialiased selection:bg-blue-500/30">
+<!-- SideNavBar Shell -->
+<aside class="fixed left-0 top-0 h-full flex flex-col z-40 bg-slate-950 dark:bg-slate-950 h-screen w-64 border-r border-slate-800 dark:border-slate-800">
+<div class="p-6">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 bg-blue-600 rounded flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-lg" data-icon="security" style="font-variation-settings: 'FILL' 1;">security</span>
+</div>
+<div>
+<h1 class="text-xl font-bold tracking-tighter text-slate-50 dark:text-slate-50 font-['Space_Grotesk']">ScanOps</h1>
+<p class="text-[10px] text-slate-500 uppercase tracking-widest font-semibold">Enterprise Network Security</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 mt-4">
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-900 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="text-xs font-semibold tracking-wider uppercase">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-900 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="add_circle">add_circle</span>
+<span class="text-xs font-semibold tracking-wider uppercase">New Scan</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-900 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="speed">speed</span>
+<span class="text-xs font-semibold tracking-wider uppercase">Quick Scan</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-900 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="text-xs font-semibold tracking-wider uppercase">Results</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-900 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+<span class="text-xs font-semibold tracking-wider uppercase">Assets</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-900 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+<span class="text-xs font-semibold tracking-wider uppercase">Reports</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-blue-400 bg-blue-500/10 border-r-2 border-blue-500 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="text-xs font-semibold tracking-wider uppercase">Settings</span>
+</a>
+</nav>
+<div class="p-4 mt-auto border-t border-slate-800">
+<div class="flex items-center gap-3 px-2">
+<img alt="Administrator Profile" class="w-8 h-8 rounded-full border border-slate-700" data-alt="professional portrait of a security administrator in a dark suit against a minimalist grey background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCdTS1UbntT56UjW52gu0OcNcR8GA0qjzNvCZSpWxYgOTyUTJzCpYu6r-q8-FgQ--2vwYbUokg_IxkBvBJyGk0_G_IKy6-PkjBQSCqGNDGBOmOx9Tvk9t_7Kirg44WB6noVDIXqwoRbcAHuw0zpGbqer-7qTtn50OArY0flk1dpcq06p37A6bqCHLBm6KfNdLJgA5WgVgbBbu5NtETTjLD0Kp_8NHR8D4QNdVvs0KfNL_QabWczpJW3tQjFSapvFyEMDdO6n-Eq236r"/>
+<div class="overflow-hidden">
+<p class="text-xs font-bold text-slate-100 truncate">Admin_User_01</p>
+<p class="text-[10px] text-slate-500 uppercase">System Root</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- TopNavBar Shell -->
+<header class="fixed top-0 right-0 left-64 h-16 flex justify-between items-center px-6 z-30 bg-slate-950/80 backdrop-blur-md border-b border-slate-800 dark:border-slate-800 shadow-sm">
+<div class="flex items-center flex-1">
+<div class="relative w-full max-w-md">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-sm" data-icon="search">search</span>
+<input class="bg-slate-900/50 border-slate-800 text-slate-300 text-sm rounded-lg pl-10 pr-4 py-1.5 w-full focus:ring-blue-500 focus:border-blue-500 transition-all" placeholder="Search operators or permissions..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-slate-400 hover:text-blue-400 transition-all duration-200 ease-in-out p-2 hover:bg-slate-900/50 rounded-lg relative">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-blue-500 rounded-full border-2 border-slate-950"></span>
+</button>
+<div class="h-6 w-[1px] bg-slate-800"></div>
+<button class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold px-4 py-2 rounded transition-all duration-200 flex items-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="person_add">person_add</span>
+                Create New Operator
+            </button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="ml-64 pt-24 p-8 min-h-screen">
+<!-- Header Section -->
+<div class="mb-10">
+<h2 class="text-3xl font-bold font-['Space_Grotesk'] text-slate-50 tracking-tight">Access Control &amp; Users</h2>
+<p class="text-slate-400 mt-1 max-w-2xl">Manage system administrative privileges, operator roles, and security authentication protocols across the ScanOps environment.</p>
+</div>
+<!-- Filters & Stats Bento Grid -->
+<div class="grid grid-cols-12 gap-4 mb-8">
+<div class="col-span-12 lg:col-span-8 bg-slate-900/40 border border-slate-800 p-6 rounded-xl">
+<div class="flex flex-wrap items-center gap-6">
+<div class="flex flex-col gap-2">
+<label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Filter by Role</label>
+<div class="flex gap-2">
+<button class="px-3 py-1 bg-blue-500/10 border border-blue-500/50 text-blue-400 text-xs font-medium rounded-full">All Roles</button>
+<button class="px-3 py-1 bg-slate-800/50 border border-slate-700 text-slate-400 hover:text-slate-200 text-xs font-medium rounded-full transition-colors">Admin</button>
+<button class="px-3 py-1 bg-slate-800/50 border border-slate-700 text-slate-400 hover:text-slate-200 text-xs font-medium rounded-full transition-colors">Analyst</button>
+<button class="px-3 py-1 bg-slate-800/50 border border-slate-700 text-slate-400 hover:text-slate-200 text-xs font-medium rounded-full transition-colors">Observer</button>
+</div>
+</div>
+<div class="h-10 w-[1px] bg-slate-800 hidden md:block"></div>
+<div class="flex flex-col gap-2">
+<label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Filter by Status</label>
+<div class="flex gap-2">
+<button class="px-3 py-1 bg-slate-800/50 border border-slate-700 text-slate-400 hover:text-slate-200 text-xs font-medium rounded-full transition-colors">Active</button>
+<button class="px-3 py-1 bg-slate-800/50 border border-slate-700 text-slate-400 hover:text-slate-200 text-xs font-medium rounded-full transition-colors">Suspended</button>
+<button class="px-3 py-1 bg-slate-800/50 border border-slate-700 text-slate-400 hover:text-slate-200 text-xs font-medium rounded-full transition-colors">MFA Pending</button>
+</div>
+</div>
+</div>
+</div>
+<div class="col-span-12 lg:col-span-4 grid grid-cols-2 gap-4">
+<div class="bg-blue-600/5 border border-blue-500/20 p-4 rounded-xl flex flex-col justify-between">
+<span class="text-[10px] font-bold text-blue-400 uppercase tracking-widest">Active Seats</span>
+<div class="flex items-baseline gap-2">
+<span class="text-2xl font-bold text-slate-50">42</span>
+<span class="text-xs text-slate-500">/ 50</span>
+</div>
+</div>
+<div class="bg-slate-900/40 border border-slate-800 p-4 rounded-xl flex flex-col justify-between">
+<span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">MFA Compliance</span>
+<div class="flex items-baseline gap-2">
+<span class="text-2xl font-bold text-emerald-500">96%</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Data Table Section -->
+<div class="bg-slate-900/20 border border-slate-800 rounded-xl overflow-hidden backdrop-blur-sm">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-slate-900/60 border-b border-slate-800">
+<th class="px-6 py-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest">Operator</th>
+<th class="px-6 py-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest">Role</th>
+<th class="px-6 py-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest">Access Level</th>
+<th class="px-6 py-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest">Last Active</th>
+<th class="px-6 py-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest">Status</th>
+<th class="px-6 py-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-800/50">
+<!-- Row 1 -->
+<tr class="hover:bg-slate-900/40 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-[10px] font-bold text-white">SC</div>
+<div>
+<div class="text-sm font-semibold text-slate-200">Sarah Chen</div>
+<div class="text-[10px] text-slate-500">sarah.c@scanops.io</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="px-2 py-1 bg-slate-800 text-slate-300 text-[10px] font-bold rounded uppercase">Admin</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex gap-1">
+<div class="w-4 h-1 rounded-full bg-blue-500"></div>
+<div class="w-4 h-1 rounded-full bg-blue-500"></div>
+<div class="w-4 h-1 rounded-full bg-blue-500"></div>
+</div>
+<span class="text-[10px] text-slate-500 mt-1 block">Full System Access</span>
+</td>
+<td class="px-6 py-4 text-xs text-slate-400">
+                                4 mins ago
+                            </td>
+<td class="px-6 py-4">
+<span class="flex items-center gap-1.5 text-emerald-500 text-[10px] font-bold uppercase">
+<span class="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></span>
+                                    Active
+                                </span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-500 hover:text-slate-200 transition-colors p-1">
+<span class="material-symbols-outlined text-lg" data-icon="more_vert">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-slate-900/40 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center text-[10px] font-bold text-white">MK</div>
+<div>
+<div class="text-sm font-semibold text-slate-200">Marcus Knight</div>
+<div class="text-[10px] text-slate-500">m.knight@scanops.io</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="px-2 py-1 bg-slate-800 text-slate-300 text-[10px] font-bold rounded uppercase">Analyst</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex gap-1">
+<div class="w-4 h-1 rounded-full bg-blue-500"></div>
+<div class="w-4 h-1 rounded-full bg-blue-500"></div>
+<div class="w-4 h-1 rounded-full bg-slate-700"></div>
+</div>
+<span class="text-[10px] text-slate-500 mt-1 block">Read/Scan Only</span>
+</td>
+<td class="px-6 py-4 text-xs text-slate-400">
+                                2 hours ago
+                            </td>
+<td class="px-6 py-4">
+<span class="flex items-center gap-1.5 text-amber-500 text-[10px] font-bold uppercase">
+<span class="w-1.5 h-1.5 bg-amber-500 rounded-full"></span>
+                                    MFA Required
+                                </span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-500 hover:text-slate-200 transition-colors p-1">
+<span class="material-symbols-outlined text-lg" data-icon="more_vert">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-slate-900/40 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-gradient-to-br from-slate-600 to-slate-800 flex items-center justify-center text-[10px] font-bold text-white">JD</div>
+<div>
+<div class="text-sm font-semibold text-slate-200">Jane Doe</div>
+<div class="text-[10px] text-slate-500">j.doe@external.io</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="px-2 py-1 bg-slate-800 text-slate-300 text-[10px] font-bold rounded uppercase">Observer</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex gap-1">
+<div class="w-4 h-1 rounded-full bg-blue-500"></div>
+<div class="w-4 h-1 rounded-full bg-slate-700"></div>
+<div class="w-4 h-1 rounded-full bg-slate-700"></div>
+</div>
+<span class="text-[10px] text-slate-500 mt-1 block">Read-Only Reports</span>
+</td>
+<td class="px-6 py-4 text-xs text-slate-400">
+                                3 days ago
+                            </td>
+<td class="px-6 py-4">
+<span class="flex items-center gap-1.5 text-slate-500 text-[10px] font-bold uppercase">
+<span class="w-1.5 h-1.5 bg-slate-600 rounded-full"></span>
+                                    Suspended
+                                </span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-500 hover:text-slate-200 transition-colors p-1">
+<span class="material-symbols-outlined text-lg" data-icon="more_vert">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-slate-900/40 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-[10px] font-bold text-white">RL</div>
+<div>
+<div class="text-sm font-semibold text-slate-200">Robert Lopez</div>
+<div class="text-[10px] text-slate-500">r.lopez@scanops.io</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="px-2 py-1 bg-slate-800 text-slate-300 text-[10px] font-bold rounded uppercase">Analyst</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex gap-1">
+<div class="w-4 h-1 rounded-full bg-blue-500"></div>
+<div class="w-4 h-1 rounded-full bg-blue-500"></div>
+<div class="w-4 h-1 rounded-full bg-slate-700"></div>
+</div>
+<span class="text-[10px] text-slate-500 mt-1 block">Read/Scan Only</span>
+</td>
+<td class="px-6 py-4 text-xs text-slate-400">
+                                1 hour ago
+                            </td>
+<td class="px-6 py-4">
+<span class="flex items-center gap-1.5 text-emerald-500 text-[10px] font-bold uppercase">
+<span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>
+                                    Active
+                                </span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-500 hover:text-slate-200 transition-colors p-1">
+<span class="material-symbols-outlined text-lg" data-icon="more_vert">more_vert</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Table Footer -->
+<div class="px-6 py-4 bg-slate-900/60 border-t border-slate-800 flex items-center justify-between">
+<span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Showing 4 of 42 operators</span>
+<div class="flex items-center gap-2">
+<button class="p-1 text-slate-500 hover:text-slate-200 disabled:opacity-30" disabled="">
+<span class="material-symbols-outlined" data-icon="chevron_left">chevron_left</span>
+</button>
+<div class="flex gap-1">
+<button class="w-6 h-6 flex items-center justify-center rounded bg-blue-600 text-white text-[10px] font-bold">1</button>
+<button class="w-6 h-6 flex items-center justify-center rounded hover:bg-slate-800 text-slate-400 text-[10px] font-bold">2</button>
+<button class="w-6 h-6 flex items-center justify-center rounded hover:bg-slate-800 text-slate-400 text-[10px] font-bold">3</button>
+</div>
+<button class="p-1 text-slate-500 hover:text-slate-200">
+<span class="material-symbols-outlined" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- System Logs / Permissions Overview (Asymmetric Element) -->
+<div class="mt-12 grid grid-cols-12 gap-8">
+<div class="col-span-12 lg:col-span-4">
+<h3 class="text-lg font-bold font-['Space_Grotesk'] text-slate-100 mb-4">Security Policies</h3>
+<div class="space-y-4">
+<div class="p-4 bg-slate-900/40 border border-slate-800 rounded-lg group hover:border-blue-500/30 transition-all">
+<div class="flex justify-between items-start mb-2">
+<span class="text-xs font-bold text-slate-200">MFA Policy</span>
+<span class="text-[10px] font-bold text-emerald-500 bg-emerald-500/10 px-2 py-0.5 rounded">Enforced</span>
+</div>
+<p class="text-[10px] text-slate-500 leading-relaxed">All administrative accounts must use hardware-based 2FA tokens or biometric authentication for session initiation.</p>
+</div>
+<div class="p-4 bg-slate-900/40 border border-slate-800 rounded-lg group hover:border-blue-500/30 transition-all">
+<div class="flex justify-between items-start mb-2">
+<span class="text-xs font-bold text-slate-200">Session Timeout</span>
+<span class="text-[10px] font-bold text-blue-400 bg-blue-500/10 px-2 py-0.5 rounded">15 Mins</span>
+</div>
+<p class="text-[10px] text-slate-500 leading-relaxed">Automatic logout after 15 minutes of inactivity for Analyst and Observer roles to prevent unauthorized terminal access.</p>
+</div>
+</div>
+</div>
+<div class="col-span-12 lg:col-span-8">
+<div class="bg-slate-900/40 border border-slate-800 rounded-xl p-6 relative overflow-hidden">
+<div class="absolute top-0 right-0 p-8 opacity-5 select-none pointer-events-none">
+<span class="material-symbols-outlined text-9xl" data-icon="verified_user">verified_user</span>
+</div>
+<h3 class="text-lg font-bold font-['Space_Grotesk'] text-slate-100 mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-blue-500" data-icon="history">history</span>
+                        Recent Audit Trail
+                    </h3>
+<div class="space-y-4">
+<div class="flex items-center gap-4 text-xs">
+<span class="text-slate-500 font-mono w-24">14:02:11</span>
+<span class="w-2 h-2 rounded-full bg-blue-500"></span>
+<span class="text-slate-300 font-medium">Sarah Chen</span>
+<span class="text-slate-500">updated firewall access rules for node: <span class="text-slate-400 font-mono">us-east-cluster-04</span></span>
+</div>
+<div class="flex items-center gap-4 text-xs">
+<span class="text-slate-500 font-mono w-24">13:58:45</span>
+<span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+<span class="text-slate-300 font-medium">System</span>
+<span class="text-slate-500">initiated weekly vulnerability scan for enterprise segment <span class="text-slate-400 font-mono">0x44B</span></span>
+</div>
+<div class="flex items-center gap-4 text-xs">
+<span class="text-slate-500 font-mono w-24">12:30:10</span>
+<span class="w-2 h-2 rounded-full bg-amber-500"></span>
+<span class="text-slate-300 font-medium">Marcus Knight</span>
+<span class="text-slate-500">requested elevation for <span class="text-slate-400 font-mono">root-ssh</span> access (Pending Approval)</span>
+</div>
+<div class="flex items-center gap-4 text-xs">
+<span class="text-slate-500 font-mono w-24">09:15:22</span>
+<span class="w-2 h-2 rounded-full bg-red-500"></span>
+<span class="text-slate-300 font-medium">System</span>
+<span class="text-slate-500">blocked login attempt from unauthorized IP: <span class="text-slate-400 font-mono">192.168.1.104</span></span>
+</div>
+</div>
+<button class="mt-8 text-[10px] font-bold text-blue-400 uppercase tracking-widest flex items-center gap-2 hover:text-blue-300 transition-colors">
+                        View Full Security Log
+                        <span class="material-symbols-outlined text-sm" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+<!-- Success Message Toast (Visual Flourish) -->
+<div class="fixed bottom-8 right-8 flex items-center gap-4 bg-slate-900 border border-slate-800 p-4 rounded-lg shadow-2xl z-50 animate-in fade-in slide-in-from-bottom-4 duration-500">
+<div class="w-10 h-10 rounded-full bg-emerald-500/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-emerald-500" data-icon="check_circle">check_circle</span>
+</div>
+<div>
+<p class="text-sm font-bold text-slate-100">Live Sync Active</p>
+<p class="text-[10px] text-slate-500">Access Control Panel is synchronized with Global Auth Service</p>
+</div>
+<button class="ml-4 text-slate-600 hover:text-slate-400">
+<span class="material-symbols-outlined text-sm" data-icon="close">close</span>
+</button>
+</div>
+</body></html>

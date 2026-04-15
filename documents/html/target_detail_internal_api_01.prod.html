@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Target Detail - Sentinel Scan</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary": "#502400",
+                        "background": "#0c1324",
+                        "on-error-container": "#ffdad6",
+                        "surface-tint": "#adc6ff",
+                        "error": "#ffb4ab",
+                        "secondary-fixed": "#d3e4fe",
+                        "on-surface": "#dce1fb",
+                        "surface-container": "#191f31",
+                        "on-tertiary-fixed": "#311400",
+                        "on-primary": "#002e6a",
+                        "tertiary": "#ffb786",
+                        "surface-variant": "#2e3447",
+                        "surface-container-high": "#23293c",
+                        "on-tertiary-fixed-variant": "#723600",
+                        "secondary-fixed-dim": "#b7c8e1",
+                        "on-error": "#690005",
+                        "on-background": "#dce1fb",
+                        "tertiary-fixed-dim": "#ffb786",
+                        "on-primary-fixed": "#001a42",
+                        "inverse-on-surface": "#2a3043",
+                        "primary-container": "#4d8eff",
+                        "on-secondary-fixed": "#0b1c30",
+                        "inverse-primary": "#005ac2",
+                        "surface-container-highest": "#2e3447",
+                        "surface-bright": "#33394c",
+                        "surface-dim": "#0c1324",
+                        "on-primary-fixed-variant": "#004395",
+                        "on-secondary-fixed-variant": "#38485d",
+                        "outline": "#8c909f",
+                        "on-tertiary-container": "#461f00",
+                        "on-surface-variant": "#c2c6d6",
+                        "surface-container-low": "#151b2d",
+                        "secondary": "#b7c8e1",
+                        "primary-fixed": "#d8e2ff",
+                        "primary": "#adc6ff",
+                        "on-secondary-container": "#a9bad3",
+                        "error-container": "#93000a",
+                        "outline-variant": "#424754",
+                        "inverse-surface": "#dce1fb",
+                        "tertiary-fixed": "#ffdcc6",
+                        "primary-fixed-dim": "#adc6ff",
+                        "secondary-container": "#3a4a5f",
+                        "on-secondary": "#213145",
+                        "surface-container-lowest": "#070d1f",
+                        "surface": "#0c1324",
+                        "on-primary-container": "#00285d",
+                        "tertiary-container": "#df7412"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Space Grotesk"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .beacon-aura {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: .3; transform: scale(2.5); }
+        }
+        body { background-color: #0c1324; color: #dce1fb; font-family: 'Inter', sans-serif; }
+        .headline-font { font-family: 'Space Grotesk', sans-serif; }
+    </style>
+</head>
+<body class="antialiased selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopNavBar (Shared Component JSON Mapping) -->
+<nav class="fixed top-0 w-full z-50 bg-slate-950/60 backdrop-blur-xl shadow-2xl shadow-black/50 flex justify-between items-center px-6 h-16 w-full">
+<div class="flex items-center gap-8">
+<span class="text-xl font-bold tracking-tighter text-blue-400 font-['Space_Grotesk']">Sentinel Scan</span>
+<div class="hidden md:flex gap-6 items-center text-sm font-['Space_Grotesk'] tracking-tight">
+<a class="text-slate-400 hover:bg-slate-800/50 transition-colors px-3 py-1 rounded-md" href="#">Dashboard</a>
+<a class="text-blue-400 font-bold px-3 py-1 rounded-md" href="#">Network Assets</a>
+<a class="text-slate-400 hover:bg-slate-800/50 transition-colors px-3 py-1 rounded-md" href="#">Vulnerability Scans</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden sm:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-sm">search</span>
+<input class="bg-slate-900/40 border-none rounded-lg pl-10 pr-4 py-1.5 text-sm text-slate-300 focus:ring-1 focus:ring-blue-500 w-64" placeholder="Global asset search..." type="text"/>
+</div>
+<button class="text-slate-400 hover:bg-slate-800/50 p-2 rounded-lg transition-colors active:scale-95 duration-200">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-slate-400 hover:bg-slate-800/50 p-2 rounded-lg transition-colors active:scale-95 duration-200">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<img alt="Security Analyst Profile" class="w-8 h-8 rounded-full border border-slate-700" data-alt="Professional portrait of a security analyst in a dark office setting with subtle blue backlighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDrg6MwyQV6yXC4fRZeu2lRXEyCoDsOd-CoAIlzZc580SFXHvEYKNmbXl_pjyNAzT3uvfUyNfl3kXyoQLLC4xCnjR6rsdODMFCYHO9bxKuS7oQGjqBLsXwmEpfFqZ-Qa4BFlHxXuvped7wkpEfsJ3fj-2XReHwW9VDd-rBl1ac2itpxDeHEcaMDbtr1Hw6Sbukq7V6O3E-KFkjsKjQHlDLznpmNQPeV7-tvBM6eI_b1n9mG2LAmYRbZmkBxP8LM9AqbO8pUD3INbvdd"/>
+</div>
+</nav>
+<!-- SideNavBar (Shared Component JSON Mapping) -->
+<aside class="fixed left-0 top-0 h-full w-64 z-40 bg-slate-900 flex flex-col py-20 px-4 hidden lg:flex">
+<div class="mb-8 px-2">
+<h2 class="text-lg font-black text-white headline-font">Tactical Command</h2>
+<p class="text-xs text-slate-500 uppercase tracking-widest font-bold">Network Ops</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2.5 text-slate-500 hover:text-slate-300 hover:bg-slate-800 transition-all rounded-lg group" href="#">
+<span class="material-symbols-outlined">grid_view</span>
+<span class="font-['Inter'] text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-blue-400 bg-slate-800/80 border-r-2 border-blue-500 transition-all rounded-lg group" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">lan</span>
+<span class="font-['Inter'] text-sm font-medium">Network Assets</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-slate-500 hover:text-slate-300 hover:bg-slate-800 transition-all rounded-lg group" href="#">
+<span class="material-symbols-outlined">radar</span>
+<span class="font-['Inter'] text-sm font-medium">Vulnerability Scans</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-slate-500 hover:text-slate-300 hover:bg-slate-800 transition-all rounded-lg group" href="#">
+<span class="material-symbols-outlined">security</span>
+<span class="font-['Inter'] text-sm font-medium">Threat Intel</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-slate-500 hover:text-slate-300 hover:bg-slate-800 transition-all rounded-lg group" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-['Inter'] text-sm font-medium">Reporting</span>
+</a>
+</nav>
+<div class="mt-auto space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 hover:text-slate-300 hover:bg-slate-800 transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined">help_outline</span>
+<span class="font-['Inter'] text-sm font-medium">Support</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 hover:text-slate-300 hover:bg-slate-800 transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined">list_alt</span>
+<span class="font-['Inter'] text-sm font-medium">Logs</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="lg:ml-64 pt-24 pb-12 px-6 lg:px-10">
+<!-- Breadcrumbs & Tactical Header -->
+<div class="mb-8">
+<nav class="flex items-center gap-2 text-xs font-medium text-on-surface-variant/60 uppercase tracking-tighter mb-2">
+<a class="hover:text-primary transition-colors" href="#">Infrastructure</a>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<a class="hover:text-primary transition-colors" href="#">Production API</a>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="text-on-surface-variant">internal-api-01.prod</span>
+</nav>
+<div class="flex flex-wrap items-center justify-between gap-4">
+<div class="flex items-baseline gap-4">
+<h1 class="text-4xl md:text-5xl font-bold tracking-tighter headline-font text-on-surface">internal-api-01.prod</h1>
+<div class="flex items-center gap-2 px-3 py-1 bg-error/10 border border-error/20 rounded-full">
+<div class="relative flex h-2 w-2">
+<span class="beacon-aura absolute inline-flex h-full w-full rounded-full bg-error opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-error"></span>
+</div>
+<span class="text-[10px] font-black uppercase tracking-widest text-error">Critical Severity</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Target Header Card: Hero Section -->
+<div class="grid grid-cols-1 xl:grid-cols-3 gap-6 mb-8">
+<div class="xl:col-span-2 bg-surface-container-low p-8 rounded-xl relative overflow-hidden flex flex-col justify-between min-h-[240px]">
+<div class="absolute top-0 right-0 p-8 opacity-5">
+<span class="material-symbols-outlined text-[160px]">dns</span>
+</div>
+<div class="relative z-10">
+<p class="text-xs font-bold text-primary tracking-[0.2em] uppercase mb-1">Target Endpoint</p>
+<p class="text-6xl font-black headline-font text-primary-fixed tracking-tighter">10.0.42.118</p>
+<div class="flex items-center gap-4 mt-6">
+<div class="flex items-center gap-2 text-tertiary">
+<span class="material-symbols-outlined text-sm">check_circle</span>
+<span class="text-xs font-bold uppercase tracking-wider">Status: Online</span>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">encrypted</span>
+<span class="text-xs font-bold uppercase tracking-wider">Secure Connection</span>
+</div>
+</div>
+</div>
+<div class="flex flex-wrap gap-3 mt-8 relative z-10">
+<button class="bg-primary text-on-primary px-6 py-2.5 rounded-lg font-bold text-sm flex items-center gap-2 hover:brightness-110 active:scale-95 transition-all">
+<span class="material-symbols-outlined">bolt</span>
+                        Quick Scan
+                    </button>
+<button class="bg-surface-container-highest text-on-surface px-6 py-2.5 rounded-lg font-bold text-sm flex items-center gap-2 hover:bg-primary-fixed-dim hover:text-on-primary-fixed transition-all">
+<span class="material-symbols-outlined">edit</span>
+                        Edit
+                    </button>
+<button class="bg-surface-container-highest text-on-surface px-6 py-2.5 rounded-lg font-bold text-sm flex items-center gap-2 hover:bg-primary-fixed-dim hover:text-on-primary-fixed transition-all">
+<span class="material-symbols-outlined">file_export</span>
+                        Export
+                    </button>
+</div>
+</div>
+<!-- Metadata Grid Section -->
+<div class="bg-surface-container rounded-xl p-6 flex flex-col justify-center">
+<div class="grid grid-cols-2 gap-y-6 gap-x-4">
+<div>
+<p class="text-[10px] uppercase font-bold text-on-surface-variant mb-1 tracking-widest">Asset Owner</p>
+<div class="flex items-center gap-2">
+<img class="w-6 h-6 rounded-full" data-alt="Close up portrait of a smiling woman professional" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCQ6sPLYzcIlci2jS-9VDJ7jGTziOSlXXsUekp9H9N0vn0b6O1-qHRX9eK4SmYD-JvZmaIhu3Paool2ZDwHf-ib_upoDofByZ6Jx0YahW7SYoxSSdpnGOlvY6gykHaV8pvpJMQ2ddmCamtUBL1j0HAXk81mzo0Tnn8oaf5aUUW12BiXJ7uisShP0oIelFbHrPtGqqYVhmFMXW5ijDTbe9L4LHhnh2y-KwzsdvClcRa10IJiIKoJp8cjOTijr6QMVUZCO0aRBptSlbwg"/>
+<p class="text-sm font-medium text-on-surface">Sarah Jenkins</p>
+</div>
+</div>
+<div>
+<p class="text-[10px] uppercase font-bold text-on-surface-variant mb-1 tracking-widest">Access Group</p>
+<p class="text-sm font-medium text-on-surface">Internal Core</p>
+</div>
+<div>
+<p class="text-[10px] uppercase font-bold text-on-surface-variant mb-1 tracking-widest">Last Scanned</p>
+<p class="text-sm font-medium text-tertiary">2 hours ago</p>
+</div>
+<div>
+<p class="text-[10px] uppercase font-bold text-on-surface-variant mb-1 tracking-widest">Scan Frequency</p>
+<p class="text-sm font-medium text-on-surface">Daily Auto</p>
+</div>
+<div class="col-span-2 pt-2">
+<p class="text-[10px] uppercase font-bold text-on-surface-variant mb-2 tracking-widest">Asset Tags</p>
+<div class="flex flex-wrap gap-2">
+<span class="px-2 py-0.5 bg-surface-container-highest text-[10px] font-bold text-primary border border-primary/20 rounded-md">PRODUCTION</span>
+<span class="px-2 py-0.5 bg-surface-container-highest text-[10px] font-bold text-primary border border-primary/20 rounded-md">API</span>
+<span class="px-2 py-0.5 bg-surface-container-highest text-[10px] font-bold text-error border border-error/20 rounded-md">CRITICAL</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Navigation Tabs -->
+<div class="border-b border-outline-variant/15 mb-8">
+<div class="flex gap-8 overflow-x-auto no-scrollbar">
+<button class="pb-4 text-sm font-bold text-primary border-b-2 border-primary whitespace-nowrap">Overview</button>
+<button class="pb-4 text-sm font-bold text-on-surface-variant/60 hover:text-on-surface transition-colors whitespace-nowrap">Scan History</button>
+<button class="pb-4 text-sm font-bold text-on-surface-variant/60 hover:text-on-surface transition-colors whitespace-nowrap">Results</button>
+<button class="pb-4 text-sm font-bold text-on-surface-variant/60 hover:text-on-surface transition-colors whitespace-nowrap">Comments (3)</button>
+<button class="pb-4 text-sm font-bold text-on-surface-variant/60 hover:text-on-surface transition-colors whitespace-nowrap">Related Assets</button>
+</div>
+</div>
+<!-- Content Area: Overview Tab -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<!-- Left Side: Data & Table -->
+<div class="lg:col-span-2 space-y-8">
+<!-- Mini Charts Row -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="bg-surface-container-low p-6 rounded-xl">
+<div class="flex justify-between items-center mb-4">
+<h3 class="text-sm font-bold headline-font text-on-surface">Scan Performance</h3>
+<span class="text-[10px] font-bold text-on-surface-variant uppercase">Last 30 Days</span>
+</div>
+<div class="h-32 flex items-end gap-1.5">
+<!-- Visualizing a simple bar chart with Tailwind -->
+<div class="flex-1 bg-primary/20 rounded-t-sm h-[60%]"></div>
+<div class="flex-1 bg-primary/20 rounded-t-sm h-[75%]"></div>
+<div class="flex-1 bg-primary/20 rounded-t-sm h-[85%]"></div>
+<div class="flex-1 bg-error/40 rounded-t-sm h-[40%]"></div>
+<div class="flex-1 bg-primary rounded-t-sm h-[95%]"></div>
+<div class="flex-1 bg-primary/20 rounded-t-sm h-[80%]"></div>
+<div class="flex-1 bg-primary/20 rounded-t-sm h-[70%]"></div>
+<div class="flex-1 bg-primary/20 rounded-t-sm h-[85%]"></div>
+</div>
+<div class="mt-4 flex justify-between text-[10px] font-bold text-on-surface-variant">
+<span>SUCCESS RATE: 94.2%</span>
+<span class="text-error">FAILURES: 2</span>
+</div>
+</div>
+<div class="bg-surface-container-low p-6 rounded-xl">
+<div class="flex justify-between items-center mb-4">
+<h3 class="text-sm font-bold headline-font text-on-surface">Port Discovery Trend</h3>
+<span class="text-[10px] font-bold text-on-surface-variant uppercase">Surface Analysis</span>
+</div>
+<div class="h-32 flex items-center justify-center relative">
+<!-- SVG Area Graph Visualization -->
+<svg class="w-full h-full" preserveaspectratio="none" viewbox="0 0 200 100">
+<path d="M0 80 Q 25 70, 50 75 T 100 40 T 150 50 T 200 20 L 200 100 L 0 100 Z" fill="url(#grad1)"></path>
+<defs>
+<lineargradient id="grad1" x1="0%" x2="0%" y1="0%" y2="100%">
+<stop offset="0%" style="stop-color:rgba(173, 198, 255, 0.3);stop-opacity:1"></stop>
+<stop offset="100%" style="stop-color:rgba(12, 19, 36, 0);stop-opacity:1"></stop>
+</lineargradient>
+</defs>
+<path d="M0 80 Q 25 70, 50 75 T 100 40 T 150 50 T 200 20" fill="none" stroke="#adc6ff" stroke-width="2"></path>
+</svg>
+</div>
+<div class="mt-4 flex justify-between text-[10px] font-bold text-on-surface-variant">
+<span>AVG OPEN PORTS: 4.5</span>
+<span class="text-primary">+12% INCREASE</span>
+</div>
+</div>
+</div>
+<!-- Recent Open Ports Table -->
+<div class="bg-surface-container-low rounded-xl overflow-hidden">
+<div class="px-6 py-4 flex justify-between items-center bg-surface-container-high/40">
+<h3 class="text-sm font-bold headline-font text-primary tracking-tight">Recent Open Ports Snapshot</h3>
+<span class="text-[10px] font-medium text-on-surface-variant px-2 py-0.5 bg-surface-container-highest rounded">4 ACTIVE PORTS</span>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="text-[10px] uppercase font-black tracking-widest text-on-surface-variant/70">
+<th class="px-6 py-3">Port</th>
+<th class="px-6 py-3">Protocol</th>
+<th class="px-6 py-3">Service</th>
+<th class="px-6 py-3">Version</th>
+<th class="px-6 py-3 text-right">Last Check</th>
+</tr>
+</thead>
+<tbody class="text-sm divide-y divide-outline-variant/10">
+<tr class="hover:bg-surface-container-high transition-colors">
+<td class="px-6 py-4 font-black headline-font text-primary">443</td>
+<td class="px-6 py-4 text-on-surface-variant">TCP</td>
+<td class="px-6 py-4">
+<span class="px-2 py-0.5 bg-primary/10 text-primary text-[11px] font-bold rounded">HTTPS</span>
+</td>
+<td class="px-6 py-4 font-mono text-xs">Nginx 1.21.0</td>
+<td class="px-6 py-4 text-right text-on-surface-variant">12m ago</td>
+</tr>
+<tr class="hover:bg-surface-container-high transition-colors">
+<td class="px-6 py-4 font-black headline-font text-primary">80</td>
+<td class="px-6 py-4 text-on-surface-variant">TCP</td>
+<td class="px-6 py-4">
+<span class="px-2 py-0.5 bg-primary/10 text-primary text-[11px] font-bold rounded">HTTP</span>
+</td>
+<td class="px-6 py-4 font-mono text-xs">Nginx 1.21.0</td>
+<td class="px-6 py-4 text-right text-on-surface-variant">12m ago</td>
+</tr>
+<tr class="hover:bg-surface-container-high transition-colors">
+<td class="px-6 py-4 font-black headline-font text-primary">22</td>
+<td class="px-6 py-4 text-on-surface-variant">TCP</td>
+<td class="px-6 py-4">
+<span class="px-2 py-0.5 bg-tertiary/10 text-tertiary text-[11px] font-bold rounded">SSH</span>
+</td>
+<td class="px-6 py-4 font-mono text-xs">OpenSSH 8.4p1</td>
+<td class="px-6 py-4 text-right text-on-surface-variant">1h ago</td>
+</tr>
+<tr class="hover:bg-surface-container-high transition-colors">
+<td class="px-6 py-4 font-black headline-font text-primary">6379</td>
+<td class="px-6 py-4 text-on-surface-variant">TCP</td>
+<td class="px-6 py-4">
+<span class="px-2 py-0.5 bg-error/10 text-error text-[11px] font-bold rounded">REDIS</span>
+</td>
+<td class="px-6 py-4 font-mono text-xs">Redis 6.2.5</td>
+<td class="px-6 py-4 text-right text-on-surface-variant">2h ago</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<!-- Right Side: Notes & Timeline -->
+<div class="space-y-8">
+<!-- Analyst Notes Section -->
+<div class="bg-surface-container rounded-xl p-6">
+<h3 class="text-sm font-bold headline-font text-on-surface mb-4">Analyst Notes</h3>
+<textarea class="w-full bg-surface-container-low border-none rounded-lg p-4 text-sm text-on-surface placeholder:text-on-surface-variant/40 focus:ring-1 focus:ring-primary h-32" placeholder="Enter findings or tactical notes..."></textarea>
+<div class="flex justify-between items-center mt-3">
+<span class="text-[10px] font-bold text-on-surface-variant uppercase">Auto-saved</span>
+<button class="text-primary text-[10px] font-black uppercase tracking-widest hover:underline underline-offset-4">Log Interaction</button>
+</div>
+</div>
+<!-- Chronological History Log -->
+<div class="bg-surface-container-low rounded-xl p-6">
+<h3 class="text-sm font-bold headline-font text-on-surface mb-6">Tactical Timeline</h3>
+<div class="space-y-6 relative before:absolute before:left-[11px] before:top-2 before:bottom-2 before:w-[2px] before:bg-outline-variant/20">
+<!-- Timeline Item 1 -->
+<div class="relative pl-10">
+<div class="absolute left-0 top-1 w-[24px] h-[24px] bg-error-container text-on-error-container rounded-full flex items-center justify-center z-10 border-2 border-background">
+<span class="material-symbols-outlined text-[14px]">warning</span>
+</div>
+<div class="mb-1">
+<span class="text-[10px] font-black uppercase text-on-surface-variant tracking-widest">Oct 24, 14:12</span>
+</div>
+<p class="text-sm font-bold text-error">Vulnerability Detected</p>
+<p class="text-xs text-on-surface-variant mt-1 leading-relaxed">Critical: CVE-2023-44487 (HTTP/2 Rapid Reset) found on port 443.</p>
+</div>
+<!-- Timeline Item 2 -->
+<div class="relative pl-10">
+<div class="absolute left-0 top-1 w-[24px] h-[24px] bg-surface-container-highest text-primary rounded-full flex items-center justify-center z-10 border-2 border-background">
+<span class="material-symbols-outlined text-[14px]">search</span>
+</div>
+<div class="mb-1">
+<span class="text-[10px] font-black uppercase text-on-surface-variant tracking-widest">Oct 24, 12:00</span>
+</div>
+<p class="text-sm font-bold text-on-surface">Scheduled Scan Completed</p>
+<p class="text-xs text-on-surface-variant mt-1 leading-relaxed">Full tactical scan completed in 14m 22s. 4 ports active.</p>
+</div>
+<!-- Timeline Item 3 -->
+<div class="relative pl-10">
+<div class="absolute left-0 top-1 w-[24px] h-[24px] bg-surface-container-highest text-tertiary rounded-full flex items-center justify-center z-10 border-2 border-background">
+<span class="material-symbols-outlined text-[14px]">edit</span>
+</div>
+<div class="mb-1">
+<span class="text-[10px] font-black uppercase text-on-surface-variant tracking-widest">Oct 23, 09:45</span>
+</div>
+<p class="text-sm font-bold text-on-surface">Metadata Updated</p>
+<p class="text-xs text-on-surface-variant mt-1 leading-relaxed">Sarah Jenkins reassigned as lead analyst for this endpoint.</p>
+</div>
+<!-- Timeline Item 4 -->
+<div class="relative pl-10">
+<div class="absolute left-0 top-1 w-[24px] h-[24px] bg-primary-container text-on-primary-container rounded-full flex items-center justify-center z-10 border-2 border-background">
+<span class="material-symbols-outlined text-[14px]">rocket_launch</span>
+</div>
+<div class="mb-1">
+<span class="text-[10px] font-black uppercase text-on-surface-variant tracking-widest">Oct 20, 16:30</span>
+</div>
+<p class="text-sm font-bold text-primary">Asset Commissioned</p>
+<p class="text-xs text-on-surface-variant mt-1 leading-relaxed">Internal-api-01 registered into Production Internal Core group.</p>
+</div>
+</div>
+<button class="w-full mt-8 py-2 bg-surface-container-highest text-[11px] font-black uppercase tracking-widest text-on-surface-variant hover:text-on-surface transition-colors rounded">View Full Audit Log</button>
+</div>
+</div>
+</div>
+</main>
+<!-- Contextual FAB for high-level actions -->
+<div class="fixed bottom-8 right-8 flex flex-col gap-4">
+<button class="w-14 h-14 rounded-full bg-primary text-on-primary shadow-2xl flex items-center justify-center hover:scale-105 active:scale-95 transition-all group">
+<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">add</span>
+<div class="absolute right-full mr-4 bg-surface-bright px-3 py-1 rounded text-xs font-bold text-white opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">New Discovery Scan</div>
+</button>
+</div>
+</body></html>

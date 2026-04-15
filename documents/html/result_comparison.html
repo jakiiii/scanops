@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ScanOps | Comparison View</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary-fixed-dim": "#b1c6f9",
+                    "surface-container-high": "#272a31",
+                    "surface-bright": "#363940",
+                    "on-secondary": "#182f59",
+                    "error-container": "#93000a",
+                    "tertiary": "#ffb786",
+                    "surface-container-lowest": "#0b0e14",
+                    "on-secondary-fixed-variant": "#304671",
+                    "surface-variant": "#32353c",
+                    "primary": "#adc6ff",
+                    "on-secondary-fixed": "#001a42",
+                    "inverse-on-surface": "#2e3037",
+                    "error": "#ffb4ab",
+                    "inverse-primary": "#005ac2",
+                    "outline": "#8c909f",
+                    "surface-tint": "#adc6ff",
+                    "on-tertiary-fixed": "#311400",
+                    "inverse-surface": "#e1e2eb",
+                    "on-primary": "#002e6a",
+                    "tertiary-container": "#df7412",
+                    "primary-fixed": "#d8e2ff",
+                    "on-tertiary": "#502400",
+                    "secondary-container": "#304671",
+                    "primary-fixed-dim": "#adc6ff",
+                    "on-error": "#690005",
+                    "tertiary-fixed-dim": "#ffb786",
+                    "primary-container": "#4d8eff",
+                    "on-tertiary-fixed-variant": "#723600",
+                    "on-surface-variant": "#c2c6d6",
+                    "surface-container-low": "#191c22",
+                    "surface-container": "#1d2026",
+                    "on-surface": "#e1e2eb",
+                    "background": "#10131a",
+                    "surface-dim": "#10131a",
+                    "on-primary-fixed": "#001a42",
+                    "secondary-fixed": "#d8e2ff",
+                    "tertiary-fixed": "#ffdcc6",
+                    "surface-container-highest": "#32353c",
+                    "surface": "#10131a",
+                    "on-tertiary-container": "#461f00",
+                    "on-primary-fixed-variant": "#004395",
+                    "outline-variant": "#424754",
+                    "on-primary-container": "#00285d",
+                    "on-background": "#e1e2eb",
+                    "secondary": "#b1c6f9",
+                    "on-secondary-container": "#9fb5e7",
+                    "on-error-container": "#ffdad6"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "fontFamily": {
+                    "headline": ["Space Grotesk"],
+                    "body": ["Inter"],
+                    "label": ["Inter"],
+                    "mono": ["JetBrains Mono"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .glass-panel {
+            background: rgba(50, 53, 60, 0.6);
+            backdrop-filter: blur(20px);
+        }
+        .ghost-border {
+            outline: 1px solid rgba(66, 71, 84, 0.15);
+        }
+        .pulse-indicator {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0b0e14; }
+        ::-webkit-scrollbar-thumb { background: #32353c; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #4d8eff; }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body selection:bg-primary selection:text-on-primary">
+<!-- Top Navigation Bar -->
+<nav class="fixed top-0 w-full z-50 bg-[#10131a] flex justify-between items-center px-6 h-16">
+<div class="flex items-center gap-8">
+<span class="text-xl font-bold tracking-tighter text-white font-headline">Tactical Intelligence</span>
+<div class="hidden md:flex gap-6 items-center">
+<a class="text-slate-400 hover:text-white transition-colors font-headline tracking-tight" href="#">Dashboard</a>
+<a class="text-blue-500 border-b-2 border-blue-500 pb-1 font-headline tracking-tight" href="#">Scans</a>
+<a class="text-slate-400 hover:text-white transition-colors font-headline tracking-tight" href="#">Assets</a>
+<a class="text-slate-400 hover:text-white transition-colors font-headline tracking-tight" href="#">Reports</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative flex items-center bg-surface-container-low px-3 py-1.5 rounded-lg ghost-border">
+<span class="material-symbols-outlined text-slate-500 text-sm mr-2">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-sm w-48 text-on-surface" placeholder="Search Intel..." type="text"/>
+</div>
+<button class="p-2 text-slate-400 hover:bg-[#32353c] rounded-lg transition-all duration-200">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 text-slate-400 hover:bg-[#32353c] rounded-lg transition-all duration-200">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<div class="h-8 w-8 rounded-full overflow-hidden border border-outline-variant">
+<img class="object-cover w-full h-full" data-alt="professional portrait of a cybersecurity analyst in a dark tech-focused environment" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBojiZjN5gIJ_wAe0pKMY08JN-9sz39n1uMbW4rWeE9m4o9ZXjg-umhPS1p7dFiS5ZaOJx9lJdardERPC5H53fob3iTuEWqupPMXZucIQLccKp0tJt2BHJVyxy6_ebtd6yqEkdS2yOvhu-_0nKoG9ImsI4ltXiymlviNvgo5mr7Bpah-98awZnjDxnns_yLposrhvG-lihpuU0QVXGL7FxWQgnhhoVKWu3mcYaB098N5cXUco6VT2DS-qeNmBToIYpjLXgGqMQyDj_G"/>
+</div>
+</div>
+</nav>
+<!-- Side Navigation Bar -->
+<aside class="fixed left-0 top-16 h-[calc(100vh-64px)] w-64 bg-[#0b0e14] flex flex-col py-4 border-r border-surface-container">
+<div class="px-6 mb-8">
+<div class="flex items-center gap-3 mb-1">
+<div class="w-2 h-2 rounded-full bg-primary-container pulse-indicator"></div>
+<span class="text-white font-medium font-headline">Scanner v4.2</span>
+</div>
+<span class="text-slate-500 text-xs">Active Session: DC-ALPHA-09</span>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-4 px-6 py-3 text-slate-500 hover:bg-[#1d2026] hover:text-slate-200 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">radar</span>
+<span class="font-medium">Overview</span>
+</a>
+<a class="flex items-center gap-4 px-6 py-3 bg-[#1d2026] text-white border-l-4 border-blue-500 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">lan</span>
+<span class="font-medium">Ports</span>
+</a>
+<a class="flex items-center gap-4 px-6 py-3 text-slate-500 hover:bg-[#1d2026] hover:text-slate-200 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">settings_input_component</span>
+<span class="font-medium">Services</span>
+</a>
+<a class="flex items-center gap-4 px-6 py-3 text-slate-500 hover:bg-[#1d2026] hover:text-slate-200 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">security</span>
+<span class="font-medium">Vulnerabilities</span>
+</a>
+<a class="flex items-center gap-4 px-6 py-3 text-slate-500 hover:bg-[#1d2026] hover:text-slate-200 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">terminal</span>
+<span class="font-medium">Raw Output</span>
+</a>
+</nav>
+<div class="px-6 pt-4 border-t border-surface-container">
+<a class="flex items-center gap-4 py-3 text-slate-500 hover:text-slate-200 transition-colors" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="font-medium">Help</span>
+</a>
+<a class="flex items-center gap-4 py-3 text-slate-500 hover:text-slate-200 transition-colors" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-medium">Logout</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-64 mt-16 p-8 min-h-[calc(100vh-64px)] bg-surface text-on-surface">
+<!-- Header & Comparison Metadata -->
+<header class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-6">
+<div>
+<nav class="flex items-center gap-2 text-xs font-medium text-slate-500 uppercase tracking-widest mb-2">
+<span>Scans</span>
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+<span>Comparison</span>
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+<span class="text-primary-container">Diff View</span>
+</nav>
+<h1 class="text-4xl font-bold font-headline tracking-tighter text-white">Compare Scan: 192.168.1.105</h1>
+<p class="text-on-surface-variant mt-1 font-body">Comparing baseline <span class="text-white font-mono">SCN-8821</span> vs current <span class="text-white font-mono">SCN-9042</span></p>
+</div>
+<div class="flex items-center gap-3">
+<button class="flex items-center gap-2 px-4 py-2.5 rounded-md ghost-border text-on-surface-variant hover:bg-surface-container-highest transition-all duration-200">
+<span class="material-symbols-outlined">history</span>
+<span class="font-medium">Scan History</span>
+</button>
+<button class="flex items-center gap-2 px-5 py-2.5 rounded-md bg-gradient-to-br from-primary-container to-primary text-on-primary font-bold shadow-lg hover:brightness-110 active:scale-95 transition-all duration-150">
+<span class="material-symbols-outlined">download</span>
+<span>Export Comparison</span>
+</button>
+</div>
+</header>
+<!-- Difference Summary Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+<div class="md:col-span-2 bg-surface-container p-6 rounded-lg relative overflow-hidden group">
+<div class="absolute left-0 top-0 bottom-0 w-1.5 bg-primary-container"></div>
+<div class="flex justify-between items-start">
+<div>
+<span class="text-[0.65rem] font-bold uppercase tracking-[0.2em] text-slate-500 mb-2 block">Difference Summary</span>
+<h2 class="text-5xl font-bold font-headline tracking-tighter text-white leading-none">05 <span class="text-xl font-medium tracking-normal text-slate-400">Total Changes</span></h2>
+</div>
+<div class="flex gap-2">
+<span class="px-2 py-1 bg-surface-container-highest text-primary text-[10px] font-bold rounded uppercase">Significant</span>
+</div>
+</div>
+<div class="mt-8 flex gap-8">
+<div class="flex flex-col">
+<span class="text-xs text-slate-500 font-medium">New Entities</span>
+<span class="text-2xl font-bold text-[#4ade80]">+2</span>
+</div>
+<div class="flex flex-col">
+<span class="text-xs text-slate-500 font-medium">Modified</span>
+<span class="text-2xl font-bold text-tertiary">1</span>
+</div>
+<div class="flex flex-col">
+<span class="text-xs text-slate-500 font-medium">Decommissioned</span>
+<span class="text-2xl font-bold text-error">2</span>
+</div>
+</div>
+</div>
+<div class="bg-surface-container p-6 rounded-lg flex flex-col justify-between">
+<div>
+<span class="text-[0.65rem] font-bold uppercase tracking-[0.2em] text-slate-500 mb-2 block">New Ports Detected</span>
+<div class="flex items-center gap-4 mt-2">
+<span class="text-3xl font-bold font-headline text-white">8080, 5432</span>
+</div>
+</div>
+<div class="flex items-center gap-2 mt-4">
+<span class="w-full bg-surface-container-lowest h-1 rounded-full overflow-hidden">
+<div class="bg-[#4ade80] h-full w-2/3"></div>
+</span>
+<span class="text-[10px] font-mono text-slate-500">GROWTH</span>
+</div>
+</div>
+<div class="bg-surface-container p-6 rounded-lg flex flex-col justify-between">
+<div>
+<span class="text-[0.65rem] font-bold uppercase tracking-[0.2em] text-slate-500 mb-2 block">Risk Velocity</span>
+<div class="flex items-center gap-4 mt-2">
+<span class="text-3xl font-bold font-headline text-white">Low</span>
+<span class="material-symbols-outlined text-error">trending_up</span>
+</div>
+</div>
+<p class="text-xs text-slate-500 font-body">Version shift in nginx (1.18 -&gt; 1.20) reduced vulnerabilities by 1.</p>
+</div>
+</div>
+<!-- Unified Diff View -->
+<div class="bg-surface-container rounded-lg overflow-hidden border border-transparent shadow-2xl">
+<div class="bg-surface-container-high px-6 py-4 flex items-center justify-between">
+<h3 class="font-headline font-bold text-white uppercase tracking-wider text-sm">Attribute Comparison List</h3>
+<div class="flex gap-4">
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded-sm bg-[#4ade80]"></div>
+<span class="text-[10px] font-medium text-slate-400">NEW</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded-sm bg-error"></div>
+<span class="text-[10px] font-medium text-slate-400">CLOSED</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded-sm bg-tertiary"></div>
+<span class="text-[10px] font-medium text-slate-400">MODIFIED</span>
+</div>
+</div>
+</div>
+<div class="w-full overflow-x-auto">
+<table class="w-full border-collapse">
+<thead>
+<tr class="bg-surface-container-low border-b border-surface-container">
+<th class="px-6 py-4 text-left text-xs font-bold text-slate-400 uppercase tracking-widest">Attribute</th>
+<th class="px-6 py-4 text-left text-xs font-bold text-slate-400 uppercase tracking-widest">Previous Scan (Oct 12)</th>
+<th class="px-6 py-4 text-left text-xs font-bold text-slate-400 uppercase tracking-widest">Current Scan (Oct 14)</th>
+<th class="px-6 py-4 text-right text-xs font-bold text-slate-400 uppercase tracking-widest">Action</th>
+</tr>
+</thead>
+<tbody class="font-body">
+<!-- New Port Row -->
+<tr class="group border-b border-surface-container-high hover:bg-surface-container-highest transition-colors">
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<div class="p-1.5 bg-[#4ade80]/10 rounded">
+<span class="material-symbols-outlined text-[#4ade80] text-sm" data-weight="fill">add_circle</span>
+</div>
+<div>
+<span class="text-white font-medium block">Port 8080/TCP</span>
+<span class="text-[10px] text-slate-500 uppercase font-bold tracking-tighter">HTTP-PROXY</span>
+</div>
+</div>
+</td>
+<td class="px-6 py-5">
+<span class="text-slate-500 italic text-sm">-- Port Closed --</span>
+</td>
+<td class="px-6 py-5">
+<div class="bg-[#4ade80]/5 border-l-2 border-[#4ade80] px-3 py-1">
+<span class="font-mono text-sm text-[#4ade80]">Open / Apache Tomcat 9.0.41</span>
+</div>
+</td>
+<td class="px-6 py-5 text-right">
+<button class="text-slate-500 hover:text-white"><span class="material-symbols-outlined">more_vert</span></button>
+</td>
+</tr>
+<!-- Version Change Row -->
+<tr class="group border-b border-surface-container-high hover:bg-surface-container-highest transition-colors">
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<div class="p-1.5 bg-tertiary/10 rounded">
+<span class="material-symbols-outlined text-tertiary text-sm">edit_square</span>
+</div>
+<div>
+<span class="text-white font-medium block">Port 443/TCP</span>
+<span class="text-[10px] text-slate-500 uppercase font-bold tracking-tighter">HTTPS</span>
+</div>
+</div>
+</td>
+<td class="px-6 py-5">
+<span class="font-mono text-sm text-slate-400">nginx 1.18.0 (Ubuntu)</span>
+</td>
+<td class="px-6 py-5">
+<div class="bg-tertiary/5 border-l-2 border-tertiary px-3 py-1">
+<span class="font-mono text-sm text-tertiary">nginx 1.20.1 (Stable)</span>
+</div>
+</td>
+<td class="px-6 py-5 text-right">
+<button class="text-slate-500 hover:text-white"><span class="material-symbols-outlined">more_vert</span></button>
+</td>
+</tr>
+<!-- Closed Port Row -->
+<tr class="group border-b border-surface-container-high hover:bg-surface-container-highest transition-colors">
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<div class="p-1.5 bg-error/10 rounded">
+<span class="material-symbols-outlined text-error text-sm">cancel</span>
+</div>
+<div>
+<span class="text-white font-medium block">Port 21/TCP</span>
+<span class="text-[10px] text-slate-500 uppercase font-bold tracking-tighter">FTP</span>
+</div>
+</div>
+</td>
+<td class="px-6 py-5">
+<span class="font-mono text-sm text-slate-400">vsftpd 3.0.3</span>
+</td>
+<td class="px-6 py-5">
+<div class="bg-error/5 border-l-2 border-error px-3 py-1">
+<span class="font-mono text-sm text-error">Filtered / Timeout</span>
+</div>
+</td>
+<td class="px-6 py-5 text-right">
+<button class="text-slate-500 hover:text-white"><span class="material-symbols-outlined">more_vert</span></button>
+</td>
+</tr>
+<!-- New Port Row 2 -->
+<tr class="group border-b border-surface-container-high hover:bg-surface-container-highest transition-colors">
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<div class="p-1.5 bg-[#4ade80]/10 rounded">
+<span class="material-symbols-outlined text-[#4ade80] text-sm" data-weight="fill">add_circle</span>
+</div>
+<div>
+<span class="text-white font-medium block">Port 5432/TCP</span>
+<span class="text-[10px] text-slate-500 uppercase font-bold tracking-tighter">POSTGRESQL</span>
+</div>
+</div>
+</td>
+<td class="px-6 py-5">
+<span class="text-slate-500 italic text-sm">-- No instance --</span>
+</td>
+<td class="px-6 py-5">
+<div class="bg-[#4ade80]/5 border-l-2 border-[#4ade80] px-3 py-1">
+<span class="font-mono text-sm text-[#4ade80]">PostgreSQL 14.1 on x86_64</span>
+</div>
+</td>
+<td class="px-6 py-5 text-right">
+<button class="text-slate-500 hover:text-white"><span class="material-symbols-outlined">more_vert</span></button>
+</td>
+</tr>
+<!-- Closed Port Row 2 -->
+<tr class="group border-b border-surface-container-high hover:bg-surface-container-highest transition-colors">
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<div class="p-1.5 bg-error/10 rounded">
+<span class="material-symbols-outlined text-error text-sm">cancel</span>
+</div>
+<div>
+<span class="text-white font-medium block">Port 23/TCP</span>
+<span class="text-[10px] text-slate-500 uppercase font-bold tracking-tighter">TELNET</span>
+</div>
+</div>
+</td>
+<td class="px-6 py-5">
+<span class="font-mono text-sm text-slate-400">linux-telnetd</span>
+</td>
+<td class="px-6 py-5">
+<div class="bg-error/5 border-l-2 border-error px-3 py-1">
+<span class="font-mono text-sm text-error">Closed / RST Received</span>
+</div>
+</td>
+<td class="px-6 py-5 text-right">
+<button class="text-slate-500 hover:text-white"><span class="material-symbols-outlined">more_vert</span></button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Raw Comparison Output Terminal Section -->
+<div class="mt-12">
+<div class="flex items-center gap-3 mb-4">
+<span class="material-symbols-outlined text-primary-container">terminal</span>
+<h3 class="font-headline text-lg font-bold text-white">Nmap Diffs Output</h3>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-lg font-mono text-xs leading-relaxed text-on-surface-variant max-h-64 overflow-y-auto border border-outline-variant/10">
+<div class="mb-4">
+<p class="text-[#4ade80]">+ PORT 8080/tcp open http-proxy</p>
+<p class="text-[#4ade80]">+ | http-methods: Potentially risky methods: TRACE</p>
+<p class="text-slate-600">  PORT 443/tcp open https</p>
+<p class="text-tertiary">! - nginx/1.18.0 (Ubuntu)</p>
+<p class="text-tertiary">! + nginx/1.20.1</p>
+<p class="text-error">- PORT 21/tcp open ftp</p>
+<p class="text-error">- | ftp-anon: Anonymous FTP login allowed</p>
+<p class="text-[#4ade80]">+ PORT 5432/tcp open postgresql</p>
+<p class="text-error">- PORT 23/tcp open telnet</p>
+</div>
+<div class="text-slate-500 italic">
+                    [Scan Completed in 45.2s] [Comparison generated in 0.8s]
+                </div>
+</div>
+</div>
+</main>
+<!-- FAB Suppression (Per Instructions) -->
+</body></html>

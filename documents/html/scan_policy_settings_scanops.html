@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Scan Policy Settings | The Sentinel</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container": "#191f31",
+                        "secondary": "#b7c8e1",
+                        "tertiary-fixed": "#ffdcc6",
+                        "background": "#0c1324",
+                        "secondary-fixed-dim": "#b7c8e1",
+                        "on-background": "#dce1fb",
+                        "surface-dim": "#0c1324",
+                        "on-surface": "#dce1fb",
+                        "on-secondary-fixed-variant": "#38485d",
+                        "on-secondary-container": "#a9bad3",
+                        "surface-variant": "#2e3447",
+                        "surface-tint": "#adc6ff",
+                        "primary-container": "#4d8eff",
+                        "inverse-surface": "#dce1fb",
+                        "surface-container-high": "#23293c",
+                        "on-tertiary": "#502400",
+                        "on-secondary": "#213145",
+                        "on-error-container": "#ffdad6",
+                        "on-tertiary-fixed": "#311400",
+                        "tertiary": "#ffb786",
+                        "error": "#ffb4ab",
+                        "surface-container-low": "#151b2d",
+                        "surface": "#0c1324",
+                        "on-secondary-fixed": "#0b1c30",
+                        "on-error": "#690005",
+                        "surface-container-lowest": "#070d1f",
+                        "inverse-primary": "#005ac2",
+                        "primary-fixed-dim": "#adc6ff",
+                        "outline-variant": "#424754",
+                        "secondary-container": "#3a4a5f",
+                        "on-primary": "#002e6a",
+                        "on-primary-fixed": "#001a42",
+                        "outline": "#8c909f",
+                        "error-container": "#93000a",
+                        "inverse-on-surface": "#2a3043",
+                        "secondary-fixed": "#d3e4fe",
+                        "tertiary-fixed-dim": "#ffb786",
+                        "on-tertiary-container": "#461f00",
+                        "tertiary-container": "#df7412",
+                        "surface-bright": "#33394c",
+                        "primary": "#adc6ff",
+                        "on-tertiary-fixed-variant": "#723600",
+                        "on-primary-fixed-variant": "#004395",
+                        "surface-container-highest": "#2e3447",
+                        "on-primary-container": "#00285d",
+                        "primary-fixed": "#d8e2ff",
+                        "on-surface-variant": "#c2c6d6"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Space Grotesk"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #0c1324;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #2e3447;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body selection:bg-primary/30 selection:text-primary">
+<!-- Sidebar Navigation -->
+<aside class="fixed left-0 top-0 h-full z-40 border-r border-white/5 bg-[#0c1324] w-64 flex flex-col shadow-2xl shadow-black/50">
+<div class="px-6 py-8">
+<div class="flex items-center gap-3 mb-10">
+<div class="w-8 h-8 bg-primary rounded-sm flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary text-xl" data-icon="shield">shield</span>
+</div>
+<div>
+<h1 class="font-headline font-black text-blue-500 leading-none text-xl tracking-tighter">SENTINEL</h1>
+<p class="text-[10px] uppercase tracking-widest text-slate-500 mt-1">Precision Security</p>
+</div>
+</div>
+<nav class="space-y-1">
+<a class="flex items-center gap-3 px-3 py-2.5 text-slate-500 hover:text-slate-300 hover:bg-[#151b2d] transition-all duration-200 ease-in-out font-['Inter'] text-sm font-medium" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="dashboard">dashboard</span>
+                    Dashboard
+                </a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-slate-500 hover:text-slate-300 hover:bg-[#151b2d] transition-all duration-200 ease-in-out font-['Inter'] text-sm font-medium" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="radar">radar</span>
+                    Network Scans
+                </a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-blue-400 bg-[#2e3447] rounded-md transition-all duration-200 ease-in-out font-['Inter'] text-sm font-medium" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="security">security</span>
+                    Scan Policies
+                </a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-slate-500 hover:text-slate-300 hover:bg-[#151b2d] transition-all duration-200 ease-in-out font-['Inter'] text-sm font-medium" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="visibility">visibility</span>
+                    Threat Intel
+                </a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-slate-500 hover:text-slate-300 hover:bg-[#151b2d] transition-all duration-200 ease-in-out font-['Inter'] text-sm font-medium" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="history">history</span>
+                    Audit Logs
+                </a>
+</nav>
+</div>
+<div class="mt-auto px-6 py-6 border-t border-white/5 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 hover:text-slate-300 transition-colors font-['Inter'] text-sm font-medium" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="help">help</span>
+                Support
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 hover:text-slate-300 transition-colors font-['Inter'] text-sm font-medium" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="logout">logout</span>
+                Sign Out
+            </a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-64 min-h-screen">
+<!-- Top App Bar -->
+<header class="flex justify-between items-center px-8 py-6 w-full bg-[#0c1324] sticky top-0 z-30">
+<div class="flex flex-col">
+<h2 class="font-headline text-3xl font-bold tracking-tighter text-blue-500 dark:text-blue-400">Scan Policy Settings</h2>
+<p class="text-on-surface-variant text-xs mt-1 font-medium">CONFIGURE GLOBAL OPERATIONAL PARAMETERS</p>
+</div>
+<div class="flex items-center gap-6">
+<div class="relative group">
+<span class="material-symbols-outlined text-slate-400 cursor-pointer hover:text-blue-400 transition-colors duration-200" data-icon="notifications">notifications</span>
+<span class="absolute -top-1 -right-1 w-2 h-2 bg-error rounded-full ring-2 ring-background"></span>
+</div>
+<span class="material-symbols-outlined text-slate-400 cursor-pointer hover:text-blue-400 transition-colors duration-200" data-icon="settings">settings</span>
+<div class="h-10 w-10 rounded-full bg-surface-container-highest overflow-hidden border border-outline-variant/30">
+<img alt="User profile" data-alt="Close up portrait of a male cybersecurity specialist in a dimly lit tech environment with soft blue rim lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDYqqmaw-wh2vb8z8Q_9CIarhfrPmyumJvIr2viNhTyu8tuXdQ4es1IrIxe-fA5OPk3EbuniG5hPEoBC3h-StPpZaDTbx9XcI89nLtk8c4vRn_6LpN8P0F_BNENcS_bfLa64W8VGHtGeD9HgR7xbuEzqb8408e8irBeQQ4fElpMxbazI_gWslVsYTWwFWe0zAW5SVa7tvq3Ts6uViw0xE5sW8lWtjDW8dNTlgOgX9ByWxZOGyCOF4CSBXwBw9zhYMvfoURAx6DY6-zd"/>
+</div>
+</div>
+</header>
+<div class="px-8 pb-32 max-w-7xl">
+<!-- Alert Panel -->
+<div class="mb-10 p-6 bg-surface-container-lowest border-l-4 border-tertiary shadow-2xl relative overflow-hidden group">
+<div class="absolute right-0 top-0 opacity-10 pointer-events-none group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-[120px]" data-icon="warning">warning</span>
+</div>
+<div class="flex items-start gap-5 relative z-10">
+<div class="p-3 bg-tertiary/10 rounded-lg">
+<span class="material-symbols-outlined text-tertiary text-2xl" data-icon="gavel" data-weight="fill">gavel</span>
+</div>
+<div>
+<h3 class="font-headline text-xl font-bold text-tertiary mb-1">Global Policy Enforcement</h3>
+<p class="text-on-surface-variant max-w-3xl leading-relaxed">
+                            These policies define the technical boundaries for all scanning operations within the Sentinel environment. Changes made here will be applied immediately to all active and future scan jobs across the entire operator pool. Ensure compliance with internal infrastructure guidelines before modification.
+                        </p>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-12 gap-8">
+<!-- Left Column -->
+<div class="col-span-12 lg:col-span-7 space-y-8">
+<!-- Allowed Scan Options -->
+<section class="bg-surface-container-low p-8 rounded-xl shadow-sm">
+<div class="flex items-center gap-3 mb-8">
+<span class="material-symbols-outlined text-primary" data-icon="list_alt">list_alt</span>
+<h3 class="font-headline text-xl font-semibold tracking-tight">Allowed Scan Options</h3>
+</div>
+<div class="grid grid-cols-1 gap-4">
+<!-- Toggle Item -->
+<div class="flex items-center justify-between p-4 bg-surface-container rounded-lg border border-transparent hover:border-outline-variant/20 transition-colors">
+<div>
+<p class="font-medium text-on-surface">Service Detection</p>
+<p class="text-xs text-on-surface-variant">Attempts to determine the version of the service running on a port.</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+<!-- Toggle Item -->
+<div class="flex items-center justify-between p-4 bg-surface-container rounded-lg border border-transparent hover:border-outline-variant/20 transition-colors">
+<div>
+<p class="font-medium text-on-surface">OS Fingerprinting</p>
+<p class="text-xs text-on-surface-variant">Analyzes TCP/IP stack responses to identify remote operating systems.</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+<!-- Toggle Item -->
+<div class="flex items-center justify-between p-4 bg-surface-container rounded-lg border border-transparent hover:border-outline-variant/20 transition-colors">
+<div>
+<p class="font-medium text-on-surface">Aggressive Mode</p>
+<p class="text-xs text-on-surface-variant">Enables OS detection, version detection, script scanning, and traceroute.</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+<!-- Toggle Item -->
+<div class="flex items-center justify-between p-4 bg-surface-container rounded-lg border border-transparent hover:border-outline-variant/20 transition-colors">
+<div>
+<p class="font-medium text-on-surface">Traceroute</p>
+<p class="text-xs text-on-surface-variant">Determines network hop path during scanning phase.</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+<!-- Toggle Item -->
+<div class="flex items-center justify-between p-4 bg-surface-container rounded-lg border border-transparent hover:border-outline-variant/20 transition-colors">
+<div>
+<p class="font-medium text-on-surface">NSE Script Execution</p>
+<p class="text-xs text-on-surface-variant">Allows Nmap Scripting Engine to run automated discovery scripts.</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+</div>
+</section>
+<!-- Safe Defaults -->
+<section class="bg-surface-container-low p-8 rounded-xl shadow-sm">
+<div class="flex items-center gap-3 mb-8">
+<span class="material-symbols-outlined text-tertiary" data-icon="verified_user">verified_user</span>
+<h3 class="font-headline text-xl font-semibold tracking-tight">Safe Defaults</h3>
+</div>
+<div class="space-y-4">
+<div class="flex items-center justify-between p-4 bg-surface-container rounded-lg">
+<div class="flex items-center gap-4">
+<div class="w-2 h-2 rounded-full bg-tertiary animate-pulse shadow-[0_0_8px_rgba(255,183,134,0.6)]"></div>
+<div>
+<p class="font-medium text-on-surface">Force Safe Mode</p>
+<p class="text-xs text-on-surface-variant">Automatically strips any intrusive NSE scripts from scan queues.</p>
+</div>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+<div class="flex items-center justify-between p-4 bg-surface-container rounded-lg">
+<div class="flex items-center gap-4">
+<div class="w-2 h-2 rounded-full bg-primary animate-pulse shadow-[0_0_8px_rgba(173,198,255,0.6)]"></div>
+<div>
+<p class="font-medium text-on-surface">Limit to Internal Segments</p>
+<p class="text-xs text-on-surface-variant">Restricts target ranges to VPC and predefined intranet CIDRs.</p>
+</div>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+</div>
+</section>
+</div>
+<!-- Right Column -->
+<div class="col-span-12 lg:col-span-5 space-y-8">
+<!-- Restricted/Blocked Options -->
+<section class="bg-surface-container-low p-8 rounded-xl shadow-sm">
+<div class="flex items-center gap-3 mb-6">
+<span class="material-symbols-outlined text-error" data-icon="block">block</span>
+<h3 class="font-headline text-xl font-semibold tracking-tight">Restricted Flags</h3>
+</div>
+<p class="text-sm text-on-surface-variant mb-6">Explicitly prohibited Nmap arguments.</p>
+<div class="space-y-2 mb-6">
+<div class="flex items-center justify-between bg-surface-container-lowest p-3 rounded-md">
+<code class="text-error text-sm font-mono">--badsum</code>
+<button class="text-on-surface-variant hover:text-white transition-colors">
+<span class="material-symbols-outlined text-lg" data-icon="close">close</span>
+</button>
+</div>
+<div class="flex items-center justify-between bg-surface-container-lowest p-3 rounded-md">
+<code class="text-error text-sm font-mono">--send-eth</code>
+<button class="text-on-surface-variant hover:text-white transition-colors">
+<span class="material-symbols-outlined text-lg" data-icon="close">close</span>
+</button>
+</div>
+<div class="flex items-center justify-between bg-surface-container-lowest p-3 rounded-md">
+<code class="text-error text-sm font-mono">--spoof-mac</code>
+<button class="text-on-surface-variant hover:text-white transition-colors">
+<span class="material-symbols-outlined text-lg" data-icon="close">close</span>
+</button>
+</div>
+</div>
+<div class="flex gap-2">
+<input class="bg-surface-container border-none text-sm w-full focus:ring-1 focus:ring-primary/40 rounded-md py-2 px-4" placeholder="e.g. --ad-hoc" type="text"/>
+<button class="bg-surface-container-highest px-4 py-2 rounded-md hover:bg-primary-container transition-colors">
+<span class="material-symbols-outlined text-xl" data-icon="add">add</span>
+</button>
+</div>
+</section>
+<!-- Scanning Constraints -->
+<section class="bg-surface-container-low p-8 rounded-xl shadow-sm">
+<div class="flex items-center gap-3 mb-8">
+<span class="material-symbols-outlined text-primary" data-icon="speed">speed</span>
+<h3 class="font-headline text-xl font-semibold tracking-tight">Scanning Constraints</h3>
+</div>
+<div class="space-y-6">
+<div>
+<label class="block text-xs uppercase tracking-widest text-slate-500 mb-2 font-bold">Max Ports Per Scan</label>
+<div class="relative">
+<input class="w-full bg-surface-container-lowest border-none text-primary font-bold text-lg focus:ring-1 focus:ring-primary/40 rounded-lg p-4" type="number" value="1000"/>
+<span class="absolute right-4 top-1/2 -translate-y-1/2 text-xs text-on-surface-variant font-mono">TCP/UDP</span>
+</div>
+</div>
+<div>
+<label class="block text-xs uppercase tracking-widest text-slate-500 mb-2 font-bold">Scan Timeout</label>
+<div class="relative">
+<input class="w-full bg-surface-container-lowest border-none text-primary font-bold text-lg focus:ring-1 focus:ring-primary/40 rounded-lg p-4" type="text" value="2h"/>
+<span class="absolute right-4 top-1/2 -translate-y-1/2 text-xs text-on-surface-variant font-mono">HH:MM</span>
+</div>
+</div>
+<div>
+<label class="block text-xs uppercase tracking-widest text-slate-500 mb-2 font-bold">Max Concurrency</label>
+<div class="relative">
+<input class="w-full bg-surface-container-lowest border-none text-primary font-bold text-lg focus:ring-1 focus:ring-primary/40 rounded-lg p-4" type="number" value="5"/>
+<span class="absolute right-4 top-1/2 -translate-y-1/2 text-xs text-on-surface-variant font-mono">JOBS</span>
+</div>
+</div>
+</div>
+</section>
+</div>
+</div>
+</div>
+<!-- Action Bar -->
+<div class="fixed bottom-0 left-64 right-0 p-6 bg-[#0c1324]/80 backdrop-blur-xl border-t border-white/5 flex justify-end items-center gap-4 z-50">
+<button class="px-6 py-2.5 text-on-surface-variant font-medium hover:text-white transition-colors">
+                Reset to System Defaults
+            </button>
+<button class="bg-primary text-on-primary px-8 py-2.5 rounded-md font-bold hover:bg-primary-container transition-all active:scale-95 flex items-center gap-2">
+<span class="material-symbols-outlined text-lg" data-icon="save">save</span>
+                Save Policy
+            </button>
+</div>
+</main>
+</body></html>

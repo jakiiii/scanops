@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}Raw Output | ScanOps{% endblock %}
+
+{% block content %}
+    {% include "includes/breadcrumbs.html" with breadcrumbs=breadcrumbs %}
+    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6">
+        <div>
+            <h1 class="text-3xl font-bold text-white tracking-tight">Raw Output Viewer</h1>
+            <p class="text-slate-400 mt-1 font-mono">{{ result.execution.execution_id }} • {{ result.target_snapshot }}</p>
+        </div>
+        <div class="flex gap-2">
+            <a href="{% url 'scans:result-detail' result.pk %}" class="px-3 py-2 rounded-lg bg-slate-800 border border-slate-700 text-sm text-slate-100 hover:bg-slate-700">Back to Detail</a>
+            <button type="button" id="copy-raw-output" class="px-3 py-2 rounded-lg bg-blue-600 text-sm font-semibold text-white hover:bg-blue-500">Copy Output</button>
+        </div>
+    </div>
+
+    <div class="scanops-panel p-4 mb-4">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
+            <div class="md:col-span-3">
+                <label for="raw-search" class="block text-[10px] uppercase tracking-widest text-slate-500 mb-1.5">Search in Output</label>
+                <input id="raw-search" type="text" class="scanops-input" placeholder="Find token, port, service, or host string"/>
+            </div>
+            <div class="flex items-end">
+                <button type="button" id="find-next" class="w-full px-3 py-2 rounded-lg bg-slate-800 border border-slate-700 text-sm text-slate-100 hover:bg-slate-700">Find Next</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="scanops-panel p-0 overflow-hidden">
+        <div class="px-4 py-3 border-b border-slate-800 bg-slate-900/70 flex items-center justify-between gap-2">
+            <p class="text-xs uppercase tracking-widest text-slate-500">Raw Text Output</p>
+            <p class="text-xs text-slate-500">{{ result.generated_at|date:"M d, Y H:i:s" }}</p>
+        </div>
+        <pre id="raw-output" class="p-4 max-h-[70vh] overflow-auto text-xs text-slate-200 bg-slate-950 whitespace-pre-wrap font-mono leading-relaxed">{{ result.raw_output_text|default:"No raw output was stored for this result." }}</pre>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+    <script>
+        (function () {
+            const copyButton = document.getElementById("copy-raw-output");
+            const findButton = document.getElementById("find-next");
+            const searchInput = document.getElementById("raw-search");
+            const output = document.getElementById("raw-output");
+            if (!output) {
+                return;
+            }
+
+            if (copyButton) {
+                copyButton.addEventListener("click", async function () {
+                    try {
+                        await navigator.clipboard.writeText(output.textContent || "");
+                        copyButton.textContent = "Copied";
+                        window.setTimeout(() => {
+                            copyButton.textContent = "Copy Output";
+                        }, 1200);
+                    } catch (error) {
+                        copyButton.textContent = "Copy Failed";
+                        window.setTimeout(() => {
+                            copyButton.textContent = "Copy Output";
+                        }, 1200);
+                    }
+                });
+            }
+
+            if (findButton && searchInput) {
+                findButton.addEventListener("click", function () {
+                    const term = searchInput.value.trim();
+                    if (!term) {
+                        return;
+                    }
+                    window.find(term);
+                });
+            }
+        })();
+    </script>
+{% endblock %}

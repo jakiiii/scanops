@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Admin Scan Profiles | Sentinel Tactical</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-variant": "#2e3447",
+                        "on-secondary-fixed-variant": "#38485d",
+                        "tertiary-fixed-dim": "#ffb786",
+                        "outline": "#8c909f",
+                        "on-error-container": "#ffdad6",
+                        "on-primary": "#002e6a",
+                        "on-surface-variant": "#c2c6d6",
+                        "on-primary-fixed-variant": "#004395",
+                        "on-primary-container": "#00285d",
+                        "primary": "#adc6ff",
+                        "tertiary-container": "#df7412",
+                        "surface": "#0c1324",
+                        "error-container": "#93000a",
+                        "inverse-surface": "#dce1fb",
+                        "secondary-fixed": "#d3e4fe",
+                        "primary-fixed-dim": "#adc6ff",
+                        "on-secondary-container": "#a9bad3",
+                        "surface-container-highest": "#2e3447",
+                        "on-secondary-fixed": "#0b1c30",
+                        "on-error": "#690005",
+                        "secondary-fixed-dim": "#b7c8e1",
+                        "secondary-container": "#3a4a5f",
+                        "on-primary-fixed": "#001a42",
+                        "on-surface": "#dce1fb",
+                        "surface-tint": "#adc6ff",
+                        "secondary": "#b7c8e1",
+                        "on-tertiary": "#502400",
+                        "primary-container": "#4d8eff",
+                        "tertiary": "#ffb786",
+                        "surface-container-low": "#151b2d",
+                        "surface-container-lowest": "#070d1f",
+                        "on-secondary": "#213145",
+                        "inverse-on-surface": "#2a3043",
+                        "on-tertiary-fixed-variant": "#723600",
+                        "on-tertiary-fixed": "#311400",
+                        "outline-variant": "#424754",
+                        "surface-container": "#191f31",
+                        "on-background": "#dce1fb",
+                        "background": "#0c1324",
+                        "surface-bright": "#33394c",
+                        "error": "#ffb4ab",
+                        "inverse-primary": "#005ac2",
+                        "surface-dim": "#0c1324",
+                        "on-tertiary-container": "#461f00",
+                        "tertiary-fixed": "#ffdcc6",
+                        "primary-fixed": "#d8e2ff",
+                        "surface-container-high": "#23293c"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Space Grotesk"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, .brand-font { font-family: 'Space Grotesk', sans-serif; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface selection:bg-primary/30">
+<!-- TopAppBar Shell -->
+<header class="fixed top-0 w-full z-50 bg-slate-950/60 backdrop-blur-xl shadow-2xl shadow-black/50 flex justify-between items-center px-6 h-16 w-full">
+<div class="flex items-center gap-8">
+<span class="text-2xl font-bold tracking-tighter text-blue-400 brand-font">Sentinel Tactical</span>
+<div class="hidden md:flex items-center gap-6">
+<nav class="flex gap-6 font-space-grotesk tracking-tight text-sm">
+<a class="text-slate-400 hover:text-blue-300 transition-colors duration-200" href="#">Network</a>
+<a class="text-blue-400 font-bold" href="#">Admin Scan Profiles</a>
+<a class="text-slate-400 hover:text-blue-300 transition-colors duration-200" href="#">Incident Response</a>
+</nav>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative group">
+<span class="material-symbols-outlined text-slate-400 hover:text-blue-300 cursor-pointer active:scale-95 duration-150">notifications</span>
+<span class="absolute -top-1 -right-1 w-2 h-2 bg-error rounded-full"></span>
+</div>
+<span class="material-symbols-outlined text-slate-400 hover:text-blue-300 cursor-pointer active:scale-95 duration-150">settings</span>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant">
+<img alt="Administrator Profile" class="w-full h-full object-cover" data-alt="close-up portrait of a high-tech digital security analyst profile picture with blue interface glow" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD0gH3f1ZmMN1vCshE8tOMAQMUpRbv6GgXqqOhBYbyeq-k1fuyGadH6Qfzhl6KCdv84utHoS7K0mGxDCOfAz58h6E8otMxwAKYxZOHP_I12TzD1x357aGx079HsEvMfO37ObN74Ew-2SCjknrd6jG6Ld5ejSS23RO8csH0IG0bkDDNuLRtSzhd_f1qipEQ4FXrDHLMq5ipm9GiRZzjTuFmEIEuYIovOFWTeN_30ZTYqwrj-7uzQyiVgRMdIGTDXvrKsrkn8NN2Q79Cl"/>
+</div>
+</div>
+</header>
+<!-- SideNavBar Shell -->
+<aside class="fixed left-0 top-0 h-full w-64 z-40 bg-slate-900 flex flex-col pt-20 pb-6 border-r border-slate-950/50">
+<div class="px-6 mb-8">
+<h2 class="text-xl font-bold text-slate-100 brand-font">Command Center</h2>
+<p class="text-[10px] uppercase tracking-widest text-slate-500 font-bold">Operational Alpha</p>
+</div>
+<nav class="flex-1 space-y-1 px-3">
+<a class="flex items-center gap-3 px-3 py-2 text-slate-400 hover:bg-slate-800/50 transition-all duration-200 active:translate-x-1 font-inter text-sm group" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 bg-slate-800 text-blue-400 border-r-2 border-blue-500 transition-all duration-200 active:translate-x-1 font-inter text-sm" href="#">
+<span class="material-symbols-outlined">security_update_good</span>
+<span>Scan Profiles</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-400 hover:bg-slate-800/50 transition-all duration-200 active:translate-x-1 font-inter text-sm" href="#">
+<span class="material-symbols-outlined">receipt_long</span>
+<span>Threat Logs</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-400 hover:bg-slate-800/50 transition-all duration-200 active:translate-x-1 font-inter text-sm" href="#">
+<span class="material-symbols-outlined">biotech</span>
+<span>Vulnerabilities</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-400 hover:bg-slate-800/50 transition-all duration-200 active:translate-x-1 font-inter text-sm" href="#">
+<span class="material-symbols-outlined">admin_panel_settings</span>
+<span>System Admin</span>
+</a>
+</nav>
+<div class="px-3 pt-6 border-t border-slate-800 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-slate-400 hover:bg-slate-800/50 transition-all duration-200 font-inter text-sm" href="#">
+<span class="material-symbols-outlined">help</span>
+<span>Support</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-400 hover:bg-slate-800/50 transition-all duration-200 font-inter text-sm" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span>Logout</span>
+</a>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="ml-64 pt-24 px-10 pb-12 min-h-screen bg-surface">
+<!-- Header Section -->
+<header class="mb-10 max-w-7xl mx-auto">
+<div class="flex justify-between items-end">
+<div>
+<h1 class="text-4xl font-bold tracking-tighter text-on-surface mb-2">Admin Scan Profiles</h1>
+<p class="text-on-surface-variant font-medium">Governance and oversight for system-wide tactical scanning templates.</p>
+</div>
+<div class="flex gap-3">
+<button class="bg-surface-container-highest text-on-surface px-4 py-2 rounded-lg text-sm font-semibold hover:bg-primary-fixed-dim transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">filter_list</span>
+                        Filter Registry
+                    </button>
+<button class="bg-primary text-on-primary px-5 py-2 rounded-lg text-sm font-bold flex items-center gap-2 shadow-lg shadow-primary/20 hover:brightness-110 active:scale-95 duration-150">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                        New Template
+                    </button>
+</div>
+</div>
+</header>
+<!-- Approval Grid (Asymmetric) -->
+<section class="mb-12 max-w-7xl mx-auto">
+<div class="flex items-center gap-3 mb-6">
+<span class="w-2 h-2 rounded-full bg-tertiary shadow-[0_0_12px_rgba(255,183,134,0.6)]"></span>
+<h2 class="text-lg font-bold brand-font text-tertiary tracking-wide uppercase">Approval-Required Profiles</h2>
+<span class="bg-tertiary-container/20 text-tertiary px-2 py-0.5 rounded-full text-[10px] font-bold">3 PENDING</span>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<!-- Approval Card 1 -->
+<div class="lg:col-span-2 bg-surface-container-low p-6 rounded-xl relative overflow-hidden group border-l-4 border-tertiary">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-8xl">verified_user</span>
+</div>
+<div class="flex justify-between items-start mb-4">
+<div>
+<h3 class="text-xl font-bold text-on-surface mb-1">Deep Core Audit 2.0</h3>
+<div class="flex gap-4 text-xs font-medium text-on-surface-variant">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">person</span> Submitted by: Sarah Jenkins</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">schedule</span> 2h ago</span>
+</div>
+</div>
+<div class="flex gap-2">
+<button class="bg-surface-container-highest hover:bg-error/20 text-on-surface px-3 py-1.5 rounded-lg text-xs font-bold transition-all">Reject</button>
+<button class="bg-primary text-on-primary px-4 py-1.5 rounded-lg text-xs font-bold hover:brightness-110 transition-all">Approve &amp; Publish</button>
+</div>
+</div>
+<p class="text-sm text-on-surface-variant max-w-2xl mb-6">This template performs a non-invasive memory resident scan for lateral movement indicators. Requires Elevated Level 4 credentials.</p>
+<div class="flex gap-3">
+<span class="px-2 py-1 bg-surface-container-highest rounded text-[10px] font-bold text-primary tracking-widest uppercase">Risk: High</span>
+<span class="px-2 py-1 bg-surface-container-highest rounded text-[10px] font-bold text-on-surface-variant tracking-widest uppercase">Audit Template</span>
+</div>
+</div>
+<!-- Approval Stats -->
+<div class="bg-surface-container-low p-6 rounded-xl flex flex-col justify-between">
+<div>
+<h4 class="text-sm font-bold text-on-surface-variant tracking-widest uppercase mb-4">Queue Insights</h4>
+<div class="space-y-4">
+<div class="flex justify-between items-center">
+<span class="text-xs text-on-surface-variant">Avg. Review Time</span>
+<span class="text-sm font-bold">14.2 Hours</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-xs text-on-surface-variant">Success Rate</span>
+<span class="text-sm font-bold text-primary">92%</span>
+</div>
+</div>
+</div>
+<div class="pt-4 mt-4 border-t border-outline-variant/15">
+<p class="text-[10px] text-on-surface-variant leading-relaxed">Profiles requiring admin sign-off are flagged based on heuristic risk scoring of the scan parameters.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- System Profiles Registry -->
+<section class="max-w-7xl mx-auto">
+<div class="flex items-center gap-3 mb-6">
+<span class="w-2 h-2 rounded-full bg-primary shadow-[0_0_12px_rgba(173,198,255,0.6)]"></span>
+<h2 class="text-lg font-bold brand-font text-primary tracking-wide uppercase">Global Registry</h2>
+</div>
+<div class="bg-surface-container-low rounded-xl overflow-hidden shadow-2xl shadow-black/40">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container-highest">
+<tr>
+<th class="px-6 py-4 text-[10px] font-extrabold text-on-surface-variant uppercase tracking-[0.2em]">Profile Name</th>
+<th class="px-6 py-4 text-[10px] font-extrabold text-on-surface-variant uppercase tracking-[0.2em]">Scan Type</th>
+<th class="px-6 py-4 text-[10px] font-extrabold text-on-surface-variant uppercase tracking-[0.2em]">Owner</th>
+<th class="px-6 py-4 text-[10px] font-extrabold text-on-surface-variant uppercase tracking-[0.2em]">Status</th>
+<th class="px-6 py-4 text-[10px] font-extrabold text-on-surface-variant uppercase tracking-[0.2em] text-right">Usage</th>
+<th class="px-6 py-4 text-[10px] font-extrabold text-on-surface-variant uppercase tracking-[0.2em] text-center">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/10">
+<!-- Row 1 -->
+<tr class="hover:bg-surface-container-high transition-colors group">
+<td class="px-6 py-4">
+<div class="flex flex-col">
+<span class="text-sm font-bold text-on-surface">External Recon Alpha</span>
+<span class="text-[10px] text-on-surface-variant">Last updated: 12 May 2024</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="text-xs font-medium text-primary bg-primary/10 px-2 py-0.5 rounded">Discovery</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded bg-on-secondary-fixed-variant flex items-center justify-center text-[10px] font-bold">MK</div>
+<span class="text-xs text-on-surface-variant">Markus K.</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+<span class="text-xs font-bold text-primary uppercase tracking-tighter">Published</span>
+</div>
+</td>
+<td class="px-6 py-4 text-right">
+<span class="text-sm font-mono text-on-surface-variant">1,204</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex justify-center gap-4 text-on-surface-variant">
+<button class="hover:text-primary transition-colors"><span class="material-symbols-outlined text-[18px]">edit</span></button>
+<button class="hover:text-error transition-colors"><span class="material-symbols-outlined text-[18px]">block</span></button>
+<button class="hover:text-on-surface transition-colors"><span class="material-symbols-outlined text-[18px]">delete</span></button>
+</div>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface-container-high transition-colors group">
+<td class="px-6 py-4">
+<div class="flex flex-col">
+<span class="text-sm font-bold text-on-surface">Internal Prowler V4</span>
+<span class="text-[10px] text-on-surface-variant">Last updated: 09 May 2024</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="text-xs font-medium text-tertiary bg-tertiary/10 px-2 py-0.5 rounded">Intrusion</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded bg-on-secondary-fixed-variant flex items-center justify-center text-[10px] font-bold">JD</div>
+<span class="text-xs text-on-surface-variant">Jane Doe</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="w-1.5 h-1.5 rounded-full bg-outline"></span>
+<span class="text-xs font-bold text-outline uppercase tracking-tighter">Draft</span>
+</div>
+</td>
+<td class="px-6 py-4 text-right">
+<span class="text-sm font-mono text-on-surface-variant">0</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex justify-center gap-4 text-on-surface-variant">
+<button class="hover:text-primary transition-colors"><span class="material-symbols-outlined text-[18px]">publish</span></button>
+<button class="hover:text-primary transition-colors"><span class="material-symbols-outlined text-[18px]">edit</span></button>
+<button class="hover:text-on-surface transition-colors"><span class="material-symbols-outlined text-[18px]">delete</span></button>
+</div>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-surface-container-high transition-colors group">
+<td class="px-6 py-4">
+<div class="flex flex-col">
+<span class="text-sm font-bold text-on-surface">Compliance Baseline 2024</span>
+<span class="text-[10px] text-on-surface-variant">Last updated: 01 May 2024</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="text-xs font-medium text-secondary bg-secondary/10 px-2 py-0.5 rounded">Audit</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded bg-on-secondary-fixed-variant flex items-center justify-center text-[10px] font-bold">SA</div>
+<span class="text-xs text-on-surface-variant">System Admin</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+<span class="text-xs font-bold text-primary uppercase tracking-tighter">Published</span>
+</div>
+</td>
+<td class="px-6 py-4 text-right">
+<span class="text-sm font-mono text-on-surface-variant">4,582</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex justify-center gap-4 text-on-surface-variant">
+<button class="hover:text-primary transition-colors"><span class="material-symbols-outlined text-[18px]">edit</span></button>
+<button class="hover:text-error transition-colors"><span class="material-symbols-outlined text-[18px]">block</span></button>
+<button class="hover:text-on-surface transition-colors"><span class="material-symbols-outlined text-[18px]">delete</span></button>
+</div>
+</td>
+</tr>
+<!-- Row 4 (Disabled) -->
+<tr class="bg-surface-container-lowest/50 opacity-60">
+<td class="px-6 py-4">
+<div class="flex flex-col">
+<span class="text-sm font-bold text-on-surface line-through decoration-error/50">Legacy Port Scanner</span>
+<span class="text-[10px] text-on-surface-variant">Last updated: 14 Dec 2023</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="text-xs font-medium text-on-surface-variant bg-surface-variant px-2 py-0.5 rounded">Discovery</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="text-xs text-on-surface-variant">System</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="w-1.5 h-1.5 rounded-full bg-error"></span>
+<span class="text-xs font-bold uppercase tracking-tighter">Archived</span>
+</div>
+</td>
+<td class="px-6 py-4 text-right">
+<span class="text-sm font-mono text-on-surface-variant">9.8k</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex justify-center gap-4 text-on-surface-variant">
+<button class="hover:text-primary transition-colors"><span class="material-symbols-outlined text-[18px]">restore</span></button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="px-6 py-4 bg-surface-container flex justify-between items-center border-t border-outline-variant/10">
+<span class="text-xs text-on-surface-variant">Showing 1-12 of 48 system profiles</span>
+<div class="flex gap-2">
+<button class="p-1 hover:bg-surface-container-highest rounded text-on-surface-variant"><span class="material-symbols-outlined">chevron_left</span></button>
+<button class="p-1 hover:bg-surface-container-highest rounded text-on-surface-variant"><span class="material-symbols-outlined">chevron_right</span></button>
+</div>
+</div>
+</div>
+</section>
+<!-- Footer Decoration / Glass Panel -->
+<footer class="mt-16 max-w-7xl mx-auto">
+<div class="bg-surface-bright/20 backdrop-blur-md p-8 rounded-2xl border border-outline-variant/10 flex items-center justify-between">
+<div class="flex items-center gap-6">
+<div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-3xl" style="font-variation-settings: 'FILL' 1;">shield_with_heart</span>
+</div>
+<div>
+<h4 class="text-lg font-bold brand-font text-on-surface mb-1">Automated Integrity Check</h4>
+<p class="text-sm text-on-surface-variant max-w-md leading-relaxed">System-wide scan profiles are audited every 24 hours to ensure compliance with the latest NIST threat definitions.</p>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<span class="text-[10px] text-on-surface-variant uppercase tracking-[0.2em] mb-1">System Pulse</span>
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+<span class="text-sm font-bold font-mono">OP_A_ONLINE</span>
+</div>
+</div>
+</div>
+</footer>
+</main>
+</body></html>

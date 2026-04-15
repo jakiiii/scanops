@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {},
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Public Sans"],
+                        "body": ["Public Sans"],
+                        "label": ["Public Sans"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Public Sans', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .code-glow {
+            box-shadow: inset 0 0 20px rgba(59, 130, 246, 0.05);
+        }
+    </style>
+</head>
+<body class="h-full bg-slate-950 text-slate-200 antialiased overflow-hidden">
+<header class="fixed top-0 w-full border-b bg-slate-900 border-slate-800 shadow-sm z-50 flex justify-between items-center h-16 px-6 font-sans antialiased">
+<div class="flex items-center gap-8">
+<div class="text-xl font-bold tracking-tight text-white">ScanOps</div>
+<nav class="hidden md:flex gap-6 text-sm font-medium">
+<a class="text-slate-400 hover:text-white hover:bg-slate-800 transition-colors duration-150 ease-in-out px-2 py-1" href="#">Dashboard</a>
+<a class="text-slate-400 hover:text-white hover:bg-slate-800 transition-colors duration-150 ease-in-out px-2 py-1" href="#">Network Map</a>
+<a class="text-white border-b-2 border-blue-500 duration-150 ease-in-out px-2 py-1" href="#">Scans</a>
+<a class="text-slate-400 hover:text-white hover:bg-slate-800 transition-colors duration-150 ease-in-out px-2 py-1" href="#">Vulnerabilities</a>
+<a class="text-slate-400 hover:text-white hover:bg-slate-800 transition-colors duration-150 ease-in-out px-2 py-1" href="#">Reports</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2">
+<button class="p-2 text-slate-400 hover:text-white transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 text-slate-400 hover:text-white transition-colors">
+<span class="material-symbols-outlined">settings</span>
+</button>
+</div>
+<div class="h-8 w-8 rounded-full bg-blue-600 flex items-center justify-center text-xs font-bold text-white border border-blue-400/30">
+<img alt="User profile" class="h-full w-full rounded-full object-cover" data-alt="Close up portrait of a professional male security analyst in a modern office with soft blue lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDQpwJtGmSK_OCTcabFbm5JTEttpK5zVZaQ0uHQubhepFhS_YkRIa_DFgspXaWgkRkhe-CIghSS-mKniPKv9lI_etCHlGfwIg60Rh2-TJLqCtDnUEnjzDORNEklW4-kv1cWV_pfVe9nQlJzk_eYkcr-Nki9ynckHkgyDam2WUfEF2XShUsDUbQYDlhN3-zki_7c3FAe4uZrnXqVebt358I72TQDrzuq3um9X4IphZAy8HBhcSj51ESm9cDktENulRr5tyXlhmi7hboC"/>
+</div>
+</div>
+</header>
+<aside class="fixed left-0 top-16 h-full w-64 border-r bg-slate-900 border-slate-800 flat no shadows flex flex-col h-[calc(100vh-64px)] z-40 text-sm font-medium">
+<div class="p-6 flex flex-col gap-1">
+<div class="flex items-center gap-3">
+<div class="h-10 w-10 bg-blue-500/20 rounded flex items-center justify-center text-blue-400">
+<span class="material-symbols-outlined">security</span>
+</div>
+<div>
+<div class="text-slate-100 font-semibold truncate">Enterprise Admin</div>
+<div class="text-[10px] text-slate-500 uppercase tracking-wider">Network Node 01</div>
+</div>
+</div>
+</div>
+<nav class="flex-1 px-2 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:bg-slate-800 transition-all duration-200 rounded" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:bg-slate-800 transition-all duration-200 rounded" href="#">
+<span class="material-symbols-outlined" data-icon="lan">lan</span>
+<span>Network Map</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 bg-blue-600/10 text-blue-400 border-r-4 border-blue-500 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="radar">radar</span>
+<span>Scans</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:bg-slate-800 transition-all duration-200 rounded" href="#">
+<span class="material-symbols-outlined" data-icon="security">security</span>
+<span>Vulnerabilities</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:bg-slate-800 transition-all duration-200 rounded" href="#">
+<span class="material-symbols-outlined" data-icon="assessment">assessment</span>
+<span>Reports</span>
+</a>
+</nav>
+<div class="px-4 py-6">
+<button class="w-full py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded font-semibold transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm">add</span>
+                New Scan
+            </button>
+</div>
+<div class="mt-auto border-t border-slate-800 p-2">
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:bg-slate-800 transition-all duration-200 rounded" href="#">
+<span class="material-symbols-outlined" data-icon="help_outline">help_outline</span>
+<span>Support</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:bg-slate-800 transition-all duration-200 rounded" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span>Log Out</span>
+</a>
+</div>
+</aside>
+<main class="ml-64 mt-16 p-8 h-[calc(100vh-64px)] overflow-y-auto">
+<nav class="flex items-center gap-2 text-xs font-medium text-slate-500 mb-8 uppercase tracking-widest">
+<span>System</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span>Security</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="text-blue-400">Restrictions</span>
+</nav>
+<div class="max-w-4xl mx-auto h-full flex flex-col items-center justify-center -mt-12">
+<div class="relative mb-10">
+<div class="absolute inset-0 bg-blue-500/10 rounded-full blur-3xl scale-150"></div>
+<div class="relative h-32 w-32 flex items-center justify-center">
+<div class="absolute inset-0 border-2 border-blue-500/20 rounded-full animate-pulse"></div>
+<div class="absolute inset-4 border border-amber-500/40 rounded-full"></div>
+<span class="material-symbols-outlined text-7xl text-amber-500" style="font-variation-settings: 'FILL' 1;">gpp_maybe</span>
+</div>
+</div>
+<div class="text-center space-y-4 mb-10">
+<h1 class="text-4xl md:text-5xl font-extrabold text-white tracking-tight">Access Denied</h1>
+<p class="text-lg text-slate-400 max-w-xl mx-auto leading-relaxed">
+                    You do not have the required clearance level to access this intelligence module.
+                </p>
+</div>
+<div class="w-full bg-slate-900 border border-slate-800 rounded-lg overflow-hidden mb-12 code-glow">
+<div class="bg-slate-800/50 px-4 py-2 border-b border-slate-800 flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="h-2.5 w-2.5 rounded-full bg-red-500/50"></div>
+<div class="h-2.5 w-2.5 rounded-full bg-amber-500/50"></div>
+<div class="h-2.5 w-2.5 rounded-full bg-slate-600"></div>
+</div>
+<div class="text-[10px] font-mono text-slate-500 uppercase tracking-widest">System Log Error_v4.2</div>
+</div>
+<div class="p-6 font-mono text-sm space-y-2">
+<div class="flex gap-4">
+<span class="text-slate-600 select-none">01</span>
+<span class="text-red-400 font-bold">[CRITICAL]</span>
+<span class="text-slate-300">AUTHORIZATION FAULT DETECTED</span>
+</div>
+<div class="flex gap-4">
+<span class="text-slate-600 select-none">02</span>
+<span class="text-slate-500">REASON:</span>
+<span class="text-amber-400">Insufficient administrative privileges</span>
+</div>
+<div class="flex gap-4">
+<span class="text-slate-600 select-none">03</span>
+<span class="text-slate-500">MODULE:</span>
+<span class="text-blue-400">[Network Topology Scans]</span>
+</div>
+<div class="flex gap-4">
+<span class="text-slate-600 select-none">04</span>
+<span class="text-slate-500">ACTION:</span>
+<span class="text-slate-400">Requesting immediate fallback to secure state...</span>
+</div>
+</div>
+</div>
+<div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
+<button class="px-8 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded font-bold transition-all shadow-lg shadow-blue-900/20 flex items-center justify-center gap-2 group">
+<span class="material-symbols-outlined text-lg">arrow_back</span>
+                    Return to Dashboard
+                </button>
+<button class="px-8 py-3 border border-slate-700 hover:bg-slate-800 text-slate-300 rounded font-bold transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-lg">admin_panel_settings</span>
+                    Contact System Admin
+                </button>
+</div>
+</div>
+<footer class="mt-auto pt-16 grid grid-cols-2 md:grid-cols-4 gap-6 border-t border-slate-900 text-[10px] text-slate-500 font-mono tracking-widest uppercase">
+<div class="flex flex-col gap-1">
+<span class="text-slate-700">Node Status</span>
+<span class="text-blue-500/80">Active / Encrypted</span>
+</div>
+<div class="flex flex-col gap-1">
+<span class="text-slate-700">IP Origin</span>
+<span class="text-slate-400">192.168.1.104 [VPN-A]</span>
+</div>
+<div class="flex flex-col gap-1">
+<span class="text-slate-700">Session ID</span>
+<span class="text-slate-400">SO-8829-QX-019</span>
+</div>
+<div class="flex flex-col gap-1">
+<span class="text-slate-700">Time Stamp</span>
+<span class="text-slate-400">2023-10-24 14:22:01 UTC</span>
+</div>
+</footer>
+</main>
+</body></html>

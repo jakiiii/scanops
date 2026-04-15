@@ -1,0 +1,91 @@
+{% load scanops_tags %}
+<form method="post" action="{% url 'notifications:bulk-action' %}">
+    {% csrf_token %}
+    <div class="scanops-panel overflow-hidden">
+        <div class="px-4 py-3 border-b border-slate-800 bg-slate-900/60 flex items-center justify-between gap-3">
+            <div class="flex items-center gap-2">
+                <select name="action" class="scanops-input !w-auto !py-1.5 !text-xs">
+                    <option value="read">Mark as Read</option>
+                    <option value="unread">Mark as Unread</option>
+                </select>
+                <button type="submit" class="px-3 py-1.5 rounded bg-slate-800 hover:bg-slate-700 text-xs text-slate-200">Apply to Selected</button>
+            </div>
+            <p class="text-xs text-slate-500">{{ page_obj.paginator.count }} total notifications</p>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="w-full min-w-[1080px] text-left border-collapse">
+                <thead>
+                <tr class="border-b border-slate-800 bg-slate-900/70">
+                    <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500"><input type="checkbox" onclick="document.querySelectorAll('.notification-checkbox').forEach(cb=>cb.checked=this.checked)"/></th>
+                    <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">Title</th>
+                    <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">Type</th>
+                    <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">Severity</th>
+                    <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">Created At</th>
+                    <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">State</th>
+                    <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500 text-right">Actions</th>
+                </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-800/60">
+                {% for notification in notifications %}
+                    <tr class="hover:bg-slate-800/30 transition-colors {% if not notification.is_read %}bg-blue-500/5{% endif %}">
+                        <td class="px-4 py-4"><input type="checkbox" name="notification_ids" value="{{ notification.pk }}" class="notification-checkbox"/></td>
+                        <td class="px-4 py-4">
+                            <p class="text-sm {% if notification.is_read %}text-slate-300{% else %}text-slate-100 font-semibold{% endif %}">{{ notification.title }}</p>
+                            <p class="text-xs text-slate-500 mt-1">{{ notification.message|truncatechars:90 }}</p>
+                        </td>
+                        <td class="px-4 py-4"><span class="px-2 py-1 rounded text-[10px] uppercase font-semibold {{ notification.notification_type|notification_type_badge }}">{{ notification.get_notification_type_display }}</span></td>
+                        <td class="px-4 py-4"><span class="px-2 py-1 rounded text-[10px] uppercase font-semibold {{ notification.severity|severity_badge }}">{{ notification.get_severity_display }}</span></td>
+                        <td class="px-4 py-4 text-xs text-slate-300">{{ notification.created_at|date:"M d, Y H:i" }}</td>
+                        <td class="px-4 py-4 text-xs">
+                            {% if notification.is_read %}
+                                <span class="px-2 py-1 rounded text-[10px] uppercase font-semibold {{ 'done'|status_badge }}">Read</span>
+                            {% else %}
+                                <span class="px-2 py-1 rounded text-[10px] uppercase font-semibold {{ 'pending'|status_badge }}">Unread</span>
+                            {% endif %}
+                        </td>
+                        <td class="px-4 py-4">
+                            <div class="flex justify-end gap-2">
+                                <a href="{% url 'notifications:detail' notification.pk %}" class="px-2.5 py-1.5 rounded bg-slate-800 hover:bg-slate-700 text-[11px] text-slate-200">Open</a>
+                                {% if notification.is_read %}
+                                    <form method="post" action="{% url 'notifications:mark-unread' notification.pk %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="px-2.5 py-1.5 rounded bg-slate-700/50 hover:bg-slate-700 text-[11px] text-slate-200">Unread</button>
+                                    </form>
+                                {% else %}
+                                    <form method="post" action="{% url 'notifications:mark-read' notification.pk %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="px-2.5 py-1.5 rounded bg-emerald-500/20 hover:bg-emerald-500/30 text-[11px] text-emerald-200">Read</button>
+                                    </form>
+                                {% endif %}
+                                {% if notification.action_url %}
+                                    <a href="{{ notification.action_url }}" class="px-2.5 py-1.5 rounded bg-blue-500/20 hover:bg-blue-500/30 text-[11px] text-blue-200">Related</a>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="7" class="px-4 py-14 text-center">
+                            <span class="material-symbols-outlined text-4xl text-slate-600">notifications_off</span>
+                            <p class="text-sm text-slate-300 mt-2">No notifications found.</p>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% if is_paginated %}
+            <div class="px-4 py-3 border-t border-slate-800 bg-slate-900/40 flex justify-between items-center">
+                <p class="text-xs text-slate-500">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</p>
+                <div class="flex gap-2">
+                    {% if page_obj.has_previous %}
+                        <a href="?page={{ page_obj.previous_page_number }}" hx-get="?page={{ page_obj.previous_page_number }}" hx-include="#notification-filter-form" hx-target="#notifications-container" hx-push-url="true" class="px-3 py-1.5 text-xs rounded bg-slate-800 hover:bg-slate-700 text-slate-200">Previous</a>
+                    {% endif %}
+                    {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}" hx-get="?page={{ page_obj.next_page_number }}" hx-include="#notification-filter-form" hx-target="#notifications-container" hx-push-url="true" class="px-3 py-1.5 text-xs rounded bg-slate-800 hover:bg-slate-700 text-slate-200">Next</a>
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</form>

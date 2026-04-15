@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% load scanops_tags %}
+
+{% block title %}Notification Detail | ScanOps{% endblock %}
+
+{% block content %}
+    {% include "includes/breadcrumbs.html" with breadcrumbs=breadcrumbs %}
+    <div class="flex flex-col lg:flex-row lg:items-start justify-between gap-4 mb-6">
+        <div>
+            <h1 class="text-4xl font-bold text-white tracking-tight">Notification Detail</h1>
+            <p class="text-slate-400 mt-1">{{ notification.created_at|date:"M d, Y H:i:s" }}</p>
+        </div>
+        <div class="flex gap-2">
+            {% if notification.is_read %}
+                <form method="post" action="{% url 'notifications:mark-unread' notification.pk %}">
+                    {% csrf_token %}
+                    <button type="submit" class="px-3 py-2 rounded-lg bg-slate-700/50 text-slate-200 text-sm hover:bg-slate-700">Mark Unread</button>
+                </form>
+            {% else %}
+                <form method="post" action="{% url 'notifications:mark-read' notification.pk %}">
+                    {% csrf_token %}
+                    <button type="submit" class="px-3 py-2 rounded-lg bg-emerald-500/20 text-emerald-200 text-sm hover:bg-emerald-500/30">Mark Read</button>
+                </form>
+            {% endif %}
+            <a href="{% url 'notifications:list' %}" class="px-3 py-2 rounded-lg bg-slate-800 border border-slate-700 text-sm text-slate-100 hover:bg-slate-700">Back</a>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
+        <div class="xl:col-span-8">
+            <div class="scanops-panel p-6 space-y-5">
+                <div class="flex items-center gap-2">
+                    <span class="px-2 py-1 rounded text-[10px] uppercase font-semibold {{ notification.notification_type|notification_type_badge }}">{{ notification.get_notification_type_display }}</span>
+                    <span class="px-2 py-1 rounded text-[10px] uppercase font-semibold {{ notification.severity|severity_badge }}">{{ notification.get_severity_display }}</span>
+                    {% if notification.is_read %}
+                        <span class="px-2 py-1 rounded text-[10px] uppercase font-semibold {{ 'done'|status_badge }}">Read</span>
+                    {% else %}
+                        <span class="px-2 py-1 rounded text-[10px] uppercase font-semibold {{ 'pending'|status_badge }}">Unread</span>
+                    {% endif %}
+                </div>
+                <h2 class="text-2xl font-bold text-white tracking-tight">{{ notification.title }}</h2>
+                <p class="text-slate-300 leading-relaxed">{{ notification.message }}</p>
+                {% if notification.action_url %}
+                    <a href="{{ notification.action_url }}" class="inline-flex px-3 py-2 rounded bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold">Open Related Item</a>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="xl:col-span-4 space-y-6">
+            <div class="scanops-panel p-5">
+                <h3 class="text-sm font-semibold text-white mb-3">Related Summary</h3>
+                <div class="space-y-2 text-sm text-slate-300">
+                    {% if notification.related_execution %}
+                        <p>Execution: <a href="{% url 'scans:monitor' notification.related_execution.pk %}" class="text-blue-300 hover:text-blue-200">{{ notification.related_execution.execution_id }}</a></p>
+                    {% endif %}
+                    {% if notification.related_result %}
+                        <p>Result: <a href="{% url 'scans:result-detail' notification.related_result.pk %}" class="text-blue-300 hover:text-blue-200">Result #{{ notification.related_result.pk }}</a></p>
+                    {% endif %}
+                    {% if notification.related_schedule %}
+                        <p>Schedule: <a href="{% url 'schedules:edit' notification.related_schedule.pk %}" class="text-blue-300 hover:text-blue-200">{{ notification.related_schedule.name }}</a></p>
+                    {% endif %}
+                    {% if notification.related_asset %}
+                        <p>Asset: <a href="{% url 'assets:detail' notification.related_asset.pk %}" class="text-blue-300 hover:text-blue-200">{{ notification.related_asset.name }}</a></p>
+                    {% endif %}
+                    {% if not notification.related_execution and not notification.related_result and not notification.related_schedule and not notification.related_asset %}
+                        <p class="text-slate-500">No linked object.</p>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="scanops-panel p-5">
+                <h3 class="text-sm font-semibold text-white mb-3">Activity Timeline</h3>
+                <div class="space-y-3 text-xs text-slate-400">
+                    <p><span class="text-slate-300">Created:</span> {{ notification.created_at|date:"M d, Y H:i:s" }}</p>
+                    {% if notification.read_at %}
+                        <p><span class="text-slate-300">Read:</span> {{ notification.read_at|date:"M d, Y H:i:s" }}</p>
+                    {% else %}
+                        <p><span class="text-slate-300">Read:</span> Pending</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

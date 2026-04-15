@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "inverse-primary": "#005ac2",
+                    "surface-container-high": "#272a31",
+                    "surface-container-low": "#191c22",
+                    "error-container": "#93000a",
+                    "tertiary-fixed-dim": "#ffb786",
+                    "tertiary-fixed": "#ffdcc6",
+                    "outline-variant": "#424754",
+                    "on-secondary-container": "#9fb5e7",
+                    "secondary-fixed-dim": "#b1c6f9",
+                    "on-secondary": "#182f59",
+                    "on-error-container": "#ffdad6",
+                    "inverse-surface": "#e1e2eb",
+                    "surface-container-highest": "#32353c",
+                    "on-secondary-fixed-variant": "#304671",
+                    "on-tertiary-container": "#461f00",
+                    "tertiary-container": "#df7412",
+                    "surface-container": "#1d2026",
+                    "outline": "#8c909f",
+                    "secondary-fixed": "#d8e2ff",
+                    "tertiary": "#ffb786",
+                    "on-primary-container": "#00285d",
+                    "primary-fixed-dim": "#adc6ff",
+                    "surface-tint": "#adc6ff",
+                    "surface-container-lowest": "#0b0e14",
+                    "on-primary-fixed-variant": "#004395",
+                    "inverse-on-surface": "#2e3037",
+                    "secondary": "#b1c6f9",
+                    "background": "#10131a",
+                    "secondary-container": "#304671",
+                    "primary-fixed": "#d8e2ff",
+                    "on-secondary-fixed": "#001a42",
+                    "surface-bright": "#363940",
+                    "primary": "#adc6ff",
+                    "surface": "#10131a",
+                    "on-tertiary-fixed-variant": "#723600",
+                    "on-error": "#690005",
+                    "on-primary-fixed": "#001a42",
+                    "on-tertiary": "#502400",
+                    "on-background": "#e1e2eb",
+                    "surface-variant": "#32353c",
+                    "on-tertiary-fixed": "#311400",
+                    "primary-container": "#4d8eff",
+                    "on-primary": "#002e6a",
+                    "on-surface-variant": "#c2c6d6",
+                    "surface-dim": "#10131a",
+                    "on-surface": "#e1e2eb",
+                    "error": "#ffb4ab"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "fontFamily": {
+                    "headline": ["Space Grotesk"],
+                    "body": ["Inter"],
+                    "label": ["Inter"],
+                    "mono": ["JetBrains Mono"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .font-headline { font-family: 'Space Grotesk', sans-serif; }
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
+        .glass-panel {
+            background: rgba(50, 53, 60, 0.6);
+            backdrop-filter: blur(20px);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex overflow-hidden">
+<!-- Auth Section: Left -->
+<main class="w-full lg:w-[480px] flex flex-col p-8 md:p-12 z-10 bg-surface relative">
+<!-- Logo Branding -->
+<header class="mb-16">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-gradient-to-br from-primary-container to-primary rounded-lg flex items-center justify-center shadow-lg">
+<span class="material-symbols-outlined text-on-primary-container" style="font-variation-settings: 'FILL' 1;">radar</span>
+</div>
+<h1 class="text-2xl font-black font-headline tracking-tighter text-on-surface">ScanOps</h1>
+</div>
+</header>
+<!-- Login Form -->
+<div class="flex-grow flex flex-col justify-center max-w-sm mx-auto lg:mx-0 w-full">
+<div class="mb-8">
+<h2 class="text-3xl font-bold font-headline mb-2 text-on-surface">Authorized Access Only</h2>
+<p class="text-on-surface-variant text-sm tracking-wide">Enter your tactical credentials to establish connection.</p>
+</div>
+<form class="space-y-6" onsubmit="return false;">
+<!-- Identity Input -->
+<div class="space-y-2 group">
+<label class="block text-[10px] font-bold uppercase tracking-widest text-outline" for="email">User Identifier</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline-variant text-lg">account_circle</span>
+<input class="w-full bg-surface-container-low border-0 border-b-2 border-transparent focus:border-primary focus:ring-0 text-on-surface placeholder:text-surface-container-highest pl-10 py-3 transition-all duration-300 font-mono text-sm" id="email" placeholder="OPERATOR_ID" type="text"/>
+</div>
+</div>
+<!-- Password Input -->
+<div class="space-y-2 group">
+<label class="block text-[10px] font-bold uppercase tracking-widest text-outline" for="password">Security Protocol</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline-variant text-lg">lock</span>
+<input class="w-full bg-surface-container-low border-0 border-b-2 border-transparent focus:border-primary focus:ring-0 text-on-surface placeholder:text-surface-container-highest pl-10 py-3 transition-all duration-300 font-mono text-sm" id="password" placeholder="••••••••••••" type="password"/>
+</div>
+</div>
+<!-- Options -->
+<div class="flex items-center justify-between">
+<label class="flex items-center gap-2 cursor-pointer group">
+<input class="w-4 h-4 rounded-sm border-outline-variant bg-surface-container text-primary focus:ring-offset-background focus:ring-primary" type="checkbox"/>
+<span class="text-[11px] font-medium text-on-surface-variant group-hover:text-on-surface transition-colors">MAINTAIN PERSISTENCE</span>
+</label>
+<a class="text-[11px] font-bold text-primary hover:text-primary-fixed-dim transition-colors tracking-tight" href="#">RECOVER ACCESS</a>
+</div>
+<!-- Action Button -->
+<button class="w-full bg-gradient-to-br from-primary-container to-primary py-4 rounded-lg font-headline font-bold text-on-primary shadow-lg shadow-primary/10 active:scale-[0.98] transition-all flex items-center justify-center gap-2" type="submit">
+                    INITIATE AUTHENTICATION
+                    <span class="material-symbols-outlined text-lg">login</span>
+</button>
+</form>
+<div class="mt-12 p-4 bg-surface-container-lowest border-l-2 border-tertiary-container rounded-r-lg">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-tertiary-container text-xl mt-0.5" style="font-variation-settings: 'FILL' 1;">warning</span>
+<div>
+<p class="text-[11px] font-mono leading-relaxed text-on-surface-variant">
+<span class="text-tertiary font-bold">SYSTEM NOTICE:</span> This is a restricted ScanOps intelligence node. All connections are logged via MAC and IP fingerprinting. Unauthorized access attempts will trigger local network isolation protocols.
+                        </p>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer -->
+<footer class="mt-auto pt-8">
+<div class="flex items-center gap-4 text-[10px] text-outline font-mono">
+<span>SEC-LEVEL: 4</span>
+<span class="w-1 h-1 bg-outline-variant rounded-full"></span>
+<span>ENC: AES-256</span>
+<span class="w-1 h-1 bg-outline-variant rounded-full"></span>
+<span>© 2024 SCANOPS INTEL</span>
+</div>
+</footer>
+</main>
+<!-- Visual Section: Right -->
+<section class="hidden lg:flex flex-grow relative bg-surface-container-lowest overflow-hidden">
+<!-- Abstract Network Visualization -->
+<div class="absolute inset-0 z-0">
+<img alt="Cybersecurity network visualization" class="w-full h-full object-cover opacity-20 grayscale brightness-50" data-alt="Intricate blue and teal glowing digital network lines and nodes on a dark black background representing global infrastructure data flow" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCyK3aS_PYduuYatHLkT_0P5VHB0HpxElYtzQu1LP4351BrGjcSc9hNVTaBnMGs8ekV3LgH7lXtUE2AZID5BAY6kn9gFJ7jnEInoUNvI_s4HxEtvJ4G1KDJ5fQvVX8YlOS5ycdEyCVHVQwen_XDAO3QoHi4fvLQu_aYOO2xdRA58LFWk3yWD4IB02zHVpQLcLm9hPPtfObG4WbDIYZPEfa4yqxEdkm8pjoUfRwNrcGgHbTsAH7P82hmfuh7qKLqANQtCYJRHKkFCjcQ"/>
+<!-- Overlay Gradients -->
+<div class="absolute inset-0 bg-gradient-to-r from-background via-transparent to-transparent"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent"></div>
+</div>
+<!-- Floating Data Panels (Bento-style Decorative elements) -->
+<div class="relative z-10 w-full flex items-center justify-center p-20">
+<div class="grid grid-cols-12 grid-rows-6 gap-6 w-full h-full max-w-5xl">
+<!-- Active Scan Node -->
+<div class="col-span-6 row-span-2 glass-panel p-6 rounded-xl border border-white/5 flex flex-col justify-between">
+<div class="flex justify-between items-start">
+<span class="text-[10px] font-mono text-primary font-bold tracking-widest uppercase">Scanner Active</span>
+<div class="w-2 h-2 rounded-full bg-primary animate-pulse"></div>
+</div>
+<div class="space-y-1">
+<div class="text-4xl font-headline font-bold text-on-surface">1,204</div>
+<div class="text-[10px] text-on-surface-variant font-mono uppercase tracking-widest">Global Assets Monitored</div>
+</div>
+</div>
+<!-- Threat Level Module -->
+<div class="col-span-4 row-span-4 glass-panel p-6 rounded-xl border border-white/5 flex flex-col">
+<div class="text-[10px] font-mono text-error font-bold tracking-widest uppercase mb-4">Threat Environment</div>
+<div class="flex-grow flex items-center justify-center">
+<div class="relative w-32 h-32 flex items-center justify-center">
+<div class="absolute inset-0 border-4 border-surface-container-highest rounded-full"></div>
+<div class="absolute inset-0 border-4 border-error rounded-full" style="clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);"></div>
+<span class="text-2xl font-headline font-bold text-on-surface">L4</span>
+</div>
+</div>
+<div class="mt-4 space-y-2">
+<div class="h-1 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full w-2/3 bg-error"></div>
+</div>
+<div class="flex justify-between text-[9px] font-mono text-outline">
+<span>VULNERABILITY INDEX</span>
+<span>67%</span>
+</div>
+</div>
+</div>
+<!-- Technical Feed -->
+<div class="col-span-2 row-span-4 bg-surface-container-low/40 rounded-xl flex flex-col p-4 overflow-hidden">
+<div class="flex flex-col gap-3">
+<div class="w-full h-2 bg-surface-container-highest rounded-full"></div>
+<div class="w-2/3 h-2 bg-surface-container-highest rounded-full"></div>
+<div class="w-full h-2 bg-surface-container-highest rounded-full"></div>
+<div class="w-1/2 h-2 bg-primary/30 rounded-full"></div>
+<div class="w-full h-2 bg-surface-container-highest rounded-full"></div>
+<div class="w-3/4 h-2 bg-surface-container-highest rounded-full"></div>
+<div class="w-full h-2 bg-error/30 rounded-full"></div>
+<div class="w-2/3 h-2 bg-surface-container-highest rounded-full"></div>
+<div class="w-full h-2 bg-surface-container-highest rounded-full"></div>
+<div class="w-1/2 h-2 bg-surface-container-highest rounded-full"></div>
+<div class="w-full h-2 bg-surface-container-highest rounded-full"></div>
+<div class="w-5/6 h-2 bg-surface-container-highest rounded-full"></div>
+<div class="w-1/3 h-2 bg-surface-container-highest rounded-full"></div>
+<div class="w-full h-2 bg-surface-container-highest rounded-full"></div>
+<div class="w-2/3 h-2 bg-surface-container-highest rounded-full"></div>
+</div>
+</div>
+<!-- Footer Stats -->
+<div class="col-span-6 row-span-2 glass-panel p-6 rounded-xl border border-white/5 flex gap-8 items-center">
+<div class="flex-grow">
+<div class="text-[10px] text-outline font-mono mb-1 uppercase tracking-widest">Network Latency</div>
+<div class="flex items-end gap-2">
+<span class="text-3xl font-headline font-bold text-on-surface">14</span>
+<span class="text-xs text-on-surface-variant pb-1 font-mono">ms</span>
+</div>
+</div>
+<div class="h-12 w-px bg-outline-variant/30"></div>
+<div class="flex-grow">
+<div class="text-[10px] text-outline font-mono mb-1 uppercase tracking-widest">Active Proxies</div>
+<div class="flex items-end gap-2">
+<span class="text-3xl font-headline font-bold text-on-surface">09</span>
+<span class="text-xs text-on-surface-variant pb-1 font-mono">Nodes</span>
+</div>
+</div>
+</div>
+<!-- Map Decor -->
+<div class="col-span-6 row-span-2 relative rounded-xl overflow-hidden grayscale">
+<img alt="Global connectivity map" class="w-full h-full object-cover opacity-40" data-alt="World map silhouette in deep blue with glowing data connection points and arcs spanning continents on a black background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDA8j-yQEChmjFljcZI9Wzl9Ecq_5bAYHJBmq0FCkmBZHzTWmzlRH60GLW4UFQfJT4p7MOwoE9E81_spfF1R8l_ZYEbfkw_mxyOLmlSWc5bbBoYGDoyzuQ8-SPcQc8Kew7tQwkkKPLEtrb69Zal9oORyNRfpZemRFcigQPgDWj04NYmn3cheEtVOYyh0OJJv8pIGbB4goIR8WLvyBZPReKhnyWPdspRTLiAY58nO15O8E2ciPD9BGKuMyqA6j7KnEHZGt7OfUaHQGuO"/>
+<div class="absolute inset-0 bg-primary/10"></div>
+</div>
+</div>
+</div>
+<!-- Atmospheric Elements -->
+<div class="absolute bottom-10 right-10 flex flex-col items-end pointer-events-none opacity-40">
+<span class="text-[64px] font-headline font-black text-white/5 leading-none select-none">SCANOPS_CORE</span>
+<span class="text-[10px] font-mono text-outline-variant tracking-[1em] mr-2">VER_2.4.0_ALPHA</span>
+</div>
+</section>
+</body></html>

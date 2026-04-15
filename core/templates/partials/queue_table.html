@@ -1,0 +1,70 @@
+{% load scanops_tags %}
+<div class="scanops-panel overflow-hidden">
+    <div class="overflow-x-auto">
+        <table class="w-full min-w-[980px] text-left border-collapse">
+            <thead>
+            <tr class="border-b border-slate-800 bg-slate-900/70">
+                <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">Position</th>
+                <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">Execution</th>
+                <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">Target</th>
+                <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">Profile</th>
+                <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">Submitted By</th>
+                <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">Submitted At</th>
+                <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">Priority</th>
+                <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">Est. Wait</th>
+                <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">Assigned Worker</th>
+                <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">Queue State</th>
+                <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500 text-right">Actions</th>
+            </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-800/60">
+            {% for execution in executions %}
+                <tr class="hover:bg-slate-800/30 transition-colors">
+                    <td class="px-4 py-4 text-sm text-slate-200">#{{ execution.queue_position }}</td>
+                    <td class="px-4 py-4 text-xs font-mono text-blue-300">{{ execution.execution_id }}</td>
+                    <td class="px-4 py-4 text-sm text-slate-200">{{ execution.scan_request.target.target_value }}</td>
+                    <td class="px-4 py-4 text-sm text-slate-300">{{ execution.scan_request.profile.name|default:execution.scan_request.get_scan_type_display }}</td>
+                    <td class="px-4 py-4 text-sm text-slate-300">{{ execution.scan_request.requested_by|default:"System" }}</td>
+                    <td class="px-4 py-4 text-xs text-slate-400">{{ execution.created_at|date:"M d, H:i" }}</td>
+                    <td class="px-4 py-4 text-xs text-slate-300">P{{ execution.priority }}</td>
+                    <td class="px-4 py-4 text-xs text-slate-300">~{{ execution.estimated_wait_minutes }}m</td>
+                    <td class="px-4 py-4 text-xs text-slate-300">{{ execution.worker_name|default:"Pending assignment" }}</td>
+                    <td class="px-4 py-4">
+                        <span class="px-2 py-1 rounded text-[10px] uppercase font-semibold {{ execution.queue_status|status_badge }}">{{ execution.get_queue_status_display }}</span>
+                    </td>
+                    <td class="px-4 py-4">
+                        <div class="flex justify-end gap-2">
+                            <a href="{% url 'scans:monitor' execution.pk %}" class="px-2.5 py-1.5 rounded bg-slate-800 hover:bg-slate-700 text-[11px] text-slate-200">Monitor</a>
+                            <form method="post" action="{% url 'scans:execution-cancel' execution.pk %}">
+                                {% csrf_token %}
+                                <button type="submit" class="px-2.5 py-1.5 rounded bg-rose-500/20 hover:bg-rose-500/30 text-[11px] text-rose-200">Cancel</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="11" class="px-4 py-14 text-center">
+                        <span class="material-symbols-outlined text-4xl text-slate-600">queue</span>
+                        <p class="text-sm text-slate-300 mt-2">Queue is currently empty.</p>
+                        <p class="text-xs text-slate-500 mt-1">Validated requests will appear here once queued.</p>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% if is_paginated %}
+        <div class="px-4 py-3 border-t border-slate-800 bg-slate-900/40 flex justify-between items-center">
+            <p class="text-xs text-slate-500">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</p>
+            <div class="flex gap-2">
+                {% if page_obj.has_previous %}
+                    <a href="?page={{ page_obj.previous_page_number }}" hx-get="?page={{ page_obj.previous_page_number }}" hx-include="#queue-filter-form" hx-target="#queue-table-container" hx-push-url="true" class="px-3 py-1.5 text-xs rounded bg-slate-800 hover:bg-slate-700 text-slate-200">Previous</a>
+                {% endif %}
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}" hx-get="?page={{ page_obj.next_page_number }}" hx-include="#queue-filter-form" hx-target="#queue-table-container" hx-push-url="true" class="px-3 py-1.5 text-xs rounded bg-slate-800 hover:bg-slate-700 text-slate-200">Next</a>
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+</div>

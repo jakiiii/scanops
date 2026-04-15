@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+
+{% block title %}{% if mode == "edit" %}Edit Scheduled Scan{% else %}Create Scheduled Scan{% endif %} | ScanOps{% endblock %}
+
+{% block content %}
+    {% include "includes/breadcrumbs.html" with breadcrumbs=breadcrumbs %}
+    <div class="mb-8">
+        <h1 class="text-4xl font-bold text-white tracking-tight">{% if mode == "edit" %}Edit Scheduled Scan{% else %}Create Scheduled Scan{% endif %}</h1>
+        <p class="text-slate-400 mt-1">Configure safe recurring scan settings with controlled options and notification routing.</p>
+    </div>
+
+    {% if form.non_field_errors %}
+        <div class="scanops-panel p-4 border-rose-500/30 mb-6">
+            {% for error in form.non_field_errors %}
+                <p class="text-sm text-rose-200">{{ error }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
+        <div class="xl:col-span-8">
+            <form id="schedule-form" method="post" class="space-y-6">
+                {% csrf_token %}
+                <div
+                    class="scanops-panel p-6 space-y-5"
+                    hx-post="{% url 'schedules:preview' %}"
+                    hx-target="#schedule-summary-panel"
+                    hx-trigger="change from:select, change from:input[type='checkbox'], keyup delay:450ms from:input"
+                    hx-include="#schedule-form"
+                >
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div>
+                            <label class="block text-sm text-slate-300 mb-1.5">Schedule Name</label>
+                            {{ form.name }}
+                        </div>
+                        <div>
+                            <label class="block text-sm text-slate-300 mb-1.5">Target</label>
+                            {{ form.target }}
+                        </div>
+                        <div>
+                            <label class="block text-sm text-slate-300 mb-1.5">Profile</label>
+                            {{ form.profile }}
+                        </div>
+                        <div>
+                            <label class="block text-sm text-slate-300 mb-1.5">Scan Type</label>
+                            {{ form.scan_type }}
+                        </div>
+                        <div>
+                            <label class="block text-sm text-slate-300 mb-1.5">Timing Profile</label>
+                            {{ form.timing_profile }}
+                        </div>
+                        <div>
+                            <label class="block text-sm text-slate-300 mb-1.5">Frequency</label>
+                            {{ form.schedule_type }}
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-sm text-slate-300 mb-1.5">Port Scope</label>
+                            {{ form.port_input }}
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-sm text-slate-300 mb-1.5">Custom Recurrence Rule</label>
+                            {{ form.recurrence_rule }}
+                            <p class="text-[11px] text-slate-500 mt-1">Use short intervals for custom mode (e.g. <span class="font-mono">6h</span>, <span class="font-mono">2d</span>, <span class="font-mono">1w</span>).</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm text-slate-300 mb-1.5">Start At</label>
+                            {{ form.start_at }}
+                            {% if form.start_at.errors %}<p class="text-xs text-rose-300 mt-1">{{ form.start_at.errors|striptags }}</p>{% endif %}
+                        </div>
+                        <div>
+                            <label class="block text-sm text-slate-300 mb-1.5">End At</label>
+                            {{ form.end_at }}
+                            {% if form.end_at.errors %}<p class="text-xs text-rose-300 mt-1">{{ form.end_at.errors|striptags }}</p>{% endif %}
+                        </div>
+                    </div>
+
+                    <div class="border-t border-slate-800 pt-5">
+                        <p class="text-xs uppercase tracking-widest text-slate-500 mb-3">Scan Options</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                            <label class="flex items-center justify-between gap-2 p-3 rounded-lg bg-slate-900/70 border border-slate-800"><span class="text-sm text-slate-300">Host Discovery</span>{{ form.enable_host_discovery }}</label>
+                            <label class="flex items-center justify-between gap-2 p-3 rounded-lg bg-slate-900/70 border border-slate-800"><span class="text-sm text-slate-300">Service Detection</span>{{ form.enable_service_detection }}</label>
+                            <label class="flex items-center justify-between gap-2 p-3 rounded-lg bg-slate-900/70 border border-slate-800"><span class="text-sm text-slate-300">Version Detection</span>{{ form.enable_version_detection }}</label>
+                            <label class="flex items-center justify-between gap-2 p-3 rounded-lg bg-slate-900/70 border border-slate-800"><span class="text-sm text-slate-300">OS Detection</span>{{ form.enable_os_detection }}</label>
+                            <label class="flex items-center justify-between gap-2 p-3 rounded-lg bg-slate-900/70 border border-slate-800"><span class="text-sm text-slate-300">Traceroute</span>{{ form.enable_traceroute }}</label>
+                            <label class="flex items-center justify-between gap-2 p-3 rounded-lg bg-slate-900/70 border border-slate-800"><span class="text-sm text-slate-300">DNS Resolution</span>{{ form.enable_dns_resolution }}</label>
+                            <label class="flex items-center justify-between gap-2 p-3 rounded-lg bg-slate-900/70 border border-slate-800"><span class="text-sm text-slate-300">Enabled</span>{{ form.is_enabled }}</label>
+                            <label class="flex items-center justify-between gap-2 p-3 rounded-lg bg-slate-900/70 border border-slate-800"><span class="text-sm text-slate-300">Notify on Run</span>{{ form.notification_enabled }}</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex flex-wrap items-center justify-end gap-3">
+                    {% if mode == "edit" %}
+                        <button
+                            type="submit"
+                            formaction="{% url 'schedules:run-now' schedule.pk %}"
+                            formnovalidate
+                            class="px-4 py-2 rounded-lg bg-indigo-500/20 text-indigo-200 text-sm hover:bg-indigo-500/30"
+                        >
+                            Run Now
+                        </button>
+                    {% endif %}
+                    <a href="{% url 'schedules:list' %}" class="px-4 py-2 text-sm font-semibold text-slate-400 hover:text-white">Cancel</a>
+                    <button type="submit" class="px-6 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-sm font-bold">{% if mode == "edit" %}Save Changes{% else %}Create Schedule{% endif %}</button>
+                </div>
+            </form>
+
+            {% if mode == "edit" %}
+                <div class="mt-4 flex justify-end">
+                    <form method="post" action="{% url 'schedules:delete' schedule.pk %}">
+                        {% csrf_token %}
+                        <button type="submit" class="px-4 py-2 rounded-lg bg-rose-500/20 text-rose-200 text-sm hover:bg-rose-500/30">Delete Schedule</button>
+                    </form>
+                </div>
+            {% endif %}
+        </div>
+        <div class="xl:col-span-4" id="schedule-summary-panel">
+            {% include "partials/schedule_summary.html" with summary=schedule_summary %}
+        </div>
+    </div>
+{% endblock %}

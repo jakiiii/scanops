@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Sentinel Scan | Allowed Targets</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(51, 57, 76, 0.6);
+            backdrop-filter: blur(24px);
+        }
+        .status-beacon {
+            position: relative;
+        }
+        .status-beacon::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: currentColor;
+            opacity: 0.3;
+            filter: blur(8px);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "tertiary-fixed": "#ffdcc6",
+                      "on-surface-variant": "#c2c6d6",
+                      "secondary-fixed": "#d3e4fe",
+                      "primary": "#adc6ff",
+                      "surface-container": "#191f31",
+                      "outline": "#8c909f",
+                      "on-primary": "#002e6a",
+                      "secondary": "#b7c8e1",
+                      "secondary-fixed-dim": "#b7c8e1",
+                      "surface-dim": "#0c1324",
+                      "background": "#0c1324",
+                      "tertiary-container": "#df7412",
+                      "on-error": "#690005",
+                      "inverse-on-surface": "#2a3043",
+                      "on-surface": "#dce1fb",
+                      "on-primary-fixed-variant": "#004395",
+                      "on-primary-container": "#00285d",
+                      "surface-container-lowest": "#070d1f",
+                      "primary-fixed": "#d8e2ff",
+                      "primary-container": "#4d8eff",
+                      "on-secondary-fixed": "#0b1c30",
+                      "outline-variant": "#424754",
+                      "on-secondary-fixed-variant": "#38485d",
+                      "surface-container-high": "#23293c",
+                      "surface-tint": "#adc6ff",
+                      "error": "#ffb4ab",
+                      "primary-fixed-dim": "#adc6ff",
+                      "on-tertiary-container": "#461f00",
+                      "on-tertiary": "#502400",
+                      "on-error-container": "#ffdad6",
+                      "surface-container-low": "#151b2d",
+                      "surface": "#0c1324",
+                      "secondary-container": "#3a4a5f",
+                      "inverse-primary": "#005ac2",
+                      "on-secondary": "#213145",
+                      "error-container": "#93000a",
+                      "surface-variant": "#2e3447",
+                      "tertiary-fixed-dim": "#ffb786",
+                      "on-background": "#dce1fb",
+                      "tertiary": "#ffb786",
+                      "surface-container-highest": "#2e3447",
+                      "on-secondary-container": "#a9bad3",
+                      "on-tertiary-fixed-variant": "#723600",
+                      "inverse-surface": "#dce1fb",
+                      "on-primary-fixed": "#001a42",
+                      "on-tertiary-fixed": "#311400",
+                      "surface-bright": "#33394c"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "fontFamily": {
+                      "headline": ["Space Grotesk"],
+                      "body": ["Inter"],
+                      "label": ["Inter"]
+              }
+            },
+          },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-surface font-body selection:bg-primary/30">
+<!-- TopNavBar -->
+<header class="bg-[#0c1324] flex justify-between items-center px-8 py-4 w-full fixed top-0 z-50">
+<div class="flex items-center gap-8">
+<span class="text-2xl font-bold tracking-tighter text-blue-500 font-headline">Sentinel Scan</span>
+<nav class="hidden md:flex gap-6 items-center">
+<a class="text-slate-400 hover:text-blue-300 transition-colors font-headline" href="#">Dashboard</a>
+<a class="text-slate-400 hover:text-blue-300 transition-colors font-headline" href="#">Scans</a>
+<a class="text-slate-400 hover:text-blue-300 transition-colors font-headline" href="#">Assets</a>
+<a class="text-slate-400 hover:text-blue-300 transition-colors font-headline" href="#">Compliance</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-slate-400 hover:text-blue-300 transition-colors active:opacity-80">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 text-slate-400 hover:text-blue-300 transition-colors active:opacity-80">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<div class="w-8 h-8 bg-surface-container-highest rounded-full flex items-center justify-center overflow-hidden">
+<img alt="User Profile" data-alt="Portrait of a focused cybersecurity professional in a dark modern office environment with blue ambient light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDZ_VSsANnlbiBTOaX1AYoFohty8z8mxbdMB5UjAUWH0nyi1mdDG_p35toq5HQ63whMsWZs6MSJAERJQHetHuwrD6LLIaEUyouLRh0n8TaBhmUtIcVMfJq4fL6AseNrp_lFU-ZgLIy4kUgNZ7xRgpCufexwTm3ZAbg33MJnWr_j7HX0L0pAjcN76nWQB2-rN04VlYwd1OtduaHXkJXW7yPtcQrVG_YJUl7hhkApkDudeE7tyLdDPhlaVFICtFMN3grAWmwI3ELR3Cpn"/>
+</div>
+</div>
+</header>
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 flex flex-col h-full w-64 bg-[#151b2d] py-6 pt-24 shadow-2xl shadow-black/50 hidden md:flex">
+<div class="px-6 mb-8">
+<h2 class="text-lg font-black text-blue-500 font-headline">Target Controls</h2>
+<p class="text-xs text-slate-400 font-medium">Network Governance</p>
+</div>
+<nav class="flex flex-col gap-1 pr-4">
+<a class="flex items-center gap-3 px-6 py-3 text-blue-400 bg-[#2e3447] font-medium rounded-r-lg border-l-4 border-blue-500 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">shield</span>
+<span class="text-sm">Whitelist Ranges</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-slate-400 hover:bg-[#2e3447]/50 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">block</span>
+<span class="text-sm">Blocked Ranges</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-slate-400 hover:bg-[#2e3447]/50 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">public_off</span>
+<span class="text-sm">Public Restrictions</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-slate-400 hover:bg-[#2e3447]/50 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">rule</span>
+<span class="text-sm">Validation Rules</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-slate-400 hover:bg-[#2e3447]/50 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">verified_user</span>
+<span class="text-sm">Approval Policy</span>
+</a>
+</nav>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-0 md:ml-64 pt-24 pb-12 px-8 min-h-screen">
+<div class="max-w-6xl mx-auto space-y-8">
+<!-- Header Section -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div>
+<h1 class="text-5xl font-bold tracking-tight text-on-surface font-headline leading-none">Allowed Targets</h1>
+<p class="text-on-surface-variant text-sm mt-2 max-w-xl">Configure granular network access policies for scanning operations. Ensure tactical governance over internal assets while preventing accidental exposure.</p>
+</div>
+<div class="bg-surface-container-low px-4 py-3 rounded-lg border-l-4 border-tertiary flex items-center gap-3">
+<span class="material-symbols-outlined text-tertiary">gavel</span>
+<div>
+<p class="text-[10px] uppercase tracking-widest text-on-surface-variant font-bold">Policy Status</p>
+<p class="text-sm font-semibold">Tactical Governance Active</p>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<!-- Main Configuration Column -->
+<div class="lg:col-span-2 space-y-8">
+<!-- Section 1: Whitelist Ranges -->
+<section class="bg-surface-container-low p-6 rounded-xl space-y-6">
+<div class="flex justify-between items-center">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">lan</span>
+<h3 class="text-xl font-bold font-headline">Whitelist Ranges</h3>
+</div>
+<button class="bg-primary text-on-primary px-4 py-2 rounded-md text-sm font-bold flex items-center gap-2 hover:brightness-110 transition-all active:scale-95">
+<span class="material-symbols-outlined text-sm">add</span>
+                                Add Range
+                            </button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-separate border-spacing-y-2">
+<thead>
+<tr class="text-on-surface-variant text-[10px] uppercase tracking-widest font-bold">
+<th class="px-4 py-2">CIDR Range</th>
+<th class="px-4 py-2">Owner</th>
+<th class="px-4 py-2 text-center">Status</th>
+<th class="px-4 py-2 text-right">Actions</th>
+</tr>
+</thead>
+<tbody>
+<tr class="bg-surface-container hover:bg-surface-container-high transition-colors group">
+<td class="px-4 py-4 font-mono text-sm text-primary">10.0.0.0/8</td>
+<td class="px-4 py-4 text-sm">Infrastructure Ops</td>
+<td class="px-4 py-4 text-center">
+<span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[10px] font-bold bg-green-500/10 text-green-400">
+<span class="w-2 h-2 rounded-full bg-green-400"></span> ACTIVE
+                                            </span>
+</td>
+<td class="px-4 py-4 text-right">
+<div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-1 hover:text-primary"><span class="material-symbols-outlined text-lg">edit</span></button>
+<button class="p-1 hover:text-error"><span class="material-symbols-outlined text-lg">delete</span></button>
+</div>
+</td>
+</tr>
+<tr class="bg-surface-container hover:bg-surface-container-high transition-colors group">
+<td class="px-4 py-4 font-mono text-sm text-primary">192.168.1.0/24</td>
+<td class="px-4 py-4 text-sm">Dev-Cluster-A</td>
+<td class="px-4 py-4 text-center">
+<span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[10px] font-bold bg-green-500/10 text-green-400">
+<span class="w-2 h-2 rounded-full bg-green-400"></span> ACTIVE
+                                            </span>
+</td>
+<td class="px-4 py-4 text-right">
+<div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-1 hover:text-primary"><span class="material-symbols-outlined text-lg">edit</span></button>
+<button class="p-1 hover:text-error"><span class="material-symbols-outlined text-lg">delete</span></button>
+</div>
+</td>
+</tr>
+<tr class="bg-surface-container hover:bg-surface-container-high transition-colors group">
+<td class="px-4 py-4 font-mono text-sm text-primary">172.16.50.0/22</td>
+<td class="px-4 py-4 text-sm">Sec-Internal-Lab</td>
+<td class="px-4 py-4 text-center">
+<span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[10px] font-bold bg-tertiary/10 text-tertiary">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span> PENDING
+                                            </span>
+</td>
+<td class="px-4 py-4 text-right">
+<div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-1 hover:text-primary"><span class="material-symbols-outlined text-lg">edit</span></button>
+<button class="p-1 hover:text-error"><span class="material-symbols-outlined text-lg">delete</span></button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<!-- Section 2: Blocked Ranges -->
+<section class="bg-surface-container-low p-6 rounded-xl space-y-6">
+<div class="flex justify-between items-center">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-error">gpp_maybe</span>
+<h3 class="text-xl font-bold font-headline">Blocked Ranges</h3>
+</div>
+<button class="text-on-surface-variant hover:text-error transition-colors flex items-center gap-2 text-sm">
+<span class="material-symbols-outlined text-sm">filter_list</span>
+                                Sort Restricted
+                            </button>
+</div>
+<div class="space-y-3">
+<div class="flex items-center justify-between p-4 bg-surface-container-lowest rounded-lg group hover:bg-error/5 transition-colors border border-transparent hover:border-error/20">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-error">lock</span>
+<div>
+<p class="font-mono text-sm font-bold text-error">10.100.200.0/24</p>
+<p class="text-[10px] text-on-surface-variant uppercase">Payroll DB Subnet • No Access</p>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<span class="px-3 py-1 bg-error-container text-on-error-container rounded text-[10px] font-black uppercase tracking-tighter">Restricted</span>
+<button class="opacity-0 group-hover:opacity-100 text-on-surface-variant hover:text-error transition-all"><span class="material-symbols-outlined">delete_sweep</span></button>
+</div>
+</div>
+<div class="flex items-center justify-between p-4 bg-surface-container-lowest rounded-lg group hover:bg-error/5 transition-colors border border-transparent hover:border-error/20">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-error">lock</span>
+<div>
+<p class="font-mono text-sm font-bold text-error">0.0.0.0/0</p>
+<p class="text-[10px] text-on-surface-variant uppercase">Global Broadcast • Safety Interlock</p>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<span class="px-3 py-1 bg-error-container text-on-error-container rounded text-[10px] font-black uppercase tracking-tighter">Restricted</span>
+<button class="opacity-0 group-hover:opacity-100 text-on-surface-variant hover:text-error transition-all"><span class="material-symbols-outlined">delete_sweep</span></button>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Side Policy Panel -->
+<div class="space-y-6">
+<!-- Policy Info Panel -->
+<div class="bg-gradient-to-br from-primary-container/20 to-surface-container-high p-6 rounded-xl border border-primary/10 shadow-xl shadow-black/40">
+<div class="flex items-center gap-3 mb-4">
+<span class="material-symbols-outlined text-primary-container status-beacon text-green-400">policy</span>
+<h4 class="font-headline font-bold text-lg">Tactical Governance</h4>
+</div>
+<p class="text-xs text-on-surface-variant leading-relaxed mb-6">
+                            The Sentinel system utilizes a multi-layered verification engine. Any scan initiated against a target outside the Whitelist Ranges will be automatically quarantined for Peer Review.
+                        </p>
+<div class="space-y-4">
+<div class="flex items-start gap-3">
+<div class="w-1 h-12 bg-primary rounded-full mt-1"></div>
+<div>
+<p class="text-[10px] font-black uppercase text-primary">Isolation</p>
+<p class="text-xs text-on-surface">Target isolation is maintained via hardware-level VLAN segmentation during active payloads.</p>
+</div>
+</div>
+<div class="flex items-start gap-3">
+<div class="w-1 h-12 bg-tertiary rounded-full mt-1"></div>
+<div>
+<p class="text-[10px] font-black uppercase text-tertiary">Audit Trail</p>
+<p class="text-xs text-on-surface">Every CIDR entry modification is cryptographically signed and logged for SOC compliance.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Validation Rules Panel -->
+<div class="bg-surface-container-low p-6 rounded-xl space-y-6">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary-fixed-dim">verified</span>
+<h4 class="font-headline font-bold text-lg">Validation Rules</h4>
+</div>
+<div class="space-y-4">
+<div class="flex items-center justify-between">
+<span class="text-xs font-medium">Allow Public Domains</span>
+<button class="w-10 h-5 bg-surface-container-highest rounded-full relative p-1 transition-colors">
+<div class="w-3 h-3 bg-slate-500 rounded-full"></div>
+</button>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-xs font-medium">Require CIDR Mask</span>
+<button class="w-10 h-5 bg-primary rounded-full relative p-1 transition-colors flex justify-end">
+<div class="w-3 h-3 bg-white rounded-full"></div>
+</button>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-xs font-medium">Syntax Verification</span>
+<button class="w-10 h-5 bg-primary rounded-full relative p-1 transition-colors flex justify-end">
+<div class="w-3 h-3 bg-white rounded-full"></div>
+</button>
+</div>
+</div>
+</div>
+<!-- Approval Policy Settings -->
+<div class="bg-surface-container-low p-6 rounded-xl space-y-4">
+<h4 class="font-headline font-bold text-lg flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary">approval_delegation</span>
+                            Approval Policy
+                        </h4>
+<div class="space-y-3">
+<label class="block">
+<span class="text-[10px] text-on-surface-variant uppercase font-bold tracking-widest block mb-1">Large Range Threshold</span>
+<select class="w-full bg-surface-container-lowest border-none text-sm rounded-lg focus:ring-1 focus:ring-primary/40">
+<option>Prefix /20 or larger</option>
+<option>Prefix /16 or larger</option>
+<option>Prefix /24 or larger</option>
+</select>
+</label>
+<label class="block">
+<span class="text-[10px] text-on-surface-variant uppercase font-bold tracking-widest block mb-1">Required Approvers</span>
+<select class="w-full bg-surface-container-lowest border-none text-sm rounded-lg focus:ring-1 focus:ring-primary/40">
+<option>Level 2 Admin Only</option>
+<option>Peer Review (1 person)</option>
+<option>Dual Admin Signature</option>
+</select>
+</label>
+</div>
+</div>
+</div>
+</div>
+<!-- Public Target Restriction Card (Asymmetric Full-Width) -->
+<section class="bg-surface-container-low p-8 rounded-xl flex flex-col md:flex-row gap-12 items-center">
+<div class="md:w-1/3 relative">
+<div class="w-32 h-32 rounded-full border-[10px] border-error-container/30 flex items-center justify-center relative">
+<span class="material-symbols-outlined text-error text-5xl" style="font-variation-settings: 'FILL' 1;">public_off</span>
+<div class="absolute inset-0 border-4 border-error/40 border-dashed rounded-full animate-pulse"></div>
+</div>
+</div>
+<div class="flex-1 space-y-4">
+<div class="flex items-center justify-between">
+<h3 class="text-2xl font-bold font-headline">Public Target Restriction</h3>
+<div class="flex items-center gap-3">
+<span class="text-[10px] font-black uppercase text-error tracking-widest">Global Lock Active</span>
+<button class="w-14 h-7 bg-error rounded-full relative p-1 transition-colors flex justify-end shadow-lg shadow-error/20">
+<div class="w-5 h-5 bg-white rounded-full"></div>
+</button>
+</div>
+</div>
+<p class="text-on-surface-variant text-sm">
+                        When enabled, the scanner is restricted to private IP ranges only (RFC 1918). All requests to public IPv4/IPv6 address spaces are hard-blocked at the kernel level. This prevents accidental scanning of external cloud provider assets or vendor infrastructure.
+                    </p>
+<div class="flex gap-4 pt-2">
+<button class="text-primary text-xs font-bold border-b border-primary/40 hover:border-primary transition-all pb-1">View Restriction Logs</button>
+<button class="text-on-surface-variant text-xs font-bold border-b border-outline-variant hover:border-on-surface transition-all pb-1">Configure Exceptions</button>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- Success Message Ghost Toast (Optional UX touch) -->
+<div class="fixed bottom-8 right-8 bg-surface-container-highest border border-primary/20 px-6 py-4 rounded-xl shadow-2xl flex items-center gap-4 translate-y-24 opacity-0 transition-all">
+<span class="material-symbols-outlined text-green-400">check_circle</span>
+<div class="text-sm">
+<p class="font-bold">Configuration Updated</p>
+<p class="text-on-surface-variant">Whitelist changes have been applied.</p>
+</div>
+</div>
+</body></html>

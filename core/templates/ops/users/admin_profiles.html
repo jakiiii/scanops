@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% load scanops_tags %}
+
+{% block title %}Admin Scan Profiles | ScanOps{% endblock %}
+
+{% block content %}
+    {% include "includes/breadcrumbs.html" with breadcrumbs=breadcrumbs %}
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+        <div>
+            <h1 class="text-4xl font-bold text-white tracking-tight">Admin Scan Profile Management</h1>
+            <p class="text-slate-400 mt-1">Govern shared scan templates and system profiles.</p>
+        </div>
+        <a href="{% url 'ops:users-list' %}" class="px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-sm font-semibold text-slate-100 hover:bg-slate-700">Back to Users</a>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
+        <div class="scanops-panel p-5 border-l-4 border-l-blue-500">
+            <p class="text-xs uppercase tracking-widest text-slate-500">Total Profiles</p>
+            <p class="text-3xl font-bold text-blue-300 mt-2">{{ summary.total }}</p>
+        </div>
+        <div class="scanops-panel p-5 border-l-4 border-l-indigo-500">
+            <p class="text-xs uppercase tracking-widest text-slate-500">System</p>
+            <p class="text-3xl font-bold text-indigo-300 mt-2">{{ summary.system }}</p>
+        </div>
+        <div class="scanops-panel p-5 border-l-4 border-l-cyan-500">
+            <p class="text-xs uppercase tracking-widest text-slate-500">Shared</p>
+            <p class="text-3xl font-bold text-cyan-300 mt-2">{{ summary.shared }}</p>
+        </div>
+        <div class="scanops-panel p-5 border-l-4 border-l-emerald-500">
+            <p class="text-xs uppercase tracking-widest text-slate-500">Active</p>
+            <p class="text-3xl font-bold text-emerald-300 mt-2">{{ summary.active }}</p>
+        </div>
+    </div>
+
+    <form
+        id="admin-profile-filter-form"
+        class="scanops-panel p-4 mb-6"
+        hx-get="{% url 'ops:admin-profiles' %}"
+        hx-target="#admin-profiles-table-container"
+        hx-trigger="keyup changed delay:450ms from:input, change from:select"
+        hx-push-url="true"
+    >
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+            <div>
+                <label class="block text-[10px] uppercase tracking-widest text-slate-500 mb-1.5">Search</label>
+                {{ filter_form.q }}
+            </div>
+            <div>
+                <label class="block text-[10px] uppercase tracking-widest text-slate-500 mb-1.5">Type</label>
+                {{ filter_form.profile_type }}
+            </div>
+            <div>
+                <label class="block text-[10px] uppercase tracking-widest text-slate-500 mb-1.5">Status</label>
+                {{ filter_form.active }}
+            </div>
+            <div>
+                <label class="block text-[10px] uppercase tracking-widest text-slate-500 mb-1.5">Owner</label>
+                {{ filter_form.owner }}
+            </div>
+        </div>
+    </form>
+
+    <div id="admin-profiles-table-container">
+        {% include "partials/admin_profiles_table.html" %}
+    </div>
+{% endblock %}

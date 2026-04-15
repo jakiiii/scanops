@@ -1,0 +1,39 @@
+<div class="scanops-panel p-5 space-y-4">
+    <h3 class="text-base font-semibold text-white">Schedule Summary</h3>
+    {% if errors %}
+        <div class="bg-rose-500/10 border border-rose-500/20 rounded-lg p-3">
+            <p class="text-xs text-rose-200">{{ errors|striptags }}</p>
+        </div>
+    {% endif %}
+
+    {% if summary %}
+        <div class="grid grid-cols-2 gap-3 text-sm">
+            <div class="bg-slate-900/70 border border-slate-800 rounded-lg p-3">
+                <p class="text-[10px] uppercase tracking-widest text-slate-500">Target</p>
+                <p class="text-slate-100 mt-1">{{ summary.target }}</p>
+            </div>
+            <div class="bg-slate-900/70 border border-slate-800 rounded-lg p-3">
+                <p class="text-[10px] uppercase tracking-widest text-slate-500">Profile</p>
+                <p class="text-slate-100 mt-1">{{ summary.profile }}</p>
+            </div>
+            <div class="bg-slate-900/70 border border-slate-800 rounded-lg p-3">
+                <p class="text-[10px] uppercase tracking-widest text-slate-500">Frequency</p>
+                <p class="text-slate-100 mt-1">{{ summary.frequency }}</p>
+            </div>
+            <div class="bg-slate-900/70 border border-slate-800 rounded-lg p-3">
+                <p class="text-[10px] uppercase tracking-widest text-slate-500">Timing</p>
+                <p class="text-slate-100 mt-1">{{ summary.timing_profile }}</p>
+            </div>
+            <div class="bg-slate-900/70 border border-slate-800 rounded-lg p-3">
+                <p class="text-[10px] uppercase tracking-widest text-slate-500">Start</p>
+                <p class="text-slate-100 mt-1">{{ summary.start_at|default:"-" }}</p>
+            </div>
+            <div class="bg-slate-900/70 border border-slate-800 rounded-lg p-3">
+                <p class="text-[10px] uppercase tracking-widest text-slate-500">Notifications</p>
+                <p class="text-slate-100 mt-1">{% if summary.notifications %}Enabled{% else %}Disabled{% endif %}</p>
+            </div>
+        </div>
+    {% else %}
+        <p class="text-sm text-slate-500">Adjust schedule fields to preview the resulting configuration.</p>
+    {% endif %}
+</div>

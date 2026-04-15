@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Asset Detail | ScanOps</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {},
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    fontFamily: {
+                        "headline": ["Public Sans"],
+                        "body": ["Public Sans"],
+                        "label": ["Public Sans"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Public Sans', sans-serif;
+            background-color: #020617; /* slate-950 fallback */
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-200">
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-full flex flex-col z-40 h-screen w-64 border-r border-slate-800 dark:border-slate-900 bg-slate-950 dark:bg-black shadow-xl">
+<div class="p-6">
+<div class="text-xl font-black tracking-tighter text-white">ScanOps</div>
+<div class="text-[10px] font-semibold tracking-widest text-slate-500 uppercase mt-1">Enterprise Security</div>
+</div>
+<nav class="flex-1 flex flex-col mt-4">
+<!-- Dashboard -->
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-900 transition-colors duration-150 transition-transform scale-95 active:scale-90" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-xs font-semibold tracking-wide Inter">Dashboard</span>
+</a>
+<!-- Assets (Active) -->
+<a class="flex items-center gap-3 px-4 py-3 bg-blue-600/10 text-blue-400 border-r-2 border-blue-500 hover:bg-slate-900 transition-colors duration-150 transition-transform scale-95 active:scale-90" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="text-xs font-semibold tracking-wide Inter">Assets</span>
+</a>
+<!-- Scans -->
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-900 transition-colors duration-150 transition-transform scale-95 active:scale-90" href="#">
+<span class="material-symbols-outlined">radar</span>
+<span class="text-xs font-semibold tracking-wide Inter">Scans</span>
+</a>
+<!-- Vulnerabilities -->
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-900 transition-colors duration-150 transition-transform scale-95 active:scale-90" href="#">
+<span class="material-symbols-outlined">security</span>
+<span class="text-xs font-semibold tracking-wide Inter">Vulnerabilities</span>
+</a>
+<!-- Team Activity -->
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-900 transition-colors duration-150 transition-transform scale-95 active:scale-90" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="text-xs font-semibold tracking-wide Inter">Team Activity</span>
+</a>
+<!-- Reports -->
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-900 transition-colors duration-150 transition-transform scale-95 active:scale-90" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="text-xs font-semibold tracking-wide Inter">Reports</span>
+</a>
+<!-- Integration -->
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-900 transition-colors duration-150 transition-transform scale-95 active:scale-90" href="#">
+<span class="material-symbols-outlined">terminal</span>
+<span class="text-xs font-semibold tracking-wide Inter">Integration</span>
+</a>
+<!-- Settings -->
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-900 transition-colors duration-150 transition-transform scale-95 active:scale-90" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-xs font-semibold tracking-wide Inter">Settings</span>
+</a>
+</nav>
+<div class="p-4 border-t border-slate-800">
+<a class="flex items-center gap-3 px-4 py-2 text-slate-400 hover:text-slate-100 transition-colors" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="text-xs font-semibold tracking-wide Inter">Help Center</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-slate-400 hover:text-slate-100 transition-colors" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="text-xs font-semibold tracking-wide Inter">Log Out</span>
+</a>
+</div>
+</aside>
+<!-- TopNavBar -->
+<header class="sticky top-0 ml-64 flex justify-between items-center px-6 py-3 z-30 bg-slate-900/50 dark:bg-slate-950/50 backdrop-blur-md border-b border-slate-800 dark:border-slate-900">
+<div class="flex items-center gap-4 flex-1">
+<div class="relative w-full max-w-md">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-sm">search</span>
+<input class="w-full bg-slate-800/50 border-none rounded-lg py-2 pl-10 pr-4 text-sm focus:ring-1 focus:ring-blue-500 text-slate-200" placeholder="Search assets, IPs, or vulnerabilities..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-4">
+<button class="text-slate-400 hover:text-white transition-colors opacity-80 hover:opacity-100">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-slate-400 hover:text-white transition-colors opacity-80 hover:opacity-100">
+<span class="material-symbols-outlined">history</span>
+</button>
+<button class="text-slate-400 hover:text-white transition-colors opacity-80 hover:opacity-100">
+<span class="material-symbols-outlined">chat_bubble</span>
+</button>
+</div>
+<div class="h-8 w-8 rounded-full overflow-hidden border border-slate-700">
+<img alt="Administrator Profile" class="h-full w-full object-cover" data-alt="professional portrait of a system administrator in a dark office environment with soft blue accent lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCSSgm7_KC1ZogYW4ppVRsQ5AMAI64IdhP_dpAcOIyeJbBn_-REn2rVobatJSloZt5ygmrD3PrlTo4gAJO2blFQ7wHR43xJr-1Y_Clh9xZOxcivzFNw4Pv2Dm3zrWKCu0V4isp4mtShog0wu8Q8exgvsIN7UlzR2RewI1GDkWMbPCzPjkhcuzmku5iDFFrhb0PSUSk5o-QfNa4fw0aByJr5VW5SrKlhDbUe1O_vv0BgQom4epiQ0Gyy8FiCiEsgG6loyGsNnA2d7rFZ"/>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="ml-64 p-8 min-h-screen">
+<!-- Asset Header -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8">
+<div class="flex items-center gap-5">
+<div class="h-16 w-16 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center text-blue-500">
+<span class="material-symbols-outlined text-4xl">dns</span>
+</div>
+<div>
+<div class="flex items-center gap-3">
+<h1 class="text-2xl font-bold tracking-tight text-white">PROD-DB-CLUSTER-04</h1>
+<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 uppercase tracking-wider">Active</span>
+</div>
+<div class="flex items-center gap-4 mt-1 text-slate-400 text-sm">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs">lan</span> 10.0.42.158</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs">terminal</span> Ubuntu 22.04 LTS</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs">location_on</span> AWS us-east-1</span>
+</div>
+</div>
+</div>
+<div class="flex gap-3">
+<button class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-lg text-sm font-semibold transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">refresh</span> Re-scan Asset
+                </button>
+<button class="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-sm font-semibold transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">edit</span> Manage
+                </button>
+</div>
+</div>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-12 gap-6">
+<!-- Tabs Navigation (Spans 12) -->
+<div class="col-span-12 border-b border-slate-800 flex gap-8">
+<button class="pb-4 text-blue-400 border-b-2 border-blue-500 font-semibold text-sm">Overview</button>
+<button class="pb-4 text-slate-400 hover:text-slate-200 font-medium text-sm transition-colors">Service Inventory</button>
+<button class="pb-4 text-slate-400 hover:text-slate-200 font-medium text-sm transition-colors">Change History</button>
+<button class="pb-4 text-slate-400 hover:text-slate-200 font-medium text-sm transition-colors">Related Scans</button>
+</div>
+<!-- Left Column (Overview Content) -->
+<div class="col-span-12 lg:col-span-8 space-y-6">
+<!-- Risk & Security Bento Section -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="bg-slate-900/40 border border-slate-800 p-6 rounded-xl relative overflow-hidden group">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h3 class="text-slate-400 text-xs font-bold uppercase tracking-widest">Risk Score</h3>
+<div class="text-4xl font-black text-white mt-1">42<span class="text-lg text-slate-500 font-normal">/100</span></div>
+</div>
+<span class="material-symbols-outlined text-blue-500/20 text-6xl absolute -right-2 -top-2">shield_with_heart</span>
+</div>
+<div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+<div class="bg-blue-500 h-full w-[42%]"></div>
+</div>
+<p class="mt-4 text-xs text-slate-500 leading-relaxed">Risk is currently <span class="text-emerald-400 font-semibold">Moderate</span>. No critical vulnerabilities detected in the last 48 hours.</p>
+</div>
+<div class="bg-slate-900/40 border border-slate-800 p-6 rounded-xl">
+<h3 class="text-slate-400 text-xs font-bold uppercase tracking-widest mb-4">Security Posture</h3>
+<div class="space-y-3">
+<div class="flex justify-between items-center">
+<span class="text-xs text-slate-300">Compliance (SOC2)</span>
+<span class="material-symbols-outlined text-emerald-500 text-sm">check_circle</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-xs text-slate-300">Encryption (At Rest)</span>
+<span class="material-symbols-outlined text-emerald-500 text-sm">check_circle</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-xs text-slate-300">Public Exposure</span>
+<span class="px-1.5 py-0.5 rounded text-[9px] bg-slate-800 text-slate-400 border border-slate-700">Internal Only</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Timeline / Change History Preview -->
+<div class="bg-slate-900/40 border border-slate-800 rounded-xl p-6">
+<div class="flex justify-between items-center mb-6">
+<h3 class="text-slate-200 font-bold">Recent Activities</h3>
+<button class="text-blue-400 text-xs font-semibold hover:underline">View Full Log</button>
+</div>
+<div class="space-y-6">
+<div class="relative pl-6 border-l border-slate-800">
+<div class="absolute -left-[5px] top-1 h-2 w-2 rounded-full bg-blue-500 ring-4 ring-blue-500/10"></div>
+<div class="text-xs text-slate-500 mb-1">Today, 09:42 AM</div>
+<div class="text-sm font-medium text-slate-200">Port Scan Completed</div>
+<div class="text-xs text-slate-400 mt-1">Automated daily scan found no changes in open ports.</div>
+</div>
+<div class="relative pl-6 border-l border-slate-800">
+<div class="absolute -left-[5px] top-1 h-2 w-2 rounded-full bg-amber-500 ring-4 ring-amber-500/10"></div>
+<div class="text-xs text-slate-500 mb-1">Yesterday, 11:15 PM</div>
+<div class="text-sm font-medium text-slate-200">OS Patch Applied</div>
+<div class="text-xs text-slate-400 mt-1">Ubuntu security update 2.4.1 installed by <span class="text-slate-300">Systemd</span>.</div>
+</div>
+<div class="relative pl-6 border-l border-slate-800">
+<div class="absolute -left-[5px] top-1 h-2 w-2 rounded-full bg-slate-600"></div>
+<div class="text-xs text-slate-500 mb-1">Oct 24, 02:20 PM</div>
+<div class="text-sm font-medium text-slate-200">New Service Detected</div>
+<div class="text-xs text-slate-400 mt-1">Redis server (v6.2.6) detected on port 6379.</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column (Sidebar Details) -->
+<div class="col-span-12 lg:col-span-4 space-y-6">
+<!-- Owner Information -->
+<div class="bg-slate-900/40 border border-slate-800 p-6 rounded-xl">
+<h3 class="text-slate-400 text-xs font-bold uppercase tracking-widest mb-6">Asset Ownership</h3>
+<div class="flex items-center gap-4 mb-6">
+<img alt="Owner Profile" class="h-12 w-12 rounded-full border border-slate-700" data-alt="headshot of a female devops engineer with glasses and a friendly smile in a modern office" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAbbLUZJZmqnJjpt-V1u3QlHgSgdUR6jiR1Lld30X140puh51mRgWsvu_vaoVmrdPtfovguTc3t0Y8Gdv9nJeMf_rDG5Grhxlfv_0xxZcUUwhZe4lsBz14R2ZrCqYxfvvyO_PwJTuL4ZIJARkFfYnub4wB7wRkabSwE8qJWhUWJhiDH1PSrp9_Tm1_6yYkUIttiDXEn3ib776WK2KdVrw0F4WAVjaqcLjjAhX2mjjwEL3d0wN2LTk7o7kv3X9ZqXex9aBEdB47AE0FI"/>
+<div>
+<div class="text-sm font-bold text-white">Sarah Jenkins</div>
+<div class="text-xs text-slate-500">Principal Cloud Architect</div>
+</div>
+</div>
+<div class="space-y-4">
+<div class="flex justify-between text-xs">
+<span class="text-slate-500">Department</span>
+<span class="text-slate-200 font-medium">Data Infrastructure</span>
+</div>
+<div class="flex justify-between text-xs">
+<span class="text-slate-500">Environment</span>
+<span class="text-slate-200 font-medium">Production (VPC-B)</span>
+</div>
+<div class="flex justify-between text-xs">
+<span class="text-slate-500">Business Unit</span>
+<span class="text-slate-200 font-medium">Fintech Services</span>
+</div>
+</div>
+<button class="w-full mt-6 py-2 border border-slate-700 rounded-lg text-xs font-bold text-slate-300 hover:bg-slate-800 transition-colors">
+                        Contact Owner
+                    </button>
+</div>
+<!-- Network Context Card -->
+<div class="bg-slate-900/40 border border-slate-800 p-6 rounded-xl">
+<h3 class="text-slate-400 text-xs font-bold uppercase tracking-widest mb-4">Network Context</h3>
+<div class="aspect-square bg-slate-950 rounded-lg border border-slate-800 flex items-center justify-center overflow-hidden relative">
+<div class="absolute inset-0 bg-blue-500/5 flex items-center justify-center">
+<!-- Simple Network Diagram visualization placeholder -->
+<div class="relative">
+<div class="h-10 w-10 rounded-lg bg-blue-600/20 border border-blue-500 flex items-center justify-center z-10 relative">
+<span class="material-symbols-outlined text-blue-400 text-xl">dns</span>
+</div>
+<div class="absolute top-1/2 -left-12 h-[1px] w-12 bg-slate-700"></div>
+<div class="absolute top-1/2 -right-12 h-[1px] w-12 bg-slate-700"></div>
+<div class="absolute top-[-40px] left-1/2 -translate-x-1/2 h-10 w-[1px] bg-slate-700"></div>
+<div class="h-6 w-6 rounded bg-slate-800 border border-slate-700 absolute -left-16 top-1/2 -translate-y-1/2 flex items-center justify-center">
+<span class="material-symbols-outlined text-[10px] text-slate-500">public</span>
+</div>
+<div class="h-6 w-6 rounded bg-slate-800 border border-slate-700 absolute -right-16 top-1/2 -translate-y-1/2 flex items-center justify-center">
+<span class="material-symbols-outlined text-[10px] text-slate-500">storage</span>
+</div>
+</div>
+</div>
+<span class="absolute bottom-3 left-1/2 -translate-x-1/2 text-[10px] text-slate-500 font-medium">Visual Topology</span>
+</div>
+<div class="mt-4 grid grid-cols-2 gap-2">
+<div class="bg-slate-800/50 p-2 rounded text-center">
+<div class="text-[10px] text-slate-500">Ingress</div>
+<div class="text-xs font-bold text-white">4.2 GB</div>
+</div>
+<div class="bg-slate-800/50 p-2 rounded text-center">
+<div class="text-[10px] text-slate-500">Egress</div>
+<div class="text-xs font-bold text-white">1.8 GB</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Service Inventory (Full Width Section for detailed view) -->
+<div class="col-span-12 bg-slate-900/40 border border-slate-800 rounded-xl overflow-hidden">
+<div class="p-6 border-b border-slate-800 flex justify-between items-center">
+<h3 class="text-slate-200 font-bold">Open Ports &amp; Services</h3>
+<div class="flex items-center gap-2">
+<span class="text-xs text-slate-500">Filter by state:</span>
+<select class="bg-slate-800 border-none text-[10px] font-bold rounded py-1 pl-2 pr-8 text-slate-300">
+<option>All Active</option>
+<option>Open Only</option>
+</select>
+</div>
+</div>
+<table class="w-full text-left">
+<thead>
+<tr class="text-[10px] font-bold text-slate-500 uppercase tracking-wider bg-slate-900/60">
+<th class="px-6 py-4">Port</th>
+<th class="px-6 py-4">Service</th>
+<th class="px-6 py-4">Product / Version</th>
+<th class="px-6 py-4">Protocol</th>
+<th class="px-6 py-4">State</th>
+<th class="px-6 py-4 text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-800">
+<tr class="hover:bg-slate-800/30 transition-colors">
+<td class="px-6 py-4 text-sm font-mono text-blue-400">22</td>
+<td class="px-6 py-4 text-sm font-medium text-slate-200">SSH</td>
+<td class="px-6 py-4 text-sm text-slate-400">OpenSSH 8.9p1</td>
+<td class="px-6 py-4 text-sm text-slate-400">TCP</td>
+<td class="px-6 py-4">
+<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">OPEN</span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-500 hover:text-white transition-colors"><span class="material-symbols-outlined text-lg">more_horiz</span></button>
+</td>
+</tr>
+<tr class="hover:bg-slate-800/30 transition-colors">
+<td class="px-6 py-4 text-sm font-mono text-blue-400">443</td>
+<td class="px-6 py-4 text-sm font-medium text-slate-200">HTTPS</td>
+<td class="px-6 py-4 text-sm text-slate-400">nginx 1.18.0</td>
+<td class="px-6 py-4 text-sm text-slate-400">TCP</td>
+<td class="px-6 py-4">
+<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">OPEN</span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-500 hover:text-white transition-colors"><span class="material-symbols-outlined text-lg">more_horiz</span></button>
+</td>
+</tr>
+<tr class="hover:bg-slate-800/30 transition-colors">
+<td class="px-6 py-4 text-sm font-mono text-blue-400">5432</td>
+<td class="px-6 py-4 text-sm font-medium text-slate-200">PostgreSQL</td>
+<td class="px-6 py-4 text-sm text-slate-400">PostgreSQL 14.5</td>
+<td class="px-6 py-4 text-sm text-slate-400">TCP</td>
+<td class="px-6 py-4">
+<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">OPEN</span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-500 hover:text-white transition-colors"><span class="material-symbols-outlined text-lg">more_horiz</span></button>
+</td>
+</tr>
+<tr class="hover:bg-slate-800/30 transition-colors">
+<td class="px-6 py-4 text-sm font-mono text-blue-400">6379</td>
+<td class="px-6 py-4 text-sm font-medium text-slate-200">Redis</td>
+<td class="px-6 py-4 text-sm text-slate-400">Redis Server 6.2.6</td>
+<td class="px-6 py-4 text-sm text-slate-400">TCP</td>
+<td class="px-6 py-4">
+<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">OPEN</span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-500 hover:text-white transition-colors"><span class="material-symbols-outlined text-lg">more_horiz</span></button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</main>
+</body></html>

@@ -1,0 +1,14 @@
+{% if breadcrumbs %}
+    <nav class="flex items-center gap-2 text-xs text-slate-500 uppercase tracking-wider mb-3">
+        {% for item in breadcrumbs %}
+            {% if item.url %}
+                <a href="{{ item.url }}" class="hover:text-blue-300 transition-colors">{{ item.label }}</a>
+            {% else %}
+                <span class="text-blue-300">{{ item.label }}</span>
+            {% endif %}
+            {% if not forloop.last %}
+                <span class="material-symbols-outlined text-xs">chevron_right</span>
+            {% endif %}
+        {% endfor %}
+    </nav>
+{% endif %}

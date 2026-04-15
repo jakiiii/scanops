@@ -4,6 +4,8 @@ __pycache__/
 *.pyo
 *.pyd
 .Python
+.pytest_cache/
+.mypy_cache/
 
 # Env
 .env
@@ -17,9 +19,11 @@ venv/
 db.sqlite3
 media_root/
 static_root/
+app_logs/
 
 # Git
 .git/
+.gitignore
 
 # OS
 .DS_Store
@@ -27,3 +31,8 @@ static_root/
 # Logs
 *.log
 
+# Local tooling and generated artifacts
+.idea/
+backup/
+dbbackup/
+documents/

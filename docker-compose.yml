@@ -1,0 +1,34 @@
+services:
+  scanops-web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: scanops-web
+    environment:
+      JTRO_ENVIRONMENT: dev
+      JTRO_DEBUG: "True"
+      JTRO_SECRET_KEY: "scanops-dev-secret-key-change-me"
+      JTRO_SSL_ENABLED: "False"
+      JTRO_ALLOWED_HOSTS: "localhost,127.0.0.1,0.0.0.0"
+      JTRO_DEV_DATABASE: sqlite
+      JTRO_SQLITE_PATH: /app/state/db.sqlite3
+      EMAIL_BACKEND: "django.core.mail.backends.console.EmailBackend"
+      GUNICORN_WORKERS: "3"
+    ports:
+      - "8008:8008"
+    volumes:
+      - scanops_sqlite:/app/state
+      - scanops_static:/app/static_root
+      - scanops_media:/app/media_root
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://127.0.0.1:8008/login/ >/dev/null || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 45s
+
+volumes:
+  scanops_sqlite:
+  scanops_static:
+  scanops_media:

@@ -36,10 +36,14 @@ if not SECRET_KEY and not DEBUG:
 _jtro_allowed = os.environ.get('JTRO_ALLOWED_HOSTS')
 if _jtro_allowed:
     ALLOWED_HOSTS = [h.strip() for h in _jtro_allowed.split(',') if h.strip()]
+    if DEBUG:
+        for _debug_host in ['localhost', '127.0.0.1', '0.0.0.0', 'testserver']:
+            if _debug_host not in ALLOWED_HOSTS:
+                ALLOWED_HOSTS.append(_debug_host)
 else:
     if DEBUG:
         # safe defaults for development
-        ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+        ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0', 'testserver']
     else:
         # production: empty list forces explicit configuration
         ALLOWED_HOSTS = []

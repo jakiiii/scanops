@@ -1,4 +1,4 @@
-# Dockerfile for incidentmatrix
+# Dockerfile for ScanOps
 FROM python:3.12-slim
 
 # Prevents Python from writing pyc files to disc and buffering stdout/stderr
@@ -45,18 +45,18 @@ RUN pip install --upgrade pip wheel \
 COPY . /app/
 
 # Create required runtime directories and set ownership
-RUN mkdir -p /app/static_root/static /app/media_root/media /app/app_logs \
-    && chown -R app:app /app/static_root /app/media_root /app/app_logs /app
+RUN mkdir -p /app/static_root/static /app/media_root/media /app/app_logs /app/state \
+    && chown -R app:app /app/static_root /app/media_root /app/app_logs /app/state /app
 
 # Copy entrypoint and make it executable
 COPY entrypoint.sh /app/entrypoint.sh
 RUN chmod +x /app/entrypoint.sh
 
 # Expose the port the app will run on
-EXPOSE 8002
+EXPOSE 8008
 
 # Run as non-root user
 USER app
 
 ENTRYPOINT ["/app/entrypoint.sh"]
-CMD ["gunicorn", "core.wsgi:application", "--bind", "0.0.0.0:8002", "--workers", "3", "--access-logfile", "-", "--error-logfile", "-"]
+CMD ["sh", "-c", "gunicorn core.wsgi:application --bind 0.0.0.0:8008 --workers ${GUNICORN_WORKERS:-3} --access-logfile - --error-logfile -"]

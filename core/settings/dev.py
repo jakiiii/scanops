@@ -20,10 +20,14 @@ if os.environ.get('JTRO_DEV_DATABASE') == "postgres":
         }
     }
 else:
+    sqlite_name = os.environ.get("JTRO_SQLITE_PATH")
+    if not sqlite_name:
+        sqlite_name = os.path.join(BASE_DIR, "db.sqlite3")
+
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
-            "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
+            "NAME": sqlite_name,
         }
     }
 

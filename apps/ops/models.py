@@ -58,14 +58,29 @@ class Role(models.Model):
 
 class PermissionRule(models.Model):
     class PermissionKey(models.TextChoices):
-        MANAGE_USERS = "manage_users", "Manage Users"
-        MANAGE_SETTINGS = "manage_settings", "Manage Settings"
-        MANAGE_PROFILES = "manage_profiles", "Manage Profiles"
-        MANAGE_SCHEDULES = "manage_schedules", "Manage Schedules"
-        VIEW_SYSTEM_HEALTH = "view_system_health", "View System Health"
-        RUN_SCANS = "run_scans", "Run Scans"
-        ARCHIVE_RESULTS = "archive_results", "Archive Results"
+        VIEW_DASHBOARD = "view_dashboard", "View Dashboard"
+        VIEW_TARGETS = "view_targets", "View Targets"
+        MANAGE_TARGETS = "manage_targets", "Manage Targets"
+        VIEW_SCANS = "view_scans", "View Running Scans"
+        CREATE_SCAN_REQUEST = "create_scan_request", "Create Scan Requests"
+        CONTROL_SCAN_EXECUTIONS = "control_scan_executions", "Control Scan Executions"
+        VIEW_RESULTS = "view_results", "View Scan Results"
+        COMPARE_RESULTS = "compare_results", "Compare Results"
+        VIEW_HISTORY = "view_history", "View Scan History"
+        MANAGE_HISTORY = "manage_history", "Manage Scan History"
+        VIEW_REPORTS = "view_reports", "View Reports"
         GENERATE_REPORTS = "generate_reports", "Generate Reports"
+        MANAGE_REPORTS = "manage_reports", "Manage Reports"
+        VIEW_SCHEDULES = "view_schedules", "View Schedules"
+        MANAGE_SCHEDULES = "manage_schedules", "Manage Schedules"
+        VIEW_NOTIFICATIONS = "view_notifications", "View Notifications"
+        VIEW_ASSETS = "view_assets", "View Assets"
+        MANAGE_ASSETS = "manage_assets", "Manage Assets"
+        MANAGE_SETTINGS = "manage_settings", "Manage Settings"
+        MANAGE_USERS = "manage_users", "Manage Users"
+        MANAGE_ROLES = "manage_roles", "Manage Roles"
+        MANAGE_PROFILES = "manage_profiles", "Manage Scan Profiles"
+        VIEW_SYSTEM_HEALTH = "view_system_health", "View System Health"
 
     role = models.ForeignKey(Role, related_name="permission_rules", on_delete=models.CASCADE)
     permission_key = models.CharField(max_length=64, choices=PermissionKey.choices)

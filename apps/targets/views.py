@@ -1,16 +1,18 @@
 from __future__ import annotations
 
 from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import CreateView, DetailView, ListView
 
+from apps.ops.models import PermissionRule
+from apps.ops.rbac import CapabilityRequiredMixin, scope_queryset_for_user
 from apps.targets.forms import TargetFilterForm, TargetForm
 from apps.targets.models import Target
 
 
-class TargetListView(LoginRequiredMixin, ListView):
+class TargetListView(CapabilityRequiredMixin, ListView):
+    capability_key = PermissionRule.PermissionKey.VIEW_TARGETS
     model = Target
     template_name = "targets/target_list.html"
     context_object_name = "targets"
@@ -23,7 +25,8 @@ class TargetListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         queryset = Target.objects.select_related("owner", "created_by").order_by("-updated_at")
-        self.filter_form = TargetFilterForm(self.request.GET or None)
+        queryset = scope_queryset_for_user(queryset, self.request.user, ("owner", "created_by"))
+        self.filter_form = TargetFilterForm(self.request.GET or None, user=self.request.user)
         return self.filter_form.apply(queryset)
 
     def get_context_data(self, **kwargs):
@@ -32,10 +35,16 @@ class TargetListView(LoginRequiredMixin, ListView):
         return context
 
 
-class TargetCreateView(LoginRequiredMixin, CreateView):
+class TargetCreateView(CapabilityRequiredMixin, CreateView):
+    capability_key = PermissionRule.PermissionKey.MANAGE_TARGETS
     model = Target
     form_class = TargetForm
     template_name = "targets/target_form.html"
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["user"] = self.request.user
+        return kwargs
 
     def form_valid(self, form):
         target = form.save(commit=False)
@@ -61,13 +70,15 @@ class TargetCreateView(LoginRequiredMixin, CreateView):
         return context
 
 
-class TargetDetailView(LoginRequiredMixin, DetailView):
+class TargetDetailView(CapabilityRequiredMixin, DetailView):
+    capability_key = PermissionRule.PermissionKey.VIEW_TARGETS
     model = Target
     template_name = "targets/target_detail.html"
     context_object_name = "target"
 
     def get_queryset(self):
-        return Target.objects.select_related("owner", "created_by")
+        queryset = Target.objects.select_related("owner", "created_by")
+        return scope_queryset_for_user(queryset, self.request.user, ("owner", "created_by"))
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

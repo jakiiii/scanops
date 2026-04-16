@@ -1,13 +1,14 @@
 from __future__ import annotations
 
 from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
 from django.views import View
 from django.views.generic import ListView
 
+from apps.ops.models import PermissionRule
+from apps.ops.rbac import CapabilityRequiredMixin, scope_queryset_for_user
 from apps.scans.forms import HistoryFilterForm
 from apps.scans.models import ScanExecution
 from apps.scans.services.execution_service import archive_execution, restore_execution
@@ -24,7 +25,8 @@ def _redirect_back(request: HttpRequest, fallback: str) -> HttpResponse:
     return redirect(request.META.get("HTTP_REFERER") or fallback)
 
 
-class _BaseHistoryListView(LoginRequiredMixin, ListView):
+class _BaseHistoryListView(CapabilityRequiredMixin, ListView):
+    capability_key = PermissionRule.PermissionKey.VIEW_HISTORY
     model = ScanExecution
     context_object_name = "executions"
     paginate_by = 15
@@ -39,17 +41,19 @@ class _BaseHistoryListView(LoginRequiredMixin, ListView):
         return [self.template_name]
 
     def base_queryset(self):
-        return ScanExecution.objects.select_related(
+        queryset = ScanExecution.objects.select_related(
             "scan_request",
             "scan_request__target",
             "scan_request__profile",
             "scan_request__requested_by",
         ).prefetch_related("result")
+        return scope_queryset_for_user(queryset, self.request.user, ("scan_request__requested_by",))
 
     def get_queryset(self):
         queryset = self.base_queryset()
         self.filter_form = HistoryFilterForm(
             self.request.GET or None,
+            user=self.request.user,
             include_user_filter=self.include_user_filter,
         )
         if self.filter_form.is_valid():
@@ -69,7 +73,7 @@ class _BaseHistoryListView(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["filter_form"] = self.filter_form
-        context["include_user_filter"] = self.include_user_filter
+        context["include_user_filter"] = "requested_by" in self.filter_form.fields
         context["page_mode"] = self.page_mode
         context["page_title"] = self.page_title
         context["page_subtitle"] = self.page_subtitle
@@ -115,50 +119,72 @@ class ArchivedHistoryView(_BaseHistoryListView):
         return super().get_queryset().filter(is_archived=True)
 
 
-class HistoryArchiveExecutionView(LoginRequiredMixin, View):
+class HistoryArchiveExecutionView(CapabilityRequiredMixin, View):
+    capability_key = PermissionRule.PermissionKey.MANAGE_HISTORY
+
     def post(self, request, pk: int) -> HttpResponse:
-        execution = get_object_or_404(ScanExecution, pk=pk)
+        queryset = scope_queryset_for_user(ScanExecution.objects.all(), request.user, ("scan_request__requested_by",))
+        execution = get_object_or_404(queryset, pk=pk)
         archive_execution(execution)
         messages.success(request, f"{execution.execution_id} archived.")
         return _redirect_back(request, reverse("scans:history"))
 
 
-class HistoryRestoreExecutionView(LoginRequiredMixin, View):
+class HistoryRestoreExecutionView(CapabilityRequiredMixin, View):
+    capability_key = PermissionRule.PermissionKey.MANAGE_HISTORY
+
     def post(self, request, pk: int) -> HttpResponse:
-        execution = get_object_or_404(ScanExecution, pk=pk)
+        queryset = scope_queryset_for_user(ScanExecution.objects.all(), request.user, ("scan_request__requested_by",))
+        execution = get_object_or_404(queryset, pk=pk)
         restore_execution(execution)
         messages.success(request, f"{execution.execution_id} restored from archive.")
         return _redirect_back(request, reverse("scans:history-archived"))
 
 
-class HistoryDeleteExecutionView(LoginRequiredMixin, View):
+class HistoryDeleteExecutionView(CapabilityRequiredMixin, View):
+    capability_key = PermissionRule.PermissionKey.MANAGE_HISTORY
+
     def post(self, request, pk: int) -> HttpResponse:
-        execution = get_object_or_404(ScanExecution, pk=pk)
+        queryset = scope_queryset_for_user(ScanExecution.objects.all(), request.user, ("scan_request__requested_by",))
+        execution = get_object_or_404(queryset, pk=pk)
         execution_id = execution.execution_id
         permanently_delete_execution(execution)
         messages.warning(request, f"{execution_id} was permanently deleted.")
         return _redirect_back(request, reverse("scans:history-archived"))
 
 
-class HistoryCloneSettingsView(LoginRequiredMixin, View):
+class HistoryCloneSettingsView(CapabilityRequiredMixin, View):
+    capability_key = PermissionRule.PermissionKey.CREATE_SCAN_REQUEST
+
     def post(self, request, pk: int) -> HttpResponse:
-        execution = get_object_or_404(ScanExecution, pk=pk)
+        queryset = scope_queryset_for_user(ScanExecution.objects.all(), request.user, ("scan_request__requested_by",))
+        execution = get_object_or_404(queryset, pk=pk)
         cloned_request = clone_scan_request_from_execution(execution, user=request.user)
         messages.success(request, f"Settings cloned into request #{cloned_request.pk}.")
         return _redirect_back(request, reverse("scans:new"))
 
 
-class HistoryRerunView(LoginRequiredMixin, View):
+class HistoryRerunView(CapabilityRequiredMixin, View):
+    capability_key = PermissionRule.PermissionKey.CONTROL_SCAN_EXECUTIONS
+
     def post(self, request, pk: int) -> HttpResponse:
-        execution = get_object_or_404(ScanExecution, pk=pk)
+        queryset = scope_queryset_for_user(ScanExecution.objects.all(), request.user, ("scan_request__requested_by",))
+        execution = get_object_or_404(queryset, pk=pk)
         new_execution = rerun_execution(execution, user=request.user)
         messages.success(request, f"Re-run queued as {new_execution.execution_id}.")
         return _redirect_back(request, reverse("scans:running"))
 
 
-class HistoryCompareRedirectView(LoginRequiredMixin, View):
+class HistoryCompareRedirectView(CapabilityRequiredMixin, View):
+    capability_key = PermissionRule.PermissionKey.COMPARE_RESULTS
+
     def post(self, request, pk: int) -> HttpResponse:
-        execution = get_object_or_404(ScanExecution.objects.select_related("result"), pk=pk)
+        queryset = scope_queryset_for_user(
+            ScanExecution.objects.select_related("result"),
+            request.user,
+            ("scan_request__requested_by",),
+        )
+        execution = get_object_or_404(queryset, pk=pk)
         result = getattr(execution, "result", None)
         if result is None:
             messages.error(request, "No result available yet for this execution.")

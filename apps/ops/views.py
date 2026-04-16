@@ -2,11 +2,11 @@ from __future__ import annotations
 
 from django.contrib import messages
 from django.contrib.auth import get_user_model
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import PermissionDenied
 from django.db.models import Q
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from django.urls import reverse, reverse_lazy
+from django.urls import reverse
 from django.views import View
 from django.views.generic import ListView, TemplateView
 
@@ -24,6 +24,7 @@ from apps.ops.forms import (
     UserFilterForm,
 )
 from apps.ops.models import AppSetting, PermissionRule, Role
+from apps.ops.rbac import CapabilityRequiredMixin
 from apps.ops.services import app_settings_service, permission_service, profile_governance_service, user_management_service
 from apps.ops.services.admin_audit_service import log_admin_action
 from apps.ops.services.system_health_service import overall_status, recent_alerts, recent_timeline, run_health_checks
@@ -35,22 +36,6 @@ User = get_user_model()
 
 def _redirect_back(request: HttpRequest, fallback_url: str) -> HttpResponse:
     return redirect(request.META.get("HTTP_REFERER") or fallback_url)
-
-
-class CapabilityRequiredMixin(LoginRequiredMixin):
-    capability_key: str | None = None
-
-    def has_capability(self) -> bool:
-        if self.capability_key is None:
-            return True
-        return permission_service.user_has_permission(self.request.user, self.capability_key)
-
-    def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            return self.handle_no_permission()
-        if not self.has_capability():
-            return redirect("accounts:permission_denied")
-        return super().dispatch(request, *args, **kwargs)
 
 
 def settings_tabs(active_slug: str) -> list[dict]:
@@ -220,6 +205,7 @@ class UserListView(CapabilityRequiredMixin, ListView):
         return [self.template_name]
 
     def get_queryset(self):
+        permission_service.bootstrap_default_roles()
         queryset = User.objects.select_related("profile__role").order_by("-date_joined")
         self.filter_form = UserFilterForm(self.request.GET or None)
         if self.filter_form.is_valid():
@@ -259,13 +245,17 @@ class UserListView(CapabilityRequiredMixin, ListView):
             except Exception:
                 user.profile_cached = user_management_service.ensure_profile(user)
             user.activity_summary = activity_map.get(user.id)
+            user.can_manage_account = permission_service.can_manage_user_account(self.request.user, user)
 
         source = User.objects.select_related("profile__role")
         context["summary"] = {
             "total": source.count(),
             "active": source.filter(is_active=True).count(),
             "approved": source.filter(profile__is_approved=True).count(),
-            "admins": source.filter(Q(is_superuser=True) | Q(is_administrator=True) | Q(profile__role__slug__in=["super_admin", "security_admin"])).count(),
+            "admins": source.filter(
+                Q(is_superuser=True)
+                | Q(profile__role__slug__in=[permission_service.SUPER_ADMIN, permission_service.SECURITY_ADMIN])
+            ).count(),
         }
         context["breadcrumbs"] = [
             {"label": "User Management", "url": ""},
@@ -278,14 +268,20 @@ class UserCreateView(CapabilityRequiredMixin, TemplateView):
     template_name = "ops/users/form.html"
 
     def get(self, request, *args, **kwargs):
-        form = UserAdminForm()
+        permission_service.bootstrap_default_roles()
+        form = UserAdminForm(actor=request.user)
         return render(request, self.template_name, self.get_context_data(form=form, mode="create"))
 
     def post(self, request, *args, **kwargs):
-        form = UserAdminForm(request.POST)
+        permission_service.bootstrap_default_roles()
+        form = UserAdminForm(request.POST, actor=request.user)
         if not form.is_valid():
             return render(request, self.template_name, self.get_context_data(form=form, mode="create"))
-        user = user_management_service.create_user(form.cleaned_data, actor=request.user)
+        try:
+            user = user_management_service.create_user(form.cleaned_data, actor=request.user)
+        except ValueError as exc:
+            form.add_error(None, str(exc))
+            return render(request, self.template_name, self.get_context_data(form=form, mode="create"))
         log_admin_action(
             actor=request.user,
             action="user.create",
@@ -319,19 +315,28 @@ class UserUpdateView(CapabilityRequiredMixin, TemplateView):
     template_name = "ops/users/form.html"
 
     def get_user(self):
-        return get_object_or_404(User.objects.select_related("profile__role"), pk=self.kwargs["pk"])
+        user_obj = get_object_or_404(User.objects.select_related("profile__role"), pk=self.kwargs["pk"])
+        if not permission_service.can_manage_user_account(self.request.user, user_obj):
+            raise PermissionDenied("You do not have permission to manage this user.")
+        return user_obj
 
     def get(self, request, *args, **kwargs):
+        permission_service.bootstrap_default_roles()
         user_obj = self.get_user()
-        form = UserAdminForm(user_instance=user_obj)
+        form = UserAdminForm(user_instance=user_obj, actor=request.user)
         return render(request, self.template_name, self.get_context_data(form=form, mode="edit", user_obj=user_obj))
 
     def post(self, request, *args, **kwargs):
+        permission_service.bootstrap_default_roles()
         user_obj = self.get_user()
-        form = UserAdminForm(request.POST, user_instance=user_obj)
+        form = UserAdminForm(request.POST, user_instance=user_obj, actor=request.user)
         if not form.is_valid():
             return render(request, self.template_name, self.get_context_data(form=form, mode="edit", user_obj=user_obj))
-        user_management_service.update_user(user_obj, form.cleaned_data, actor=request.user)
+        try:
+            user_management_service.update_user(user_obj, form.cleaned_data, actor=request.user)
+        except ValueError as exc:
+            form.add_error(None, str(exc))
+            return render(request, self.template_name, self.get_context_data(form=form, mode="edit", user_obj=user_obj))
         log_admin_action(
             actor=request.user,
             action="user.update",
@@ -364,8 +369,10 @@ class UserToggleActiveView(CapabilityRequiredMixin, View):
     capability_key = PermissionRule.PermissionKey.MANAGE_USERS
 
     def post(self, request, pk: int):
-        user = get_object_or_404(User, pk=pk)
-        user_management_service.set_user_active(user, is_active=not user.is_active)
+        user = get_object_or_404(User.objects.select_related("profile__role"), pk=pk)
+        if not permission_service.can_manage_user_account(request.user, user):
+            raise PermissionDenied("You do not have permission to manage this user.")
+        user_management_service.set_user_active(user, is_active=not user.is_active, actor=request.user)
         log_admin_action(
             actor=request.user,
             action="user.toggle_active",
@@ -382,8 +389,10 @@ class UserFlagPasswordResetView(CapabilityRequiredMixin, View):
     capability_key = PermissionRule.PermissionKey.MANAGE_USERS
 
     def post(self, request, pk: int):
-        user = get_object_or_404(User, pk=pk)
-        user_management_service.mark_password_reset_required(user, required=True)
+        user = get_object_or_404(User.objects.select_related("profile__role"), pk=pk)
+        if not permission_service.can_manage_user_account(request.user, user):
+            raise PermissionDenied("You do not have permission to manage this user.")
+        user_management_service.mark_password_reset_required(user, required=True, actor=request.user)
         log_admin_action(
             actor=request.user,
             action="user.flag_password_reset",
@@ -397,7 +406,7 @@ class UserFlagPasswordResetView(CapabilityRequiredMixin, View):
 
 
 class RolePermissionView(CapabilityRequiredMixin, TemplateView):
-    capability_key = PermissionRule.PermissionKey.MANAGE_USERS
+    capability_key = PermissionRule.PermissionKey.MANAGE_ROLES
     template_name = "ops/users/roles.html"
 
     def _get_edit_role(self):
@@ -451,7 +460,7 @@ class RolePermissionView(CapabilityRequiredMixin, TemplateView):
 
 
 class RoleMatrixPartialView(CapabilityRequiredMixin, View):
-    capability_key = PermissionRule.PermissionKey.MANAGE_USERS
+    capability_key = PermissionRule.PermissionKey.MANAGE_ROLES
 
     def get(self, request):
         roles = list(Role.objects.prefetch_related("permission_rules").order_by("is_system", "name"))
@@ -460,7 +469,7 @@ class RoleMatrixPartialView(CapabilityRequiredMixin, View):
 
 
 class RolePermissionToggleView(CapabilityRequiredMixin, View):
-    capability_key = PermissionRule.PermissionKey.MANAGE_USERS
+    capability_key = PermissionRule.PermissionKey.MANAGE_ROLES
 
     def post(self, request):
         form = RolePermissionToggleForm(request.POST)

@@ -31,19 +31,21 @@
                     <td class="px-4 py-4 text-xs text-slate-300">{{ schedule.notification_enabled|yesno:"Enabled,Disabled" }}</td>
                     <td class="px-4 py-4">
                         <div class="flex justify-end gap-2">
-                            <form method="post" action="{% url 'schedules:run-now' schedule.pk %}">
-                                {% csrf_token %}
-                                <button type="submit" class="px-2.5 py-1.5 rounded bg-blue-500/20 hover:bg-blue-500/30 text-[11px] text-blue-200">Run Now</button>
-                            </form>
-                            <a href="{% url 'schedules:edit' schedule.pk %}" class="px-2.5 py-1.5 rounded bg-slate-800 hover:bg-slate-700 text-[11px] text-slate-200">Edit</a>
-                            <form method="post" action="{% url 'schedules:toggle' schedule.pk %}">
-                                {% csrf_token %}
-                                <button type="submit" class="px-2.5 py-1.5 rounded bg-amber-500/20 hover:bg-amber-500/30 text-[11px] text-amber-200">{{ schedule.is_enabled|yesno:"Disable,Enable" }}</button>
-                            </form>
-                            <form method="post" action="{% url 'schedules:delete' schedule.pk %}">
-                                {% csrf_token %}
-                                <button type="submit" class="px-2.5 py-1.5 rounded bg-rose-500/20 hover:bg-rose-500/30 text-[11px] text-rose-200">Delete</button>
-                            </form>
+                            {% if request.user|has_capability:'manage_schedules' %}
+                                <form method="post" action="{% url 'schedules:run-now' schedule.pk %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="px-2.5 py-1.5 rounded bg-blue-500/20 hover:bg-blue-500/30 text-[11px] text-blue-200">Run Now</button>
+                                </form>
+                                <a href="{% url 'schedules:edit' schedule.pk %}" class="px-2.5 py-1.5 rounded bg-slate-800 hover:bg-slate-700 text-[11px] text-slate-200">Edit</a>
+                                <form method="post" action="{% url 'schedules:toggle' schedule.pk %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="px-2.5 py-1.5 rounded bg-amber-500/20 hover:bg-amber-500/30 text-[11px] text-amber-200">{{ schedule.is_enabled|yesno:"Disable,Enable" }}</button>
+                                </form>
+                                <form method="post" action="{% url 'schedules:delete' schedule.pk %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="px-2.5 py-1.5 rounded bg-rose-500/20 hover:bg-rose-500/30 text-[11px] text-rose-200">Delete</button>
+                                </form>
+                            {% endif %}
                         </div>
                     </td>
                 </tr>

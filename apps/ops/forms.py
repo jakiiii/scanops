@@ -7,6 +7,7 @@ from django.contrib.auth import get_user_model
 
 from apps.notifications.models import Notification
 from apps.ops.models import PermissionRule, Role
+from apps.ops.services import permission_service
 from apps.reports.models import GeneratedReport
 from apps.scans.models import ScanProfile
 
@@ -191,7 +192,7 @@ class UserAdminForm(forms.Form):
     display_name = forms.CharField(max_length=160)
     username = forms.CharField(max_length=150)
     email = forms.EmailField()
-    role = forms.ModelChoiceField(queryset=Role.objects.none(), required=False)
+    role = forms.ModelChoiceField(queryset=Role.objects.none(), required=True)
     is_active = forms.BooleanField(required=False, initial=True)
     is_approved = forms.BooleanField(required=False, initial=True)
     is_internal_operator = forms.BooleanField(required=False, initial=True)
@@ -200,10 +201,14 @@ class UserAdminForm(forms.Form):
     new_password = forms.CharField(required=False, widget=forms.PasswordInput(render_value=False))
     force_password_reset = forms.BooleanField(required=False)
 
-    def __init__(self, *args, user_instance=None, **kwargs):
+    def __init__(self, *args, user_instance=None, actor=None, **kwargs):
         self.user_instance = user_instance
+        self.actor = actor
         super().__init__(*args, **kwargs)
-        self.fields["role"].queryset = Role.objects.order_by("name")
+        if actor is not None:
+            self.fields["role"].queryset = permission_service.get_assignable_roles(actor)
+        else:
+            self.fields["role"].queryset = Role.objects.order_by("name")
         _decorate_fields(self)
         if self.user_instance and not self.is_bound:
             profile = getattr(self.user_instance, "profile", None)
@@ -239,6 +244,12 @@ class UserAdminForm(forms.Form):
         if queryset.exists():
             raise forms.ValidationError("A user with this email already exists.")
         return email
+
+    def clean_role(self):
+        role = self.cleaned_data.get("role")
+        if self.actor is not None and not permission_service.can_assign_role(self.actor, role):
+            raise forms.ValidationError("You are not allowed to assign this role.")
+        return role
 
 
 class RoleForm(forms.ModelForm):

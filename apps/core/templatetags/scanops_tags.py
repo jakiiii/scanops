@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from django import template
 
+from apps.ops.services import permission_service
+
 
 register = template.Library()
 
@@ -127,3 +129,18 @@ def dict_get(value: dict, key):
     if not isinstance(value, dict):
         return None
     return value.get(key)
+
+
+@register.filter
+def has_capability(user, capability_key: str) -> bool:
+    return permission_service.user_has_permission(user, capability_key)
+
+
+@register.filter
+def role_slug(user) -> str:
+    return permission_service.get_user_role_slug(user) or ""
+
+
+@register.filter
+def role_name(user) -> str:
+    return permission_service.get_user_role_name(user)

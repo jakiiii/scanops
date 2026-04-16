@@ -3,6 +3,7 @@ from __future__ import annotations
 from django import forms
 from django.contrib.auth import get_user_model
 
+from apps.ops.rbac import scope_queryset_for_user, user_is_scoped
 from apps.schedules.models import ScanSchedule
 from apps.targets.models import Target
 
@@ -23,9 +24,11 @@ class ScheduleFilterForm(forms.Form):
     next_run_from = forms.DateField(required=False, widget=forms.DateInput(attrs={"type": "date"}))
     next_run_to = forms.DateField(required=False, widget=forms.DateInput(attrs={"type": "date"}))
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, user=None, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["owner"].queryset = User.objects.filter(is_active=True).order_by("username")
+        if user is not None and user_is_scoped(user):
+            self.fields["owner"].queryset = self.fields["owner"].queryset.filter(pk=user.pk)
         for field in self.fields.values():
             field.widget.attrs["class"] = "scanops-input"
         self.fields["q"].widget.attrs["placeholder"] = "Search by schedule, target, profile..."
@@ -62,9 +65,15 @@ class ScheduleForm(forms.ModelForm):
             "name": forms.TextInput(attrs={"placeholder": "Nightly DMZ Sweep"}),
         }
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, user=None, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["target"].queryset = Target.objects.order_by("target_value")
+        if user is not None:
+            self.fields["target"].queryset = scope_queryset_for_user(
+                self.fields["target"].queryset,
+                user,
+                ("owner", "created_by"),
+            )
         self.fields["profile"].queryset = self.fields["profile"].queryset.filter(is_active=True).order_by("name")
         for field in self.fields.values():
             if isinstance(field.widget, forms.CheckboxInput):
@@ -86,4 +95,3 @@ class ScheduleForm(forms.ModelForm):
         if schedule_type != ScanSchedule.ScheduleType.CUSTOM and recurrence_rule and len(recurrence_rule) > 255:
             self.add_error("recurrence_rule", "Recurrence rule is too long.")
         return cleaned_data
-

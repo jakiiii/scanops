@@ -40,33 +40,41 @@
                                 <a href="{% url 'scans:result-detail' execution.result.pk %}" class="px-2.5 py-1.5 rounded bg-slate-800 hover:bg-slate-700 text-[11px] text-slate-200">Result</a>
                             {% endif %}
                             {% if page_mode == 'archived' %}
-                                <form method="post" action="{% url 'scans:history-restore' execution.pk %}">
-                                    {% csrf_token %}
-                                    <button type="submit" class="px-2.5 py-1.5 rounded bg-emerald-500/20 hover:bg-emerald-500/30 text-[11px] text-emerald-200">Restore</button>
-                                </form>
-                                <form method="post" action="{% url 'scans:history-delete' execution.pk %}">
-                                    {% csrf_token %}
-                                    <button type="submit" class="px-2.5 py-1.5 rounded bg-rose-500/20 hover:bg-rose-500/30 text-[11px] text-rose-200">Delete</button>
-                                </form>
+                                {% if request.user|has_capability:'manage_history' %}
+                                    <form method="post" action="{% url 'scans:history-restore' execution.pk %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="px-2.5 py-1.5 rounded bg-emerald-500/20 hover:bg-emerald-500/30 text-[11px] text-emerald-200">Restore</button>
+                                    </form>
+                                    <form method="post" action="{% url 'scans:history-delete' execution.pk %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="px-2.5 py-1.5 rounded bg-rose-500/20 hover:bg-rose-500/30 text-[11px] text-rose-200">Delete</button>
+                                    </form>
+                                {% endif %}
                             {% else %}
-                                <form method="post" action="{% url 'scans:history-rerun' execution.pk %}">
-                                    {% csrf_token %}
-                                    <button type="submit" class="px-2.5 py-1.5 rounded bg-blue-500/20 hover:bg-blue-500/30 text-[11px] text-blue-200">Re-run</button>
-                                </form>
-                                <form method="post" action="{% url 'scans:history-clone' execution.pk %}">
-                                    {% csrf_token %}
-                                    <button type="submit" class="px-2.5 py-1.5 rounded bg-slate-700/50 hover:bg-slate-700 text-[11px] text-slate-200">Clone</button>
-                                </form>
-                                {% if execution.result %}
+                                {% if request.user|has_capability:'control_scan_executions' %}
+                                    <form method="post" action="{% url 'scans:history-rerun' execution.pk %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="px-2.5 py-1.5 rounded bg-blue-500/20 hover:bg-blue-500/30 text-[11px] text-blue-200">Re-run</button>
+                                    </form>
+                                {% endif %}
+                                {% if request.user|has_capability:'create_scan_request' %}
+                                    <form method="post" action="{% url 'scans:history-clone' execution.pk %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="px-2.5 py-1.5 rounded bg-slate-700/50 hover:bg-slate-700 text-[11px] text-slate-200">Clone</button>
+                                    </form>
+                                {% endif %}
+                                {% if request.user|has_capability:'compare_results' and execution.result %}
                                     <form method="post" action="{% url 'scans:history-compare' execution.pk %}">
                                         {% csrf_token %}
                                         <button type="submit" class="px-2.5 py-1.5 rounded bg-indigo-500/20 hover:bg-indigo-500/30 text-[11px] text-indigo-200">Compare</button>
                                     </form>
                                 {% endif %}
-                                <form method="post" action="{% url 'scans:history-archive' execution.pk %}">
-                                    {% csrf_token %}
-                                    <button type="submit" class="px-2.5 py-1.5 rounded bg-amber-500/20 hover:bg-amber-500/30 text-[11px] text-amber-200">Archive</button>
-                                </form>
+                                {% if request.user|has_capability:'manage_history' %}
+                                    <form method="post" action="{% url 'scans:history-archive' execution.pk %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="px-2.5 py-1.5 rounded bg-amber-500/20 hover:bg-amber-500/30 text-[11px] text-amber-200">Archive</button>
+                                    </form>
+                                {% endif %}
                             {% endif %}
                         </div>
                     </td>

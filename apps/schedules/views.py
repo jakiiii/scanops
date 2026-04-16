@@ -3,7 +3,6 @@ from __future__ import annotations
 from datetime import timedelta
 
 from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
@@ -12,6 +11,8 @@ from django.views import View
 from django.views.generic import CreateView, ListView, UpdateView
 
 from apps.notifications.services.notification_service import create_notification
+from apps.ops.models import PermissionRule
+from apps.ops.rbac import CapabilityRequiredMixin, scope_queryset_for_user
 from apps.schedules.forms import ScheduleFilterForm, ScheduleForm
 from apps.schedules.models import ScanSchedule, ScheduleRunLog
 from apps.schedules.services.schedule_service import apply_next_run, build_schedule_summary, trigger_schedule_run
@@ -21,7 +22,8 @@ def _redirect_back(request, fallback: str):
     return redirect(request.META.get("HTTP_REFERER") or fallback)
 
 
-class ScheduleListView(LoginRequiredMixin, ListView):
+class ScheduleListView(CapabilityRequiredMixin, ListView):
+    capability_key = PermissionRule.PermissionKey.VIEW_SCHEDULES
     model = ScanSchedule
     template_name = "schedules/list.html"
     context_object_name = "schedules"
@@ -34,7 +36,8 @@ class ScheduleListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         queryset = ScanSchedule.objects.select_related("target", "profile", "created_by").order_by("-created_at")
-        self.filter_form = ScheduleFilterForm(self.request.GET or None)
+        queryset = scope_queryset_for_user(queryset, self.request.user, ("created_by",))
+        self.filter_form = ScheduleFilterForm(self.request.GET or None, user=self.request.user)
         if self.filter_form.is_valid():
             cleaned = self.filter_form.cleaned_data
             q = (cleaned.get("q") or "").strip()
@@ -64,7 +67,7 @@ class ScheduleListView(LoginRequiredMixin, ListView):
         context["filter_form"] = self.filter_form
         now = timezone.now()
         due_soon = now + timedelta(hours=24)
-        source = ScanSchedule.objects.all()
+        source = scope_queryset_for_user(ScanSchedule.objects.all(), self.request.user, ("created_by",))
         context["summary"] = {
             "total": source.count(),
             "active": source.filter(is_enabled=True).count(),
@@ -77,10 +80,16 @@ class ScheduleListView(LoginRequiredMixin, ListView):
         return context
 
 
-class ScheduleCreateView(LoginRequiredMixin, CreateView):
+class ScheduleCreateView(CapabilityRequiredMixin, CreateView):
+    capability_key = PermissionRule.PermissionKey.MANAGE_SCHEDULES
     model = ScanSchedule
     form_class = ScheduleForm
     template_name = "schedules/form.html"
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["user"] = self.request.user
+        return kwargs
 
     def form_valid(self, form):
         self.object: ScanSchedule = form.save(commit=False)
@@ -116,11 +125,21 @@ class ScheduleCreateView(LoginRequiredMixin, CreateView):
         return context
 
 
-class ScheduleUpdateView(LoginRequiredMixin, UpdateView):
+class ScheduleUpdateView(CapabilityRequiredMixin, UpdateView):
+    capability_key = PermissionRule.PermissionKey.MANAGE_SCHEDULES
     model = ScanSchedule
     form_class = ScheduleForm
     template_name = "schedules/form.html"
     context_object_name = "schedule"
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["user"] = self.request.user
+        return kwargs
+
+    def get_queryset(self):
+        queryset = ScanSchedule.objects.select_related("target", "profile", "created_by")
+        return scope_queryset_for_user(queryset, self.request.user, ("created_by",))
 
     def form_valid(self, form):
         self.object = form.save()
@@ -156,9 +175,11 @@ class ScheduleUpdateView(LoginRequiredMixin, UpdateView):
         return context
 
 
-class SchedulePreviewView(LoginRequiredMixin, View):
+class SchedulePreviewView(CapabilityRequiredMixin, View):
+    capability_key = PermissionRule.PermissionKey.MANAGE_SCHEDULES
+
     def post(self, request):
-        form = ScheduleForm(request.POST)
+        form = ScheduleForm(request.POST, user=request.user)
         if form.is_valid():
             temp_schedule = ScanSchedule(**form.cleaned_data)
             temp_schedule.next_run_at = None
@@ -167,9 +188,12 @@ class SchedulePreviewView(LoginRequiredMixin, View):
         return render(request, "partials/schedule_summary.html", {"summary": {}, "errors": form.errors})
 
 
-class ScheduleRunNowView(LoginRequiredMixin, View):
+class ScheduleRunNowView(CapabilityRequiredMixin, View):
+    capability_key = PermissionRule.PermissionKey.MANAGE_SCHEDULES
+
     def post(self, request, pk: int):
-        schedule = get_object_or_404(ScanSchedule, pk=pk)
+        queryset = scope_queryset_for_user(ScanSchedule.objects.all(), request.user, ("created_by",))
+        schedule = get_object_or_404(queryset, pk=pk)
         log = trigger_schedule_run(schedule, user=request.user)
         if log.status == ScheduleRunLog.Status.FAILED:
             messages.error(request, log.message)
@@ -180,9 +204,12 @@ class ScheduleRunNowView(LoginRequiredMixin, View):
         return _redirect_back(request, reverse("schedules:list"))
 
 
-class ScheduleToggleView(LoginRequiredMixin, View):
+class ScheduleToggleView(CapabilityRequiredMixin, View):
+    capability_key = PermissionRule.PermissionKey.MANAGE_SCHEDULES
+
     def post(self, request, pk: int):
-        schedule = get_object_or_404(ScanSchedule, pk=pk)
+        queryset = scope_queryset_for_user(ScanSchedule.objects.all(), request.user, ("created_by",))
+        schedule = get_object_or_404(queryset, pk=pk)
         schedule.is_enabled = not schedule.is_enabled
         if not schedule.is_enabled:
             schedule.next_run_at = None
@@ -193,16 +220,20 @@ class ScheduleToggleView(LoginRequiredMixin, View):
         return _redirect_back(request, reverse("schedules:list"))
 
 
-class ScheduleDeleteView(LoginRequiredMixin, View):
+class ScheduleDeleteView(CapabilityRequiredMixin, View):
+    capability_key = PermissionRule.PermissionKey.MANAGE_SCHEDULES
+
     def post(self, request, pk: int):
-        schedule = get_object_or_404(ScanSchedule, pk=pk)
+        queryset = scope_queryset_for_user(ScanSchedule.objects.all(), request.user, ("created_by",))
+        schedule = get_object_or_404(queryset, pk=pk)
         name = schedule.name
         schedule.delete()
         messages.warning(request, f"Deleted schedule: {name}")
         return _redirect_back(request, reverse("schedules:list"))
 
 
-class ScheduleHistoryView(LoginRequiredMixin, ListView):
+class ScheduleHistoryView(CapabilityRequiredMixin, ListView):
+    capability_key = PermissionRule.PermissionKey.VIEW_SCHEDULES
     model = ScheduleRunLog
     template_name = "schedules/history.html"
     context_object_name = "run_logs"
@@ -210,6 +241,7 @@ class ScheduleHistoryView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         queryset = ScheduleRunLog.objects.select_related("schedule", "execution", "generated_report").order_by("-run_at")
+        queryset = scope_queryset_for_user(queryset, self.request.user, ("schedule__created_by",))
         q = (self.request.GET.get("q") or "").strip()
         status = (self.request.GET.get("status") or "").strip()
         schedule_id = (self.request.GET.get("schedule") or "").strip()
@@ -228,7 +260,11 @@ class ScheduleHistoryView(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["status_choices"] = ScheduleRunLog.Status.choices
-        context["schedule_choices"] = ScanSchedule.objects.order_by("name")
+        context["schedule_choices"] = scope_queryset_for_user(
+            ScanSchedule.objects.order_by("name"),
+            self.request.user,
+            ("created_by",),
+        )
         context["breadcrumbs"] = [
             {"label": "Schedule", "url": reverse("schedules:list")},
             {"label": "History", "url": ""},

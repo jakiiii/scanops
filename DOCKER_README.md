@@ -1,104 +1,122 @@
-# ScanOps Docker Guide
+# ScanOps Docker Deployment Guide
 
-This setup runs ScanOps on:
+This project is Dockerized with two runtime services:
 
-- `0.0.0.0:8008`
+- `scanops-web` (Django + Gunicorn)
+- `db` (PostgreSQL 16)
 
-The container entrypoint automatically runs:
-
-1. `python manage.py migrate`
-2. `python manage.py collectstatic --noinput`
-3. Gunicorn bound to `0.0.0.0:8008`
-
-## Option 1: Docker Compose (Recommended)
-
-From project root:
-
-```bash
-docker compose build
-docker compose up -d
-```
-
-Check status:
-
-```bash
-docker compose ps
-docker compose logs -f --tail=200
-```
-
-Open:
+The app is exposed on host port `8008`:
 
 - `http://127.0.0.1:8008/login/`
 - `http://0.0.0.0:8008/login/`
 
-Stop:
+## Prerequisites
+
+- Docker Engine
+- Docker Compose plugin (`docker compose`)
+
+## Environment Setup
+
+Create `.env` once:
 
 ```bash
+cp .env.example .env
+```
+
+Minimum values to review:
+
+- `JTRO_SECRET_KEY`
+- `JTRO_ALLOWED_HOSTS`
+- `SCANOPS_DB_NAME`
+- `SCANOPS_DB_USER`
+- `SCANOPS_DB_PASSWORD`
+- `SCANOPS_DB_PORT` (default `5432`)
+
+## Deployment Script
+
+Primary script:
+
+```bash
+./scripts/deploy_and_run.sh
+```
+
+Default behavior of `up`:
+
+1. Builds `scanops-web` image.
+2. Starts PostgreSQL (`db`) and app (`scanops-web`).
+3. Waits for PostgreSQL readiness.
+4. Lets the app entrypoint run `migrate` and `collectstatic`.
+5. Verifies HTTP readiness at `127.0.0.1:8008/login/`.
+
+### Common Commands
+
+```bash
+./scripts/deploy_and_run.sh up
+./scripts/deploy_and_run.sh up --no-build
+./scripts/deploy_and_run.sh restart
+./scripts/deploy_and_run.sh down
+./scripts/deploy_and_run.sh ps
+./scripts/deploy_and_run.sh logs
+./scripts/deploy_and_run.sh migrate
+./scripts/deploy_and_run.sh collectstatic
+./scripts/deploy_and_run.sh check
+```
+
+### Port Override
+
+```bash
+SCANOPS_PORT=8010 ./scripts/deploy_and_run.sh up
+```
+
+### DB Backup and Restore
+
+Backup current local DB defined by `.env`:
+
+```bash
+./scripts/deploy_and_run.sh backup-local-db
+```
+
+This writes backup files to:
+
+```text
+dbbackup/migration/
+```
+
+Restore into Docker PostgreSQL:
+
+```bash
+./scripts/deploy_and_run.sh restore-db --backup-file dbbackup/migration/<backup-file>.sql
+```
+
+Restore during startup:
+
+```bash
+./scripts/deploy_and_run.sh up --restore-db --backup-file dbbackup/migration/<backup-file>.sql
+```
+
+## Direct Docker Compose (Without Script)
+
+```bash
+docker compose up -d --build
+docker compose ps
+docker compose logs -f --tail=200
 docker compose down
 ```
 
-## Using Project Script (Docker Mode)
+## Persistence
 
-The repository includes a unified runner script:
+Named volumes:
 
-```bash
-./scripts/deploy_and_run.sh --mode docker
-```
-
-Useful variants:
-
-```bash
-./scripts/deploy_and_run.sh --mode docker --no-build
-./scripts/deploy_and_run.sh --mode docker --logs
-./scripts/deploy_and_run.sh --mode docker --no-run
-```
-
-## Option 2: Plain Docker
-
-Build image:
-
-```bash
-docker build -t scanops:latest .
-```
-
-Run container on port `8008`:
-
-```bash
-docker run --rm -p 8008:8008 \
-  -e JTRO_ENVIRONMENT=dev \
-  -e JTRO_DEBUG=True \
-  -e JTRO_SECRET_KEY=scanops-dev-secret-key-change-me \
-  -e JTRO_ALLOWED_HOSTS=localhost,127.0.0.1,0.0.0.0 \
-  -e JTRO_DEV_DATABASE=sqlite \
-  -e JTRO_SQLITE_PATH=/app/state/db.sqlite3 \
-  -e JTRO_SSL_ENABLED=False \
-  -v scanops_state:/app/state \
-  -v scanops_static:/app/static_root \
-  -v scanops_media:/app/media_root \
-  scanops:latest
-```
-
-## Useful Commands
-
-Run one-off migration inside compose service:
-
-```bash
-docker compose run --rm scanops-web python manage.py migrate
-```
-
-Create superuser inside compose service:
-
-```bash
-docker compose run --rm scanops-web python manage.py createsuperuser
-```
+- `scanops_postgres_data` (PostgreSQL data)
+- `scanops_static` (collected static files)
+- `scanops_media` (uploaded media)
+- `scanops_logs` (application logs)
 
 ## Troubleshooting
 
-- Port already in use:
-  - Change host mapping in `docker-compose.yml` (left side of `8008:8008`) or stop the process using port `8008`.
-- App does not start:
-  - Check logs: `docker compose logs --tail=200`.
-- Host access issues:
-  - Ensure `JTRO_ALLOWED_HOSTS` includes the host you use (already set to `localhost,127.0.0.1,0.0.0.0` in compose).
-- Fresh reset:
-  - `docker compose down -v` to remove containers + named volumes and recreate from scratch.
+- App not reachable:
+  - `./scripts/deploy_and_run.sh logs`
+- DB container unhealthy:
+  - `docker compose logs db`
+- Fresh reset (removes all persisted Docker DB/static/media data):
+  - `docker compose down -v`

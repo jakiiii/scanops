@@ -1,25 +1,58 @@
 services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: "${SCANOPS_DB_NAME:-db_scanops}"
+      POSTGRES_USER: "${SCANOPS_DB_USER:-scanops}"
+      POSTGRES_PASSWORD: "${SCANOPS_DB_PASSWORD:-scanops_dev_password}"
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - scanops_postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${SCANOPS_DB_USER:-scanops} -d ${SCANOPS_DB_NAME:-db_scanops} >/dev/null || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
   scanops-web:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: scanops-web
+    env_file:
+      - .env
+    depends_on:
+      db:
+        condition: service_healthy
     environment:
-      JTRO_ENVIRONMENT: dev
-      JTRO_DEBUG: "True"
-      JTRO_SECRET_KEY: "scanops-dev-secret-key-change-me"
-      JTRO_SSL_ENABLED: "False"
-      JTRO_ALLOWED_HOSTS: "localhost,127.0.0.1,0.0.0.0"
-      JTRO_DEV_DATABASE: sqlite
-      JTRO_SQLITE_PATH: /app/state/db.sqlite3
-      EMAIL_BACKEND: "django.core.mail.backends.console.EmailBackend"
-      GUNICORN_WORKERS: "3"
+      JTRO_ENVIRONMENT: "${JTRO_ENVIRONMENT:-dev}"
+      JTRO_DEBUG: "${JTRO_DEBUG:-True}"
+      JTRO_SECRET_KEY: "${JTRO_SECRET_KEY:-scanops-dev-secret-key-change-me}"
+      JTRO_SSL_ENABLED: "${JTRO_SSL_ENABLED:-False}"
+      JTRO_ALLOWED_HOSTS: "${JTRO_ALLOWED_HOSTS:-localhost,127.0.0.1,0.0.0.0}"
+      JTRO_CSRF_TRUSTED_ORIGINS: "${JTRO_CSRF_TRUSTED_ORIGINS:-}"
+      JTRO_DEV_DATABASE: "postgres"
+      JTRO_DEV_DATABASE_ENGINE: "django.db.backends.postgresql"
+      JTRO_DEV_DATABASE_NAME: "${SCANOPS_DB_NAME:-db_scanops}"
+      JTRO_DEV_DATABASE_USER: "${SCANOPS_DB_USER:-scanops}"
+      JTRO_DEV_DATABASE_PASSWORD: "${SCANOPS_DB_PASSWORD:-scanops_dev_password}"
+      JTRO_DEV_DATABASE_HOST: "db"
+      JTRO_DEV_DATABASE_PORT: "${SCANOPS_DB_PORT:-5432}"
+      JTRO_DATABASE_ENGINE: "django.db.backends.postgresql"
+      JTRO_DATABASE_NAME: "${SCANOPS_DB_NAME:-db_scanops}"
+      JTRO_DATABASE_USER: "${SCANOPS_DB_USER:-scanops}"
+      JTRO_DATABASE_PASSWORD: "${SCANOPS_DB_PASSWORD:-scanops_dev_password}"
+      JTRO_DATABASE_HOST: "db"
+      JTRO_DATABASE_PORT: "${SCANOPS_DB_PORT:-5432}"
+      EMAIL_BACKEND: "${EMAIL_BACKEND:-django.core.mail.backends.console.EmailBackend}"
+      GUNICORN_WORKERS: "${GUNICORN_WORKERS:-3}"
     ports:
-      - "8008:8008"
+      - "${SCANOPS_PORT:-8008}:8008"
     volumes:
-      - scanops_sqlite:/app/state
       - scanops_static:/app/static_root
       - scanops_media:/app/media_root
+      - scanops_logs:/app/app_logs
     restart: unless-stopped
     healthcheck:
       test: ["CMD-SHELL", "curl -fsS http://127.0.0.1:8008/login/ >/dev/null || exit 1"]
@@ -29,6 +62,7 @@ services:
       start_period: 45s
 
 volumes:
-  scanops_sqlite:
+  scanops_postgres_data:
   scanops_static:
   scanops_media:
+  scanops_logs:

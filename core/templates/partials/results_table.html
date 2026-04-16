@@ -43,11 +43,15 @@
                     <td class="px-4 py-4">
                         <div class="flex justify-end items-center gap-2">
                             <a href="{% url 'scans:result-detail' result.pk %}" class="px-2.5 py-1.5 rounded bg-slate-800 hover:bg-slate-700 text-[11px] text-slate-200">Open</a>
-                            <a href="{% url 'scans:result-compare-current' result.pk %}" class="px-2.5 py-1.5 rounded bg-blue-500/20 hover:bg-blue-500/30 text-[11px] text-blue-200">Compare</a>
-                            <form method="post" action="{% url 'scans:history-rerun' result.execution.pk %}">
-                                {% csrf_token %}
-                                <button type="submit" class="px-2.5 py-1.5 rounded bg-emerald-500/20 hover:bg-emerald-500/30 text-[11px] text-emerald-200">Re-run</button>
-                            </form>
+                            {% if request.user|has_capability:'compare_results' %}
+                                <a href="{% url 'scans:result-compare-current' result.pk %}" class="px-2.5 py-1.5 rounded bg-blue-500/20 hover:bg-blue-500/30 text-[11px] text-blue-200">Compare</a>
+                            {% endif %}
+                            {% if request.user|has_capability:'control_scan_executions' %}
+                                <form method="post" action="{% url 'scans:history-rerun' result.execution.pk %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="px-2.5 py-1.5 rounded bg-emerald-500/20 hover:bg-emerald-500/30 text-[11px] text-emerald-200">Re-run</button>
+                                </form>
+                            {% endif %}
                             <a href="{% url 'scans:result-raw' result.pk %}" class="px-2.5 py-1.5 rounded bg-slate-700/60 hover:bg-slate-700 text-[11px] text-slate-200">Export</a>
                         </div>
                     </td>

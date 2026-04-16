@@ -35,10 +35,12 @@
                     <td class="px-4 py-4">
                         <div class="flex justify-end gap-2">
                             <a href="{% url 'scans:monitor' execution.pk %}" class="px-2.5 py-1.5 rounded bg-slate-800 hover:bg-slate-700 text-[11px] text-slate-200">Monitor</a>
-                            <form method="post" action="{% url 'scans:execution-cancel' execution.pk %}">
-                                {% csrf_token %}
-                                <button type="submit" class="px-2.5 py-1.5 rounded bg-rose-500/20 hover:bg-rose-500/30 text-[11px] text-rose-200">Cancel</button>
-                            </form>
+                            {% if request.user|has_capability:'control_scan_executions' %}
+                                <form method="post" action="{% url 'scans:execution-cancel' execution.pk %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="px-2.5 py-1.5 rounded bg-rose-500/20 hover:bg-rose-500/30 text-[11px] text-rose-200">Cancel</button>
+                                </form>
+                            {% endif %}
                         </div>
                     </td>
                 </tr>

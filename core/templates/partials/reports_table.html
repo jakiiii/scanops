@@ -48,14 +48,16 @@
                             <a href="{% url 'reports:detail' report.pk %}" class="px-2.5 py-1.5 rounded bg-slate-800 hover:bg-slate-700 text-[11px] text-slate-200">Preview</a>
                             <a href="{% url 'reports:download' report.pk %}" class="px-2.5 py-1.5 rounded bg-blue-500/20 hover:bg-blue-500/30 text-[11px] text-blue-200">Download</a>
                             <a href="{% url 'reports:print' report.pk %}" class="px-2.5 py-1.5 rounded bg-indigo-500/20 hover:bg-indigo-500/30 text-[11px] text-indigo-200">Print</a>
-                            <form method="post" action="{% url 'reports:regenerate' report.pk %}">
-                                {% csrf_token %}
-                                <button type="submit" class="px-2.5 py-1.5 rounded bg-emerald-500/20 hover:bg-emerald-500/30 text-[11px] text-emerald-200">Regenerate</button>
-                            </form>
-                            <form method="post" action="{% url 'reports:archive' report.pk %}">
-                                {% csrf_token %}
-                                <button type="submit" class="px-2.5 py-1.5 rounded bg-amber-500/20 hover:bg-amber-500/30 text-[11px] text-amber-200">Archive</button>
-                            </form>
+                            {% if request.user|has_capability:'manage_reports' %}
+                                <form method="post" action="{% url 'reports:regenerate' report.pk %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="px-2.5 py-1.5 rounded bg-emerald-500/20 hover:bg-emerald-500/30 text-[11px] text-emerald-200">Regenerate</button>
+                                </form>
+                                <form method="post" action="{% url 'reports:archive' report.pk %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="px-2.5 py-1.5 rounded bg-amber-500/20 hover:bg-amber-500/30 text-[11px] text-amber-200">Archive</button>
+                                </form>
+                            {% endif %}
                         </div>
                     </td>
                 </tr>

@@ -5,12 +5,14 @@ from django.urls import path, include, re_path
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
 
+from apps.ops.services import permission_service
+
 
 def administrator_required_view(view):
     @wraps(view)
     @login_required
     def wrapped(request, *args, **kwargs):
-        if not getattr(request.user, 'is_administrator', False):
+        if not permission_service.can_manage_users(request.user):
             return redirect('accounts:permission_denied')
         return view(request, *args, **kwargs)
 

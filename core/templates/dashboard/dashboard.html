@@ -9,16 +9,22 @@
             <h1 class="text-3xl font-extrabold text-white tracking-tight">Dashboard</h1>
             <p class="text-slate-400 mt-1">Operational overview of authorized scanning activity.</p>
         </div>
-        <div class="flex items-center gap-3">
-            <a href="{% url 'scans:new' %}" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg font-semibold flex items-center gap-2 transition-colors">
-                <span class="material-symbols-outlined text-lg">add</span>
-                New Scan
-            </a>
-            <a href="{% url 'targets:create' %}" class="bg-slate-800 hover:bg-slate-700 text-white px-4 py-2 rounded-lg font-semibold flex items-center gap-2 transition-colors border border-slate-700">
-                <span class="material-symbols-outlined text-lg">track_changes</span>
-                Add Target
-            </a>
-        </div>
+        {% if request.user|has_capability:'create_scan_request' or request.user|has_capability:'manage_targets' %}
+            <div class="flex items-center gap-3">
+                {% if request.user|has_capability:'create_scan_request' %}
+                    <a href="{% url 'scans:new' %}" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg font-semibold flex items-center gap-2 transition-colors">
+                        <span class="material-symbols-outlined text-lg">add</span>
+                        New Scan
+                    </a>
+                {% endif %}
+                {% if request.user|has_capability:'manage_targets' %}
+                    <a href="{% url 'targets:create' %}" class="bg-slate-800 hover:bg-slate-700 text-white px-4 py-2 rounded-lg font-semibold flex items-center gap-2 transition-colors border border-slate-700">
+                        <span class="material-symbols-outlined text-lg">track_changes</span>
+                        Add Target
+                    </a>
+                {% endif %}
+            </div>
+        {% endif %}
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">

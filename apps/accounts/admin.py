@@ -5,8 +5,28 @@ from django.utils.html import format_html
 
 from apps.accounts.audit import AuditLogAdminMixin
 from apps.accounts.models import User, UserLogs
-
 from apps.accounts.forms import UserAdminCreationForm, UserAdminChangeForm
+from apps.ops.models import UserProfile
+
+
+class UserProfileInline(admin.StackedInline):
+    model = UserProfile
+    can_delete = False
+    fk_name = "user"
+    extra = 0
+    verbose_name = "RBAC Profile"
+    verbose_name_plural = "RBAC Profile"
+    fields = (
+        "display_name",
+        "role",
+        "is_approved",
+        "is_internal_operator",
+        "allowed_workspace",
+        "force_password_reset",
+        "notes",
+        "last_seen_at",
+    )
+    readonly_fields = ("last_seen_at",)
 
 
 @admin.register(User)
@@ -15,10 +35,22 @@ class UserAdmin(AuditLogAdminMixin, DjangoUserAdmin):
     form = UserAdminChangeForm
     model = User
 
-    list_display = ['username', 'first_name', 'last_name', 'email', 'is_superuser', 'is_staff', 'is_administrator', 'is_operator', 'is_active']
-    list_filter = ['is_superuser', 'is_staff']
+    list_display = [
+        'username',
+        'first_name',
+        'last_name',
+        'email',
+        'role_display',
+        'is_superuser',
+        'is_staff',
+        'is_administrator',
+        'is_operator',
+        'is_active',
+    ]
+    list_filter = ['is_superuser', 'is_staff', 'profile__role']
     search_fields = ['username', 'email', 'first_name', 'last_name']
     readonly_fields = ['last_login', 'date_joined']
+    inlines = (UserProfileInline,)
 
     fieldsets = (
         (None, {'fields': ('username', 'password')}),
@@ -33,6 +65,14 @@ class UserAdmin(AuditLogAdminMixin, DjangoUserAdmin):
             'fields': ('username', 'email', 'password1', 'password2', 'is_active', 'is_superuser', 'is_staff', 'is_administrator', 'is_operator')}
          ),
     )
+
+    def role_display(self, obj):
+        profile = getattr(obj, "profile", None)
+        if profile and profile.role:
+            return profile.role.name
+        return "-"
+
+    role_display.short_description = "Role"
 
 
 admin.site.unregister(Group)

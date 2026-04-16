@@ -3,7 +3,6 @@ from __future__ import annotations
 import json
 
 from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
@@ -12,6 +11,8 @@ from django.views import View
 from django.views.generic import DetailView, FormView, ListView
 
 from apps.notifications.services.notification_service import notify_report_generated
+from apps.ops.models import PermissionRule
+from apps.ops.rbac import CapabilityRequiredMixin, scope_queryset_for_user
 from apps.reports.forms import ReportFilterForm, ReportGenerateForm
 from apps.reports.models import GeneratedReport
 from apps.reports.services.report_service import (
@@ -25,7 +26,8 @@ def _redirect_back(request, fallback: str):
     return redirect(request.META.get("HTTP_REFERER") or fallback)
 
 
-class ReportListView(LoginRequiredMixin, ListView):
+class ReportListView(CapabilityRequiredMixin, ListView):
+    capability_key = PermissionRule.PermissionKey.VIEW_REPORTS
     model = GeneratedReport
     template_name = "reports/list.html"
     context_object_name = "reports"
@@ -46,7 +48,18 @@ class ReportListView(LoginRequiredMixin, ListView):
             )
             .order_by("-created_at")
         )
-        self.filter_form = ReportFilterForm(self.request.GET or None)
+        queryset = scope_queryset_for_user(
+            queryset,
+            self.request.user,
+            (
+                "generated_by",
+                "source_execution__scan_request__requested_by",
+                "source_result__execution__scan_request__requested_by",
+                "comparison_left_result__execution__scan_request__requested_by",
+                "comparison_right_result__execution__scan_request__requested_by",
+            ),
+        )
+        self.filter_form = ReportFilterForm(self.request.GET or None, user=self.request.user)
         if self.filter_form.is_valid():
             cleaned = self.filter_form.cleaned_data
             q = (cleaned.get("q") or "").strip()
@@ -75,7 +88,17 @@ class ReportListView(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["filter_form"] = self.filter_form
-        summary_source = GeneratedReport.objects.all()
+        summary_source = scope_queryset_for_user(
+            GeneratedReport.objects.all(),
+            self.request.user,
+            (
+                "generated_by",
+                "source_execution__scan_request__requested_by",
+                "source_result__execution__scan_request__requested_by",
+                "comparison_left_result__execution__scan_request__requested_by",
+                "comparison_right_result__execution__scan_request__requested_by",
+            ),
+        )
         context["summary"] = {
             "total": summary_source.count(),
             "generated": summary_source.filter(status=GeneratedReport.Status.GENERATED).count(),
@@ -88,9 +111,15 @@ class ReportListView(LoginRequiredMixin, ListView):
         return context
 
 
-class ReportGenerateView(LoginRequiredMixin, FormView):
+class ReportGenerateView(CapabilityRequiredMixin, FormView):
+    capability_key = PermissionRule.PermissionKey.GENERATE_REPORTS
     form_class = ReportGenerateForm
     template_name = "reports/generate.html"
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["user"] = self.request.user
+        return kwargs
 
     def get_initial(self):
         initial = super().get_initial()
@@ -121,16 +150,18 @@ class ReportGenerateView(LoginRequiredMixin, FormView):
         ]
         sample_payload = build_report_payload(
             report_type=GeneratedReport.ReportType.EXECUTIVE_SUMMARY,
-            source_result=self.form_class().fields["source_result"].queryset.first(),
+            source_result=self.form_class(user=self.request.user).fields["source_result"].queryset.first(),
             include_sections={"summary": True, "ports": True, "services": True, "findings": True, "timeline": False},
         )
         context["preview_payload"] = sample_payload
         return context
 
 
-class ReportPreviewView(LoginRequiredMixin, View):
+class ReportPreviewView(CapabilityRequiredMixin, View):
+    capability_key = PermissionRule.PermissionKey.GENERATE_REPORTS
+
     def post(self, request):
-        form = ReportGenerateForm(request.POST)
+        form = ReportGenerateForm(request.POST, user=request.user)
         if not form.is_valid():
             return render(request, "partials/report_preview.html", {"preview": {}, "errors": form.errors})
         preview_payload = build_report_payload(
@@ -152,7 +183,8 @@ class ReportPreviewView(LoginRequiredMixin, View):
         return render(request, "partials/report_preview.html", {"preview": preview_payload, "errors": {}})
 
 
-class ReportDetailView(LoginRequiredMixin, DetailView):
+class ReportDetailView(CapabilityRequiredMixin, DetailView):
+    capability_key = PermissionRule.PermissionKey.VIEW_REPORTS
     model = GeneratedReport
     template_name = "reports/detail.html"
     context_object_name = "report"
@@ -165,34 +197,114 @@ class ReportDetailView(LoginRequiredMixin, DetailView):
         ]
         return context
 
+    def get_queryset(self):
+        queryset = GeneratedReport.objects.select_related(
+            "generated_by",
+            "source_result__execution__scan_request__requested_by",
+            "source_execution__scan_request__requested_by",
+            "comparison_left_result__execution__scan_request__requested_by",
+            "comparison_right_result__execution__scan_request__requested_by",
+        )
+        return scope_queryset_for_user(
+            queryset,
+            self.request.user,
+            (
+                "generated_by",
+                "source_execution__scan_request__requested_by",
+                "source_result__execution__scan_request__requested_by",
+                "comparison_left_result__execution__scan_request__requested_by",
+                "comparison_right_result__execution__scan_request__requested_by",
+            ),
+        )
 
-class ReportPrintView(LoginRequiredMixin, DetailView):
+
+class ReportPrintView(CapabilityRequiredMixin, DetailView):
+    capability_key = PermissionRule.PermissionKey.VIEW_REPORTS
     model = GeneratedReport
     template_name = "reports/printable.html"
     context_object_name = "report"
 
+    def get_queryset(self):
+        queryset = GeneratedReport.objects.select_related(
+            "generated_by",
+            "source_result__execution__scan_request__requested_by",
+            "source_execution__scan_request__requested_by",
+            "comparison_left_result__execution__scan_request__requested_by",
+            "comparison_right_result__execution__scan_request__requested_by",
+        )
+        return scope_queryset_for_user(
+            queryset,
+            self.request.user,
+            (
+                "generated_by",
+                "source_execution__scan_request__requested_by",
+                "source_result__execution__scan_request__requested_by",
+                "comparison_left_result__execution__scan_request__requested_by",
+                "comparison_right_result__execution__scan_request__requested_by",
+            ),
+        )
 
-class ReportArchiveView(LoginRequiredMixin, View):
+
+class ReportArchiveView(CapabilityRequiredMixin, View):
+    capability_key = PermissionRule.PermissionKey.MANAGE_REPORTS
+
     def post(self, request, pk: int):
-        report = get_object_or_404(GeneratedReport, pk=pk)
+        queryset = scope_queryset_for_user(
+            GeneratedReport.objects.all(),
+            request.user,
+            (
+                "generated_by",
+                "source_execution__scan_request__requested_by",
+                "source_result__execution__scan_request__requested_by",
+                "comparison_left_result__execution__scan_request__requested_by",
+                "comparison_right_result__execution__scan_request__requested_by",
+            ),
+        )
+        report = get_object_or_404(queryset, pk=pk)
         report.status = GeneratedReport.Status.ARCHIVED
         report.save(update_fields=["status", "updated_at"])
         messages.info(request, f"Archived report: {report.title}")
         return _redirect_back(request, reverse("reports:list"))
 
 
-class ReportRegenerateView(LoginRequiredMixin, View):
+class ReportRegenerateView(CapabilityRequiredMixin, View):
+    capability_key = PermissionRule.PermissionKey.MANAGE_REPORTS
+
     def post(self, request, pk: int):
-        report = get_object_or_404(GeneratedReport, pk=pk)
+        queryset = scope_queryset_for_user(
+            GeneratedReport.objects.all(),
+            request.user,
+            (
+                "generated_by",
+                "source_execution__scan_request__requested_by",
+                "source_result__execution__scan_request__requested_by",
+                "comparison_left_result__execution__scan_request__requested_by",
+                "comparison_right_result__execution__scan_request__requested_by",
+            ),
+        )
+        report = get_object_or_404(queryset, pk=pk)
         report = regenerate_report(report, user=request.user)
         notify_report_generated(report)
         messages.success(request, f"Regenerated report: {report.title}")
         return _redirect_back(request, reverse("reports:detail", kwargs={"pk": report.pk}))
 
 
-class ReportDownloadView(LoginRequiredMixin, View):
+class ReportDownloadView(CapabilityRequiredMixin, View):
+    capability_key = PermissionRule.PermissionKey.VIEW_REPORTS
+
     def get(self, request, pk: int):
-        report = get_object_or_404(GeneratedReport, pk=pk)
+        queryset = scope_queryset_for_user(
+            GeneratedReport.objects.all(),
+            request.user,
+            (
+                "generated_by",
+                "source_execution__scan_request__requested_by",
+                "source_result__execution__scan_request__requested_by",
+                "comparison_left_result__execution__scan_request__requested_by",
+                "comparison_right_result__execution__scan_request__requested_by",
+            ),
+        )
+        report = get_object_or_404(queryset, pk=pk)
         if report.format == GeneratedReport.Format.JSON:
             return HttpResponse(
                 json.dumps(report.report_payload_json, indent=2),
@@ -210,4 +322,3 @@ class ReportDownloadView(LoginRequiredMixin, View):
             content_type="text/html; charset=utf-8",
             headers={"Content-Disposition": f'attachment; filename="report-{report.pk}.html"'},
         )
-

@@ -13,7 +13,9 @@
         <div class="flex flex-wrap gap-2">
             <a href="{% url 'scans:result-raw' result.pk %}" class="px-3 py-2 rounded-lg bg-slate-800 border border-slate-700 text-sm text-slate-100 hover:bg-slate-700">Raw Output</a>
             <a href="{% url 'scans:result-parsed' result.pk %}" class="px-3 py-2 rounded-lg bg-slate-800 border border-slate-700 text-sm text-slate-100 hover:bg-slate-700">Parsed Output</a>
-            <a href="{% url 'scans:result-compare-current' result.pk %}" class="px-3 py-2 rounded-lg bg-blue-600 text-sm font-semibold text-white hover:bg-blue-500">Compare</a>
+            {% if request.user|has_capability:'compare_results' %}
+                <a href="{% url 'scans:result-compare-current' result.pk %}" class="px-3 py-2 rounded-lg bg-blue-600 text-sm font-semibold text-white hover:bg-blue-500">Compare</a>
+            {% endif %}
             <a href="{% url 'scans:host-detail' result.execution.scan_request.target_id %}" class="px-3 py-2 rounded-lg bg-emerald-600 text-sm font-semibold text-white hover:bg-emerald-500">Host Detail</a>
         </div>
     </div>
@@ -191,7 +193,9 @@
                     <p class="text-[11px] uppercase tracking-widest text-slate-500 mb-2">Activity</p>
                     {% if previous_result %}
                         <p class="text-sm text-slate-300">Previous result exists from {{ previous_result.generated_at|date:"M d, Y H:i" }}.</p>
-                        <a href="{% url 'scans:result-compare' %}?left_result={{ previous_result.pk }}&right_result={{ result.pk }}" class="inline-flex mt-3 px-3 py-2 rounded bg-blue-600 text-sm font-semibold text-white hover:bg-blue-500">Compare with previous</a>
+                        {% if request.user|has_capability:'compare_results' %}
+                            <a href="{% url 'scans:result-compare' %}?left_result={{ previous_result.pk }}&right_result={{ result.pk }}" class="inline-flex mt-3 px-3 py-2 rounded bg-blue-600 text-sm font-semibold text-white hover:bg-blue-500">Compare with previous</a>
+                        {% endif %}
                     {% else %}
                         <p class="text-sm text-slate-500">No previous result is available for this host.</p>
                     {% endif %}

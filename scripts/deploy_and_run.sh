@@ -3,29 +3,24 @@ set -Eeuo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
-
-MANAGE_PY="${PROJECT_ROOT}/manage.py"
-VENV_DIR="${PROJECT_ROOT}/.venv"
-REQ_FILE="${PROJECT_ROOT}/requirements.txt"
-ENV_FILE="${PROJECT_ROOT}/.env"
-ENV_EXAMPLE="${PROJECT_ROOT}/.env.example"
-
-MODE="local"
+COMPOSE_FILE="${PROJECT_ROOT}/docker-compose.yml"
+APP_SERVICE="${SCANOPS_SERVICE:-scanops-web}"
+DB_SERVICE="${SCANOPS_DB_SERVICE:-db}"
 HOST="${SCANOPS_HOST:-0.0.0.0}"
 PORT="${SCANOPS_PORT:-8008}"
+DEFAULT_BACKUP_DIR="${PROJECT_ROOT}/dbbackup/migration"
 
-SKIP_INSTALL=0
-SKIP_MIGRATE=0
-SKIP_COLLECTSTATIC=0
-SKIP_CHECK=0
-SEED_DEMO=0
-NO_RUN=0
-NO_BUILD=0
-SHOW_LOGS=0
-
-PYTHON_BIN=""
-PIP_BIN=""
+ACTION="up"
+DO_BUILD=1
+FOLLOW_LOGS=0
+NO_VERIFY=0
+RUN_RESTORE_AFTER_UP=0
+BACKUP_FILE=""
 COMPOSE_CMD=()
+
+DB_NAME="${SCANOPS_DB_NAME:-db_scanops}"
+DB_USER="${SCANOPS_DB_USER:-scanops}"
+DB_PASSWORD="${SCANOPS_DB_PASSWORD:-scanops_dev_password}"
 
 log() {
   printf '[ScanOps] %s\n' "$*"
@@ -42,40 +37,58 @@ die() {
 
 usage() {
   cat <<EOF
-Usage: scripts/deploy_and_run.sh [options]
+Usage: scripts/deploy_and_run.sh [action] [options]
 
-Modes:
-  --mode local|docker     Run locally (Django runserver) or via Docker Compose
+Actions:
+  up (default)            Build image, start DB + app, run migrate/collectstatic, verify readiness
+  build                   Build Docker image for ScanOps app service
+  down                    Stop and remove containers/network
+  restart                 Recreate services (down then up)
+  logs                    Follow service logs
+  ps                      Show compose service status
+  migrate                 Run Django migrations inside Docker
+  collectstatic           Run Django collectstatic inside Docker
+  check                   Run Django system checks inside Docker
+  backup-local-db         Backup current local DB configured in .env to dbbackup/migration
+  restore-db              Restore a SQL backup into Docker PostgreSQL, then run migrations
 
-Core options:
-  --host <host>           Bind host for local runserver (default: ${HOST})
-  --port <port>           Bind port / healthcheck port (default: ${PORT})
-  --skip-install          Skip pip install -r requirements.txt (local mode)
-  --skip-migrate          Skip python manage.py migrate
-  --skip-collectstatic    Skip python manage.py collectstatic --noinput
-  --skip-check            Skip python manage.py check
-  --seed-demo             Run python manage.py seed_demo_environment if command exists
-  --no-run                Prepare only; do not start runserver / docker compose up
-
-Docker mode:
-  --no-build              Skip docker compose build
-  --logs                  Follow docker compose logs after startup
-
-Misc:
+Options:
+  --service <name>        Compose app service name (default: ${APP_SERVICE})
+  --db-service <name>     Compose DB service name (default: ${DB_SERVICE})
+  --port <port>           Host port for readiness checks and compose mapping (default: ${PORT})
+  --build                 Force build step for 'up' and 'restart' (default behavior)
+  --no-build              Skip build step for 'up' and 'restart'
+  --restore-db            With action 'up', restore DB after startup
+  --backup-file <path>    SQL backup file path for restore-db / --restore-db
+  --logs                  Follow logs after a successful 'up' or 'restart'
+  --no-verify             Skip HTTP readiness verification after startup
   -h, --help              Show this help
+
+Environment:
+  SCANOPS_SERVICE         Override compose app service name
+  SCANOPS_DB_SERVICE      Override compose DB service name
+  SCANOPS_PORT            Override host port mapping (default 8008)
+  SCANOPS_HOST            Display host for startup URL (default 0.0.0.0)
+  SCANOPS_DB_NAME         Docker PostgreSQL database name
+  SCANOPS_DB_USER         Docker PostgreSQL database user
+  SCANOPS_DB_PASSWORD     Docker PostgreSQL database password
 EOF
 }
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
-    --mode)
-      [[ $# -ge 2 ]] || die "--mode requires a value"
-      MODE="$2"
+    up|build|down|restart|logs|ps|migrate|collectstatic|check|backup-local-db|restore-db)
+      ACTION="$1"
+      shift
+      ;;
+    --service)
+      [[ $# -ge 2 ]] || die "--service requires a value"
+      APP_SERVICE="$2"
       shift 2
       ;;
-    --host)
-      [[ $# -ge 2 ]] || die "--host requires a value"
-      HOST="$2"
+    --db-service)
+      [[ $# -ge 2 ]] || die "--db-service requires a value"
+      DB_SERVICE="$2"
       shift 2
       ;;
     --port)
@@ -83,36 +96,29 @@ while [[ $# -gt 0 ]]; do
       PORT="$2"
       shift 2
       ;;
-    --skip-install)
-      SKIP_INSTALL=1
-      shift
-      ;;
-    --skip-migrate)
-      SKIP_MIGRATE=1
-      shift
-      ;;
-    --skip-collectstatic)
-      SKIP_COLLECTSTATIC=1
-      shift
-      ;;
-    --skip-check)
-      SKIP_CHECK=1
-      shift
-      ;;
-    --seed-demo)
-      SEED_DEMO=1
-      shift
-      ;;
-    --no-run)
-      NO_RUN=1
+    --build)
+      DO_BUILD=1
       shift
       ;;
     --no-build)
-      NO_BUILD=1
+      DO_BUILD=0
       shift
       ;;
+    --restore-db)
+      RUN_RESTORE_AFTER_UP=1
+      shift
+      ;;
+    --backup-file)
+      [[ $# -ge 2 ]] || die "--backup-file requires a value"
+      BACKUP_FILE="$2"
+      shift 2
+      ;;
     --logs)
-      SHOW_LOGS=1
+      FOLLOW_LOGS=1
+      shift
+      ;;
+    --no-verify)
+      NO_VERIFY=1
       shift
       ;;
     -h|--help)
@@ -120,95 +126,37 @@ while [[ $# -gt 0 ]]; do
       exit 0
       ;;
     *)
-      die "Unknown option: $1"
+      die "Unknown argument: $1"
       ;;
   esac
 done
 
-[[ "${MODE}" == "local" || "${MODE}" == "docker" ]] || die "--mode must be 'local' or 'docker'"
-[[ -f "${MANAGE_PY}" ]] || die "manage.py not found at ${MANAGE_PY}"
-[[ -f "${REQ_FILE}" ]] || die "requirements.txt not found at ${REQ_FILE}"
+[[ -f "${COMPOSE_FILE}" ]] || die "docker-compose.yml not found at ${COMPOSE_FILE}"
 
-cd "${PROJECT_ROOT}"
+load_env_file() {
+  if [[ -f "${PROJECT_ROOT}/.env" ]]; then
+    set -a
+    # shellcheck disable=SC1091
+    source "${PROJECT_ROOT}/.env"
+    set +a
+    return 0
+  fi
 
-if [[ ! -f "${ENV_FILE}" && -f "${ENV_EXAMPLE}" ]]; then
-  cp "${ENV_EXAMPLE}" "${ENV_FILE}"
-  log "Created .env from .env.example"
-fi
-
-mkdir -p "${PROJECT_ROOT}/app_logs" "${PROJECT_ROOT}/static_root/static" "${PROJECT_ROOT}/media_root/media"
-
-activate_venv_if_present() {
-  if [[ -d "${VENV_DIR}" && -f "${VENV_DIR}/bin/activate" ]]; then
-    # shellcheck disable=SC1090
-    source "${VENV_DIR}/bin/activate"
-    log "Activated virtualenv: ${VENV_DIR}"
+  if [[ -f "${PROJECT_ROOT}/.env.example" ]]; then
+    cp "${PROJECT_ROOT}/.env.example" "${PROJECT_ROOT}/.env"
+    warn "No .env file found. Created ${PROJECT_ROOT}/.env from .env.example."
+  elif [[ -f "${PROJECT_ROOT}/.env.sample" ]]; then
+    cp "${PROJECT_ROOT}/.env.sample" "${PROJECT_ROOT}/.env"
+    warn "No .env file found. Created ${PROJECT_ROOT}/.env from .env.sample."
   else
-    warn "Virtualenv not found at ${VENV_DIR}; using system Python"
-  fi
-}
-
-set_python_tools() {
-  if command -v python >/dev/null 2>&1; then
-    PYTHON_BIN="$(command -v python)"
-  elif command -v python3 >/dev/null 2>&1; then
-    PYTHON_BIN="$(command -v python3)"
-  else
-    die "Python is not installed"
+    warn "No .env/.env.example/.env.sample found. Continuing with environment defaults."
+    return 0
   fi
 
-  if command -v pip >/dev/null 2>&1; then
-    PIP_BIN="$(command -v pip)"
-  else
-    PIP_BIN="${PYTHON_BIN} -m pip"
-  fi
-}
-
-run_manage() {
-  "${PYTHON_BIN}" "${MANAGE_PY}" "$@"
-}
-
-prepare_local() {
-  activate_venv_if_present
-  set_python_tools
-
-  if [[ "${SKIP_INSTALL}" -eq 0 ]]; then
-    log "Installing dependencies"
-    # shellcheck disable=SC2086
-    ${PIP_BIN} install -r "${REQ_FILE}"
-  fi
-
-  if [[ "${SKIP_MIGRATE}" -eq 0 ]]; then
-    log "Running migrations"
-    run_manage migrate --noinput
-  fi
-
-  if [[ "${SKIP_COLLECTSTATIC}" -eq 0 ]]; then
-    log "Collecting static files"
-    run_manage collectstatic --noinput --ignore "admin/js/*"
-  fi
-
-  if [[ "${SKIP_CHECK}" -eq 0 ]]; then
-    log "Running Django system checks"
-    run_manage check
-  fi
-
-  if [[ "${SEED_DEMO}" -eq 1 ]]; then
-    if run_manage help seed_demo_environment >/dev/null 2>&1; then
-      log "Seeding demo environment"
-      run_manage seed_demo_environment
-    else
-      warn "seed_demo_environment command not found; skipping demo seed"
-    fi
-  fi
-
-  if [[ "${NO_RUN}" -eq 1 ]]; then
-    log "Preparation complete (--no-run enabled)"
-    return
-  fi
-
-  log "Starting ScanOps on http://${HOST}:${PORT}"
-  exec "${PYTHON_BIN}" "${MANAGE_PY}" runserver "${HOST}:${PORT}"
+  set -a
+  # shellcheck disable=SC1091
+  source "${PROJECT_ROOT}/.env"
+  set +a
 }
 
 set_compose_cmd() {
@@ -217,21 +165,32 @@ set_compose_cmd() {
   elif command -v docker-compose >/dev/null 2>&1; then
     COMPOSE_CMD=(docker-compose)
   else
-    die "Docker Compose is required for --mode docker"
+    die "Docker Compose is required"
   fi
+}
+
+ensure_docker() {
+  command -v docker >/dev/null 2>&1 || die "Docker is not installed"
+  docker info >/dev/null 2>&1 || die "Docker daemon is not reachable"
+  set_compose_cmd
+}
+
+compose() {
+  SCANOPS_PORT="${PORT}" "${COMPOSE_CMD[@]}" -f "${COMPOSE_FILE}" "$@"
 }
 
 wait_for_http() {
   local url="$1"
   local attempts="$2"
   local sleep_for="$3"
+  local i
 
   if ! command -v curl >/dev/null 2>&1; then
-    warn "curl not available; skipping HTTP verification for ${url}"
+    warn "curl is not available; skipping HTTP readiness verification for ${url}"
     return 0
   fi
 
-  for _ in $(seq 1 "${attempts}"); do
+  for ((i = 1; i <= attempts; i += 1)); do
     if curl -fsS "${url}" >/dev/null 2>&1; then
       return 0
     fi
@@ -240,41 +199,218 @@ wait_for_http() {
   return 1
 }
 
-prepare_docker() {
-  command -v docker >/dev/null 2>&1 || die "Docker is not installed"
-  docker info >/dev/null 2>&1 || die "Docker daemon is not reachable"
-  set_compose_cmd
+wait_for_db() {
+  local attempts=90
+  local i
 
-  if [[ "${NO_BUILD}" -eq 0 ]]; then
-    log "Building Docker image"
-    "${COMPOSE_CMD[@]}" build
+  log "Waiting for PostgreSQL service '${DB_SERVICE}'"
+  for ((i = 1; i <= attempts; i += 1)); do
+    if compose exec -T "${DB_SERVICE}" pg_isready -U "${DB_USER}" -d "${DB_NAME}" >/dev/null 2>&1; then
+      return 0
+    fi
+    sleep 1
+  done
+
+  compose logs --tail=200 "${DB_SERVICE}" || true
+  die "PostgreSQL service '${DB_SERVICE}' did not become ready in time"
+}
+
+run_manage_command() {
+  local subcommand="$1"
+  shift
+  log "Running 'python manage.py ${subcommand} $*' in '${APP_SERVICE}'"
+  compose exec -T "${APP_SERVICE}" python manage.py "${subcommand}" "$@"
+}
+
+ensure_runtime_up() {
+  if [[ "${DO_BUILD}" -eq 1 ]]; then
+    log "Building Docker image for '${APP_SERVICE}'"
+    compose build "${APP_SERVICE}"
   fi
 
-  if [[ "${NO_RUN}" -eq 1 ]]; then
-    log "Docker build complete (--no-run enabled)"
-    return
-  fi
+  log "Starting service '${DB_SERVICE}'"
+  compose up -d --remove-orphans "${DB_SERVICE}"
+  wait_for_db
 
-  log "Starting Docker services"
-  "${COMPOSE_CMD[@]}" up -d
+  log "Starting service '${APP_SERVICE}'"
+  compose up -d --remove-orphans "${APP_SERVICE}"
+}
 
+wait_for_app() {
   local login_url="http://127.0.0.1:${PORT}/login/"
   if wait_for_http "${login_url}" 90 1; then
-    log "Application is reachable at ${login_url}"
-  else
-    "${COMPOSE_CMD[@]}" logs --tail=200 scanops-web || true
-    die "App did not become ready on ${login_url}"
+    return 0
+  fi
+  compose logs --tail=200 "${APP_SERVICE}" || true
+  die "Application did not become ready on ${login_url}"
+}
+
+resolve_backup_file() {
+  if [[ -n "${BACKUP_FILE}" ]]; then
+    [[ -f "${BACKUP_FILE}" ]] || die "Backup file not found: ${BACKUP_FILE}"
+    printf '%s\n' "${BACKUP_FILE}"
+    return 0
   fi
 
-  "${COMPOSE_CMD[@]}" ps
+  local latest_backup
+  latest_backup="$(ls -1t "${DEFAULT_BACKUP_DIR}"/*.sql 2>/dev/null | head -n 1 || true)"
+  [[ -n "${latest_backup}" ]] || die "No backup file found in ${DEFAULT_BACKUP_DIR}. Use --backup-file <path>."
+  printf '%s\n' "${latest_backup}"
+}
 
-  if [[ "${SHOW_LOGS}" -eq 1 ]]; then
-    "${COMPOSE_CMD[@]}" logs -f --tail=200 scanops-web
+restore_db() {
+  local backup_path
+  backup_path="$(resolve_backup_file)"
+
+  log "Restoring '${backup_path}' into Docker PostgreSQL database '${DB_NAME}'"
+  compose exec -T "${DB_SERVICE}" psql -U "${DB_USER}" -d "${DB_NAME}" -v ON_ERROR_STOP=1 \
+    -c "DROP SCHEMA public CASCADE; CREATE SCHEMA public;"
+  compose exec -T "${DB_SERVICE}" psql -U "${DB_USER}" -d "${DB_NAME}" -v ON_ERROR_STOP=1 < "${backup_path}"
+  log "Restore completed"
+}
+
+backup_local_db() {
+  local timestamp backup_dir output_file
+  backup_dir="${DEFAULT_BACKUP_DIR}"
+  mkdir -p "${backup_dir}"
+  timestamp="$(date +%Y%m%d_%H%M%S)"
+
+  local dev_database_mode dev_database_engine local_db_name local_db_user local_db_password local_db_host local_db_port sqlite_path
+  dev_database_mode="${JTRO_DEV_DATABASE:-}"
+  dev_database_engine="${JTRO_DEV_DATABASE_ENGINE:-}"
+  local_db_name="${JTRO_DEV_DATABASE_NAME:-}"
+  local_db_user="${JTRO_DEV_DATABASE_USER:-postgres}"
+  local_db_password="${JTRO_DEV_DATABASE_PASSWORD:-}"
+  local_db_host="${JTRO_DEV_DATABASE_HOST:-localhost}"
+  local_db_port="${JTRO_DEV_DATABASE_PORT:-5432}"
+  sqlite_path="${JTRO_SQLITE_PATH:-${PROJECT_ROOT}/db.sqlite3}"
+
+  if [[ "${dev_database_mode}" == "postgres" || "${dev_database_engine}" == *postgres* ]]; then
+    command -v pg_dump >/dev/null 2>&1 || die "pg_dump is required for PostgreSQL local backup"
+    [[ -n "${local_db_name}" ]] || die "JTRO_DEV_DATABASE_NAME is required for PostgreSQL local backup"
+    output_file="${backup_dir}/local_postgres_${local_db_name}_${timestamp}.sql"
+    log "Backing up local PostgreSQL database '${local_db_name}' from ${local_db_host}:${local_db_port}"
+    PGPASSWORD="${local_db_password}" pg_dump --format=plain --no-owner --no-privileges \
+      -h "${local_db_host}" -p "${local_db_port}" -U "${local_db_user}" -d "${local_db_name}" -f "${output_file}"
+    log "Local PostgreSQL backup created at ${output_file}"
+    return 0
+  fi
+
+  if [[ "${dev_database_mode}" == "sqlite" || "${dev_database_engine}" == *sqlite* ]]; then
+    [[ -f "${sqlite_path}" ]] || die "SQLite file not found: ${sqlite_path}"
+    output_file="${backup_dir}/local_sqlite_snapshot_${timestamp}.sqlite3"
+    cp "${sqlite_path}" "${output_file}"
+    log "SQLite snapshot created at ${output_file}"
+    return 0
+  fi
+
+  die "Unsupported local development DB config: JTRO_DEV_DATABASE='${dev_database_mode}', JTRO_DEV_DATABASE_ENGINE='${dev_database_engine}'"
+}
+
+start_service() {
+  if [[ "${DO_BUILD}" -eq 1 ]]; then
+    log "Building Docker image for '${APP_SERVICE}'"
+    compose build "${APP_SERVICE}"
+  fi
+
+  log "Starting service '${DB_SERVICE}'"
+  compose up -d --remove-orphans "${DB_SERVICE}"
+  wait_for_db
+
+  if [[ "${RUN_RESTORE_AFTER_UP}" -eq 1 ]]; then
+    restore_db
+  fi
+
+  log "Starting service '${APP_SERVICE}'"
+  compose up -d --remove-orphans "${APP_SERVICE}"
+
+  if [[ "${NO_VERIFY}" -eq 0 ]]; then
+    wait_for_app
+    log "Application is reachable at http://${HOST}:${PORT}/login/"
+  fi
+
+  compose ps "${DB_SERVICE}" "${APP_SERVICE}"
+
+  if [[ "${FOLLOW_LOGS}" -eq 1 ]]; then
+    compose logs -f --tail=200 "${DB_SERVICE}" "${APP_SERVICE}"
   fi
 }
 
-if [[ "${MODE}" == "local" ]]; then
-  prepare_local
-else
-  prepare_docker
-fi
+down_stack() {
+  log "Stopping ScanOps Docker services"
+  compose down --remove-orphans
+}
+
+restart_service() {
+  down_stack
+  start_service
+}
+
+main() {
+  ensure_docker
+  cd "${PROJECT_ROOT}"
+  load_env_file
+
+  DB_NAME="${SCANOPS_DB_NAME:-db_scanops}"
+  DB_USER="${SCANOPS_DB_USER:-scanops}"
+  DB_PASSWORD="${SCANOPS_DB_PASSWORD:-scanops_dev_password}"
+
+  case "${ACTION}" in
+    up)
+      start_service
+      ;;
+    build)
+      log "Building Docker image for '${APP_SERVICE}'"
+      compose build "${APP_SERVICE}"
+      ;;
+    down)
+      down_stack
+      ;;
+    restart)
+      restart_service
+      ;;
+    logs)
+      compose logs -f --tail=200 "${DB_SERVICE}" "${APP_SERVICE}"
+      ;;
+    ps)
+      compose ps "${DB_SERVICE}" "${APP_SERVICE}"
+      ;;
+    migrate)
+      ensure_runtime_up
+      wait_for_app
+      run_manage_command migrate --noinput
+      ;;
+    collectstatic)
+      ensure_runtime_up
+      wait_for_app
+      run_manage_command collectstatic --noinput --ignore "admin/js/*"
+      ;;
+    check)
+      ensure_runtime_up
+      wait_for_app
+      run_manage_command check
+      ;;
+    backup-local-db)
+      backup_local_db
+      ;;
+    restore-db)
+      if [[ "${DO_BUILD}" -eq 1 ]]; then
+        log "Building Docker image for '${APP_SERVICE}'"
+        compose build "${APP_SERVICE}"
+      fi
+      log "Starting service '${DB_SERVICE}'"
+      compose up -d --remove-orphans "${DB_SERVICE}"
+      wait_for_db
+      restore_db
+      log "Starting service '${APP_SERVICE}'"
+      compose up -d --remove-orphans "${APP_SERVICE}"
+      wait_for_app
+      run_manage_command migrate --noinput
+      ;;
+    *)
+      die "Unsupported action: ${ACTION}"
+      ;;
+  esac
+}
+
+main

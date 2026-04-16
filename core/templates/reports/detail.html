@@ -13,14 +13,16 @@
         <div class="flex flex-wrap gap-2">
             <a href="{% url 'reports:download' report.pk %}" class="px-3 py-2 rounded-lg bg-slate-800 border border-slate-700 text-sm text-slate-100 hover:bg-slate-700">Download</a>
             <a href="{% url 'reports:print' report.pk %}" class="px-3 py-2 rounded-lg bg-indigo-500/20 text-indigo-200 text-sm hover:bg-indigo-500/30">Print</a>
-            <form method="post" action="{% url 'reports:regenerate' report.pk %}">
-                {% csrf_token %}
-                <button type="submit" class="px-3 py-2 rounded-lg bg-emerald-500/20 text-emerald-200 text-sm hover:bg-emerald-500/30">Regenerate</button>
-            </form>
-            <form method="post" action="{% url 'reports:archive' report.pk %}">
-                {% csrf_token %}
-                <button type="submit" class="px-3 py-2 rounded-lg bg-amber-500/20 text-amber-200 text-sm hover:bg-amber-500/30">Archive</button>
-            </form>
+            {% if request.user|has_capability:'manage_reports' %}
+                <form method="post" action="{% url 'reports:regenerate' report.pk %}">
+                    {% csrf_token %}
+                    <button type="submit" class="px-3 py-2 rounded-lg bg-emerald-500/20 text-emerald-200 text-sm hover:bg-emerald-500/30">Regenerate</button>
+                </form>
+                <form method="post" action="{% url 'reports:archive' report.pk %}">
+                    {% csrf_token %}
+                    <button type="submit" class="px-3 py-2 rounded-lg bg-amber-500/20 text-amber-200 text-sm hover:bg-amber-500/30">Archive</button>
+                </form>
+            {% endif %}
         </div>
     </div>
 

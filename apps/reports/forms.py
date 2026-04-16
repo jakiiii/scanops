@@ -6,6 +6,7 @@ from django.db import models
 from django.utils import timezone
 
 from apps.assets.models import Asset
+from apps.ops.rbac import scope_queryset_for_user, user_is_scoped
 from apps.reports.models import GeneratedReport
 from apps.scans.models import ScanExecution, ScanResult
 
@@ -30,9 +31,11 @@ class ReportFilterForm(forms.Form):
     date_from = forms.DateField(required=False, widget=forms.DateInput(attrs={"type": "date"}))
     date_to = forms.DateField(required=False, widget=forms.DateInput(attrs={"type": "date"}))
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, user=None, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["generated_by"].queryset = User.objects.filter(is_active=True).order_by("username")
+        if user is not None and user_is_scoped(user):
+            self.fields["generated_by"].queryset = self.fields["generated_by"].queryset.filter(pk=user.pk)
         for field in self.fields.values():
             field.widget.attrs["class"] = "scanops-input"
         self.fields["q"].widget.attrs["placeholder"] = "Search report title, target, execution ID..."
@@ -61,15 +64,20 @@ class ReportGenerateForm(forms.Form):
     include_timeline = forms.BooleanField(required=False, initial=False)
     summary_notes = forms.CharField(required=False, widget=forms.Textarea(attrs={"rows": 3}))
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, user=None, **kwargs):
         super().__init__(*args, **kwargs)
         result_queryset = ScanResult.objects.select_related("execution__scan_request__target").order_by("-generated_at")
         execution_queryset = ScanExecution.objects.select_related("scan_request__target").order_by("-created_at")
+        asset_queryset = Asset.objects.order_by("name")
+        if user is not None:
+            result_queryset = scope_queryset_for_user(result_queryset, user, ("execution__scan_request__requested_by",))
+            execution_queryset = scope_queryset_for_user(execution_queryset, user, ("scan_request__requested_by",))
+            asset_queryset = scope_queryset_for_user(asset_queryset, user, ("target__owner", "target__created_by"))
         self.fields["source_result"].queryset = result_queryset
         self.fields["comparison_left_result"].queryset = result_queryset
         self.fields["comparison_right_result"].queryset = result_queryset
         self.fields["source_execution"].queryset = execution_queryset
-        self.fields["asset"].queryset = Asset.objects.order_by("name")
+        self.fields["asset"].queryset = asset_queryset
         for field in self.fields.values():
             if isinstance(field.widget, forms.CheckboxInput):
                 field.widget.attrs["class"] = "h-4 w-4 rounded border-slate-700 bg-slate-900 text-blue-500"

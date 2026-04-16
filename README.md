@@ -1,84 +1,82 @@
 # ScanOps
 
-ScanOps is an internal authorized-use network/security operations platform built around controlled Nmap-style workflows.  
-It is designed for approved internal environments, approved internal assets, and explicitly permitted targets.
+ScanOps is an internal authorized-use network/security operations platform built with Django MVT, HTML templates, and HTMX.
 
 ## Stack
 
-- Django (MVT)
-- HTML templates + HTMX
-- Django static files
-- SQLite for development (PostgreSQL-ready configuration exists)
+- Django 4.2 (MVT)
+- HTMX + server-rendered templates
+- Gunicorn in Docker
+- PostgreSQL in Docker (default runtime database)
 
-## Local Development Setup
+## Quick Docker Deploy (Local or VPS)
 
-1. Create and activate a virtual environment:
-
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-```
-
-2. Install dependencies:
-
-```bash
-pip install -r requirements.txt
-```
-
-3. Create environment file (if needed):
+1. Ensure Docker Engine + Docker Compose plugin are installed.
+2. Create runtime env file once:
 
 ```bash
 cp .env.example .env
 ```
 
-4. Run migrations:
+3. Update at least:
+   - `JTRO_SECRET_KEY`
+   - `SCANOPS_DB_PASSWORD`
+   - `JTRO_ALLOWED_HOSTS` (for VPS/public hostnames)
+
+4. Deploy:
+
+```bash
+./scripts/deploy_and_run.sh up
+```
+
+Access:
+
+- `http://127.0.0.1:8008/login/`
+- `http://0.0.0.0:8008/login/`
+
+## Docker Operations
+
+```bash
+./scripts/deploy_and_run.sh ps
+./scripts/deploy_and_run.sh logs
+./scripts/deploy_and_run.sh restart
+./scripts/deploy_and_run.sh down
+```
+
+## Database Migration Helpers
+
+Create a backup from your currently configured local DB (`.env`):
+
+```bash
+./scripts/deploy_and_run.sh backup-local-db
+```
+
+Restore a SQL backup into Docker PostgreSQL:
+
+```bash
+./scripts/deploy_and_run.sh restore-db --backup-file dbbackup/migration/<your-backup>.sql
+```
+
+You can also restore automatically during startup:
+
+```bash
+./scripts/deploy_and_run.sh up --restore-db --backup-file dbbackup/migration/<your-backup>.sql
+```
+
+## Local Non-Docker Development (Optional)
+
+You can still run Django directly:
 
 ```bash
 python manage.py migrate
-```
-
-5. Create a superuser:
-
-```bash
-python manage.py createsuperuser
-```
-
-6. Run the development server:
-
-```bash
 python manage.py runserver 0.0.0.0:8008
 ```
 
-Access the app at:
+## Docs
 
-- `http://127.0.0.1:8008/`
-- `http://0.0.0.0:8008/`
-
-## One-Command Runner
-
-Use the project script to prepare and run ScanOps:
-
-```bash
-./scripts/deploy_and_run.sh --mode local
-```
-
-Useful variants:
-
-```bash
-./scripts/deploy_and_run.sh --mode local --skip-install
-./scripts/deploy_and_run.sh --mode local --seed-demo
-./scripts/deploy_and_run.sh --mode local --no-run
-```
-
-## Project Layout (High Level)
-
-- `apps/` modular Django apps (accounts, targets, scans, reports, schedules, notifications, assets, ops, etc.)
-- `core/templates/` shared templates, pages, partials
-- `core/static/scanops/css/app.css` shared ScanOps UI styles
-- `core/settings/` environment-specific settings (`base.py`, `dev.py`, `production.py`)
-- `Dockerfile`, `docker-compose.yml` container runtime
+- Docker workflow: `DOCKER_README.md`
+- Backup scheduler and restore notes: `BACKUP_README.md`
 
 ## Security Note
 
-ScanOps is intended for internal authorized-use operations only.  
-Do not use this project to scan unauthorized systems or networks.
+ScanOps is intended for internal authorized-use operations only. Do not use this project to scan unauthorized systems or networks.

@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
@@ -10,6 +9,8 @@ from django.urls import reverse
 from django.views import View
 from django.views.generic import DetailView, ListView
 
+from apps.ops.models import PermissionRule
+from apps.ops.rbac import CapabilityRequiredMixin, scope_queryset_for_user
 from apps.scans.forms import RunningFilterForm
 from apps.scans.models import ScanExecution
 from apps.scans.services.execution_service import (
@@ -24,7 +25,8 @@ def _redirect_back(request: HttpRequest, fallback: str) -> HttpResponse:
     return redirect(request.META.get("HTTP_REFERER") or fallback)
 
 
-class RunningScanListView(LoginRequiredMixin, ListView):
+class RunningScanListView(CapabilityRequiredMixin, ListView):
+    capability_key = PermissionRule.PermissionKey.VIEW_SCANS
     model = ScanExecution
     template_name = "scans/running_scans.html"
     context_object_name = "executions"
@@ -47,7 +49,8 @@ class RunningScanListView(LoginRequiredMixin, ListView):
             .filter(is_archived=False)
             .order_by("-created_at")
         )
-        self.filter_form = RunningFilterForm(self.request.GET or None)
+        queryset = scope_queryset_for_user(queryset, self.request.user, ("scan_request__requested_by",))
+        self.filter_form = RunningFilterForm(self.request.GET or None, user=self.request.user)
         if self.filter_form.is_valid():
             cleaned = self.filter_form.cleaned_data
             q = (cleaned.get("q") or "").strip()
@@ -77,7 +80,11 @@ class RunningScanListView(LoginRequiredMixin, ListView):
                     simulate_execution_tick(execution)
         context["executions"] = executions
         context["filter_form"] = self.filter_form
-        summary_source = ScanExecution.objects.filter(is_archived=False)
+        summary_source = scope_queryset_for_user(
+            ScanExecution.objects.filter(is_archived=False),
+            self.request.user,
+            ("scan_request__requested_by",),
+        )
         context["summary"] = {
             "running": summary_source.filter(status=ScanExecution.Status.RUNNING).count(),
             "queued": summary_source.filter(status=ScanExecution.Status.QUEUED).count(),
@@ -90,7 +97,8 @@ class RunningScanListView(LoginRequiredMixin, ListView):
         return context
 
 
-class ScanQueueView(LoginRequiredMixin, ListView):
+class ScanQueueView(CapabilityRequiredMixin, ListView):
+    capability_key = PermissionRule.PermissionKey.VIEW_SCANS
     model = ScanExecution
     template_name = "scans/scan_queue.html"
     context_object_name = "executions"
@@ -116,7 +124,8 @@ class ScanQueueView(LoginRequiredMixin, ListView):
             )
             .order_by("priority", "created_at")
         )
-        self.filter_form = RunningFilterForm(self.request.GET or None)
+        queryset = scope_queryset_for_user(queryset, self.request.user, ("scan_request__requested_by",))
+        self.filter_form = RunningFilterForm(self.request.GET or None, user=self.request.user)
         if self.filter_form.is_valid():
             cleaned = self.filter_form.cleaned_data
             q = (cleaned.get("q") or "").strip()
@@ -145,7 +154,11 @@ class ScanQueueView(LoginRequiredMixin, ListView):
             execution.estimated_wait_minutes = max(1, (index - 1) * 2)
         context["executions"] = executions
         context["filter_form"] = self.filter_form
-        queue_source = ScanExecution.objects.filter(is_archived=False)
+        queue_source = scope_queryset_for_user(
+            ScanExecution.objects.filter(is_archived=False),
+            self.request.user,
+            ("scan_request__requested_by",),
+        )
         context["queue_summary"] = {
             "total": queue_source.filter(status=ScanExecution.Status.QUEUED).count(),
             "assigned": queue_source.filter(queue_status=ScanExecution.QueueStatus.ASSIGNED).count(),
@@ -159,18 +172,20 @@ class ScanQueueView(LoginRequiredMixin, ListView):
         return context
 
 
-class ScanMonitorDetailView(LoginRequiredMixin, DetailView):
+class ScanMonitorDetailView(CapabilityRequiredMixin, DetailView):
+    capability_key = PermissionRule.PermissionKey.VIEW_SCANS
     model = ScanExecution
     template_name = "scans/live_monitor.html"
     context_object_name = "execution"
 
     def get_queryset(self):
-        return ScanExecution.objects.select_related(
+        queryset = ScanExecution.objects.select_related(
             "scan_request",
             "scan_request__target",
             "scan_request__profile",
             "scan_request__requested_by",
         )
+        return scope_queryset_for_user(queryset, self.request.user, ("scan_request__requested_by",))
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -186,10 +201,17 @@ class ScanMonitorDetailView(LoginRequiredMixin, DetailView):
         return context
 
 
-class MonitorStatusPartialView(LoginRequiredMixin, View):
+class MonitorStatusPartialView(CapabilityRequiredMixin, View):
+    capability_key = PermissionRule.PermissionKey.VIEW_SCANS
+
     def get(self, request, pk: int) -> HttpResponse:
-        execution = get_object_or_404(
+        queryset = scope_queryset_for_user(
             ScanExecution.objects.select_related("scan_request", "scan_request__target", "scan_request__profile"),
+            request.user,
+            ("scan_request__requested_by",),
+        )
+        execution = get_object_or_404(
+            queryset,
             pk=pk,
         )
         if settings.DEBUG:
@@ -201,9 +223,12 @@ class MonitorStatusPartialView(LoginRequiredMixin, View):
         )
 
 
-class MonitorLogPartialView(LoginRequiredMixin, View):
+class MonitorLogPartialView(CapabilityRequiredMixin, View):
+    capability_key = PermissionRule.PermissionKey.VIEW_SCANS
+
     def get(self, request, pk: int) -> HttpResponse:
-        execution = get_object_or_404(ScanExecution, pk=pk)
+        queryset = scope_queryset_for_user(ScanExecution.objects.all(), request.user, ("scan_request__requested_by",))
+        execution = get_object_or_404(queryset, pk=pk)
         logs = execution.event_logs.all()[:80]
         return render(
             request,
@@ -212,17 +237,23 @@ class MonitorLogPartialView(LoginRequiredMixin, View):
         )
 
 
-class ExecutionCancelView(LoginRequiredMixin, View):
+class ExecutionCancelView(CapabilityRequiredMixin, View):
+    capability_key = PermissionRule.PermissionKey.CONTROL_SCAN_EXECUTIONS
+
     def post(self, request, pk: int) -> HttpResponse:
-        execution = get_object_or_404(ScanExecution, pk=pk)
+        queryset = scope_queryset_for_user(ScanExecution.objects.all(), request.user, ("scan_request__requested_by",))
+        execution = get_object_or_404(queryset, pk=pk)
         cancel_execution(execution, message=f"Cancelled by {request.user.username}.")
         messages.warning(request, f"{execution.execution_id} was cancelled.")
         return _redirect_back(request, reverse("scans:running"))
 
 
-class ExecutionRetryView(LoginRequiredMixin, View):
+class ExecutionRetryView(CapabilityRequiredMixin, View):
+    capability_key = PermissionRule.PermissionKey.CONTROL_SCAN_EXECUTIONS
+
     def post(self, request, pk: int) -> HttpResponse:
-        execution = get_object_or_404(ScanExecution, pk=pk)
+        queryset = scope_queryset_for_user(ScanExecution.objects.all(), request.user, ("scan_request__requested_by",))
+        execution = get_object_or_404(queryset, pk=pk)
         new_execution = retry_execution(execution)
         messages.success(request, f"Retry queued as {new_execution.execution_id}.")
         return _redirect_back(request, reverse("scans:running"))

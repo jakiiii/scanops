@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
@@ -18,9 +17,12 @@ from apps.assets.services.asset_service import (
 )
 from apps.notifications.models import Notification
 from apps.notifications.services.notification_service import create_notification
+from apps.ops.models import PermissionRule
+from apps.ops.rbac import CapabilityRequiredMixin, scope_queryset_for_user
 
 
-class AssetListView(LoginRequiredMixin, ListView):
+class AssetListView(CapabilityRequiredMixin, ListView):
+    capability_key = PermissionRule.PermissionKey.VIEW_ASSETS
     model = Asset
     template_name = "assets/list.html"
     context_object_name = "assets"
@@ -36,7 +38,8 @@ class AssetListView(LoginRequiredMixin, ListView):
             sync_assets_from_results(limit=40)
 
         queryset = Asset.objects.select_related("target").order_by("-updated_at")
-        self.filter_form = AssetFilterForm(self.request.GET or None)
+        queryset = scope_queryset_for_user(queryset, self.request.user, ("target__owner", "target__created_by"))
+        self.filter_form = AssetFilterForm(self.request.GET or None, user=self.request.user)
         if self.filter_form.is_valid():
             cleaned = self.filter_form.cleaned_data
             q = (cleaned.get("q") or "").strip()
@@ -64,7 +67,11 @@ class AssetListView(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["filter_form"] = self.filter_form
-        source = Asset.objects.all()
+        source = scope_queryset_for_user(
+            Asset.objects.all(),
+            self.request.user,
+            ("target__owner", "target__created_by"),
+        )
         context["summary"] = {
             "total": source.count(),
             "critical": source.filter(risk_level=Asset.RiskLevel.CRITICAL).count(),
@@ -77,7 +84,8 @@ class AssetListView(LoginRequiredMixin, ListView):
         return context
 
 
-class AssetDetailView(LoginRequiredMixin, DetailView):
+class AssetDetailView(CapabilityRequiredMixin, DetailView):
+    capability_key = PermissionRule.PermissionKey.VIEW_ASSETS
     model = Asset
     template_name = "assets/detail.html"
     context_object_name = "asset"
@@ -92,8 +100,13 @@ class AssetDetailView(LoginRequiredMixin, DetailView):
         ]
         return context
 
+    def get_queryset(self):
+        queryset = Asset.objects.select_related("target")
+        return scope_queryset_for_user(queryset, self.request.user, ("target__owner", "target__created_by"))
 
-class AssetChangeHistoryView(LoginRequiredMixin, TemplateView):
+
+class AssetChangeHistoryView(CapabilityRequiredMixin, TemplateView):
+    capability_key = PermissionRule.PermissionKey.VIEW_ASSETS
     template_name = "assets/change_history.html"
 
     def get_context_data(self, **kwargs):
@@ -101,7 +114,12 @@ class AssetChangeHistoryView(LoginRequiredMixin, TemplateView):
         asset = None
         pk = self.kwargs.get("pk")
         if pk:
-            asset = get_object_or_404(Asset, pk=pk)
+            scoped_assets = scope_queryset_for_user(
+                Asset.objects.all(),
+                self.request.user,
+                ("target__owner", "target__created_by"),
+            )
+            asset = get_object_or_404(scoped_assets, pk=pk)
             changes = asset.change_logs.select_related("previous_snapshot", "current_snapshot").order_by("-created_at")
             context["breadcrumbs"] = [
                 {"label": "Assets", "url": reverse("assets:list")},
@@ -109,7 +127,11 @@ class AssetChangeHistoryView(LoginRequiredMixin, TemplateView):
                 {"label": "Change History", "url": ""},
             ]
         else:
-            changes = global_asset_changes()
+            changes = scope_queryset_for_user(
+                global_asset_changes(),
+                self.request.user,
+                ("asset__target__owner", "asset__target__created_by"),
+            )
             context["breadcrumbs"] = [
                 {"label": "Assets", "url": reverse("assets:list")},
                 {"label": "Change History", "url": ""},
@@ -143,14 +165,19 @@ class AssetChangeHistoryView(LoginRequiredMixin, TemplateView):
         return context
 
 
-class AssetChangesPartialView(LoginRequiredMixin, View):
+class AssetChangesPartialView(CapabilityRequiredMixin, View):
+    capability_key = PermissionRule.PermissionKey.VIEW_ASSETS
+
     def get(self, request, pk: int):
-        asset = get_object_or_404(Asset, pk=pk)
+        scoped_assets = scope_queryset_for_user(Asset.objects.all(), request.user, ("target__owner", "target__created_by"))
+        asset = get_object_or_404(scoped_assets, pk=pk)
         changes = asset.change_logs.select_related("previous_snapshot", "current_snapshot").order_by("-created_at")[:50]
         return render(request, "partials/asset_changes_timeline.html", {"asset": asset, "changes": changes})
 
 
-class AssetSyncView(LoginRequiredMixin, View):
+class AssetSyncView(CapabilityRequiredMixin, View):
+    capability_key = PermissionRule.PermissionKey.MANAGE_ASSETS
+
     def post(self, request):
         count = sync_assets_from_results(limit=100)
         create_notification(

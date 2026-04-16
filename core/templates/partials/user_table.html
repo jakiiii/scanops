@@ -56,19 +56,25 @@
                         {% endif %}
                     </td>
                     <td class="px-4 py-3">
-                        <div class="flex justify-end gap-2">
-                            <a href="{% url 'ops:users-edit' user.pk %}" class="px-2.5 py-1.5 rounded bg-slate-800 border border-slate-700 text-xs text-slate-200 hover:bg-slate-700">Edit</a>
-                            <form method="post" action="{% url 'ops:users-toggle-active' user.pk %}">
-                                {% csrf_token %}
-                                <button type="submit" class="px-2.5 py-1.5 rounded {% if user.is_active %}bg-rose-500/20 text-rose-200 hover:bg-rose-500/30{% else %}bg-emerald-500/20 text-emerald-200 hover:bg-emerald-500/30{% endif %} text-xs">
-                                    {% if user.is_active %}Disable{% else %}Enable{% endif %}
-                                </button>
-                            </form>
-                            <form method="post" action="{% url 'ops:users-flag-password-reset' user.pk %}">
-                                {% csrf_token %}
-                                <button type="submit" class="px-2.5 py-1.5 rounded bg-amber-500/20 text-amber-200 hover:bg-amber-500/30 text-xs">Flag Reset</button>
-                            </form>
-                        </div>
+                        {% if user.can_manage_account %}
+                            <div class="flex justify-end gap-2">
+                                <a href="{% url 'ops:users-edit' user.pk %}" class="px-2.5 py-1.5 rounded bg-slate-800 border border-slate-700 text-xs text-slate-200 hover:bg-slate-700">Edit</a>
+                                <form method="post" action="{% url 'ops:users-toggle-active' user.pk %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="px-2.5 py-1.5 rounded {% if user.is_active %}bg-rose-500/20 text-rose-200 hover:bg-rose-500/30{% else %}bg-emerald-500/20 text-emerald-200 hover:bg-emerald-500/30{% endif %} text-xs">
+                                        {% if user.is_active %}Disable{% else %}Enable{% endif %}
+                                    </button>
+                                </form>
+                                <form method="post" action="{% url 'ops:users-flag-password-reset' user.pk %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="px-2.5 py-1.5 rounded bg-amber-500/20 text-amber-200 hover:bg-amber-500/30 text-xs">Flag Reset</button>
+                                </form>
+                            </div>
+                        {% else %}
+                            <div class="flex justify-end">
+                                <span class="text-xs text-slate-500">Restricted</span>
+                            </div>
+                        {% endif %}
                     </td>
                 </tr>
             {% empty %}

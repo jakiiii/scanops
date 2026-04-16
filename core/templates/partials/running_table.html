@@ -59,17 +59,19 @@
                     <td class="px-4 py-4">
                         <div class="flex justify-end items-center gap-2">
                             <a href="{% url 'scans:monitor' execution.pk %}" class="px-2.5 py-1.5 rounded bg-slate-800 hover:bg-slate-700 text-[11px] text-slate-200">Monitor</a>
-                            {% if execution.status == 'queued' or execution.status == 'running' %}
-                                <form method="post" action="{% url 'scans:execution-cancel' execution.pk %}">
-                                    {% csrf_token %}
-                                    <button type="submit" class="px-2.5 py-1.5 rounded bg-rose-500/20 hover:bg-rose-500/30 text-[11px] text-rose-200">Cancel</button>
-                                </form>
-                            {% endif %}
-                            {% if execution.status == 'failed' or execution.status == 'cancelled' %}
-                                <form method="post" action="{% url 'scans:execution-retry' execution.pk %}">
-                                    {% csrf_token %}
-                                    <button type="submit" class="px-2.5 py-1.5 rounded bg-emerald-500/20 hover:bg-emerald-500/30 text-[11px] text-emerald-200">Retry</button>
-                                </form>
+                            {% if request.user|has_capability:'control_scan_executions' %}
+                                {% if execution.status == 'queued' or execution.status == 'running' %}
+                                    <form method="post" action="{% url 'scans:execution-cancel' execution.pk %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="px-2.5 py-1.5 rounded bg-rose-500/20 hover:bg-rose-500/30 text-[11px] text-rose-200">Cancel</button>
+                                    </form>
+                                {% endif %}
+                                {% if execution.status == 'failed' or execution.status == 'cancelled' %}
+                                    <form method="post" action="{% url 'scans:execution-retry' execution.pk %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="px-2.5 py-1.5 rounded bg-emerald-500/20 hover:bg-emerald-500/30 text-[11px] text-emerald-200">Retry</button>
+                                    </form>
+                                {% endif %}
                             {% endif %}
                         </div>
                     </td>

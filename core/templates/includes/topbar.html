@@ -1,3 +1,4 @@
+{% load scanops_tags %}
 <header class="sticky top-0 z-30 bg-slate-950/90 backdrop-blur border-b border-slate-800">
     <div class="h-16 px-4 md:px-8 flex items-center justify-between gap-4">
         <div class="flex items-center gap-3 flex-1">
@@ -8,20 +9,26 @@
             </div>
         </div>
         <div class="flex items-center gap-3">
-            <a href="{% url 'notifications:list' %}" class="p-2 text-slate-400 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors" title="Notifications">
-                <span class="material-symbols-outlined">notifications</span>
-            </a>
-            <a href="{% url 'reports:list' %}" class="p-2 text-slate-400 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors" title="Reports">
-                <span class="material-symbols-outlined">description</span>
-            </a>
-            <a href="{% url 'ops:health-system' %}" class="p-2 text-slate-400 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors" title="System Health">
-                <span class="material-symbols-outlined">monitor_heart</span>
-            </a>
+            {% if request.user|has_capability:'view_notifications' %}
+                <a href="{% url 'notifications:list' %}" class="p-2 text-slate-400 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors" title="Notifications">
+                    <span class="material-symbols-outlined">notifications</span>
+                </a>
+            {% endif %}
+            {% if request.user|has_capability:'view_reports' %}
+                <a href="{% url 'reports:list' %}" class="p-2 text-slate-400 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors" title="Reports">
+                    <span class="material-symbols-outlined">description</span>
+                </a>
+            {% endif %}
+            {% if request.user|has_capability:'view_system_health' %}
+                <a href="{% url 'ops:health-system' %}" class="p-2 text-slate-400 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors" title="System Health">
+                    <span class="material-symbols-outlined">monitor_heart</span>
+                </a>
+            {% endif %}
             <div class="h-6 w-px bg-slate-800"></div>
             <div class="text-right hidden sm:block">
                 <p class="text-xs font-bold text-white">{{ request.user.get_full_name|default:request.user.username }}</p>
                 <p class="text-[10px] text-slate-500 uppercase tracking-wider">
-                    {% if request.user.is_administrator %}Administrator{% else %}Operator{% endif %}
+                    {{ request.user|role_name }}
                 </p>
             </div>
             <div class="w-8 h-8 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-xs font-bold text-blue-300">

@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load scanops_tags %}
 
 {% block title %}{% if mode == "edit" %}Edit Scheduled Scan{% else %}Create Scheduled Scan{% endif %} | ScanOps{% endblock %}
 
@@ -89,7 +90,7 @@
                     </div>
                 </div>
                 <div class="flex flex-wrap items-center justify-end gap-3">
-                    {% if mode == "edit" %}
+                    {% if mode == "edit" and request.user|has_capability:'manage_schedules' %}
                         <button
                             type="submit"
                             formaction="{% url 'schedules:run-now' schedule.pk %}"
@@ -106,10 +107,12 @@
 
             {% if mode == "edit" %}
                 <div class="mt-4 flex justify-end">
-                    <form method="post" action="{% url 'schedules:delete' schedule.pk %}">
-                        {% csrf_token %}
-                        <button type="submit" class="px-4 py-2 rounded-lg bg-rose-500/20 text-rose-200 text-sm hover:bg-rose-500/30">Delete Schedule</button>
-                    </form>
+                    {% if request.user|has_capability:'manage_schedules' %}
+                        <form method="post" action="{% url 'schedules:delete' schedule.pk %}">
+                            {% csrf_token %}
+                            <button type="submit" class="px-4 py-2 rounded-lg bg-rose-500/20 text-rose-200 text-sm hover:bg-rose-500/30">Delete Schedule</button>
+                        </form>
+                    {% endif %}
                 </div>
             {% endif %}
         </div>

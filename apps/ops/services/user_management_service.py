@@ -9,6 +9,7 @@ from django.utils import timezone
 
 from apps.accounts.models import UserLogs
 from apps.ops.models import UserProfile
+from apps.ops.services import permission_service
 
 User = get_user_model()
 
@@ -35,6 +36,11 @@ def ensure_profile(user) -> UserProfile:
             "is_internal_operator": True,
         },
     )
+    if profile.role_id is None:
+        role = permission_service.get_user_role(user)
+        if role is not None and profile.role_id != role.id:
+            profile.role = role
+            profile.save(update_fields=["role", "updated_at"])
     return profile
 
 
@@ -49,6 +55,10 @@ def _split_display_name(display_name: str) -> tuple[str, str]:
 
 @transaction.atomic
 def create_user(payload: dict, *, actor=None):
+    role = payload.get("role")
+    if actor is not None and not permission_service.can_assign_role(actor, role):
+        raise ValueError("You are not allowed to assign the requested role.")
+
     username = payload["username"].strip()
     email = payload["email"].strip().lower()
     display_name = (payload.get("display_name") or "").strip()
@@ -60,7 +70,8 @@ def create_user(payload: dict, *, actor=None):
         first_name=first_name,
         last_name=last_name,
         is_active=bool(payload.get("is_active", True)),
-        is_operator=True,
+        is_operator=False,
+        is_administrator=False,
     )
     password = (payload.get("new_password") or "").strip()
     if password:
@@ -73,18 +84,25 @@ def create_user(payload: dict, *, actor=None):
 
     profile = ensure_profile(user)
     profile.display_name = display_name or user.get_full_name() or user.username
-    profile.role = payload.get("role")
+    profile.role = role
     profile.is_approved = bool(payload.get("is_approved", True))
     profile.is_internal_operator = bool(payload.get("is_internal_operator", True))
     profile.allowed_workspace = (payload.get("allowed_workspace") or "").strip()
     profile.notes = (payload.get("notes") or "").strip()
     profile.force_password_reset = bool(payload.get("force_password_reset", not bool(password)))
     profile.save()
+    permission_service.assign_role_to_user(user, role)
     return user
 
 
 @transaction.atomic
 def update_user(user, payload: dict, *, actor=None):
+    if actor is not None and not permission_service.can_manage_user_account(actor, user):
+        raise ValueError("You are not allowed to manage this user.")
+    role = payload.get("role")
+    if actor is not None and not permission_service.can_assign_role(actor, role):
+        raise ValueError("You are not allowed to assign the requested role.")
+
     display_name = (payload.get("display_name") or "").strip()
     first_name, last_name = _split_display_name(display_name)
     user.username = payload["username"].strip()
@@ -101,23 +119,28 @@ def update_user(user, payload: dict, *, actor=None):
 
     profile = ensure_profile(user)
     profile.display_name = display_name or user.get_full_name() or user.username
-    profile.role = payload.get("role")
+    profile.role = role
     profile.is_approved = bool(payload.get("is_approved", True))
     profile.is_internal_operator = bool(payload.get("is_internal_operator", True))
     profile.allowed_workspace = (payload.get("allowed_workspace") or "").strip()
     profile.notes = (payload.get("notes") or "").strip()
     profile.force_password_reset = bool(payload.get("force_password_reset", False))
     profile.save()
+    permission_service.assign_role_to_user(user, role)
     return user
 
 
-def set_user_active(user, *, is_active: bool):
+def set_user_active(user, *, is_active: bool, actor=None):
+    if actor is not None and not permission_service.can_manage_user_account(actor, user):
+        raise ValueError("You are not allowed to manage this user.")
     user.is_active = bool(is_active)
     user.save(update_fields=["is_active"])
     return user
 
 
-def mark_password_reset_required(user, *, required: bool = True):
+def mark_password_reset_required(user, *, required: bool = True, actor=None):
+    if actor is not None and not permission_service.can_manage_user_account(actor, user):
+        raise ValueError("You are not allowed to manage this user.")
     profile = ensure_profile(user)
     profile.force_password_reset = bool(required)
     profile.save(update_fields=["force_password_reset", "updated_at"])

@@ -3,7 +3,6 @@ from __future__ import annotations
 import json
 
 from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
@@ -11,12 +10,15 @@ from django.views import View
 from django.views.generic import CreateView
 
 from apps.core.services.scan_policy import build_scan_summary, validate_scan_options
+from apps.ops.models import PermissionRule
+from apps.ops.rbac import CapabilityRequiredMixin, scope_queryset_for_user
 from apps.scans.forms import ScanRequestForm
 from apps.scans.models import ScanRequest
 from apps.targets.models import Target
 
 
-class ScanRequestCreateView(LoginRequiredMixin, CreateView):
+class ScanRequestCreateView(CapabilityRequiredMixin, CreateView):
+    capability_key = PermissionRule.PermissionKey.CREATE_SCAN_REQUEST
     model = ScanRequest
     form_class = ScanRequestForm
     template_name = "scans/new_scan.html"
@@ -54,6 +56,11 @@ class ScanRequestCreateView(LoginRequiredMixin, CreateView):
     def get_success_url(self):
         return reverse("scans:new")
 
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["user"] = self.request.user
+        return kwargs
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         initial_payload = self.get_initial()
@@ -67,7 +74,8 @@ class ScanRequestCreateView(LoginRequiredMixin, CreateView):
         return context
 
 
-class ScanPreviewView(LoginRequiredMixin, View):
+class ScanPreviewView(CapabilityRequiredMixin, View):
+    capability_key = PermissionRule.PermissionKey.CREATE_SCAN_REQUEST
     template_name = "partials/scan_preview.html"
 
     @staticmethod
@@ -78,7 +86,8 @@ class ScanPreviewView(LoginRequiredMixin, View):
         target = None
         target_id = request.POST.get("target")
         if target_id and target_id.isdigit():
-            target = Target.objects.filter(pk=int(target_id)).first()
+            target_queryset = scope_queryset_for_user(Target.objects.all(), request.user, ("owner", "created_by"))
+            target = target_queryset.filter(pk=int(target_id)).first()
 
         payload = {
             "target": target,

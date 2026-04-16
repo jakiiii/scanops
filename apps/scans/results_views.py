@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render
@@ -10,6 +9,8 @@ from django.urls import reverse
 from django.views import View
 from django.views.generic import DetailView, ListView, TemplateView
 
+from apps.ops.models import PermissionRule
+from apps.ops.rbac import CapabilityRequiredMixin, scope_queryset_for_user
 from apps.scans.forms import CompareResultsForm, ResultFilterForm
 from apps.scans.models import ScanExecution, ScanResult
 from apps.scans.services.comparison_service import build_comparison_from_current, compare_results
@@ -21,7 +22,8 @@ from apps.scans.services.result_service import (
 from apps.targets.models import Target
 
 
-class ScanResultListView(LoginRequiredMixin, ListView):
+class ScanResultListView(CapabilityRequiredMixin, ListView):
+    capability_key = PermissionRule.PermissionKey.VIEW_RESULTS
     model = ScanResult
     template_name = "scans/results_list.html"
     context_object_name = "results"
@@ -53,8 +55,9 @@ class ScanResultListView(LoginRequiredMixin, ListView):
             .filter(execution__is_archived=False)
             .order_by("-generated_at")
         )
+        queryset = scope_queryset_for_user(queryset, self.request.user, ("execution__scan_request__requested_by",))
 
-        self.filter_form = ResultFilterForm(self.request.GET or None)
+        self.filter_form = ResultFilterForm(self.request.GET or None, user=self.request.user)
         if self.filter_form.is_valid():
             cleaned = self.filter_form.cleaned_data
             q = (cleaned.get("q") or "").strip()
@@ -83,7 +86,11 @@ class ScanResultListView(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["filter_form"] = self.filter_form
-        summary_source = ScanResult.objects.filter(execution__is_archived=False)
+        summary_source = scope_queryset_for_user(
+            ScanResult.objects.filter(execution__is_archived=False),
+            self.request.user,
+            ("execution__scan_request__requested_by",),
+        )
         context["result_summary"] = {
             "total": summary_source.count(),
             "high_risk": summary_source.filter(port_results__risk_level="high").distinct().count(),
@@ -96,19 +103,21 @@ class ScanResultListView(LoginRequiredMixin, ListView):
         return context
 
 
-class ScanResultDetailView(LoginRequiredMixin, DetailView):
+class ScanResultDetailView(CapabilityRequiredMixin, DetailView):
+    capability_key = PermissionRule.PermissionKey.VIEW_RESULTS
     model = ScanResult
     template_name = "scans/result_detail.html"
     context_object_name = "result"
 
     def get_queryset(self):
-        return ScanResult.objects.select_related(
+        queryset = ScanResult.objects.select_related(
             "execution",
             "execution__scan_request",
             "execution__scan_request__target",
             "execution__scan_request__profile",
             "execution__scan_request__requested_by",
         ).prefetch_related("port_results")
+        return scope_queryset_for_user(queryset, self.request.user, ("execution__scan_request__requested_by",))
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -122,10 +131,15 @@ class ScanResultDetailView(LoginRequiredMixin, DetailView):
         return context
 
 
-class ScanRawOutputView(LoginRequiredMixin, DetailView):
+class ScanRawOutputView(CapabilityRequiredMixin, DetailView):
+    capability_key = PermissionRule.PermissionKey.VIEW_RESULTS
     model = ScanResult
     template_name = "scans/raw_output.html"
     context_object_name = "result"
+
+    def get_queryset(self):
+        queryset = ScanResult.objects.select_related("execution__scan_request__requested_by")
+        return scope_queryset_for_user(queryset, self.request.user, ("execution__scan_request__requested_by",))
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -137,10 +151,15 @@ class ScanRawOutputView(LoginRequiredMixin, DetailView):
         return context
 
 
-class ScanParsedOutputView(LoginRequiredMixin, DetailView):
+class ScanParsedOutputView(CapabilityRequiredMixin, DetailView):
+    capability_key = PermissionRule.PermissionKey.VIEW_RESULTS
     model = ScanResult
     template_name = "scans/parsed_output.html"
     context_object_name = "result"
+
+    def get_queryset(self):
+        queryset = ScanResult.objects.select_related("execution__scan_request__requested_by")
+        return scope_queryset_for_user(queryset, self.request.user, ("execution__scan_request__requested_by",))
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -153,7 +172,8 @@ class ScanParsedOutputView(LoginRequiredMixin, DetailView):
         return context
 
 
-class ScanResultCompareView(LoginRequiredMixin, TemplateView):
+class ScanResultCompareView(CapabilityRequiredMixin, TemplateView):
+    capability_key = PermissionRule.PermissionKey.COMPARE_RESULTS
     template_name = "scans/result_compare.html"
 
     def get(self, request, *args, **kwargs):
@@ -168,7 +188,12 @@ class ScanResultCompareView(LoginRequiredMixin, TemplateView):
         target = None
         pk = self.kwargs.get("pk")
         if pk:
-            current_result = get_object_or_404(ScanResult, pk=pk)
+            current_queryset = scope_queryset_for_user(
+                ScanResult.objects.select_related("execution__scan_request__target", "execution__scan_request__requested_by"),
+                self.request.user,
+                ("execution__scan_request__requested_by",),
+            )
+            current_result = get_object_or_404(current_queryset, pk=pk)
             target = current_result.execution.scan_request.target
 
         initial = {}
@@ -182,7 +207,7 @@ class ScanResultCompareView(LoginRequiredMixin, TemplateView):
             else:
                 initial = {"right_result": current_result.pk}
 
-        form = CompareResultsForm(self.request.GET or None, target=target, initial=initial)
+        form = CompareResultsForm(self.request.GET or None, target=target, initial=initial, user=self.request.user)
         comparison = None
         if self.request.GET and form.is_valid():
             left_result = form.cleaned_data["left_result"]
@@ -208,7 +233,8 @@ class ScanResultCompareView(LoginRequiredMixin, TemplateView):
         return context
 
 
-class HostDetailView(LoginRequiredMixin, DetailView):
+class HostDetailView(CapabilityRequiredMixin, DetailView):
+    capability_key = PermissionRule.PermissionKey.VIEW_RESULTS
     model = Target
     template_name = "scans/host_detail.html"
     context_object_name = "target"
@@ -222,10 +248,17 @@ class HostDetailView(LoginRequiredMixin, DetailView):
         ]
         return context
 
+    def get_queryset(self):
+        queryset = Target.objects.all()
+        return scope_queryset_for_user(queryset, self.request.user, ("owner", "created_by"))
 
-class ResultPortsPartialView(LoginRequiredMixin, View):
+
+class ResultPortsPartialView(CapabilityRequiredMixin, View):
+    capability_key = PermissionRule.PermissionKey.VIEW_RESULTS
+
     def get(self, request, pk: int) -> HttpResponse:
-        result = get_object_or_404(ScanResult, pk=pk)
+        queryset = scope_queryset_for_user(ScanResult.objects.all(), request.user, ("execution__scan_request__requested_by",))
+        result = get_object_or_404(queryset, pk=pk)
         return render(
             request,
             "partials/result_ports_table.html",

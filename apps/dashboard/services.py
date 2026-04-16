@@ -6,28 +6,35 @@ from django.db.models import Count
 from django.db.models.functions import TruncDate
 from django.utils import timezone
 
+from apps.ops.rbac import scope_queryset_for_user
 from apps.scans.models import ScanRequest
 from apps.targets.models import Target
 
 
-def build_dashboard_context() -> dict:
+def build_dashboard_context(user=None) -> dict:
     now = timezone.now()
     seven_days_ago = now - timedelta(days=6)
 
-    total_targets = Target.objects.count()
-    total_scan_requests = ScanRequest.objects.count()
-    pending_scan_requests = ScanRequest.objects.filter(status=ScanRequest.Status.PENDING).count()
-    validated_scan_requests = ScanRequest.objects.filter(status=ScanRequest.Status.VALIDATED).count()
+    targets_qs = Target.objects.all()
+    scan_requests_qs = ScanRequest.objects.all()
+    if user is not None:
+        targets_qs = scope_queryset_for_user(targets_qs, user, ("owner", "created_by"))
+        scan_requests_qs = scope_queryset_for_user(scan_requests_qs, user, ("requested_by",))
 
-    recent_targets = Target.objects.select_related("owner", "created_by").order_by("-created_at")[:5]
+    total_targets = targets_qs.count()
+    total_scan_requests = scan_requests_qs.count()
+    pending_scan_requests = scan_requests_qs.filter(status=ScanRequest.Status.PENDING).count()
+    validated_scan_requests = scan_requests_qs.filter(status=ScanRequest.Status.VALIDATED).count()
+
+    recent_targets = targets_qs.select_related("owner", "created_by").order_by("-created_at")[:5]
     recent_scan_requests = (
-        ScanRequest.objects.select_related("target", "requested_by", "profile")
+        scan_requests_qs.select_related("target", "requested_by", "profile")
         .order_by("-requested_at")[:5]
     )
 
     status_counts = {
         entry["status"]: entry["total"]
-        for entry in ScanRequest.objects.values("status").annotate(total=Count("id"))
+        for entry in scan_requests_qs.values("status").annotate(total=Count("id"))
     }
     activity_summary = [
         {"label": "Draft", "count": status_counts.get(ScanRequest.Status.DRAFT, 0)},
@@ -37,7 +44,7 @@ def build_dashboard_context() -> dict:
     ]
 
     daily_scan_rows = (
-        ScanRequest.objects.filter(requested_at__gte=seven_days_ago)
+        scan_requests_qs.filter(requested_at__gte=seven_days_ago)
         .annotate(day=TruncDate("requested_at"))
         .values("day")
         .annotate(total=Count("id"))

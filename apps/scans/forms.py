@@ -4,6 +4,7 @@ from django import forms
 from django.contrib.auth import get_user_model
 
 from apps.core.services.scan_policy import build_scan_summary, validate_scan_options
+from apps.ops.rbac import scope_queryset_for_user, user_is_scoped
 from apps.scans.models import ScanExecution, ScanPortResult, ScanProfile, ScanRequest, ScanResult
 from apps.targets.models import Target
 
@@ -47,9 +48,12 @@ class ScanRequestForm(forms.ModelForm):
             ),
         }
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, user=None, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["target"].queryset = Target.objects.filter(status=Target.Status.ACTIVE).order_by("target_value")
+        target_queryset = Target.objects.filter(status=Target.Status.ACTIVE).order_by("target_value")
+        if user is not None:
+            target_queryset = scope_queryset_for_user(target_queryset, user, ("owner", "created_by"))
+        self.fields["target"].queryset = target_queryset
         self.fields["profile"].queryset = ScanProfile.objects.filter(is_active=True).order_by("is_system", "name")
         for checkbox_name in (
             "enable_host_discovery",
@@ -105,10 +109,19 @@ class RunningFilterForm(forms.Form):
         empty_label="All Targets",
     )
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, user=None, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["requested_by"].queryset = User.objects.filter(is_active=True).order_by("username")
         self.fields["target"].queryset = Target.objects.order_by("target_value")
+        if user is not None:
+            if user_is_scoped(user):
+                self.fields["requested_by"].queryset = self.fields["requested_by"].queryset.filter(pk=user.pk)
+                self.fields["requested_by"].initial = user.pk
+            self.fields["target"].queryset = scope_queryset_for_user(
+                self.fields["target"].queryset,
+                user,
+                ("owner", "created_by"),
+            )
         for field in self.fields.values():
             field.widget.attrs["class"] = "scanops-input"
         self.fields["q"].widget.attrs["placeholder"] = "Target, execution ID, worker..."
@@ -130,10 +143,16 @@ class ResultFilterForm(forms.Form):
         choices=[("", "Any Risk")] + list(ScanPortResult.RiskLevel.choices),
     )
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, user=None, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["target"].queryset = Target.objects.order_by("target_value")
         self.fields["profile"].queryset = ScanProfile.objects.filter(is_active=True).order_by("name")
+        if user is not None:
+            self.fields["target"].queryset = scope_queryset_for_user(
+                self.fields["target"].queryset,
+                user,
+                ("owner", "created_by"),
+            )
         for field in self.fields.values():
             field.widget.attrs["class"] = "scanops-input"
         self.fields["q"].widget.attrs["placeholder"] = "Scan ID, hostname, target snapshot..."
@@ -157,7 +176,15 @@ class HistoryFilterForm(forms.Form):
         self.fields["target"].queryset = Target.objects.order_by("target_value")
         self.fields["profile"].queryset = ScanProfile.objects.filter(is_active=True).order_by("name")
         self.fields["requested_by"].queryset = User.objects.filter(is_active=True).order_by("username")
-        if not include_user_filter and "requested_by" in self.fields:
+        if user is not None:
+            self.fields["target"].queryset = scope_queryset_for_user(
+                self.fields["target"].queryset,
+                user,
+                ("owner", "created_by"),
+            )
+            if user_is_scoped(user):
+                self.fields["requested_by"].queryset = self.fields["requested_by"].queryset.filter(pk=user.pk)
+        if (not include_user_filter or (user is not None and user_is_scoped(user))) and "requested_by" in self.fields:
             self.fields.pop("requested_by")
         for field in self.fields.values():
             field.widget.attrs["class"] = "scanops-input"
@@ -168,9 +195,11 @@ class CompareResultsForm(forms.Form):
     left_result = forms.ModelChoiceField(queryset=ScanResult.objects.none(), required=True, label="Baseline")
     right_result = forms.ModelChoiceField(queryset=ScanResult.objects.none(), required=True, label="Current")
 
-    def __init__(self, *args, target: Target | None = None, **kwargs):
+    def __init__(self, *args, target: Target | None = None, user=None, **kwargs):
         super().__init__(*args, **kwargs)
         queryset = ScanResult.objects.select_related("execution__scan_request__target").order_by("-generated_at")
+        if user is not None:
+            queryset = scope_queryset_for_user(queryset, user, ("execution__scan_request__requested_by",))
         if target is not None:
             queryset = queryset.filter(execution__scan_request__target=target)
         self.fields["left_result"].queryset = queryset

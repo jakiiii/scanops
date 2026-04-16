@@ -1,13 +1,14 @@
 from __future__ import annotations
 
 from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
 from django.views import View
 from django.views.generic import DetailView, ListView
 
+from apps.ops.models import PermissionRule
+from apps.ops.rbac import CapabilityRequiredMixin
 from apps.notifications.forms import NotificationFilterForm
 from apps.notifications.models import Notification
 from apps.notifications.services.notification_service import (
@@ -22,7 +23,8 @@ def _redirect_back(request, fallback: str):
     return redirect(request.META.get("HTTP_REFERER") or fallback)
 
 
-class NotificationListView(LoginRequiredMixin, ListView):
+class NotificationListView(CapabilityRequiredMixin, ListView):
+    capability_key = PermissionRule.PermissionKey.VIEW_NOTIFICATIONS
     model = Notification
     template_name = "notifications/list.html"
     context_object_name = "notifications"
@@ -80,7 +82,8 @@ class NotificationListView(LoginRequiredMixin, ListView):
         return context
 
 
-class NotificationDetailView(LoginRequiredMixin, DetailView):
+class NotificationDetailView(CapabilityRequiredMixin, DetailView):
+    capability_key = PermissionRule.PermissionKey.VIEW_NOTIFICATIONS
     model = Notification
     template_name = "notifications/detail.html"
     context_object_name = "notification"
@@ -107,28 +110,36 @@ class NotificationDetailView(LoginRequiredMixin, DetailView):
         return context
 
 
-class NotificationMarkReadView(LoginRequiredMixin, View):
+class NotificationMarkReadView(CapabilityRequiredMixin, View):
+    capability_key = PermissionRule.PermissionKey.VIEW_NOTIFICATIONS
+
     def post(self, request, pk: int):
         notification = get_object_or_404(Notification, pk=pk, recipient=request.user)
         mark_as_read(notification)
         return _redirect_back(request, reverse("notifications:list"))
 
 
-class NotificationMarkUnreadView(LoginRequiredMixin, View):
+class NotificationMarkUnreadView(CapabilityRequiredMixin, View):
+    capability_key = PermissionRule.PermissionKey.VIEW_NOTIFICATIONS
+
     def post(self, request, pk: int):
         notification = get_object_or_404(Notification, pk=pk, recipient=request.user)
         mark_as_unread(notification)
         return _redirect_back(request, reverse("notifications:list"))
 
 
-class NotificationMarkAllReadView(LoginRequiredMixin, View):
+class NotificationMarkAllReadView(CapabilityRequiredMixin, View):
+    capability_key = PermissionRule.PermissionKey.VIEW_NOTIFICATIONS
+
     def post(self, request):
         count = bulk_mark_read(Notification.objects.filter(recipient=request.user, is_read=False))
         messages.success(request, f"Marked {count} notifications as read.")
         return _redirect_back(request, reverse("notifications:list"))
 
 
-class NotificationBulkActionView(LoginRequiredMixin, View):
+class NotificationBulkActionView(CapabilityRequiredMixin, View):
+    capability_key = PermissionRule.PermissionKey.VIEW_NOTIFICATIONS
+
     def post(self, request):
         ids = [int(x) for x in request.POST.getlist("notification_ids") if x.isdigit()]
         action = request.POST.get("action")
@@ -140,4 +151,3 @@ class NotificationBulkActionView(LoginRequiredMixin, View):
             count = bulk_mark_unread(queryset)
             messages.info(request, f"Marked {count} notifications as unread.")
         return _redirect_back(request, reverse("notifications:list"))
-

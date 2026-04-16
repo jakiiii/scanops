@@ -73,10 +73,12 @@
         </div>
     {% endif %}
 
-    {% if execution.status == 'queued' or execution.status == 'running' %}
-        <form method="post" action="{% url 'scans:execution-cancel' execution.pk %}">
-            {% csrf_token %}
-            <button type="submit" class="w-full px-4 py-2.5 rounded-lg bg-rose-500/20 hover:bg-rose-500/30 text-rose-200 font-semibold text-sm">Cancel Execution</button>
-        </form>
+    {% if request.user|has_capability:'control_scan_executions' %}
+        {% if execution.status == 'queued' or execution.status == 'running' %}
+            <form method="post" action="{% url 'scans:execution-cancel' execution.pk %}">
+                {% csrf_token %}
+                <button type="submit" class="w-full px-4 py-2.5 rounded-lg bg-rose-500/20 hover:bg-rose-500/30 text-rose-200 font-semibold text-sm">Cancel Execution</button>
+            </form>
+        {% endif %}
     {% endif %}
 </div>

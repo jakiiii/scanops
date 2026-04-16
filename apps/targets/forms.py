@@ -5,6 +5,7 @@ from django.contrib.auth import get_user_model
 from django.db import models
 
 from apps.core.services.target_validation import validate_target_input
+from apps.ops.rbac import user_has_global_scope
 from apps.targets.models import Target
 
 User = get_user_model()
@@ -44,9 +45,11 @@ class TargetForm(forms.ModelForm):
             ),
         }
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, user=None, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["owner"].queryset = User.objects.filter(is_active=True).order_by("username")
+        if user is not None and not user_has_global_scope(user):
+            self.fields["owner"].queryset = self.fields["owner"].queryset.filter(pk=user.pk)
         self.fields["owner"].required = False
         self._validation_warnings: list[str] = []
 
@@ -108,9 +111,11 @@ class TargetFilterForm(forms.Form):
         empty_label="All Users",
     )
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, user=None, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["owner"].queryset = User.objects.filter(is_active=True).order_by("username")
+        if user is not None and not user_has_global_scope(user):
+            self.fields["owner"].queryset = self.fields["owner"].queryset.filter(pk=user.pk)
         for field in self.fields.values():
             field.widget.attrs["class"] = "scanops-input"
         self.fields["q"].widget.attrs["placeholder"] = "IP, domain, CIDR, tags..."

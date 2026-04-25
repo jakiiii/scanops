@@ -76,6 +76,7 @@ INSTALLED_APPS = [
 LOCALE_APPS = [
     'apps.accounts',
     'apps.core',
+    'apps.feedback',
     'apps.dashboard',
     'apps.targets',
     'apps.scans',

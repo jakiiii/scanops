@@ -29,6 +29,7 @@ urlpatterns = [
     path('schedules/', include('apps.schedules.urls', namespace='schedules')),
     path('notifications/', include('apps.notifications.urls', namespace='notifications')),
     path('assets/', include('apps.assets.urls', namespace='assets')),
+    path('feedback/', include('apps.feedback.urls', namespace='feedback')),
     path('ops/', include('apps.ops.urls', namespace='ops')),
 
 

@@ -604,7 +604,9 @@ def build_documentation_payload() -> dict:
             "content": (
                 "For access issues, role changes, failed workflows, or platform anomalies, contact your "
                 "ScanOps administrator or security operations lead. Include time window, module name, "
-                "target scope, and execution/report IDs to accelerate triage."
+                "target scope, and execution/report IDs to accelerate triage. "
+                "For product improvements use /feedback/suggestions/, and for defects or operational incidents "
+                "use /feedback/issues/ with optional evidence attachments."
             ),
         },
         "modules": modules,

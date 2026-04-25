@@ -104,6 +104,14 @@
             <span class="material-symbols-outlined">menu_book</span>
             <span>Read Documentation</span>
         </a>
+        <a href="{% url 'feedback:suggestion' %}" class="scanops-nav-link {% if request.path|slice:':22' == '/feedback/suggestions/' %}is-active{% endif %}">
+            <span class="material-symbols-outlined">lightbulb</span>
+            <span>Suggestions</span>
+        </a>
+        <a href="{% url 'feedback:issue' %}" class="scanops-nav-link {% if request.path|slice:':17' == '/feedback/issues/' %}is-active{% endif %}">
+            <span class="material-symbols-outlined">bug_report</span>
+            <span>Issues</span>
+        </a>
         <a href="{% url 'accounts:password_change' %}" class="scanops-nav-link">
             <span class="material-symbols-outlined">password</span>
             <span>Change Password</span>
@@ -122,6 +130,18 @@
             </button>
         </form>
     {% else %}
+        <a href="{% url 'core:documentation' %}" class="scanops-nav-link {% if request.path|slice:':15' == '/documentation/' %}is-active{% endif %}">
+            <span class="material-symbols-outlined">menu_book</span>
+            <span>Read Documentation</span>
+        </a>
+        <a href="{% url 'feedback:suggestion' %}" class="scanops-nav-link {% if request.path|slice:':22' == '/feedback/suggestions/' %}is-active{% endif %}">
+            <span class="material-symbols-outlined">lightbulb</span>
+            <span>Suggestions</span>
+        </a>
+        <a href="{% url 'feedback:issue' %}" class="scanops-nav-link {% if request.path|slice:':17' == '/feedback/issues/' %}is-active{% endif %}">
+            <span class="material-symbols-outlined">bug_report</span>
+            <span>Issues</span>
+        </a>
         <a href="{% url 'accounts:login' %}" class="scanops-nav-link">
             <span class="material-symbols-outlined">login</span>
             <span>Sign In</span>

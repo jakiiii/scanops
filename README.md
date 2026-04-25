@@ -129,6 +129,15 @@ ScanOps includes a public product documentation page:
 
 The page documents core modules and safe operational workflow without exposing sensitive runtime data.
 
+## Feedback Channels
+
+ScanOps includes two feedback intake routes for users and visitors:
+
+- Suggestions: `/feedback/suggestions/`
+- Issues: `/feedback/issues/`
+
+Suggestions capture improvement ideas. Issues capture operational defects and can include optional evidence attachments (`jpg`, `jpeg`, `png`, `webp`, `mp4`, `webm`, `mov`, max `25MB`).
+
 ## Public New Scan Access
 
 The `New Scan` page (`/scans/new/`) is accessible in two modes:

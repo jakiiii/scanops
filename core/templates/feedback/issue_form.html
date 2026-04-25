@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}Report Issue | ScanOps{% endblock %}
+
+{% block content %}
+    {% include "includes/breadcrumbs.html" with breadcrumbs=breadcrumbs %}
+    <div class="max-w-5xl mx-auto">
+        <header class="mb-8">
+            <h1 class="text-3xl font-bold text-white tracking-tight">Report Issue</h1>
+            <p class="text-slate-400 mt-1">Report a problem, bug, or operational issue.</p>
+        </header>
+
+        {% if form.non_field_errors %}
+            <div class="scanops-panel p-4 border-rose-500/30 mb-6">
+                {% for error in form.non_field_errors %}
+                    <p class="text-sm text-rose-200">{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
+            <div class="xl:col-span-8">
+                <div class="scanops-panel p-6 md:p-8">
+                    <form method="post" enctype="multipart/form-data" class="space-y-5">
+                        {% csrf_token %}
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                            <div class="md:col-span-2">
+                                <label for="{{ form.title.id_for_label }}" class="block text-sm text-slate-300 mb-1.5">Title</label>
+                                {{ form.title }}
+                                {% if form.title.errors %}<p class="text-xs text-rose-300 mt-1">{{ form.title.errors|striptags }}</p>{% endif %}
+                            </div>
+                            <div class="md:col-span-2">
+                                <label for="{{ form.email.id_for_label }}" class="block text-sm text-slate-300 mb-1.5">Email</label>
+                                {{ form.email }}
+                                {% if form.email.errors %}<p class="text-xs text-rose-300 mt-1">{{ form.email.errors|striptags }}</p>{% endif %}
+                            </div>
+                            <div class="md:col-span-2">
+                                <label for="{{ form.attachment.id_for_label }}" class="block text-sm text-slate-300 mb-1.5">Attachment (optional)</label>
+                                {{ form.attachment }}
+                                {% if form.attachment.errors %}<p class="text-xs text-rose-300 mt-1">{{ form.attachment.errors|striptags }}</p>{% endif %}
+                                <p class="text-[11px] text-slate-500 mt-1">Allowed: jpg, jpeg, png, webp, mp4, webm, mov. Max size: 25MB.</p>
+                            </div>
+                            <div class="md:col-span-2">
+                                <label for="{{ form.description.id_for_label }}" class="block text-sm text-slate-300 mb-1.5">Description</label>
+                                {{ form.description }}
+                                {% if form.description.errors %}<p class="text-xs text-rose-300 mt-1">{{ form.description.errors|striptags }}</p>{% endif %}
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-end gap-3 pt-4 border-t border-slate-800">
+                            {% if request.user.is_authenticated %}
+                                <a href="{% url 'dashboard:home' %}" class="px-4 py-2 text-sm font-semibold text-slate-400 hover:text-white">Back</a>
+                            {% else %}
+                                <a href="{% url 'accounts:login' %}" class="px-4 py-2 text-sm font-semibold text-slate-400 hover:text-white">Back</a>
+                            {% endif %}
+                            <button type="submit" class="px-6 py-2.5 text-sm font-bold bg-blue-600 text-white rounded-lg hover:bg-blue-500 transition-all">Submit Issue</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="xl:col-span-4 space-y-6">
+                <div class="scanops-panel p-6 border-l-4 border-l-amber-500">
+                    <h3 class="font-bold text-white mb-3">Issue Report Tips</h3>
+                    <ul class="space-y-2 text-sm text-slate-400">
+                        <li>Include exact page and action where the issue occurs.</li>
+                        <li>Attach screenshot or short video when possible.</li>
+                        <li>Provide expected behavior vs observed behavior.</li>
+                    </ul>
+                </div>
+                <div class="scanops-panel p-6">
+                    <h3 class="font-bold text-white mb-3">Security Note</h3>
+                    <p class="text-sm text-slate-400">Do not upload sensitive credentials, private keys, or unrelated confidential files.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

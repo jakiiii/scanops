@@ -12,10 +12,11 @@ class ScanScheduleAdmin(admin.ModelAdmin):
         "schedule_type",
         "next_run_at",
         "is_enabled",
+        "is_public",
         "notification_enabled",
         "created_by",
     )
-    list_filter = ("schedule_type", "is_enabled", "notification_enabled", "timing_profile")
+    list_filter = ("schedule_type", "is_enabled", "is_public", "notification_enabled", "timing_profile")
     search_fields = ("name", "target__target_value", "profile__name", "created_by__username")
     ordering = ("-created_at",)
     autocomplete_fields = ("target", "profile", "created_by")
@@ -28,4 +29,3 @@ class ScheduleRunLogAdmin(admin.ModelAdmin):
     search_fields = ("schedule__name", "execution__execution_id", "message")
     ordering = ("-run_at",)
     autocomplete_fields = ("schedule", "execution", "generated_report")
-

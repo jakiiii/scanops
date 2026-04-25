@@ -5,6 +5,7 @@ import random
 from django.db import transaction
 from django.utils import timezone
 
+from apps.ops.services import data_visibility_service
 from apps.scans.models import ScanExecution, ScanPortResult, ScanResult
 from apps.targets.models import Target
 
@@ -161,18 +162,20 @@ def generate_mock_result_for_execution(execution: ScanExecution, force: bool = F
     return result
 
 
-def get_previous_result(result: ScanResult) -> ScanResult | None:
+def get_previous_result(result: ScanResult, *, user=None) -> ScanResult | None:
     execution = result.execution
     target = execution.scan_request.target
-    return (
+    queryset = (
         ScanResult.objects.select_related("execution__scan_request__target")
         .filter(execution__scan_request__target=target, generated_at__lt=result.generated_at)
         .order_by("-generated_at")
-        .first()
     )
+    if user is not None:
+        queryset = data_visibility_service.get_user_visible_results(user, queryset=queryset)
+    return queryset.first()
 
 
-def build_result_detail_context(result: ScanResult) -> dict:
+def build_result_detail_context(result: ScanResult, *, user=None) -> dict:
     port_results = result.port_results.all().order_by("port", "protocol")
     service_rows = [row for row in port_results if row.service_name]
     traceroute_rows = result.traceroute_data_json if isinstance(result.traceroute_data_json, list) else []
@@ -183,16 +186,18 @@ def build_result_detail_context(result: ScanResult) -> dict:
         "traceroute_rows": traceroute_rows,
         "script_rows": script_rows,
         "parsed_output": result.parsed_output_json if isinstance(result.parsed_output_json, dict) else {},
-        "previous_result": get_previous_result(result),
+        "previous_result": get_previous_result(result, user=user),
     }
 
 
-def build_host_detail_context(target: Target) -> dict:
+def build_host_detail_context(target: Target, *, user=None) -> dict:
     results = (
         ScanResult.objects.select_related("execution__scan_request", "execution__scan_request__profile")
         .filter(execution__scan_request__target=target)
         .order_by("-generated_at")
     )
+    if user is not None:
+        results = data_visibility_service.get_user_visible_results(user, queryset=results)
     latest_result = results.first()
     current_ports = latest_result.port_results.all().order_by("port") if latest_result else []
 

@@ -10,7 +10,8 @@ from django.views import View
 from django.views.generic import DetailView, ListView
 
 from apps.ops.models import PermissionRule
-from apps.ops.rbac import CapabilityRequiredMixin, scope_queryset_for_user
+from apps.ops.rbac import CapabilityRequiredMixin
+from apps.ops.services import data_visibility_service
 from apps.scans.forms import RunningFilterForm
 from apps.scans.models import ScanExecution
 from apps.scans.services.execution_service import (
@@ -49,7 +50,7 @@ class RunningScanListView(CapabilityRequiredMixin, ListView):
             .filter(is_archived=False)
             .order_by("-created_at")
         )
-        queryset = scope_queryset_for_user(queryset, self.request.user, ("scan_request__requested_by",))
+        queryset = data_visibility_service.get_user_visible_executions(self.request.user, queryset=queryset)
         self.filter_form = RunningFilterForm(self.request.GET or None, user=self.request.user)
         if self.filter_form.is_valid():
             cleaned = self.filter_form.cleaned_data
@@ -80,10 +81,9 @@ class RunningScanListView(CapabilityRequiredMixin, ListView):
                     simulate_execution_tick(execution)
         context["executions"] = executions
         context["filter_form"] = self.filter_form
-        summary_source = scope_queryset_for_user(
-            ScanExecution.objects.filter(is_archived=False),
+        summary_source = data_visibility_service.get_user_visible_executions(
             self.request.user,
-            ("scan_request__requested_by",),
+            queryset=ScanExecution.objects.filter(is_archived=False),
         )
         context["summary"] = {
             "running": summary_source.filter(status=ScanExecution.Status.RUNNING).count(),
@@ -91,6 +91,7 @@ class RunningScanListView(CapabilityRequiredMixin, ListView):
             "failed": summary_source.filter(status=ScanExecution.Status.FAILED).count(),
             "completed": summary_source.filter(status=ScanExecution.Status.COMPLETED).count(),
         }
+        context["scope_label"] = "All" if data_visibility_service.user_can_view_all_data(self.request.user) else "My"
         context["breadcrumbs"] = [
             {"label": "Running", "url": ""},
         ]
@@ -124,7 +125,7 @@ class ScanQueueView(CapabilityRequiredMixin, ListView):
             )
             .order_by("priority", "created_at")
         )
-        queryset = scope_queryset_for_user(queryset, self.request.user, ("scan_request__requested_by",))
+        queryset = data_visibility_service.get_user_visible_executions(self.request.user, queryset=queryset)
         self.filter_form = RunningFilterForm(self.request.GET or None, user=self.request.user)
         if self.filter_form.is_valid():
             cleaned = self.filter_form.cleaned_data
@@ -154,10 +155,9 @@ class ScanQueueView(CapabilityRequiredMixin, ListView):
             execution.estimated_wait_minutes = max(1, (index - 1) * 2)
         context["executions"] = executions
         context["filter_form"] = self.filter_form
-        queue_source = scope_queryset_for_user(
-            ScanExecution.objects.filter(is_archived=False),
+        queue_source = data_visibility_service.get_user_visible_executions(
             self.request.user,
-            ("scan_request__requested_by",),
+            queryset=ScanExecution.objects.filter(is_archived=False),
         )
         context["queue_summary"] = {
             "total": queue_source.filter(status=ScanExecution.Status.QUEUED).count(),
@@ -165,6 +165,7 @@ class ScanQueueView(CapabilityRequiredMixin, ListView):
             "processing": queue_source.filter(queue_status=ScanExecution.QueueStatus.PROCESSING).count(),
             "failed": queue_source.filter(queue_status=ScanExecution.QueueStatus.ERROR).count(),
         }
+        context["scope_label"] = "All" if data_visibility_service.user_can_view_all_data(self.request.user) else "My"
         context["breadcrumbs"] = [
             {"label": "Running", "url": reverse("scans:running")},
             {"label": "Queue", "url": ""},
@@ -185,7 +186,7 @@ class ScanMonitorDetailView(CapabilityRequiredMixin, DetailView):
             "scan_request__profile",
             "scan_request__requested_by",
         )
-        return scope_queryset_for_user(queryset, self.request.user, ("scan_request__requested_by",))
+        return data_visibility_service.get_user_visible_executions(self.request.user, queryset=queryset)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -205,10 +206,9 @@ class MonitorStatusPartialView(CapabilityRequiredMixin, View):
     capability_key = PermissionRule.PermissionKey.VIEW_SCANS
 
     def get(self, request, pk: int) -> HttpResponse:
-        queryset = scope_queryset_for_user(
-            ScanExecution.objects.select_related("scan_request", "scan_request__target", "scan_request__profile"),
+        queryset = data_visibility_service.get_user_visible_executions(
             request.user,
-            ("scan_request__requested_by",),
+            queryset=ScanExecution.objects.select_related("scan_request", "scan_request__target", "scan_request__profile"),
         )
         execution = get_object_or_404(
             queryset,
@@ -227,7 +227,7 @@ class MonitorLogPartialView(CapabilityRequiredMixin, View):
     capability_key = PermissionRule.PermissionKey.VIEW_SCANS
 
     def get(self, request, pk: int) -> HttpResponse:
-        queryset = scope_queryset_for_user(ScanExecution.objects.all(), request.user, ("scan_request__requested_by",))
+        queryset = data_visibility_service.get_user_visible_executions(request.user, queryset=ScanExecution.objects.all())
         execution = get_object_or_404(queryset, pk=pk)
         logs = execution.event_logs.all()[:80]
         return render(
@@ -241,7 +241,7 @@ class ExecutionCancelView(CapabilityRequiredMixin, View):
     capability_key = PermissionRule.PermissionKey.CONTROL_SCAN_EXECUTIONS
 
     def post(self, request, pk: int) -> HttpResponse:
-        queryset = scope_queryset_for_user(ScanExecution.objects.all(), request.user, ("scan_request__requested_by",))
+        queryset = data_visibility_service.get_user_visible_executions(request.user, queryset=ScanExecution.objects.all())
         execution = get_object_or_404(queryset, pk=pk)
         cancel_execution(execution, message=f"Cancelled by {request.user.username}.")
         messages.warning(request, f"{execution.execution_id} was cancelled.")
@@ -252,7 +252,7 @@ class ExecutionRetryView(CapabilityRequiredMixin, View):
     capability_key = PermissionRule.PermissionKey.CONTROL_SCAN_EXECUTIONS
 
     def post(self, request, pk: int) -> HttpResponse:
-        queryset = scope_queryset_for_user(ScanExecution.objects.all(), request.user, ("scan_request__requested_by",))
+        queryset = data_visibility_service.get_user_visible_executions(request.user, queryset=ScanExecution.objects.all())
         execution = get_object_or_404(queryset, pk=pk)
         new_execution = retry_execution(execution)
         messages.success(request, f"Retry queued as {new_execution.execution_id}.")

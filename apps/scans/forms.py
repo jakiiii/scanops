@@ -4,7 +4,8 @@ from django import forms
 from django.contrib.auth import get_user_model
 
 from apps.core.services.scan_policy import build_scan_summary, validate_scan_options
-from apps.ops.rbac import scope_queryset_for_user, user_is_scoped
+from apps.ops.rbac import user_is_scoped
+from apps.ops.services import data_visibility_service
 from apps.scans.models import ScanExecution, ScanPortResult, ScanProfile, ScanRequest, ScanResult
 from apps.targets.models import Target
 
@@ -52,9 +53,12 @@ class ScanRequestForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         target_queryset = Target.objects.filter(status=Target.Status.ACTIVE).order_by("target_value")
         if user is not None:
-            target_queryset = scope_queryset_for_user(target_queryset, user, ("owner", "created_by"))
+            target_queryset = data_visibility_service.get_user_visible_targets(user, queryset=target_queryset)
         self.fields["target"].queryset = target_queryset
-        self.fields["profile"].queryset = ScanProfile.objects.filter(is_active=True).order_by("is_system", "name")
+        profile_queryset = ScanProfile.objects.filter(is_active=True).order_by("is_system", "name")
+        if user is not None:
+            profile_queryset = data_visibility_service.get_user_visible_scan_profiles(user, queryset=profile_queryset)
+        self.fields["profile"].queryset = profile_queryset
         for checkbox_name in (
             "enable_host_discovery",
             "enable_service_detection",
@@ -117,10 +121,9 @@ class RunningFilterForm(forms.Form):
             if user_is_scoped(user):
                 self.fields["requested_by"].queryset = self.fields["requested_by"].queryset.filter(pk=user.pk)
                 self.fields["requested_by"].initial = user.pk
-            self.fields["target"].queryset = scope_queryset_for_user(
-                self.fields["target"].queryset,
+            self.fields["target"].queryset = data_visibility_service.get_user_visible_targets(
                 user,
-                ("owner", "created_by"),
+                queryset=self.fields["target"].queryset,
             )
         for field in self.fields.values():
             field.widget.attrs["class"] = "scanops-input"
@@ -148,10 +151,13 @@ class ResultFilterForm(forms.Form):
         self.fields["target"].queryset = Target.objects.order_by("target_value")
         self.fields["profile"].queryset = ScanProfile.objects.filter(is_active=True).order_by("name")
         if user is not None:
-            self.fields["target"].queryset = scope_queryset_for_user(
-                self.fields["target"].queryset,
+            self.fields["target"].queryset = data_visibility_service.get_user_visible_targets(
                 user,
-                ("owner", "created_by"),
+                queryset=self.fields["target"].queryset,
+            )
+            self.fields["profile"].queryset = data_visibility_service.get_user_visible_scan_profiles(
+                user,
+                queryset=self.fields["profile"].queryset,
             )
         for field in self.fields.values():
             field.widget.attrs["class"] = "scanops-input"
@@ -177,10 +183,13 @@ class HistoryFilterForm(forms.Form):
         self.fields["profile"].queryset = ScanProfile.objects.filter(is_active=True).order_by("name")
         self.fields["requested_by"].queryset = User.objects.filter(is_active=True).order_by("username")
         if user is not None:
-            self.fields["target"].queryset = scope_queryset_for_user(
-                self.fields["target"].queryset,
+            self.fields["target"].queryset = data_visibility_service.get_user_visible_targets(
                 user,
-                ("owner", "created_by"),
+                queryset=self.fields["target"].queryset,
+            )
+            self.fields["profile"].queryset = data_visibility_service.get_user_visible_scan_profiles(
+                user,
+                queryset=self.fields["profile"].queryset,
             )
             if user_is_scoped(user):
                 self.fields["requested_by"].queryset = self.fields["requested_by"].queryset.filter(pk=user.pk)
@@ -199,7 +208,7 @@ class CompareResultsForm(forms.Form):
         super().__init__(*args, **kwargs)
         queryset = ScanResult.objects.select_related("execution__scan_request__target").order_by("-generated_at")
         if user is not None:
-            queryset = scope_queryset_for_user(queryset, user, ("execution__scan_request__requested_by",))
+            queryset = data_visibility_service.get_user_visible_results(user, queryset=queryset)
         if target is not None:
             queryset = queryset.filter(execution__scan_request__target=target)
         self.fields["left_result"].queryset = queryset

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from django import template
 
-from apps.ops.services import permission_service
+from apps.ops.services import data_visibility_service, permission_service
 
 
 register = template.Library()
@@ -144,3 +144,8 @@ def role_slug(user) -> str:
 @register.filter
 def role_name(user) -> str:
     return permission_service.get_user_role_name(user)
+
+
+@register.filter
+def can_view_all_data(user) -> bool:
+    return data_visibility_service.user_can_view_all_data(user)

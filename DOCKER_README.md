@@ -32,6 +32,19 @@ Minimum values to review:
 - `SCANOPS_DB_PASSWORD`
 - `SCANOPS_DB_PORT` (default `5432`)
 
+For authentication/password reset:
+
+- `EMAIL_BACKEND` (use console backend for local dev)
+- `EMAIL_HOST`
+- `EMAIL_PORT`
+- `EMAIL_USE_TLS`
+- `EMAIL_HOST_USER`
+- `EMAIL_HOST_PASSWORD`
+- `DEFAULT_FROM_EMAIL`
+- `SCANOPS_SELF_REGISTRATION_ENABLED`
+- `SCANOPS_SELF_REGISTRATION_REQUIRES_APPROVAL`
+- `SCANOPS_SELF_REGISTRATION_DEFAULT_ROLE`
+
 ## Deployment Script
 
 Primary script:
@@ -60,6 +73,20 @@ Default behavior of `up`:
 ./scripts/deploy_and_run.sh migrate
 ./scripts/deploy_and_run.sh collectstatic
 ./scripts/deploy_and_run.sh check
+```
+
+## Account Routes
+
+Available account management routes:
+
+- `/register/`
+- `/password-reset/`
+- `/password-change/`
+
+When `EMAIL_BACKEND=django.core.mail.backends.console.EmailBackend`, password reset links are printed in container logs:
+
+```bash
+./scripts/deploy_and_run.sh logs
 ```
 
 ### Port Override

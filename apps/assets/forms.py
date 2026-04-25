@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from django import forms
 
-from apps.ops.rbac import scope_queryset_for_user
+from apps.ops.services import data_visibility_service
 from apps.assets.models import Asset
 from apps.targets.models import Target
 
@@ -26,10 +26,9 @@ class AssetFilterForm(forms.Form):
         super().__init__(*args, **kwargs)
         self.fields["target"].queryset = Target.objects.order_by("target_value")
         if user is not None:
-            self.fields["target"].queryset = scope_queryset_for_user(
-                self.fields["target"].queryset,
+            self.fields["target"].queryset = data_visibility_service.get_user_visible_targets(
                 user,
-                ("owner", "created_by"),
+                queryset=self.fields["target"].queryset,
             )
         for field in self.fields.values():
             field.widget.attrs["class"] = "scanops-input"

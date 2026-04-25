@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from django.conf import settings
 from django.db import models
 
 
@@ -31,6 +32,13 @@ class Asset(models.Model):
     operating_system = models.CharField(max_length=255, blank=True)
     risk_score = models.DecimalField(max_digits=5, decimal_places=2, default=0)
     risk_level = models.CharField(max_length=16, choices=RiskLevel.choices, default=RiskLevel.INFO)
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        related_name="owned_assets",
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+    )
     owner_name = models.CharField(max_length=160, blank=True)
     notes = models.TextField(blank=True)
     last_seen_at = models.DateTimeField(blank=True, null=True)
@@ -116,4 +124,3 @@ class AssetChangeLog(models.Model):
 
     def __str__(self) -> str:
         return f"{self.asset.name}: {self.get_change_type_display()}"
-

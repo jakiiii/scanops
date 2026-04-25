@@ -1,16 +1,21 @@
 {% load scanops_tags %}
 <div class="scanops-panel overflow-hidden">
     <div class="overflow-x-auto">
-        <table class="w-full min-w-[1080px] text-left border-collapse">
+        <table class="w-full {% if request.user.is_authenticated %}min-w-[1120px]{% else %}min-w-[860px]{% endif %} text-left border-collapse">
             <thead>
             <tr class="border-b border-slate-800 bg-slate-900/70">
                 <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">Name</th>
-                <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">Target</th>
-                <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">Profile</th>
+                {% if request.user.is_authenticated %}
+                    <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">Target</th>
+                    <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">Profile</th>
+                {% endif %}
                 <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">Frequency</th>
                 <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">Next Run</th>
                 <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">Status</th>
-                <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">Notifications</th>
+                <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">Visibility</th>
+                {% if request.user.is_authenticated %}
+                    <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">Notifications</th>
+                {% endif %}
                 <th class="px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500 text-right">Actions</th>
             </tr>
             </thead>
@@ -21,17 +26,27 @@
                         <p class="text-sm font-semibold text-slate-100">{{ schedule.name }}</p>
                         <p class="text-[11px] text-slate-500">#{{ schedule.pk }}</p>
                     </td>
-                    <td class="px-4 py-4 text-sm text-slate-200">{{ schedule.target.target_value }}</td>
-                    <td class="px-4 py-4 text-sm text-slate-300">{{ schedule.profile.name|default:schedule.get_scan_type_display }}</td>
+                    {% if request.user.is_authenticated %}
+                        <td class="px-4 py-4 text-sm text-slate-200">{{ schedule.target.target_value }}</td>
+                        <td class="px-4 py-4 text-sm text-slate-300">{{ schedule.profile.name|default:schedule.get_scan_type_display }}</td>
+                    {% endif %}
                     <td class="px-4 py-4 text-xs text-slate-300">{{ schedule.get_schedule_type_display }}</td>
                     <td class="px-4 py-4 text-xs text-slate-300">{{ schedule.next_run_at|date:"M d, Y H:i"|default:"-" }}</td>
                     <td class="px-4 py-4">
                         <span class="px-2 py-1 rounded text-[10px] uppercase font-semibold {{ schedule.is_enabled|yesno:'enabled,disabled'|status_badge }}">{{ schedule.is_enabled|yesno:"Enabled,Disabled" }}</span>
                     </td>
-                    <td class="px-4 py-4 text-xs text-slate-300">{{ schedule.notification_enabled|yesno:"Enabled,Disabled" }}</td>
+                    <td class="px-4 py-4">
+                        <span class="px-2 py-1 rounded text-[10px] uppercase font-semibold {% if schedule.is_public %}bg-blue-500/20 text-blue-200 border border-blue-500/30{% else %}bg-slate-500/10 text-slate-300 border border-slate-500/20{% endif %}">
+                            {{ schedule.is_public|yesno:"Public,Private" }}
+                        </span>
+                    </td>
+                    {% if request.user.is_authenticated %}
+                        <td class="px-4 py-4 text-xs text-slate-300">{{ schedule.notification_enabled|yesno:"Enabled,Disabled" }}</td>
+                    {% endif %}
                     <td class="px-4 py-4">
                         <div class="flex justify-end gap-2">
-                            {% if request.user|has_capability:'manage_schedules' %}
+                            <a href="{% url 'schedules:detail' schedule.pk %}" class="px-2.5 py-1.5 rounded bg-slate-800 hover:bg-slate-700 text-[11px] text-slate-200">View</a>
+                            {% if request.user.is_authenticated and schedule.can_manage %}
                                 <form method="post" action="{% url 'schedules:run-now' schedule.pk %}">
                                     {% csrf_token %}
                                     <button type="submit" class="px-2.5 py-1.5 rounded bg-blue-500/20 hover:bg-blue-500/30 text-[11px] text-blue-200">Run Now</button>
@@ -51,7 +66,7 @@
                 </tr>
             {% empty %}
                 <tr>
-                    <td colspan="8" class="px-4 py-14 text-center">
+                    <td colspan="{% if request.user.is_authenticated %}9{% else %}6{% endif %}" class="px-4 py-14 text-center">
                         <span class="material-symbols-outlined text-4xl text-slate-600">calendar_clock</span>
                         <p class="text-sm text-slate-300 mt-2">No schedules available.</p>
                     </td>

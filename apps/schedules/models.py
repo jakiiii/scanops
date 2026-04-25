@@ -51,6 +51,7 @@ class ScanSchedule(models.Model):
     last_run_at = models.DateTimeField(blank=True, null=True)
     is_enabled = models.BooleanField(default=True)
     notification_enabled = models.BooleanField(default=True)
+    is_public = models.BooleanField(default=False)
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         related_name="created_scan_schedules",
@@ -109,4 +110,3 @@ class ScheduleRunLog(models.Model):
 
     def __str__(self) -> str:
         return f"{self.schedule.name} @ {self.run_at:%Y-%m-%d %H:%M:%S}"
-

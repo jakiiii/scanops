@@ -7,7 +7,7 @@
     {% include "includes/breadcrumbs.html" with breadcrumbs=breadcrumbs %}
     <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
         <div>
-            <h1 class="text-4xl font-bold text-white tracking-tight">Scan Results</h1>
+            <h1 class="text-4xl font-bold text-white tracking-tight">{% if scope_label == "All" %}All Scan Results{% else %}My Scan Results{% endif %}</h1>
             <p class="text-slate-400 mt-1">Structured findings and output artifacts from completed executions.</p>
         </div>
         <div class="flex items-center gap-3">
@@ -22,19 +22,19 @@
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         <div class="scanops-panel p-5 border-l-4 border-l-blue-500">
-            <p class="text-xs uppercase tracking-widest text-slate-500">Total Results</p>
+            <p class="text-xs uppercase tracking-widest text-slate-500">{{ scope_label }} Total Results</p>
             <p class="text-3xl font-bold text-blue-300 mt-2">{{ result_summary.total }}</p>
         </div>
         <div class="scanops-panel p-5 border-l-4 border-l-rose-500">
-            <p class="text-xs uppercase tracking-widest text-slate-500">High Risk Hosts</p>
+            <p class="text-xs uppercase tracking-widest text-slate-500">{{ scope_label }} High Risk Hosts</p>
             <p class="text-3xl font-bold text-rose-300 mt-2">{{ result_summary.high_risk }}</p>
         </div>
         <div class="scanops-panel p-5 border-l-4 border-l-amber-500">
-            <p class="text-xs uppercase tracking-widest text-slate-500">Medium Risk Hosts</p>
+            <p class="text-xs uppercase tracking-widest text-slate-500">{{ scope_label }} Medium Risk Hosts</p>
             <p class="text-3xl font-bold text-amber-300 mt-2">{{ result_summary.medium_risk }}</p>
         </div>
         <div class="scanops-panel p-5 border-l-4 border-l-slate-500">
-            <p class="text-xs uppercase tracking-widest text-slate-500">Hosts Down</p>
+            <p class="text-xs uppercase tracking-widest text-slate-500">{{ scope_label }} Hosts Down</p>
             <p class="text-3xl font-bold text-slate-300 mt-2">{{ result_summary.hosts_down }}</p>
         </div>
     </div>

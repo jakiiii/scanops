@@ -106,6 +106,27 @@ LOGOUT_REDIRECT_URL = '/login/'
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/dashboard/'
 
+# Registration policy
+SCANOPS_SELF_REGISTRATION_ENABLED = env_flag("SCANOPS_SELF_REGISTRATION_ENABLED", default=True)
+SCANOPS_SELF_REGISTRATION_REQUIRES_APPROVAL = env_flag(
+    "SCANOPS_SELF_REGISTRATION_REQUIRES_APPROVAL",
+    default=False,
+)
+SCANOPS_SELF_REGISTRATION_DEFAULT_ROLE = (
+    os.environ.get("SCANOPS_SELF_REGISTRATION_DEFAULT_ROLE", "viewer").strip().lower()
+)
+
+# Email configuration
+EMAIL_BACKEND = os.environ.get("EMAIL_BACKEND", "django.core.mail.backends.console.EmailBackend")
+EMAIL_HOST = os.environ.get("EMAIL_HOST", "")
+EMAIL_PORT = int(os.environ.get("EMAIL_PORT", "587"))
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER", "")
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD", "")
+EMAIL_USE_TLS = env_flag("EMAIL_USE_TLS", default=True)
+EMAIL_USE_SSL = env_flag("EMAIL_USE_SSL", default=False)
+DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL", "webmaster@localhost")
+SERVER_EMAIL = os.environ.get("SERVER_EMAIL", DEFAULT_FROM_EMAIL)
+
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',  # Default backend for username
     'apps.accounts.backends.EmailBackend',  # Custom backend for email

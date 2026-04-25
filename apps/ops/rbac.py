@@ -5,9 +5,9 @@ from functools import wraps
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
-from django.db.models import Q, QuerySet
+from django.db.models import QuerySet
 
-from apps.ops.services import permission_service
+from apps.ops.services import data_visibility_service, permission_service
 
 
 class CapabilityRequiredMixin(LoginRequiredMixin):
@@ -51,11 +51,7 @@ def require_capability(capability_key: str):
 
 
 def user_has_global_scope(user) -> bool:
-    return permission_service.get_user_role_slug(user) in {
-        permission_service.SUPER_ADMIN,
-        permission_service.SECURITY_ADMIN,
-        permission_service.ANALYST,
-    } or getattr(user, "is_superuser", False)
+    return data_visibility_service.user_can_view_all_data(user)
 
 
 def user_is_scoped(user) -> bool:
@@ -63,18 +59,11 @@ def user_is_scoped(user) -> bool:
 
 
 def scope_queryset_for_user(queryset: QuerySet, user, owner_fields: tuple[str, ...]):
-    if not getattr(user, "is_authenticated", False):
-        return queryset.none()
-    if user_has_global_scope(user):
-        return queryset
-
-    if not owner_fields:
-        return queryset.none()
-
-    predicate = Q()
-    for field in owner_fields:
-        predicate |= Q(**{field: user})
-    return queryset.filter(predicate)
+    return data_visibility_service.filter_queryset_for_user(
+        queryset,
+        user,
+        owner_fields=owner_fields,
+    )
 
 
 def can_manage_user(actor, target_user) -> bool:

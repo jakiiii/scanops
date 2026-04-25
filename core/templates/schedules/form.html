@@ -84,13 +84,14 @@
                             <label class="flex items-center justify-between gap-2 p-3 rounded-lg bg-slate-900/70 border border-slate-800"><span class="text-sm text-slate-300">OS Detection</span>{{ form.enable_os_detection }}</label>
                             <label class="flex items-center justify-between gap-2 p-3 rounded-lg bg-slate-900/70 border border-slate-800"><span class="text-sm text-slate-300">Traceroute</span>{{ form.enable_traceroute }}</label>
                             <label class="flex items-center justify-between gap-2 p-3 rounded-lg bg-slate-900/70 border border-slate-800"><span class="text-sm text-slate-300">DNS Resolution</span>{{ form.enable_dns_resolution }}</label>
+                            <label class="flex items-center justify-between gap-2 p-3 rounded-lg bg-slate-900/70 border border-slate-800"><span class="text-sm text-slate-300">Public Schedule</span>{{ form.is_public }}</label>
                             <label class="flex items-center justify-between gap-2 p-3 rounded-lg bg-slate-900/70 border border-slate-800"><span class="text-sm text-slate-300">Enabled</span>{{ form.is_enabled }}</label>
                             <label class="flex items-center justify-between gap-2 p-3 rounded-lg bg-slate-900/70 border border-slate-800"><span class="text-sm text-slate-300">Notify on Run</span>{{ form.notification_enabled }}</label>
                         </div>
                     </div>
                 </div>
                 <div class="flex flex-wrap items-center justify-end gap-3">
-                    {% if mode == "edit" and request.user|has_capability:'manage_schedules' %}
+                    {% if mode == "edit" and can_manage_schedule %}
                         <button
                             type="submit"
                             formaction="{% url 'schedules:run-now' schedule.pk %}"
@@ -107,7 +108,7 @@
 
             {% if mode == "edit" %}
                 <div class="mt-4 flex justify-end">
-                    {% if request.user|has_capability:'manage_schedules' %}
+                    {% if can_manage_schedule %}
                         <form method="post" action="{% url 'schedules:delete' schedule.pk %}">
                             {% csrf_token %}
                             <button type="submit" class="px-4 py-2 rounded-lg bg-rose-500/20 text-rose-200 text-sm hover:bg-rose-500/30">Delete Schedule</button>

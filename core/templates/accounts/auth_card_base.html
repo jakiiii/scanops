@@ -1,0 +1,58 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>{% block title %}ScanOps Authentication{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;700&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+    <link rel="stylesheet" href="{% static 'scanops/css/app.css' %}"/>
+    <style>
+        .node-mesh {
+            background-image: radial-gradient(circle at 2px 2px, rgba(59, 130, 246, 0.12) 1px, transparent 0);
+            background-size: 40px 40px;
+        }
+    </style>
+</head>
+<body class="h-full bg-slate-950 text-slate-200 overflow-x-hidden">
+<main class="relative min-h-screen flex items-center justify-center p-4 md:p-8">
+    <div class="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+        <div class="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-950 to-blue-900/20"></div>
+        <div class="absolute inset-0 node-mesh opacity-25"></div>
+    </div>
+
+    <div class="relative z-10 w-full max-w-xl bg-slate-900/40 backdrop-blur-xl rounded-xl border border-slate-800 shadow-2xl overflow-hidden">
+        <div class="p-8 md:p-10">
+            <header class="mb-6">
+                <a href="{% url 'accounts:login' %}" class="inline-flex items-center gap-3 mb-4">
+                    <div class="w-10 h-10 bg-blue-500 rounded flex items-center justify-center">
+                        <span class="material-symbols-outlined text-slate-950" style="font-variation-settings:'FILL' 1;">security</span>
+                    </div>
+                    <h1 class="text-2xl font-bold tracking-tighter text-slate-50" style="font-family:'Space Grotesk', sans-serif;">ScanOps</h1>
+                </a>
+                <h2 class="text-2xl font-bold text-slate-50 mb-2" style="font-family:'Space Grotesk', sans-serif;">{% block heading %}{% endblock %}</h2>
+                <p class="text-slate-400 text-sm leading-relaxed">{% block description %}{% endblock %}</p>
+            </header>
+
+            {% if messages %}
+                <div class="space-y-2 mb-4">
+                    {% for message in messages %}
+                        <div class="rounded-lg border border-blue-500/30 bg-blue-500/10 px-3 py-2 text-sm text-blue-200">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            {% block content %}{% endblock %}
+
+            <footer class="mt-8 pt-6 border-t border-slate-800">
+                {% block footer_links %}{% endblock %}
+            </footer>
+        </div>
+    </div>
+</main>
+</body>
+</html>

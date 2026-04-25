@@ -3,7 +3,8 @@ from __future__ import annotations
 from django import forms
 from django.contrib.auth import get_user_model
 
-from apps.ops.rbac import scope_queryset_for_user, user_is_scoped
+from apps.ops.rbac import user_is_scoped
+from apps.ops.services import data_visibility_service
 from apps.schedules.models import ScanSchedule
 from apps.targets.models import Target
 
@@ -26,12 +27,19 @@ class ScheduleFilterForm(forms.Form):
 
     def __init__(self, *args, user=None, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["owner"].queryset = User.objects.filter(is_active=True).order_by("username")
-        if user is not None and user_is_scoped(user):
-            self.fields["owner"].queryset = self.fields["owner"].queryset.filter(pk=user.pk)
+        self.user = user
+        self.is_anonymous = user is None or not getattr(user, "is_authenticated", False)
+        self.fields["owner"].queryset = User.objects.none()
+        if not self.is_anonymous:
+            self.fields["owner"].queryset = User.objects.filter(is_active=True).order_by("username")
+            if user_is_scoped(user):
+                self.fields["owner"].queryset = self.fields["owner"].queryset.filter(pk=user.pk)
         for field in self.fields.values():
             field.widget.attrs["class"] = "scanops-input"
-        self.fields["q"].widget.attrs["placeholder"] = "Search by schedule, target, profile..."
+        if self.is_anonymous:
+            self.fields["q"].widget.attrs["placeholder"] = "Search public schedules..."
+        else:
+            self.fields["q"].widget.attrs["placeholder"] = "Search by schedule, target, profile..."
 
 
 class ScheduleForm(forms.ModelForm):
@@ -54,6 +62,7 @@ class ScheduleForm(forms.ModelForm):
             "recurrence_rule",
             "start_at",
             "end_at",
+            "is_public",
             "is_enabled",
             "notification_enabled",
         ]
@@ -69,12 +78,21 @@ class ScheduleForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields["target"].queryset = Target.objects.order_by("target_value")
         if user is not None:
-            self.fields["target"].queryset = scope_queryset_for_user(
-                self.fields["target"].queryset,
+            self.fields["target"].queryset = data_visibility_service.get_user_visible_targets(
                 user,
-                ("owner", "created_by"),
+                queryset=self.fields["target"].queryset,
             )
         self.fields["profile"].queryset = self.fields["profile"].queryset.filter(is_active=True).order_by("name")
+        if user is not None:
+            self.fields["profile"].queryset = data_visibility_service.get_user_visible_scan_profiles(
+                user,
+                queryset=self.fields["profile"].queryset,
+            )
+        if self.instance.pk and self.instance.profile_id:
+            self.fields["profile"].queryset = (
+                self.fields["profile"].queryset
+                | self.fields["profile"].queryset.model.objects.filter(pk=self.instance.profile_id)
+            ).distinct()
         for field in self.fields.values():
             if isinstance(field.widget, forms.CheckboxInput):
                 field.widget.attrs["class"] = "h-4 w-4 rounded border-slate-700 bg-slate-900 text-blue-500"

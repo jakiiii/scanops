@@ -243,7 +243,7 @@ def is_viewer(user) -> bool:
 
 
 def is_scoped_role(user) -> bool:
-    return get_user_role_slug(user) in {OPERATOR, VIEWER}
+    return get_user_role_slug(user) in {ANALYST, OPERATOR, VIEWER}
 
 
 def role_priority(user) -> int:

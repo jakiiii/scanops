@@ -9,6 +9,7 @@ from django.views.generic import DetailView, ListView
 
 from apps.ops.models import PermissionRule
 from apps.ops.rbac import CapabilityRequiredMixin
+from apps.ops.services import data_visibility_service
 from apps.notifications.forms import NotificationFilterForm
 from apps.notifications.models import Notification
 from apps.notifications.services.notification_service import (
@@ -36,12 +37,13 @@ class NotificationListView(CapabilityRequiredMixin, ListView):
         return [self.template_name]
 
     def get_queryset(self):
-        queryset = Notification.objects.filter(recipient=self.request.user).select_related(
+        queryset = Notification.objects.select_related(
             "related_execution",
             "related_result",
             "related_schedule",
             "related_asset",
         )
+        queryset = data_visibility_service.get_user_visible_notifications(self.request.user, queryset=queryset)
         self.filter_form = NotificationFilterForm(self.request.GET or None)
         if self.filter_form.is_valid():
             cleaned = self.filter_form.cleaned_data
@@ -70,12 +72,16 @@ class NotificationListView(CapabilityRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["filter_form"] = self.filter_form
-        source = Notification.objects.filter(recipient=self.request.user)
+        source = data_visibility_service.get_user_visible_notifications(
+            self.request.user,
+            queryset=Notification.objects.all(),
+        )
         context["summary"] = {
             "total": source.count(),
             "unread": source.filter(is_read=False).count(),
             "critical": source.filter(severity=Notification.Severity.ERROR, is_read=False).count(),
         }
+        context["scope_label"] = "All" if data_visibility_service.user_can_view_all_data(self.request.user) else "My"
         context["breadcrumbs"] = [
             {"label": "Notifications", "url": ""},
         ]
@@ -89,12 +95,13 @@ class NotificationDetailView(CapabilityRequiredMixin, DetailView):
     context_object_name = "notification"
 
     def get_queryset(self):
-        return Notification.objects.filter(recipient=self.request.user).select_related(
+        queryset = Notification.objects.select_related(
             "related_execution",
             "related_result",
             "related_schedule",
             "related_asset",
         )
+        return data_visibility_service.get_user_visible_notifications(self.request.user, queryset=queryset)
 
     def get(self, request, *args, **kwargs):
         response = super().get(request, *args, **kwargs)
@@ -114,7 +121,10 @@ class NotificationMarkReadView(CapabilityRequiredMixin, View):
     capability_key = PermissionRule.PermissionKey.VIEW_NOTIFICATIONS
 
     def post(self, request, pk: int):
-        notification = get_object_or_404(Notification, pk=pk, recipient=request.user)
+        notification = get_object_or_404(
+            data_visibility_service.get_user_visible_notifications(request.user, queryset=Notification.objects.all()),
+            pk=pk,
+        )
         mark_as_read(notification)
         return _redirect_back(request, reverse("notifications:list"))
 
@@ -123,7 +133,10 @@ class NotificationMarkUnreadView(CapabilityRequiredMixin, View):
     capability_key = PermissionRule.PermissionKey.VIEW_NOTIFICATIONS
 
     def post(self, request, pk: int):
-        notification = get_object_or_404(Notification, pk=pk, recipient=request.user)
+        notification = get_object_or_404(
+            data_visibility_service.get_user_visible_notifications(request.user, queryset=Notification.objects.all()),
+            pk=pk,
+        )
         mark_as_unread(notification)
         return _redirect_back(request, reverse("notifications:list"))
 
@@ -132,7 +145,12 @@ class NotificationMarkAllReadView(CapabilityRequiredMixin, View):
     capability_key = PermissionRule.PermissionKey.VIEW_NOTIFICATIONS
 
     def post(self, request):
-        count = bulk_mark_read(Notification.objects.filter(recipient=request.user, is_read=False))
+        count = bulk_mark_read(
+            data_visibility_service.get_user_visible_notifications(
+                request.user,
+                queryset=Notification.objects.filter(is_read=False),
+            )
+        )
         messages.success(request, f"Marked {count} notifications as read.")
         return _redirect_back(request, reverse("notifications:list"))
 
@@ -143,7 +161,10 @@ class NotificationBulkActionView(CapabilityRequiredMixin, View):
     def post(self, request):
         ids = [int(x) for x in request.POST.getlist("notification_ids") if x.isdigit()]
         action = request.POST.get("action")
-        queryset = Notification.objects.filter(recipient=request.user, pk__in=ids)
+        queryset = data_visibility_service.get_user_visible_notifications(
+            request.user,
+            queryset=Notification.objects.filter(pk__in=ids),
+        )
         if action == "read":
             count = bulk_mark_read(queryset)
             messages.success(request, f"Marked {count} notifications as read.")

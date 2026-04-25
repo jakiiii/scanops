@@ -9,6 +9,7 @@ from django.utils import timezone
 
 from apps.assets.models import Asset, AssetChangeLog, AssetSnapshot
 from apps.notifications.services.notification_service import notify_asset_changed
+from apps.ops.services import data_visibility_service
 from apps.scans.models import ScanPortResult, ScanResult
 
 
@@ -119,6 +120,7 @@ def _compare_snapshots(previous: AssetSnapshot | None, current: AssetSnapshot) -
 @transaction.atomic
 def sync_asset_from_result(result: ScanResult, *, notify: bool = True) -> Asset:
     target = result.execution.scan_request.target
+    derived_owner = result.execution.scan_request.requested_by or target.owner or target.created_by
     identifier = target.target_value or result.target_snapshot
     asset_name = target.name or target.target_value or result.target_snapshot
     asset_ip = None
@@ -144,7 +146,8 @@ def sync_asset_from_result(result: ScanResult, *, notify: bool = True) -> Asset:
             "operating_system": result.os_guess,
             "risk_score": risk_score,
             "risk_level": risk_level,
-            "owner_name": (target.owner.username if target.owner else ""),
+            "owner": derived_owner,
+            "owner_name": (derived_owner.username if derived_owner else ""),
             "notes": "",
             "last_seen_at": result.generated_at,
             "last_scanned_at": result.generated_at,
@@ -161,7 +164,10 @@ def sync_asset_from_result(result: ScanResult, *, notify: bool = True) -> Asset:
         asset.operating_system = result.os_guess
         asset.risk_score = risk_score
         asset.risk_level = risk_level
-        asset.owner_name = target.owner.username if target.owner else asset.owner_name
+        if derived_owner and asset.owner_id != derived_owner.id:
+            asset.owner = derived_owner
+        if derived_owner:
+            asset.owner_name = derived_owner.username
         asset.last_seen_at = result.generated_at
         asset.last_scanned_at = result.generated_at
         asset.status = status
@@ -271,12 +277,15 @@ def sync_asset_from_result(result: ScanResult, *, notify: bool = True) -> Asset:
     return asset
 
 
-def sync_assets_from_results(*, limit: int = 100) -> int:
+def sync_assets_from_results(*, limit: int = 100, user=None) -> int:
     queryset = (
         ScanResult.objects.select_related("execution__scan_request__target", "execution__scan_request__requested_by")
         .prefetch_related("port_results")
-        .order_by("-generated_at")[:limit]
+        .order_by("-generated_at")
     )
+    if user is not None:
+        queryset = data_visibility_service.get_user_visible_results(user, queryset=queryset)
+    queryset = queryset[:limit]
     count = 0
     for result in queryset:
         sync_asset_from_result(result, notify=False)
@@ -284,7 +293,7 @@ def sync_assets_from_results(*, limit: int = 100) -> int:
     return count
 
 
-def build_asset_detail_context(asset: Asset) -> dict:
+def build_asset_detail_context(asset: Asset, *, user=None) -> dict:
     latest_snapshot = asset.snapshots.order_by("-created_at").first()
     snapshots = asset.snapshots.order_by("-created_at")[:20]
     change_logs = asset.change_logs.select_related("previous_snapshot", "current_snapshot").order_by("-created_at")[:40]
@@ -293,8 +302,11 @@ def build_asset_detail_context(asset: Asset) -> dict:
         related_results = (
             ScanResult.objects.select_related("execution__scan_request__profile")
             .filter(execution__scan_request__target=asset.target)
-            .order_by("-generated_at")[:15]
+            .order_by("-generated_at")
         )
+        if user is not None:
+            related_results = data_visibility_service.get_user_visible_results(user, queryset=related_results)
+        related_results = related_results[:15]
     else:
         related_results = ScanResult.objects.none()
 

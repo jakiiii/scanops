@@ -16,6 +16,18 @@ body {
     --scanops-field-disabled-bg: #0f172a;
     --scanops-field-disabled-border: #1e293b;
     --scanops-field-disabled-text: #94a3b8;
+
+    --scanops-sidebar-bg: #0f172a;
+    --scanops-sidebar-bg-alt: #0b1220;
+    --scanops-sidebar-border: #1e293b;
+    --scanops-sidebar-divider: rgba(30, 41, 59, 0.85);
+    --scanops-sidebar-text: #cbd5e1;
+    --scanops-sidebar-text-muted: #94a3b8;
+    --scanops-sidebar-hover-bg: rgba(30, 41, 59, 0.72);
+    --scanops-sidebar-hover-border: rgba(51, 65, 85, 0.55);
+    --scanops-sidebar-active-bg: rgba(37, 99, 235, 0.18);
+    --scanops-sidebar-active-border: #2563eb;
+    --scanops-sidebar-active-text: #bfdbfe;
 }
 
 .material-symbols-outlined {
@@ -37,6 +49,23 @@ body {
     background: rgba(15, 23, 42, 0.85);
     border: 1px solid rgba(51, 65, 85, 0.8);
     border-radius: 0.75rem;
+}
+
+.scanops-sidebar {
+    background: linear-gradient(180deg, var(--scanops-sidebar-bg) 0%, var(--scanops-sidebar-bg-alt) 100%);
+    border-right: 1px solid var(--scanops-sidebar-border);
+}
+
+.scanops-sidebar-header {
+    border-bottom: 1px solid var(--scanops-sidebar-divider);
+}
+
+.scanops-sidebar-nav {
+    scrollbar-color: #334155 transparent;
+}
+
+.scanops-sidebar-footer {
+    border-top: 1px solid var(--scanops-sidebar-divider);
 }
 
 /* Global form field styling for dark ScanOps UI */
@@ -160,21 +189,33 @@ input[type="time"]::-webkit-calendar-picker-indicator {
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    color: #94a3b8;
-    padding: 0.75rem 1rem;
+    width: 100%;
+    color: var(--scanops-sidebar-text-muted);
+    padding: 0.6875rem 0.875rem;
     border-radius: 0.5rem;
-    transition: all 160ms ease-in-out;
+    border: 1px solid transparent;
+    transition: color 160ms ease-in-out, background-color 160ms ease-in-out, border-color 160ms ease-in-out;
+}
+
+button.scanops-nav-link {
+    appearance: none;
+    -webkit-appearance: none;
+    background: transparent;
+    font: inherit;
+    cursor: pointer;
 }
 
 .scanops-nav-link:hover {
-    color: #e2e8f0;
-    background: rgba(30, 41, 59, 0.6);
+    color: var(--scanops-sidebar-text);
+    background: var(--scanops-sidebar-hover-bg);
+    border-color: var(--scanops-sidebar-hover-border);
 }
 
 .scanops-nav-link.is-active {
-    color: #60a5fa;
-    background: rgba(37, 99, 235, 0.12);
-    border-left: 2px solid #3b82f6;
+    color: var(--scanops-sidebar-active-text);
+    background: var(--scanops-sidebar-active-bg);
+    border-color: rgba(37, 99, 235, 0.45);
+    box-shadow: inset 2px 0 0 var(--scanops-sidebar-active-border);
 }
 
 .status-dot {

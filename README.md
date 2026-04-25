@@ -77,6 +77,84 @@ python manage.py runserver 0.0.0.0:8008
 - Docker workflow: `DOCKER_README.md`
 - Backup scheduler and restore notes: `BACKUP_README.md`
 
+## Account Management
+
+ScanOps includes full account self-service authentication flows:
+
+- Register: `/register/`
+- Register success: `/register/success/`
+- Forgot password: `/password-reset/`
+- Password reset email sent: `/password-reset/done/`
+- Password reset confirm: `/reset/<uidb64>/<token>/`
+- Password reset complete: `/reset/done/`
+- Change password (logged-in): `/password-change/`
+- Password change done: `/password-change/done/`
+
+### Registration Policy
+
+Registration behavior is environment-driven:
+
+- `SCANOPS_SELF_REGISTRATION_ENABLED` (default: `True`)
+- `SCANOPS_SELF_REGISTRATION_REQUIRES_APPROVAL` (default: `False`)
+- `SCANOPS_SELF_REGISTRATION_DEFAULT_ROLE` (default: `viewer`)
+
+By default, new users are created with least-privilege role `viewer`.
+
+### Email Backend Configuration
+
+Password reset uses Django's secure token flow and sends emails using environment variables:
+
+- `EMAIL_BACKEND`
+- `EMAIL_HOST`
+- `EMAIL_PORT`
+- `EMAIL_USE_TLS`
+- `EMAIL_USE_SSL`
+- `EMAIL_HOST_USER`
+- `EMAIL_HOST_PASSWORD`
+- `DEFAULT_FROM_EMAIL`
+
+For local development, use:
+
+- `EMAIL_BACKEND=django.core.mail.backends.console.EmailBackend`
+
+With console backend, reset links are printed in app logs/terminal output.
+
+## User-Owned Data Isolation
+
+ScanOps enforces backend ownership filtering for operational data.
+
+- Scoped roles (`analyst`, `operator`, `viewer`) can only access their own records.
+- Global roles (`super_admin`, `security_admin`) can access all operational records.
+- Isolation is applied across list views, detail views, POST actions, HTMX partial endpoints, and form dropdown querysets.
+
+Ownership is evaluated through centralized visibility helpers in:
+
+- `apps/ops/services/data_visibility_service.py`
+
+### Public Schedule Access
+
+The schedule module supports public-safe access:
+
+- Visitors (not logged in): can browse public schedules only (`is_public=True`) in read-only mode.
+- Authenticated users: can create/manage only their own schedules, and can view public schedules.
+- Super Admin / Security Admin: can view and manage all schedules.
+
+Sensitive schedule details are restricted in public mode (target/profile details are hidden).
+
+### Ownership Backfill
+
+If legacy rows are missing ownership references, run:
+
+```bash
+./.venv/bin/python manage.py backfill_user_ownership
+```
+
+Optional dry run:
+
+```bash
+./.venv/bin/python manage.py backfill_user_ownership --dry-run
+```
+
 ## Security Note
 
 ScanOps is intended for internal authorized-use operations only. Do not use this project to scan unauthorized systems or networks.

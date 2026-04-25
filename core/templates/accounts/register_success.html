@@ -1,0 +1,24 @@
+{% extends "accounts/auth_card_base.html" %}
+
+{% block title %}ScanOps | Registration Complete{% endblock %}
+{% block heading %}Registration Complete{% endblock %}
+{% block description %}Your account request has been recorded.{% endblock %}
+
+{% block content %}
+    <div class="rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-4 py-4 text-emerald-200 text-sm leading-relaxed">
+        {% if messages %}
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        {% else %}
+            <p>Your account was created successfully. Continue to login.</p>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block footer_links %}
+    <div class="flex items-center justify-between text-sm">
+        <a href="{% url 'accounts:login' %}" class="text-blue-300 hover:text-blue-200 transition-colors">Go to login</a>
+        <a href="{% url 'accounts:password_reset' %}" class="text-slate-300 hover:text-white transition-colors">Need password help?</a>
+    </div>
+{% endblock %}

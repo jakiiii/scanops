@@ -10,7 +10,8 @@ from django.views import View
 from django.views.generic import DetailView, ListView, TemplateView
 
 from apps.ops.models import PermissionRule
-from apps.ops.rbac import CapabilityRequiredMixin, scope_queryset_for_user
+from apps.ops.rbac import CapabilityRequiredMixin
+from apps.ops.services import data_visibility_service
 from apps.scans.forms import CompareResultsForm, ResultFilterForm
 from apps.scans.models import ScanExecution, ScanResult
 from apps.scans.services.comparison_service import build_comparison_from_current, compare_results
@@ -55,7 +56,7 @@ class ScanResultListView(CapabilityRequiredMixin, ListView):
             .filter(execution__is_archived=False)
             .order_by("-generated_at")
         )
-        queryset = scope_queryset_for_user(queryset, self.request.user, ("execution__scan_request__requested_by",))
+        queryset = data_visibility_service.get_user_visible_results(self.request.user, queryset=queryset)
 
         self.filter_form = ResultFilterForm(self.request.GET or None, user=self.request.user)
         if self.filter_form.is_valid():
@@ -86,10 +87,9 @@ class ScanResultListView(CapabilityRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["filter_form"] = self.filter_form
-        summary_source = scope_queryset_for_user(
-            ScanResult.objects.filter(execution__is_archived=False),
+        summary_source = data_visibility_service.get_user_visible_results(
             self.request.user,
-            ("execution__scan_request__requested_by",),
+            queryset=ScanResult.objects.filter(execution__is_archived=False),
         )
         context["result_summary"] = {
             "total": summary_source.count(),
@@ -97,6 +97,7 @@ class ScanResultListView(CapabilityRequiredMixin, ListView):
             "medium_risk": summary_source.filter(port_results__risk_level="medium").distinct().count(),
             "hosts_down": summary_source.filter(host_status=ScanResult.HostStatus.DOWN).count(),
         }
+        context["scope_label"] = "All" if data_visibility_service.user_can_view_all_data(self.request.user) else "My"
         context["breadcrumbs"] = [
             {"label": "Results", "url": ""},
         ]
@@ -117,12 +118,12 @@ class ScanResultDetailView(CapabilityRequiredMixin, DetailView):
             "execution__scan_request__profile",
             "execution__scan_request__requested_by",
         ).prefetch_related("port_results")
-        return scope_queryset_for_user(queryset, self.request.user, ("execution__scan_request__requested_by",))
+        return data_visibility_service.get_user_visible_results(self.request.user, queryset=queryset)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         result = context["result"]
-        context.update(build_result_detail_context(result))
+        context.update(build_result_detail_context(result, user=self.request.user))
         context["tab"] = self.request.GET.get("tab", "overview")
         context["breadcrumbs"] = [
             {"label": "Results", "url": reverse("scans:results")},
@@ -139,7 +140,7 @@ class ScanRawOutputView(CapabilityRequiredMixin, DetailView):
 
     def get_queryset(self):
         queryset = ScanResult.objects.select_related("execution__scan_request__requested_by")
-        return scope_queryset_for_user(queryset, self.request.user, ("execution__scan_request__requested_by",))
+        return data_visibility_service.get_user_visible_results(self.request.user, queryset=queryset)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -159,7 +160,7 @@ class ScanParsedOutputView(CapabilityRequiredMixin, DetailView):
 
     def get_queryset(self):
         queryset = ScanResult.objects.select_related("execution__scan_request__requested_by")
-        return scope_queryset_for_user(queryset, self.request.user, ("execution__scan_request__requested_by",))
+        return data_visibility_service.get_user_visible_results(self.request.user, queryset=queryset)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -188,17 +189,19 @@ class ScanResultCompareView(CapabilityRequiredMixin, TemplateView):
         target = None
         pk = self.kwargs.get("pk")
         if pk:
-            current_queryset = scope_queryset_for_user(
-                ScanResult.objects.select_related("execution__scan_request__target", "execution__scan_request__requested_by"),
+            current_queryset = data_visibility_service.get_user_visible_results(
                 self.request.user,
-                ("execution__scan_request__requested_by",),
+                queryset=ScanResult.objects.select_related(
+                    "execution__scan_request__target",
+                    "execution__scan_request__requested_by",
+                ),
             )
             current_result = get_object_or_404(current_queryset, pk=pk)
             target = current_result.execution.scan_request.target
 
         initial = {}
         if current_result and not self.request.GET:
-            previous = build_comparison_from_current(current_result)
+            previous = build_comparison_from_current(current_result, user=self.request.user)
             if previous:
                 initial = {
                     "left_result": previous["base_result"].pk,
@@ -217,7 +220,7 @@ class ScanResultCompareView(CapabilityRequiredMixin, TemplateView):
             else:
                 comparison = compare_results(left_result, right_result)
         elif current_result and not self.request.GET:
-            comparison = build_comparison_from_current(current_result)
+            comparison = build_comparison_from_current(current_result, user=self.request.user)
 
         context.update(
             {
@@ -241,7 +244,7 @@ class HostDetailView(CapabilityRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context.update(build_host_detail_context(self.object))
+        context.update(build_host_detail_context(self.object, user=self.request.user))
         context["breadcrumbs"] = [
             {"label": "Results", "url": reverse("scans:results")},
             {"label": "Host Detail", "url": ""},
@@ -250,14 +253,14 @@ class HostDetailView(CapabilityRequiredMixin, DetailView):
 
     def get_queryset(self):
         queryset = Target.objects.all()
-        return scope_queryset_for_user(queryset, self.request.user, ("owner", "created_by"))
+        return data_visibility_service.get_user_visible_targets(self.request.user, queryset=queryset)
 
 
 class ResultPortsPartialView(CapabilityRequiredMixin, View):
     capability_key = PermissionRule.PermissionKey.VIEW_RESULTS
 
     def get(self, request, pk: int) -> HttpResponse:
-        queryset = scope_queryset_for_user(ScanResult.objects.all(), request.user, ("execution__scan_request__requested_by",))
+        queryset = data_visibility_service.get_user_visible_results(request.user, queryset=ScanResult.objects.all())
         result = get_object_or_404(queryset, pk=pk)
         return render(
             request,

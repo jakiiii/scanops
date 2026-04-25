@@ -11,7 +11,8 @@ from django.views.generic import CreateView
 
 from apps.core.services.scan_policy import build_scan_summary, validate_scan_options
 from apps.ops.models import PermissionRule
-from apps.ops.rbac import CapabilityRequiredMixin, scope_queryset_for_user
+from apps.ops.rbac import CapabilityRequiredMixin
+from apps.ops.services import data_visibility_service
 from apps.scans.forms import ScanRequestForm
 from apps.scans.models import ScanRequest
 from apps.targets.models import Target
@@ -86,7 +87,7 @@ class ScanPreviewView(CapabilityRequiredMixin, View):
         target = None
         target_id = request.POST.get("target")
         if target_id and target_id.isdigit():
-            target_queryset = scope_queryset_for_user(Target.objects.all(), request.user, ("owner", "created_by"))
+            target_queryset = data_visibility_service.get_user_visible_targets(request.user, queryset=Target.objects.all())
             target = target_queryset.filter(pk=int(target_id)).first()
 
         payload = {

@@ -17,7 +17,7 @@
 
     <div class="scanops-panel p-2 mb-6">
         <div class="flex flex-wrap items-center gap-2">
-            <a href="{% url 'scans:history' %}" class="px-3 py-2 rounded text-sm {% if page_mode == 'history' %}bg-blue-600 text-white{% else %}text-slate-300 hover:bg-slate-800{% endif %}">All History</a>
+            <a href="{% url 'scans:history' %}" class="px-3 py-2 rounded text-sm {% if page_mode == 'history' %}bg-blue-600 text-white{% else %}text-slate-300 hover:bg-slate-800{% endif %}">{% if scope_label == "All" %}All History{% else %}My History{% endif %}</a>
             <a href="{% url 'scans:history-me' %}" class="px-3 py-2 rounded text-sm {% if page_mode == 'my_history' %}bg-blue-600 text-white{% else %}text-slate-300 hover:bg-slate-800{% endif %}">My History</a>
             <a href="{% url 'scans:history-archived' %}" class="px-3 py-2 rounded text-sm {% if page_mode == 'archived' %}bg-blue-600 text-white{% else %}text-slate-300 hover:bg-slate-800{% endif %}">Archived</a>
         </div>

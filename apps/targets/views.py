@@ -6,7 +6,8 @@ from django.urls import reverse
 from django.views.generic import CreateView, DetailView, ListView
 
 from apps.ops.models import PermissionRule
-from apps.ops.rbac import CapabilityRequiredMixin, scope_queryset_for_user
+from apps.ops.rbac import CapabilityRequiredMixin
+from apps.ops.services import data_visibility_service
 from apps.targets.forms import TargetFilterForm, TargetForm
 from apps.targets.models import Target
 
@@ -25,13 +26,14 @@ class TargetListView(CapabilityRequiredMixin, ListView):
 
     def get_queryset(self):
         queryset = Target.objects.select_related("owner", "created_by").order_by("-updated_at")
-        queryset = scope_queryset_for_user(queryset, self.request.user, ("owner", "created_by"))
+        queryset = data_visibility_service.get_user_visible_targets(self.request.user, queryset=queryset)
         self.filter_form = TargetFilterForm(self.request.GET or None, user=self.request.user)
         return self.filter_form.apply(queryset)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["filter_form"] = self.filter_form
+        context["scope_label"] = "All" if data_visibility_service.user_can_view_all_data(self.request.user) else "My"
         return context
 
 
@@ -78,7 +80,7 @@ class TargetDetailView(CapabilityRequiredMixin, DetailView):
 
     def get_queryset(self):
         queryset = Target.objects.select_related("owner", "created_by")
-        return scope_queryset_for_user(queryset, self.request.user, ("owner", "created_by"))
+        return data_visibility_service.get_user_visible_targets(self.request.user, queryset=queryset)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -88,7 +90,12 @@ class TargetDetailView(CapabilityRequiredMixin, DetailView):
             {"label": target.name or target.target_value, "url": ""},
         ]
         if hasattr(target, "scan_requests"):
-            context["recent_scan_requests"] = target.scan_requests.select_related("requested_by").order_by("-requested_at")[:8]
+            recent_requests = target.scan_requests.select_related("requested_by").order_by("-requested_at")
+            recent_requests = data_visibility_service.get_user_visible_scan_requests(
+                self.request.user,
+                queryset=recent_requests,
+            )
+            context["recent_scan_requests"] = recent_requests[:8]
         else:
             context["recent_scan_requests"] = []
         return context

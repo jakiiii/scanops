@@ -12,7 +12,8 @@ from django.views.generic import DetailView, FormView, ListView
 
 from apps.notifications.services.notification_service import notify_report_generated
 from apps.ops.models import PermissionRule
-from apps.ops.rbac import CapabilityRequiredMixin, scope_queryset_for_user
+from apps.ops.rbac import CapabilityRequiredMixin
+from apps.ops.services import data_visibility_service
 from apps.reports.forms import ReportFilterForm, ReportGenerateForm
 from apps.reports.models import GeneratedReport
 from apps.reports.services.report_service import (
@@ -48,17 +49,7 @@ class ReportListView(CapabilityRequiredMixin, ListView):
             )
             .order_by("-created_at")
         )
-        queryset = scope_queryset_for_user(
-            queryset,
-            self.request.user,
-            (
-                "generated_by",
-                "source_execution__scan_request__requested_by",
-                "source_result__execution__scan_request__requested_by",
-                "comparison_left_result__execution__scan_request__requested_by",
-                "comparison_right_result__execution__scan_request__requested_by",
-            ),
-        )
+        queryset = data_visibility_service.get_user_visible_reports(self.request.user, queryset=queryset)
         self.filter_form = ReportFilterForm(self.request.GET or None, user=self.request.user)
         if self.filter_form.is_valid():
             cleaned = self.filter_form.cleaned_data
@@ -88,16 +79,9 @@ class ReportListView(CapabilityRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["filter_form"] = self.filter_form
-        summary_source = scope_queryset_for_user(
-            GeneratedReport.objects.all(),
+        summary_source = data_visibility_service.get_user_visible_reports(
             self.request.user,
-            (
-                "generated_by",
-                "source_execution__scan_request__requested_by",
-                "source_result__execution__scan_request__requested_by",
-                "comparison_left_result__execution__scan_request__requested_by",
-                "comparison_right_result__execution__scan_request__requested_by",
-            ),
+            queryset=GeneratedReport.objects.all(),
         )
         context["summary"] = {
             "total": summary_source.count(),
@@ -108,6 +92,7 @@ class ReportListView(CapabilityRequiredMixin, ListView):
         context["breadcrumbs"] = [
             {"label": "Reports", "url": ""},
         ]
+        context["scope_label"] = "All" if data_visibility_service.user_can_view_all_data(self.request.user) else "My"
         return context
 
 
@@ -205,17 +190,7 @@ class ReportDetailView(CapabilityRequiredMixin, DetailView):
             "comparison_left_result__execution__scan_request__requested_by",
             "comparison_right_result__execution__scan_request__requested_by",
         )
-        return scope_queryset_for_user(
-            queryset,
-            self.request.user,
-            (
-                "generated_by",
-                "source_execution__scan_request__requested_by",
-                "source_result__execution__scan_request__requested_by",
-                "comparison_left_result__execution__scan_request__requested_by",
-                "comparison_right_result__execution__scan_request__requested_by",
-            ),
-        )
+        return data_visibility_service.get_user_visible_reports(self.request.user, queryset=queryset)
 
 
 class ReportPrintView(CapabilityRequiredMixin, DetailView):
@@ -232,34 +207,14 @@ class ReportPrintView(CapabilityRequiredMixin, DetailView):
             "comparison_left_result__execution__scan_request__requested_by",
             "comparison_right_result__execution__scan_request__requested_by",
         )
-        return scope_queryset_for_user(
-            queryset,
-            self.request.user,
-            (
-                "generated_by",
-                "source_execution__scan_request__requested_by",
-                "source_result__execution__scan_request__requested_by",
-                "comparison_left_result__execution__scan_request__requested_by",
-                "comparison_right_result__execution__scan_request__requested_by",
-            ),
-        )
+        return data_visibility_service.get_user_visible_reports(self.request.user, queryset=queryset)
 
 
 class ReportArchiveView(CapabilityRequiredMixin, View):
     capability_key = PermissionRule.PermissionKey.MANAGE_REPORTS
 
     def post(self, request, pk: int):
-        queryset = scope_queryset_for_user(
-            GeneratedReport.objects.all(),
-            request.user,
-            (
-                "generated_by",
-                "source_execution__scan_request__requested_by",
-                "source_result__execution__scan_request__requested_by",
-                "comparison_left_result__execution__scan_request__requested_by",
-                "comparison_right_result__execution__scan_request__requested_by",
-            ),
-        )
+        queryset = data_visibility_service.get_user_visible_reports(request.user, queryset=GeneratedReport.objects.all())
         report = get_object_or_404(queryset, pk=pk)
         report.status = GeneratedReport.Status.ARCHIVED
         report.save(update_fields=["status", "updated_at"])
@@ -271,17 +226,7 @@ class ReportRegenerateView(CapabilityRequiredMixin, View):
     capability_key = PermissionRule.PermissionKey.MANAGE_REPORTS
 
     def post(self, request, pk: int):
-        queryset = scope_queryset_for_user(
-            GeneratedReport.objects.all(),
-            request.user,
-            (
-                "generated_by",
-                "source_execution__scan_request__requested_by",
-                "source_result__execution__scan_request__requested_by",
-                "comparison_left_result__execution__scan_request__requested_by",
-                "comparison_right_result__execution__scan_request__requested_by",
-            ),
-        )
+        queryset = data_visibility_service.get_user_visible_reports(request.user, queryset=GeneratedReport.objects.all())
         report = get_object_or_404(queryset, pk=pk)
         report = regenerate_report(report, user=request.user)
         notify_report_generated(report)
@@ -293,17 +238,7 @@ class ReportDownloadView(CapabilityRequiredMixin, View):
     capability_key = PermissionRule.PermissionKey.VIEW_REPORTS
 
     def get(self, request, pk: int):
-        queryset = scope_queryset_for_user(
-            GeneratedReport.objects.all(),
-            request.user,
-            (
-                "generated_by",
-                "source_execution__scan_request__requested_by",
-                "source_result__execution__scan_request__requested_by",
-                "comparison_left_result__execution__scan_request__requested_by",
-                "comparison_right_result__execution__scan_request__requested_by",
-            ),
-        )
+        queryset = data_visibility_service.get_user_visible_reports(request.user, queryset=GeneratedReport.objects.all())
         report = get_object_or_404(queryset, pk=pk)
         if report.format == GeneratedReport.Format.JSON:
             return HttpResponse(

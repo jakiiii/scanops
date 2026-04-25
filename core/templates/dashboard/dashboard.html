@@ -7,7 +7,13 @@
     <div class="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
             <h1 class="text-3xl font-extrabold text-white tracking-tight">Dashboard</h1>
-            <p class="text-slate-400 mt-1">Operational overview of authorized scanning activity.</p>
+            <p class="text-slate-400 mt-1">
+                {% if can_view_all_data %}
+                    Operational overview across all authorized scanning activity.
+                {% else %}
+                    Operational overview for your owned scanning activity.
+                {% endif %}
+            </p>
         </div>
         {% if request.user|has_capability:'create_scan_request' or request.user|has_capability:'manage_targets' %}
             <div class="flex items-center gap-3">
@@ -29,20 +35,36 @@
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         <div class="scanops-panel p-5 border-l-4 border-l-blue-500">
-            <p class="text-slate-400 text-xs font-bold uppercase tracking-widest">Total Targets</p>
+            <p class="text-slate-400 text-xs font-bold uppercase tracking-widest">{{ scope_label }} Targets</p>
             <h2 class="text-3xl font-extrabold text-white mt-2">{{ total_targets }}</h2>
         </div>
         <div class="scanops-panel p-5 border-l-4 border-l-cyan-500">
-            <p class="text-slate-400 text-xs font-bold uppercase tracking-widest">Total Scan Requests</p>
+            <p class="text-slate-400 text-xs font-bold uppercase tracking-widest">{{ scope_label }} Scan Requests</p>
             <h2 class="text-3xl font-extrabold text-white mt-2">{{ total_scan_requests }}</h2>
         </div>
         <div class="scanops-panel p-5 border-l-4 border-l-amber-500">
-            <p class="text-slate-400 text-xs font-bold uppercase tracking-widest">Pending</p>
+            <p class="text-slate-400 text-xs font-bold uppercase tracking-widest">{{ scope_label }} Pending Requests</p>
             <h2 class="text-3xl font-extrabold text-amber-400 mt-2">{{ pending_scan_requests }}</h2>
         </div>
         <div class="scanops-panel p-5 border-l-4 border-l-emerald-500">
-            <p class="text-slate-400 text-xs font-bold uppercase tracking-widest">Validated</p>
+            <p class="text-slate-400 text-xs font-bold uppercase tracking-widest">{{ scope_label }} Validated Requests</p>
             <h2 class="text-3xl font-extrabold text-emerald-400 mt-2">{{ validated_scan_requests }}</h2>
+        </div>
+        <div class="scanops-panel p-5 border-l-4 border-l-indigo-500">
+            <p class="text-slate-400 text-xs font-bold uppercase tracking-widest">{{ scope_label }} Running Scans</p>
+            <h2 class="text-3xl font-extrabold text-indigo-300 mt-2">{{ running_scans }}</h2>
+        </div>
+        <div class="scanops-panel p-5 border-l-4 border-l-emerald-500">
+            <p class="text-slate-400 text-xs font-bold uppercase tracking-widest">{{ scope_label }} Reports</p>
+            <h2 class="text-3xl font-extrabold text-emerald-300 mt-2">{{ total_reports }}</h2>
+        </div>
+        <div class="scanops-panel p-5 border-l-4 border-l-amber-500">
+            <p class="text-slate-400 text-xs font-bold uppercase tracking-widest">{{ scope_label }} Unread Notifications</p>
+            <h2 class="text-3xl font-extrabold text-amber-300 mt-2">{{ unread_notifications }}</h2>
+        </div>
+        <div class="scanops-panel p-5 border-l-4 border-l-cyan-500">
+            <p class="text-slate-400 text-xs font-bold uppercase tracking-widest">{{ scope_label }} Assets</p>
+            <h2 class="text-3xl font-extrabold text-cyan-300 mt-2">{{ total_assets }}</h2>
         </div>
     </div>
 
@@ -91,7 +113,7 @@
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div class="scanops-panel overflow-hidden">
             <div class="px-5 py-4 border-b border-slate-800">
-                <h3 class="font-bold text-white">Recent Targets</h3>
+                <h3 class="font-bold text-white">{{ scope_label }} Recent Targets</h3>
             </div>
             <div class="divide-y divide-slate-800/70">
                 {% for target in recent_targets %}
@@ -112,7 +134,7 @@
 
         <div class="scanops-panel overflow-hidden">
             <div class="px-5 py-4 border-b border-slate-800">
-                <h3 class="font-bold text-white">Recent Scan Requests</h3>
+                <h3 class="font-bold text-white">{{ scope_label }} Recent Scan Requests</h3>
             </div>
             <div class="divide-y divide-slate-800/70">
                 {% for scan in recent_scan_requests %}

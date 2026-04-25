@@ -18,7 +18,8 @@ from apps.assets.services.asset_service import (
 from apps.notifications.models import Notification
 from apps.notifications.services.notification_service import create_notification
 from apps.ops.models import PermissionRule
-from apps.ops.rbac import CapabilityRequiredMixin, scope_queryset_for_user
+from apps.ops.rbac import CapabilityRequiredMixin
+from apps.ops.services import data_visibility_service
 
 
 class AssetListView(CapabilityRequiredMixin, ListView):
@@ -38,7 +39,7 @@ class AssetListView(CapabilityRequiredMixin, ListView):
             sync_assets_from_results(limit=40)
 
         queryset = Asset.objects.select_related("target").order_by("-updated_at")
-        queryset = scope_queryset_for_user(queryset, self.request.user, ("target__owner", "target__created_by"))
+        queryset = data_visibility_service.get_user_visible_assets(self.request.user, queryset=queryset)
         self.filter_form = AssetFilterForm(self.request.GET or None, user=self.request.user)
         if self.filter_form.is_valid():
             cleaned = self.filter_form.cleaned_data
@@ -67,11 +68,7 @@ class AssetListView(CapabilityRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["filter_form"] = self.filter_form
-        source = scope_queryset_for_user(
-            Asset.objects.all(),
-            self.request.user,
-            ("target__owner", "target__created_by"),
-        )
+        source = data_visibility_service.get_user_visible_assets(self.request.user, queryset=Asset.objects.all())
         context["summary"] = {
             "total": source.count(),
             "critical": source.filter(risk_level=Asset.RiskLevel.CRITICAL).count(),
@@ -81,6 +78,7 @@ class AssetListView(CapabilityRequiredMixin, ListView):
         context["breadcrumbs"] = [
             {"label": "Assets", "url": ""},
         ]
+        context["scope_label"] = "All" if data_visibility_service.user_can_view_all_data(self.request.user) else "My"
         return context
 
 
@@ -92,7 +90,7 @@ class AssetDetailView(CapabilityRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context.update(build_asset_detail_context(self.object))
+        context.update(build_asset_detail_context(self.object, user=self.request.user))
         context["tab"] = self.request.GET.get("tab", "overview")
         context["breadcrumbs"] = [
             {"label": "Assets", "url": reverse("assets:list")},
@@ -102,7 +100,7 @@ class AssetDetailView(CapabilityRequiredMixin, DetailView):
 
     def get_queryset(self):
         queryset = Asset.objects.select_related("target")
-        return scope_queryset_for_user(queryset, self.request.user, ("target__owner", "target__created_by"))
+        return data_visibility_service.get_user_visible_assets(self.request.user, queryset=queryset)
 
 
 class AssetChangeHistoryView(CapabilityRequiredMixin, TemplateView):
@@ -114,11 +112,7 @@ class AssetChangeHistoryView(CapabilityRequiredMixin, TemplateView):
         asset = None
         pk = self.kwargs.get("pk")
         if pk:
-            scoped_assets = scope_queryset_for_user(
-                Asset.objects.all(),
-                self.request.user,
-                ("target__owner", "target__created_by"),
-            )
+            scoped_assets = data_visibility_service.get_user_visible_assets(self.request.user, queryset=Asset.objects.all())
             asset = get_object_or_404(scoped_assets, pk=pk)
             changes = asset.change_logs.select_related("previous_snapshot", "current_snapshot").order_by("-created_at")
             context["breadcrumbs"] = [
@@ -127,10 +121,9 @@ class AssetChangeHistoryView(CapabilityRequiredMixin, TemplateView):
                 {"label": "Change History", "url": ""},
             ]
         else:
-            changes = scope_queryset_for_user(
-                global_asset_changes(),
+            changes = data_visibility_service.get_user_visible_asset_changes(
                 self.request.user,
-                ("asset__target__owner", "asset__target__created_by"),
+                queryset=global_asset_changes(),
             )
             context["breadcrumbs"] = [
                 {"label": "Assets", "url": reverse("assets:list")},
@@ -169,7 +162,7 @@ class AssetChangesPartialView(CapabilityRequiredMixin, View):
     capability_key = PermissionRule.PermissionKey.VIEW_ASSETS
 
     def get(self, request, pk: int):
-        scoped_assets = scope_queryset_for_user(Asset.objects.all(), request.user, ("target__owner", "target__created_by"))
+        scoped_assets = data_visibility_service.get_user_visible_assets(request.user, queryset=Asset.objects.all())
         asset = get_object_or_404(scoped_assets, pk=pk)
         changes = asset.change_logs.select_related("previous_snapshot", "current_snapshot").order_by("-created_at")[:50]
         return render(request, "partials/asset_changes_timeline.html", {"asset": asset, "changes": changes})
@@ -179,7 +172,7 @@ class AssetSyncView(CapabilityRequiredMixin, View):
     capability_key = PermissionRule.PermissionKey.MANAGE_ASSETS
 
     def post(self, request):
-        count = sync_assets_from_results(limit=100)
+        count = sync_assets_from_results(limit=100, user=request.user)
         create_notification(
             recipient=request.user,
             title="Asset sync completed",

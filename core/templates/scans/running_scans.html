@@ -7,7 +7,7 @@
     {% include "includes/breadcrumbs.html" with breadcrumbs=breadcrumbs %}
     <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
         <div>
-            <h1 class="text-4xl font-bold text-white tracking-tight">Running Scans</h1>
+            <h1 class="text-4xl font-bold text-white tracking-tight">{% if scope_label == "All" %}All Running Scans{% else %}My Running Scans{% endif %}</h1>
             <p class="text-slate-400 mt-1">Operational overview of active execution pipelines.</p>
         </div>
         <div class="flex gap-3">
@@ -20,19 +20,19 @@
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         <div class="scanops-panel p-5 border-l-4 border-l-cyan-500">
-            <p class="text-xs uppercase tracking-widest text-slate-500">Running</p>
+            <p class="text-xs uppercase tracking-widest text-slate-500">{{ scope_label }} Running</p>
             <p class="text-3xl font-bold text-cyan-300 mt-2">{{ summary.running }}</p>
         </div>
         <div class="scanops-panel p-5 border-l-4 border-l-indigo-500">
-            <p class="text-xs uppercase tracking-widest text-slate-500">Queued</p>
+            <p class="text-xs uppercase tracking-widest text-slate-500">{{ scope_label }} Queued</p>
             <p class="text-3xl font-bold text-indigo-300 mt-2">{{ summary.queued }}</p>
         </div>
         <div class="scanops-panel p-5 border-l-4 border-l-emerald-500">
-            <p class="text-xs uppercase tracking-widest text-slate-500">Completed</p>
+            <p class="text-xs uppercase tracking-widest text-slate-500">{{ scope_label }} Completed</p>
             <p class="text-3xl font-bold text-emerald-300 mt-2">{{ summary.completed }}</p>
         </div>
         <div class="scanops-panel p-5 border-l-4 border-l-rose-500">
-            <p class="text-xs uppercase tracking-widest text-slate-500">Failed</p>
+            <p class="text-xs uppercase tracking-widest text-slate-500">{{ scope_label }} Failed</p>
             <p class="text-3xl font-bold text-rose-300 mt-2">{{ summary.failed }}</p>
         </div>
     </div>

@@ -57,7 +57,7 @@
                         <p>Result: <a href="{% url 'scans:result-detail' notification.related_result.pk %}" class="text-blue-300 hover:text-blue-200">Result #{{ notification.related_result.pk }}</a></p>
                     {% endif %}
                     {% if notification.related_schedule %}
-                        <p>Schedule: <a href="{% url 'schedules:edit' notification.related_schedule.pk %}" class="text-blue-300 hover:text-blue-200">{{ notification.related_schedule.name }}</a></p>
+                        <p>Schedule: <a href="{% url 'schedules:detail' notification.related_schedule.pk %}" class="text-blue-300 hover:text-blue-200">{{ notification.related_schedule.name }}</a></p>
                     {% endif %}
                     {% if notification.related_asset %}
                         <p>Asset: <a href="{% url 'assets:detail' notification.related_asset.pk %}" class="text-blue-300 hover:text-blue-200">{{ notification.related_asset.name }}</a></p>

@@ -1,0 +1,40 @@
+{% extends "accounts/auth_card_base.html" %}
+
+{% block title %}ScanOps | Register{% endblock %}
+{% block heading %}Create Account{% endblock %}
+{% block description %}Register a new ScanOps user account. New accounts are assigned the default least-privilege role.{% endblock %}
+
+{% block content %}
+    {% if form.non_field_errors %}
+        <div class="mb-4 rounded-lg border border-rose-500/30 bg-rose-500/10 px-3 py-2 text-sm text-rose-200">
+            {% for error in form.non_field_errors %}{{ error }}{% if not forloop.last %}<br>{% endif %}{% endfor %}
+        </div>
+    {% endif %}
+
+    <form method="post" class="space-y-4">
+        {% csrf_token %}
+        {% for field in form %}
+            <div>
+                <label for="{{ field.id_for_label }}" class="block text-xs font-semibold tracking-wider uppercase text-slate-400 mb-2">{{ field.label }}</label>
+                {{ field }}
+                {% if field.help_text %}
+                    <p class="text-[11px] text-slate-500 mt-1">{{ field.help_text }}</p>
+                {% endif %}
+                {% if field.errors %}
+                    <p class="text-xs text-rose-300 mt-1">{{ field.errors|striptags }}</p>
+                {% endif %}
+            </div>
+        {% endfor %}
+        <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-6 rounded-lg transition-all flex items-center justify-center gap-2 shadow-lg shadow-blue-900/20">
+            <span>Create Account</span>
+            <span class="material-symbols-outlined text-xl">person_add</span>
+        </button>
+    </form>
+{% endblock %}
+
+{% block footer_links %}
+    <div class="flex items-center justify-between text-sm">
+        <a href="{% url 'accounts:login' %}" class="text-slate-300 hover:text-white transition-colors">Back to login</a>
+        <a href="{% url 'accounts:password_reset' %}" class="text-blue-300 hover:text-blue-200 transition-colors">Forgot password?</a>
+    </div>
+{% endblock %}

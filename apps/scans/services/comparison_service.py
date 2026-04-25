@@ -81,8 +81,8 @@ def compare_results(base_result: ScanResult, current_result: ScanResult) -> dict
     }
 
 
-def build_comparison_from_current(current_result: ScanResult) -> dict | None:
-    previous = get_previous_result(current_result)
+def build_comparison_from_current(current_result: ScanResult, *, user=None) -> dict | None:
+    previous = get_previous_result(current_result, user=user)
     if not previous:
         return None
     return compare_results(previous, current_result)

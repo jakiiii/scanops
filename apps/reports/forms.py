@@ -6,7 +6,7 @@ from django.db import models
 from django.utils import timezone
 
 from apps.assets.models import Asset
-from apps.ops.rbac import scope_queryset_for_user, user_is_scoped
+from apps.ops.services import data_visibility_service
 from apps.reports.models import GeneratedReport
 from apps.scans.models import ScanExecution, ScanResult
 
@@ -34,7 +34,7 @@ class ReportFilterForm(forms.Form):
     def __init__(self, *args, user=None, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["generated_by"].queryset = User.objects.filter(is_active=True).order_by("username")
-        if user is not None and user_is_scoped(user):
+        if user is not None and data_visibility_service.user_is_owner_scoped(user):
             self.fields["generated_by"].queryset = self.fields["generated_by"].queryset.filter(pk=user.pk)
         for field in self.fields.values():
             field.widget.attrs["class"] = "scanops-input"
@@ -70,9 +70,9 @@ class ReportGenerateForm(forms.Form):
         execution_queryset = ScanExecution.objects.select_related("scan_request__target").order_by("-created_at")
         asset_queryset = Asset.objects.order_by("name")
         if user is not None:
-            result_queryset = scope_queryset_for_user(result_queryset, user, ("execution__scan_request__requested_by",))
-            execution_queryset = scope_queryset_for_user(execution_queryset, user, ("scan_request__requested_by",))
-            asset_queryset = scope_queryset_for_user(asset_queryset, user, ("target__owner", "target__created_by"))
+            result_queryset = data_visibility_service.get_user_visible_results(user, queryset=result_queryset)
+            execution_queryset = data_visibility_service.get_user_visible_executions(user, queryset=execution_queryset)
+            asset_queryset = data_visibility_service.get_user_visible_assets(user, queryset=asset_queryset)
         self.fields["source_result"].queryset = result_queryset
         self.fields["comparison_left_result"].queryset = result_queryset
         self.fields["comparison_right_result"].queryset = result_queryset

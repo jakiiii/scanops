@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% load scanops_tags %}
+
+{% block title %}Schedule Detail | ScanOps{% endblock %}
+
+{% block content %}
+    {% include "includes/breadcrumbs.html" with breadcrumbs=breadcrumbs %}
+
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+        <div>
+            <h1 class="text-4xl font-bold text-white tracking-tight">{{ schedule.name }}</h1>
+            <p class="text-slate-400 mt-1">Read-only schedule details and execution configuration.</p>
+        </div>
+        <div class="flex flex-wrap gap-2">
+            <a href="{% url 'schedules:list' %}" class="px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-sm font-semibold text-slate-100 hover:bg-slate-700">Back to Schedules</a>
+            {% if can_manage_schedule %}
+                <a href="{% url 'schedules:edit' schedule.pk %}" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-bold hover:bg-blue-500">Edit Schedule</a>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if is_public_view %}
+        <div class="scanops-panel p-4 mb-6 border-amber-500/30">
+            <p class="text-sm text-amber-200">Public mode: sensitive target and profile details are hidden.</p>
+        </div>
+    {% endif %}
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
+        <div class="scanops-panel p-5 border-l-4 border-l-blue-500">
+            <p class="text-xs uppercase tracking-widest text-slate-500">Visibility</p>
+            <p class="text-2xl font-bold mt-2 {% if schedule.is_public %}text-blue-300{% else %}text-slate-200{% endif %}">{{ schedule.is_public|yesno:"Public,Private" }}</p>
+        </div>
+        <div class="scanops-panel p-5 border-l-4 border-l-emerald-500">
+            <p class="text-xs uppercase tracking-widest text-slate-500">State</p>
+            <p class="text-2xl font-bold text-emerald-300 mt-2">{{ schedule.is_enabled|yesno:"Enabled,Disabled" }}</p>
+        </div>
+        <div class="scanops-panel p-5 border-l-4 border-l-amber-500">
+            <p class="text-xs uppercase tracking-widest text-slate-500">Next Run</p>
+            <p class="text-2xl font-bold text-amber-300 mt-2">{{ schedule.next_run_at|date:"M d, Y H:i"|default:"-" }}</p>
+        </div>
+    </div>
+
+    <div class="scanops-panel p-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 text-sm">
+            <div>
+                <p class="text-[11px] uppercase tracking-widest text-slate-500 mb-1">Target</p>
+                <p class="text-slate-200">
+                    {% if is_public_view %}
+                        Protected Target
+                    {% else %}
+                        {{ schedule.target.target_value }}
+                    {% endif %}
+                </p>
+            </div>
+            <div>
+                <p class="text-[11px] uppercase tracking-widest text-slate-500 mb-1">Profile</p>
+                <p class="text-slate-200">
+                    {% if is_public_view %}
+                        Protected Profile
+                    {% else %}
+                        {{ schedule.profile.name|default:schedule.get_scan_type_display }}
+                    {% endif %}
+                </p>
+            </div>
+            <div>
+                <p class="text-[11px] uppercase tracking-widest text-slate-500 mb-1">Schedule Type</p>
+                <p class="text-slate-200">{{ schedule.get_schedule_type_display }}</p>
+            </div>
+            <div>
+                <p class="text-[11px] uppercase tracking-widest text-slate-500 mb-1">Timing Profile</p>
+                <p class="text-slate-200">{{ schedule.get_timing_profile_display }}</p>
+            </div>
+            <div>
+                <p class="text-[11px] uppercase tracking-widest text-slate-500 mb-1">Start At</p>
+                <p class="text-slate-200">{{ schedule.start_at|date:"M d, Y H:i" }}</p>
+            </div>
+            <div>
+                <p class="text-[11px] uppercase tracking-widest text-slate-500 mb-1">End At</p>
+                <p class="text-slate-200">{{ schedule.end_at|date:"M d, Y H:i"|default:"-" }}</p>
+            </div>
+            <div>
+                <p class="text-[11px] uppercase tracking-widest text-slate-500 mb-1">Notifications</p>
+                <p class="text-slate-200">{{ schedule.notification_enabled|yesno:"Enabled,Disabled" }}</p>
+            </div>
+            <div>
+                <p class="text-[11px] uppercase tracking-widest text-slate-500 mb-1">Owner</p>
+                <p class="text-slate-200">
+                    {% if is_public_view %}
+                        Public Owner
+                    {% else %}
+                        {{ schedule.created_by.username|default:"System" }}
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -73,8 +73,10 @@
                     <span class="material-symbols-outlined text-xl">login</span>
                 </button>
 
-                <div class="flex items-center justify-between text-sm">
+                <div class="flex flex-wrap items-center justify-between gap-3 text-sm">
                     <a href="{% url 'accounts:password_reset' %}" class="text-blue-300 hover:text-blue-200 transition-colors">Forgot password?</a>
+                    <a href="{% url 'scans:new' %}" class="text-blue-300 hover:text-blue-200 transition-colors">New Scan</a>
+                    <a href="{% url 'core:documentation' %}" class="text-blue-300 hover:text-blue-200 transition-colors">Read Documentation</a>
                     <a href="{% url 'accounts:register' %}" class="text-slate-300 hover:text-white transition-colors">Create account</a>
                 </div>
             </form>

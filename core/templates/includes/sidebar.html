@@ -18,12 +18,10 @@
             <span>Dashboard</span>
         </a>
     {% endif %}
-    {% if request.user|has_capability:'create_scan_request' %}
-        <a href="{% url 'scans:new' %}" class="scanops-nav-link {% if request.path|slice:':11' == '/scans/new/' %}is-active{% endif %}">
-            <span class="material-symbols-outlined">add_circle</span>
-            <span>New Scan</span>
-        </a>
-    {% endif %}
+    <a href="{% url 'scans:new' %}" class="scanops-nav-link {% if request.path|slice:':11' == '/scans/new/' %}is-active{% endif %}">
+        <span class="material-symbols-outlined">add_circle</span>
+        <span>New Scan</span>
+    </a>
     {% if request.user|has_capability:'view_targets' %}
         <a href="{% url 'targets:list' %}" class="scanops-nav-link {% if request.path|slice:':9' == '/targets/' %}is-active{% endif %}">
             <span class="material-symbols-outlined">track_changes</span>
@@ -64,7 +62,7 @@
             {% if request.user.is_authenticated %}
                 {% if request.user|can_view_all_data %}All Schedules{% else %}My Schedule{% endif %}
             {% else %}
-                Public Schedule
+                Schedule
             {% endif %}
         </span>
     </a>
@@ -102,6 +100,10 @@
 
 <div class="scanops-sidebar-footer p-3 space-y-1">
     {% if request.user.is_authenticated %}
+        <a href="{% url 'core:documentation' %}" class="scanops-nav-link {% if request.path|slice:':15' == '/documentation/' %}is-active{% endif %}">
+            <span class="material-symbols-outlined">menu_book</span>
+            <span>Read Documentation</span>
+        </a>
         <a href="{% url 'accounts:password_change' %}" class="scanops-nav-link">
             <span class="material-symbols-outlined">password</span>
             <span>Change Password</span>

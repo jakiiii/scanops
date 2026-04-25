@@ -9,6 +9,15 @@
         <p class="text-slate-400 mt-1">Create a safe, controlled scan request with validated options.</p>
     </div>
 
+    {% if public_mode %}
+        <div class="scanops-panel p-4 border-blue-500/30 bg-blue-500/10 mb-6">
+            <p class="text-sm text-blue-100 font-semibold">Public access is in safe preview mode.</p>
+            <p class="text-xs text-blue-200/90 mt-1">
+                Please sign in or register to submit a scan request. Visitor mode does not expose private targets or profiles.
+            </p>
+        </div>
+    {% endif %}
+
     {% if form.non_field_errors %}
         <div class="scanops-panel p-4 border-rose-500/30 mb-6">
             {% for error in form.non_field_errors %}
@@ -33,11 +42,13 @@
                             <label for="{{ form.target.id_for_label }}" class="block text-sm text-slate-300 mb-1.5">Target</label>
                             {{ form.target }}
                             {% if form.target.errors %}<p class="text-xs text-rose-300 mt-1">{{ form.target.errors|striptags }}</p>{% endif %}
+                            {% if form.target.help_text %}<p class="text-[11px] text-slate-500 mt-1">{{ form.target.help_text }}</p>{% endif %}
                         </div>
                         <div>
                             <label for="{{ form.profile.id_for_label }}" class="block text-sm text-slate-300 mb-1.5">Scan Profile (optional)</label>
                             {{ form.profile }}
                             {% if form.profile.errors %}<p class="text-xs text-rose-300 mt-1">{{ form.profile.errors|striptags }}</p>{% endif %}
+                            {% if form.profile.help_text %}<p class="text-[11px] text-slate-500 mt-1">{{ form.profile.help_text }}</p>{% endif %}
                         </div>
                         <div>
                             <label for="{{ form.scan_type.id_for_label }}" class="block text-sm text-slate-300 mb-1.5">Scan Type</label>
@@ -91,10 +102,17 @@
                         {% if form.notes.errors %}<p class="text-xs text-rose-300 mt-1">{{ form.notes.errors|striptags }}</p>{% endif %}
                     </div>
                 </div>
-                <div class="flex items-center justify-end gap-3">
-                    <a href="{% url 'dashboard:home' %}" class="px-4 py-2 text-sm font-semibold text-slate-400 hover:text-white">Cancel</a>
-                    <button type="submit" class="px-6 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-sm font-bold">Submit Scan Request</button>
-                </div>
+                {% if public_mode %}
+                    <div class="flex flex-wrap items-center justify-end gap-3">
+                        <a href="{% url 'accounts:login' %}?next={% url 'scans:new' %}" class="px-6 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-sm font-bold">Sign In To Submit</a>
+                        <a href="{% url 'accounts:register' %}" class="px-4 py-2 text-sm font-semibold text-slate-300 hover:text-white">Register</a>
+                    </div>
+                {% else %}
+                    <div class="flex items-center justify-end gap-3">
+                        <a href="{% url 'dashboard:home' %}" class="px-4 py-2 text-sm font-semibold text-slate-400 hover:text-white">Cancel</a>
+                        <button type="submit" class="px-6 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-sm font-bold">Submit Scan Request</button>
+                    </div>
+                {% endif %}
             </form>
         </div>
         <div class="xl:col-span-4" id="scan-preview-container">

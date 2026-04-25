@@ -21,6 +21,7 @@ def administrator_required_view(view):
 urlpatterns = [
     # Phase 1 web apps
     path('', include('apps.accounts.urls', namespace='accounts')),
+    path('', include('apps.core.urls', namespace='core')),
     path('', include('apps.dashboard.urls', namespace='dashboard')),
     path('targets/', include('apps.targets.urls', namespace='targets')),
     path('scans/', include('apps.scans.urls', namespace='scans')),

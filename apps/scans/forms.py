@@ -51,13 +51,21 @@ class ScanRequestForm(forms.ModelForm):
 
     def __init__(self, *args, user=None, **kwargs):
         super().__init__(*args, **kwargs)
+        self.user = user
+        is_authenticated_user = bool(getattr(user, "is_authenticated", False))
+
         target_queryset = Target.objects.filter(status=Target.Status.ACTIVE).order_by("target_value")
-        if user is not None:
+        if is_authenticated_user:
             target_queryset = data_visibility_service.get_user_visible_targets(user, queryset=target_queryset)
+        else:
+            target_queryset = target_queryset.none()
         self.fields["target"].queryset = target_queryset
+
         profile_queryset = ScanProfile.objects.filter(is_active=True).order_by("is_system", "name")
-        if user is not None:
+        if is_authenticated_user:
             profile_queryset = data_visibility_service.get_user_visible_scan_profiles(user, queryset=profile_queryset)
+        else:
+            profile_queryset = profile_queryset.filter(is_system=True)
         self.fields["profile"].queryset = profile_queryset
         for checkbox_name in (
             "enable_host_discovery",
@@ -70,6 +78,26 @@ class ScanRequestForm(forms.ModelForm):
             self.fields[checkbox_name].widget.attrs.update(
                 {"class": "h-4 w-4 rounded border-slate-700 bg-slate-900 text-blue-500"}
             )
+
+        if not is_authenticated_user:
+            readonly_fields = (
+                "target",
+                "profile",
+                "scan_type",
+                "port_input",
+                "enable_host_discovery",
+                "enable_service_detection",
+                "enable_version_detection",
+                "enable_os_detection",
+                "enable_traceroute",
+                "enable_dns_resolution",
+                "timing_profile",
+                "notes",
+            )
+            for field_name in readonly_fields:
+                self.fields[field_name].disabled = True
+            self.fields["target"].help_text = "Sign in to select your targets."
+            self.fields["profile"].help_text = "System profiles are shown for reference only."
 
         self.policy_result = None
         self.summary = None

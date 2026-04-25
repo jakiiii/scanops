@@ -1,0 +1,92 @@
+<article id="{{ module.id }}" class="doc-section scanops-panel p-6">
+    <div class="flex items-start gap-4 mb-5">
+        <div class="w-10 h-10 rounded-lg bg-blue-500/15 border border-blue-500/30 flex items-center justify-center shrink-0">
+            <span class="material-symbols-outlined text-blue-300">{{ module.icon }}</span>
+        </div>
+        <div>
+            <h3 class="text-xl font-semibold text-white">{{ module.title }}</h3>
+            <p class="text-sm text-slate-400 mt-1">Enterprise module reference and operational usage guidance.</p>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        <div class="rounded-lg border border-slate-800 bg-slate-900/60 p-4">
+            <h4 class="text-sm font-semibold text-blue-200 uppercase tracking-wider mb-2">What Is It</h4>
+            <p class="text-sm text-slate-300 leading-relaxed">{{ module.what_is }}</p>
+        </div>
+        <div class="rounded-lg border border-slate-800 bg-slate-900/60 p-4">
+            <h4 class="text-sm font-semibold text-blue-200 uppercase tracking-wider mb-2">Why It Is Used</h4>
+            <ul class="space-y-1.5 text-sm text-slate-300 list-disc pl-5">
+                {% for item in module.why_used %}
+                    <li>{{ item }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <div class="rounded-lg border border-slate-800 bg-slate-900/60 p-4 mb-6">
+        <h4 class="text-sm font-semibold text-blue-200 uppercase tracking-wider mb-2">How To Use</h4>
+        <ol class="space-y-1.5 text-sm text-slate-300 list-decimal pl-5">
+            {% for step in module.how_to_use %}
+                <li>{{ step }}</li>
+            {% endfor %}
+        </ol>
+    </div>
+
+    <div class="rounded-lg border border-slate-800 bg-slate-900/60 p-4 mb-6">
+        <h4 class="text-sm font-semibold text-blue-200 uppercase tracking-wider mb-3">Field-By-Field Explanation</h4>
+        <div class="overflow-x-auto">
+            <table class="w-full min-w-[720px] text-left border-collapse">
+                <thead>
+                <tr class="border-b border-slate-800">
+                    <th class="py-2 pr-4 text-[11px] uppercase tracking-wider text-slate-500">Field / Option</th>
+                    <th class="py-2 pr-4 text-[11px] uppercase tracking-wider text-slate-500">Explanation</th>
+                    <th class="py-2 text-[11px] uppercase tracking-wider text-slate-500">Examples</th>
+                </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-800/70">
+                {% for field in module.fields %}
+                    <tr>
+                        <td class="py-3 pr-4 align-top text-sm text-slate-100 font-semibold">{{ field.name }}</td>
+                        <td class="py-3 pr-4 align-top text-sm text-slate-300">{{ field.details }}</td>
+                        <td class="py-3 align-top text-sm text-slate-400">
+                            {% if field.examples %}
+                                <ul class="space-y-1 list-disc pl-4">
+                                    {% for item in field.examples %}
+                                        <li>{{ item }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% else %}
+                                <span class="text-slate-500">-</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="rounded-lg border border-slate-800 bg-slate-900/60 p-4">
+            <h4 class="text-sm font-semibold text-blue-200 uppercase tracking-wider mb-2">Real Examples</h4>
+            <ul class="space-y-1.5 text-sm text-slate-300 list-disc pl-5">
+                {% for item in module.examples %}
+                    <li>{{ item }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="rounded-lg border border-slate-800 bg-slate-900/60 p-4">
+            <h4 class="text-sm font-semibold text-blue-200 uppercase tracking-wider mb-2">Best Practices</h4>
+            <ul class="space-y-1.5 text-sm text-slate-300 list-disc pl-5">
+                {% for item in module.best_practices %}
+                    <li>{{ item }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    {% if module.warnings %}
+        {% include "documentation/partials/callout.html" with variant="warning" title="Warnings" items=module.warnings %}
+    {% endif %}
+</article>

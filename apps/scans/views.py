@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 
 from django.contrib import messages
+from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
@@ -10,19 +11,23 @@ from django.views import View
 from django.views.generic import CreateView
 
 from apps.core.services.scan_policy import build_scan_summary, validate_scan_options
-from apps.ops.models import PermissionRule
-from apps.ops.rbac import CapabilityRequiredMixin
 from apps.ops.services import data_visibility_service
 from apps.scans.forms import ScanRequestForm
 from apps.scans.models import ScanRequest
 from apps.targets.models import Target
 
 
-class ScanRequestCreateView(CapabilityRequiredMixin, CreateView):
-    capability_key = PermissionRule.PermissionKey.CREATE_SCAN_REQUEST
+class ScanRequestCreateView(CreateView):
     model = ScanRequest
     form_class = ScanRequestForm
     template_name = "scans/new_scan.html"
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.method.lower() == "post" and not request.user.is_authenticated:
+            messages.info(request, "Please login or register to submit a scan request.")
+            login_url = reverse("accounts:login")
+            return HttpResponseRedirect(f"{login_url}?next={reverse('scans:new')}")
+        return super().dispatch(request, *args, **kwargs)
 
     def get_initial(self):
         initial = super().get_initial()
@@ -41,6 +46,8 @@ class ScanRequestCreateView(CapabilityRequiredMixin, CreateView):
         return initial
 
     def form_valid(self, form):
+        if not self.request.user.is_authenticated:
+            raise PermissionDenied("Anonymous users cannot submit scan requests.")
         self.object: ScanRequest = form.save(commit=False)
         self.object.requested_by = self.request.user
         self.object.status = ScanRequest.Status.PENDING
@@ -59,7 +66,7 @@ class ScanRequestCreateView(CapabilityRequiredMixin, CreateView):
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs["user"] = self.request.user
+        kwargs["user"] = self.request.user if self.request.user.is_authenticated else None
         return kwargs
 
     def get_context_data(self, **kwargs):
@@ -72,11 +79,11 @@ class ScanRequestCreateView(CapabilityRequiredMixin, CreateView):
             {"label": "Scans", "url": ""},
             {"label": "New Request", "url": ""},
         ]
+        context["public_mode"] = not self.request.user.is_authenticated
         return context
 
 
-class ScanPreviewView(CapabilityRequiredMixin, View):
-    capability_key = PermissionRule.PermissionKey.CREATE_SCAN_REQUEST
+class ScanPreviewView(View):
     template_name = "partials/scan_preview.html"
 
     @staticmethod
@@ -84,24 +91,38 @@ class ScanPreviewView(CapabilityRequiredMixin, View):
         return (raw_value or "").lower() in {"1", "true", "on", "yes"}
 
     def post(self, request, *args, **kwargs) -> HttpResponse:
-        target = None
-        target_id = request.POST.get("target")
-        if target_id and target_id.isdigit():
-            target_queryset = data_visibility_service.get_user_visible_targets(request.user, queryset=Target.objects.all())
-            target = target_queryset.filter(pk=int(target_id)).first()
+        if request.user.is_authenticated:
+            target = None
+            target_id = request.POST.get("target")
+            if target_id and target_id.isdigit():
+                target_queryset = data_visibility_service.get_user_visible_targets(request.user, queryset=Target.objects.all())
+                target = target_queryset.filter(pk=int(target_id)).first()
 
-        payload = {
-            "target": target,
-            "scan_type": request.POST.get("scan_type", ""),
-            "port_input": request.POST.get("port_input", ""),
-            "enable_host_discovery": self._coerce_checkbox(request.POST.get("enable_host_discovery")),
-            "enable_service_detection": self._coerce_checkbox(request.POST.get("enable_service_detection")),
-            "enable_version_detection": self._coerce_checkbox(request.POST.get("enable_version_detection")),
-            "enable_os_detection": self._coerce_checkbox(request.POST.get("enable_os_detection")),
-            "enable_traceroute": self._coerce_checkbox(request.POST.get("enable_traceroute")),
-            "enable_dns_resolution": self._coerce_checkbox(request.POST.get("enable_dns_resolution")),
-            "timing_profile": request.POST.get("timing_profile", ""),
-        }
+            payload = {
+                "target": target,
+                "scan_type": request.POST.get("scan_type", ""),
+                "port_input": request.POST.get("port_input", ""),
+                "enable_host_discovery": self._coerce_checkbox(request.POST.get("enable_host_discovery")),
+                "enable_service_detection": self._coerce_checkbox(request.POST.get("enable_service_detection")),
+                "enable_version_detection": self._coerce_checkbox(request.POST.get("enable_version_detection")),
+                "enable_os_detection": self._coerce_checkbox(request.POST.get("enable_os_detection")),
+                "enable_traceroute": self._coerce_checkbox(request.POST.get("enable_traceroute")),
+                "enable_dns_resolution": self._coerce_checkbox(request.POST.get("enable_dns_resolution")),
+                "timing_profile": request.POST.get("timing_profile", ""),
+            }
+        else:
+            payload = {
+                "target": None,
+                "scan_type": "safe_basic",
+                "port_input": "",
+                "enable_host_discovery": True,
+                "enable_service_detection": True,
+                "enable_version_detection": False,
+                "enable_os_detection": False,
+                "enable_traceroute": False,
+                "enable_dns_resolution": True,
+                "timing_profile": "normal",
+            }
         policy = validate_scan_options(payload)
         summary = build_scan_summary(payload, policy)
         return render(

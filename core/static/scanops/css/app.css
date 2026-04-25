@@ -218,6 +218,31 @@ button.scanops-nav-link {
     box-shadow: inset 2px 0 0 var(--scanops-sidebar-active-border);
 }
 
+.doc-section {
+    scroll-margin-top: 5.5rem;
+}
+
+.doc-toc-link {
+    color: var(--scanops-sidebar-text-muted);
+    border: 1px solid transparent;
+    background: transparent;
+}
+
+.doc-toc-link:hover {
+    color: var(--scanops-sidebar-text);
+    background: var(--scanops-sidebar-hover-bg);
+    border-color: var(--scanops-sidebar-hover-border);
+}
+
+.doc-toc-link.is-active,
+.doc-toc-link.active,
+.doc-toc-link[aria-current="location"] {
+    color: var(--scanops-sidebar-active-text);
+    background: var(--scanops-sidebar-active-bg);
+    border-color: rgba(37, 99, 235, 0.45);
+    box-shadow: inset 3px 0 0 var(--scanops-sidebar-active-border);
+}
+
 .status-dot {
     width: 0.5rem;
     height: 0.5rem;

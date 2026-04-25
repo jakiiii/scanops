@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Read Documentation | ScanOps{% endblock %}
+
+{% block content %}
+    {% include "includes/breadcrumbs.html" with breadcrumbs=breadcrumbs %}
+
+    <section id="overview" class="doc-section scanops-panel p-6 md:p-8 mb-6 border-l-4 border-l-blue-500">
+        <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-5">
+            <div>
+                <p class="text-[11px] uppercase tracking-[0.2em] text-blue-300">Enterprise Knowledge Base</p>
+                <h1 class="text-4xl font-bold text-white tracking-tight mt-2">{{ page.title }}</h1>
+                <p class="text-slate-300 mt-3 max-w-4xl">{{ page.subtitle }}</p>
+            </div>
+            <div class="flex flex-wrap gap-3">
+                {% if request.user.is_authenticated %}
+                    <a href="{% url 'dashboard:home' %}" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-semibold hover:bg-blue-500">Open Dashboard</a>
+                {% else %}
+                    <a href="{% url 'accounts:login' %}" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-semibold hover:bg-blue-500">Sign In</a>
+                {% endif %}
+                <a href="{% url 'scans:new' %}" class="px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-sm font-semibold text-slate-100 hover:bg-slate-700">Open New Scan</a>
+            </div>
+        </div>
+        {% include "documentation/partials/callout.html" with variant="warning" title="Authorized Use Notice" text=page.authorized_notice %}
+    </section>
+
+    <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
+        <aside class="xl:col-span-3">
+            <div class="scanops-panel p-4 xl:sticky xl:top-24">
+                <h2 class="text-sm font-semibold text-white mb-3">Table Of Contents</h2>
+                <nav class="space-y-1" data-doc-toc>
+                    <a href="#overview" class="scanops-nav-link doc-toc-link">Overview</a>
+                    <a href="#getting-started" class="scanops-nav-link doc-toc-link">Getting Started</a>
+                    <a href="#module-documentation" class="scanops-nav-link doc-toc-link">Module Documentation</a>
+                    {% for module in modules %}
+                        <a href="#{{ module.id }}" class="scanops-nav-link doc-toc-link text-sm">{{ module.title }}</a>
+                    {% endfor %}
+                    <a href="#security-access" class="scanops-nav-link doc-toc-link">Security & Access</a>
+                    <a href="#recommended-workflow" class="scanops-nav-link doc-toc-link">Recommended Workflow</a>
+                    <a href="#best-practices" class="scanops-nav-link doc-toc-link">Best Practices</a>
+                    <a href="#support" class="scanops-nav-link doc-toc-link">Support / Help</a>
+                </nav>
+            </div>
+        </aside>
+
+        <div class="xl:col-span-9 space-y-6" data-doc-scrollspy>
+            <section id="getting-started" class="doc-section scanops-panel p-6">
+                <h2 class="text-2xl font-bold text-white mb-3">Getting Started</h2>
+                <ol class="space-y-2 text-sm text-slate-300 list-decimal pl-5">
+                    {% for step in getting_started_steps %}
+                        <li>{{ step }}</li>
+                    {% endfor %}
+                </ol>
+            </section>
+
+            <section id="module-documentation" class="doc-section space-y-4">
+                <h2 class="text-2xl font-bold text-white">Module Documentation</h2>
+                <p class="text-sm text-slate-400">
+                    Each module section includes What it is, Why it is used, How to use, Field-by-field guidance,
+                    real examples, best practices, and warnings.
+                </p>
+                {% for module in modules %}
+                    {% include "documentation/partials/module_section.html" with module=module %}
+                {% endfor %}
+            </section>
+
+            <section id="security-access" class="doc-section scanops-panel p-6">
+                <h2 class="text-2xl font-bold text-white mb-3">Security & Access Control</h2>
+                <ul class="space-y-2 text-sm text-slate-300 list-disc pl-5">
+                    {% for point in security_access_points %}
+                        <li>{{ point }}</li>
+                    {% endfor %}
+                </ul>
+            </section>
+
+            <section id="recommended-workflow" class="doc-section scanops-panel p-6">
+                <h2 class="text-2xl font-bold text-white mb-3">Recommended Workflow</h2>
+                <ol class="space-y-2 text-sm text-slate-300 list-decimal pl-5">
+                    {% for step in recommended_workflow %}
+                        <li>{{ step }}</li>
+                    {% endfor %}
+                </ol>
+            </section>
+
+            <section id="best-practices" class="doc-section scanops-panel p-6">
+                <h2 class="text-2xl font-bold text-white mb-3">Best Practices</h2>
+                <ul class="space-y-2 text-sm text-slate-300 list-disc pl-5">
+                    {% for item in global_best_practices %}
+                        <li>{{ item }}</li>
+                    {% endfor %}
+                </ul>
+            </section>
+
+            <section id="support" class="doc-section scanops-panel p-6">
+                <h2 class="text-2xl font-bold text-white mb-3">{{ support.title }}</h2>
+                <p class="text-sm text-slate-300 leading-relaxed">{{ support.content }}</p>
+            </section>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+    <script defer src="{% static 'scanops/js/documentation.js' %}"></script>
+{% endblock %}

@@ -119,6 +119,25 @@ For local development, use:
 
 With console backend, reset links are printed in app logs/terminal output.
 
+## Read Documentation Page
+
+ScanOps includes a public product documentation page:
+
+- URL: `/documentation/`
+- Public access: available without login from the login page via **Read Documentation**
+- In-app access: available from the sidebar for authenticated users via **Read Documentation**
+
+The page documents core modules and safe operational workflow without exposing sensitive runtime data.
+
+## Public New Scan Access
+
+The `New Scan` page (`/scans/new/`) is accessible in two modes:
+
+- Visitors (not logged in): can open the page in public-safe preview mode only. Submission is blocked and they are prompted to sign in/register.
+- Authenticated users (all roles): can create scan requests using user-scoped targets and profiles.
+
+The backend enforces ownership filtering on target/profile selection and blocks anonymous POST submission.
+
 ## User-Owned Data Isolation
 
 ScanOps enforces backend ownership filtering for operational data.

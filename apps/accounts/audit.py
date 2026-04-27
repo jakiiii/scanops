@@ -1,5 +1,9 @@
 import logging
+from functools import lru_cache
+import ipaddress
+from pathlib import Path
 
+from django.conf import settings
 from ipware import get_client_ip
 from user_agents import parse
 
@@ -7,6 +11,7 @@ from apps.accounts.models import UserLogs
 
 
 logger = logging.getLogger("exceptions_log")
+UNKNOWN_LOCATION = "Unknown"
 
 
 def _trim(value, length):
@@ -16,10 +21,106 @@ def _trim(value, length):
     return value[:length]
 
 
+def _normalize_public_ip(ip_address: str) -> str:
+    if not ip_address:
+        return ""
+    try:
+        parsed = ipaddress.ip_address(ip_address)
+    except ValueError:
+        return ""
+    if (
+        parsed.is_private
+        or parsed.is_loopback
+        or parsed.is_multicast
+        or parsed.is_reserved
+        or parsed.is_link_local
+        or parsed.is_unspecified
+    ):
+        return ""
+    return str(parsed)
+
+
+def _geoip_candidate_paths() -> list[Path]:
+    configured_path = (getattr(settings, "GEOIP_PATH", "") or "").strip()
+    candidates: list[Path] = []
+    if configured_path:
+        configured = Path(configured_path)
+        if configured.is_file():
+            candidates.append(configured)
+        else:
+            candidates.extend(
+                [
+                    configured / "GeoLite2-City.mmdb",
+                    configured / "GeoLite2City.mmdb",
+                ]
+            )
+
+    base_dir = Path(getattr(settings, "BASE_DIR", Path(__file__).resolve().parents[2]))
+    candidates.extend(
+        [
+            base_dir / "GeoLite2City" / "GeoLite2City.mmdb",
+            base_dir / "GeoLite2City" / "GeoLite2-City.mmdb",
+        ]
+    )
+
+    deduped: list[Path] = []
+    seen: set[str] = set()
+    for candidate in candidates:
+        candidate_str = str(candidate)
+        if candidate_str in seen:
+            continue
+        seen.add(candidate_str)
+        deduped.append(candidate)
+    return deduped
+
+
+@lru_cache(maxsize=1)
+def _get_geoip_reader():
+    try:
+        from geoip2.database import Reader
+    except Exception:
+        return None
+
+    for mmdb_path in _geoip_candidate_paths():
+        if not mmdb_path.exists():
+            continue
+        try:
+            return Reader(str(mmdb_path))
+        except Exception:
+            logger.exception("Failed to initialize GeoIP reader from %s", mmdb_path)
+    return None
+
+
+def resolve_location_from_ip(ip_address: str) -> str:
+    normalized_ip = _normalize_public_ip(ip_address)
+    if not normalized_ip:
+        return UNKNOWN_LOCATION
+
+    reader = _get_geoip_reader()
+    if reader is None:
+        return UNKNOWN_LOCATION
+
+    try:
+        city_response = reader.city(normalized_ip)
+    except Exception:
+        return UNKNOWN_LOCATION
+
+    city = _trim(getattr(city_response.city, "name", ""), 80)
+    country = _trim(getattr(city_response.country, "name", ""), 80)
+    if city and country and city.lower() != country.lower():
+        return _trim(f"{city}, {country}", 160)
+    if country:
+        return _trim(country, 160)
+    if city:
+        return _trim(city, 160)
+    return UNKNOWN_LOCATION
+
+
 def extract_request_audit_context(request):
     if request is None:
         return {
             "ip_address": "",
+            "location": UNKNOWN_LOCATION,
             "request_method": "",
             "path": "",
             "user_agent": "",
@@ -52,6 +153,7 @@ def extract_request_audit_context(request):
 
     return {
         "ip_address": _trim(ip_address, 45),
+        "location": _trim(resolve_location_from_ip(ip_address), 160) or UNKNOWN_LOCATION,
         "request_method": _trim(getattr(request, "method", ""), 10),
         "path": _trim(request.get_full_path(), 500),
         "user_agent": user_agent_string,

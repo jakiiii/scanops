@@ -91,7 +91,7 @@
         </a>
     {% endif %}
     {% if request.user|has_capability:'view_system_health' %}
-        <a href="{% url 'ops:health-system' %}" class="scanops-nav-link {% if request.path|slice:':12' == '/ops/health/' %}is-active{% endif %}">
+        <a href="{% url 'ops:health-system' %}" class="scanops-nav-link {% if request.path|slice:':19' == '/ops/health/system/' or request.path|slice:':26' == '/ops/health/queue-workers/' %}is-active{% endif %}">
             <span class="material-symbols-outlined">monitor_heart</span>
             <span>System Health</span>
         </a>
@@ -116,6 +116,12 @@
             <span class="material-symbols-outlined">password</span>
             <span>Change Password</span>
         </a>
+        {% if request.user|is_super_admin %}
+            <a href="{% url 'ops:health-user-logs-analytics' %}" class="scanops-nav-link {% if request.path|slice:':31' == '/ops/health/user-logs-analytics/' %}is-active{% endif %}">
+                <span class="material-symbols-outlined">query_stats</span>
+                <span>User Logs Analytics</span>
+            </a>
+        {% endif %}
         {% if request.user.is_superuser %}
             <a href="{% url 'admin:index' %}" class="scanops-nav-link">
                 <span class="material-symbols-outlined">admin_panel_settings</span>

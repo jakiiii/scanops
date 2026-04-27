@@ -36,6 +36,15 @@ class CapabilityRequiredMixin(LoginRequiredMixin):
         return super().dispatch(request, *args, **kwargs)
 
 
+class SuperAdminRequiredMixin(LoginRequiredMixin):
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return self.handle_no_permission()
+        if not (permission_service.is_super_admin(request.user) or getattr(request.user, "is_superuser", False)):
+            raise PermissionDenied("You do not have permission to access this resource.")
+        return super().dispatch(request, *args, **kwargs)
+
+
 def require_capability(capability_key: str):
     def decorator(view_func):
         @wraps(view_func)

@@ -1,0 +1,37 @@
+<div class="scanops-panel p-5">
+    <h3 class="text-sm font-bold text-slate-200 uppercase tracking-widest mb-4">Top IP Addresses</h3>
+    <div class="overflow-x-auto">
+        <table class="w-full text-sm text-left">
+            <thead class="text-[10px] uppercase tracking-widest text-slate-500">
+            <tr>
+                <th class="pb-2 pr-3">IP Address</th>
+                <th class="pb-2 pr-3">Location</th>
+                <th class="pb-2 pr-3">Count</th>
+                <th class="pb-2 pr-3">Unique Users</th>
+                <th class="pb-2 pr-3">Last Seen</th>
+            </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-800">
+            {% for row in top_ips %}
+                <tr>
+                    <td class="py-2 pr-3 text-slate-200 font-mono">{{ row.ip_address }}</td>
+                    <td class="py-2 pr-3">
+                        {% if row.location and row.location != "Unknown" %}
+                            <span class="text-slate-300">{{ row.location }}</span>
+                        {% else %}
+                            <span class="text-slate-500">Unknown</span>
+                        {% endif %}
+                    </td>
+                    <td class="py-2 pr-3 text-slate-100 font-semibold">{{ row.count }}</td>
+                    <td class="py-2 pr-3 text-cyan-300">{{ row.unique_users }}</td>
+                    <td class="py-2 pr-3 text-slate-400">{{ row.last_seen|date:"Y-m-d H:i" }}</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="5" class="py-6 text-center text-slate-500">No IP activity available.</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>

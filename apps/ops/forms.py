@@ -5,6 +5,7 @@ import ipaddress
 from django import forms
 from django.contrib.auth import get_user_model
 
+from apps.accounts.models import UserLogs
 from apps.notifications.models import Notification
 from apps.ops.models import PermissionRule, Role
 from apps.ops.services import permission_service
@@ -167,6 +168,72 @@ class ThemeSettingsForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         _decorate_fields(self)
+
+
+class UserLogAnalyticsFilterForm(forms.Form):
+    PERIOD_TODAY = "today"
+    PERIOD_YESTERDAY = "yesterday"
+    PERIOD_THIS_WEEK = "this_week"
+    PERIOD_THIS_MONTH = "this_month"
+    PERIOD_THIS_YEAR = "this_year"
+    PERIOD_CUSTOM = "custom"
+
+    period = forms.ChoiceField(
+        required=False,
+        initial=PERIOD_THIS_WEEK,
+        choices=(
+            (PERIOD_TODAY, "Today"),
+            (PERIOD_YESTERDAY, "Yesterday"),
+            (PERIOD_THIS_WEEK, "This Week"),
+            (PERIOD_THIS_MONTH, "This Month"),
+            (PERIOD_THIS_YEAR, "This Year"),
+            (PERIOD_CUSTOM, "Custom"),
+        ),
+    )
+    start_date = forms.DateField(
+        required=False,
+        widget=forms.DateInput(attrs={"type": "date"}),
+    )
+    end_date = forms.DateField(
+        required=False,
+        widget=forms.DateInput(attrs={"type": "date"}),
+    )
+    username = forms.CharField(required=False)
+    action_type = forms.ChoiceField(
+        required=False,
+        choices=(("", "All Actions"), *UserLogs.ActionType.choices),
+    )
+    result = forms.ChoiceField(
+        required=False,
+        choices=(("", "All Results"), ("success", "Success"), ("failed", "Failed")),
+    )
+    ip_contains = forms.CharField(required=False)
+    path_contains = forms.CharField(required=False)
+    actor_type = forms.ChoiceField(
+        required=False,
+        choices=(("", "All Users"), ("authenticated", "Authenticated"), ("anonymous", "Anonymous/System")),
+    )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        _decorate_fields(self)
+        self.fields["username"].widget.attrs["placeholder"] = "Username or email..."
+        self.fields["ip_contains"].widget.attrs["placeholder"] = "IP contains..."
+        self.fields["path_contains"].widget.attrs["placeholder"] = "Path contains..."
+
+    def clean(self):
+        cleaned = super().clean()
+        start_date = cleaned.get("start_date")
+        end_date = cleaned.get("end_date")
+        period = cleaned.get("period")
+
+        if start_date and end_date and start_date > end_date:
+            self.add_error("end_date", "End date must be on or after start date.")
+
+        if period == self.PERIOD_CUSTOM and not start_date and not end_date:
+            self.add_error("start_date", "Provide a start date or end date for custom period.")
+
+        return cleaned
 
 
 class UserFilterForm(forms.Form):

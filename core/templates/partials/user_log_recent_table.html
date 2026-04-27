@@ -1,0 +1,97 @@
+<div class="scanops-panel overflow-hidden">
+    <div class="px-5 py-4 border-b border-slate-800 flex items-center justify-between">
+        <h3 class="text-sm font-bold text-slate-200 uppercase tracking-widest">Recent Logs</h3>
+        <span class="text-[11px] text-slate-500">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+    </div>
+    <div class="overflow-x-auto">
+        <table class="w-full text-sm text-left">
+            <thead class="bg-slate-900/80 text-[10px] uppercase tracking-widest text-slate-500">
+            <tr>
+                <th class="px-4 py-3">Action Datetime</th>
+                <th class="px-4 py-3">Username</th>
+                <th class="px-4 py-3">Action</th>
+                <th class="px-4 py-3">Result</th>
+                <th class="px-4 py-3">IP Address</th>
+                <th class="px-4 py-3">Location</th>
+                <th class="px-4 py-3">Path</th>
+                <th class="px-4 py-3">Description</th>
+                <th class="px-4 py-3">Browser / Agent</th>
+            </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-800">
+            {% for log in logs %}
+                <tr class="hover:bg-slate-900/40">
+                    <td class="px-4 py-3 text-slate-300">{{ log.action_datetime|date:"Y-m-d H:i:s" }}</td>
+                    <td class="px-4 py-3">
+                        <p class="font-semibold text-slate-200">{{ log.username_snapshot|default:"Unknown" }}</p>
+                        {% if log.user and log.user.email %}
+                            <p class="text-[11px] text-slate-500">{{ log.user.email }}</p>
+                        {% endif %}
+                    </td>
+                    <td class="px-4 py-3 text-slate-200">{{ log.get_action_type_display|default:log.action_type|default:"Unknown" }}</td>
+                    <td class="px-4 py-3">
+                        {% if log.is_success %}
+                            <span class="px-2 py-1 rounded text-[11px] bg-emerald-500/10 text-emerald-300 border border-emerald-500/20">Success</span>
+                        {% else %}
+                            <span class="px-2 py-1 rounded text-[11px] bg-rose-500/10 text-rose-300 border border-rose-500/20">Failed</span>
+                        {% endif %}
+                    </td>
+                    <td class="px-4 py-3 text-slate-300 font-mono">{{ log.ip_address|default:"-" }}</td>
+                    <td class="px-4 py-3">
+                        {% if log.location and log.location != "Unknown" %}
+                            <span class="text-slate-300">{{ log.location }}</span>
+                        {% else %}
+                            <span class="text-slate-500">Unknown</span>
+                        {% endif %}
+                    </td>
+                    <td class="px-4 py-3 text-slate-300"><code>{{ log.path|default:"/" }}</code></td>
+                    <td class="px-4 py-3 text-slate-400">{{ log.description|default:"-" }}</td>
+                    <td class="px-4 py-3 text-slate-400">
+                        {% if log.browser %}
+                            <p>{{ log.browser }}</p>
+                        {% endif %}
+                        {% if log.operating_system or log.device %}
+                            <p class="text-[11px] text-slate-500">{{ log.operating_system|default:"" }}{% if log.operating_system and log.device %} / {% endif %}{{ log.device|default:"" }}</p>
+                        {% endif %}
+                        {% if not log.browser and log.user_agent %}
+                            <p class="text-[11px] text-slate-500">{{ log.user_agent|truncatechars:60 }}</p>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="9" class="px-4 py-10 text-center text-slate-500">
+                        No user logs found for the current filters.
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% if is_paginated %}
+        <div class="px-4 py-3 border-t border-slate-800 flex items-center justify-between text-xs text-slate-400">
+            <span>Showing {{ page_obj.start_index }} - {{ page_obj.end_index }} of {{ page_obj.paginator.count }} logs</span>
+            <div class="flex gap-2">
+                {% if page_obj.has_previous %}
+                    <a
+                        href="?{% if pagination_query %}{{ pagination_query }}&{% endif %}page={{ page_obj.previous_page_number }}"
+                        hx-get="?{% if pagination_query %}{{ pagination_query }}&{% endif %}page={{ page_obj.previous_page_number }}"
+                        hx-target="#user-log-analytics-content"
+                        hx-push-url="true"
+                        class="px-3 py-1.5 rounded border border-slate-700 hover:bg-slate-800"
+                    >Previous</a>
+                {% endif %}
+                {% if page_obj.has_next %}
+                    <a
+                        href="?{% if pagination_query %}{{ pagination_query }}&{% endif %}page={{ page_obj.next_page_number }}"
+                        hx-get="?{% if pagination_query %}{{ pagination_query }}&{% endif %}page={{ page_obj.next_page_number }}"
+                        hx-target="#user-log-analytics-content"
+                        hx-push-url="true"
+                        class="px-3 py-1.5 rounded border border-slate-700 hover:bg-slate-800"
+                    >Next</a>
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+</div>

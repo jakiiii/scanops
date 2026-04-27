@@ -518,6 +518,48 @@ def build_documentation_payload() -> dict:
             ],
         },
         {
+            "id": "user-logs-analytics",
+            "title": "User Logs Analytics",
+            "icon": "query_stats",
+            "what_is": (
+                "User Logs Analytics is the Super Admin audit dashboard for authentication events, "
+                "access activity, and admin action telemetry from stored user logs."
+            ),
+            "why_used": [
+                "Provides centralized visibility into login success/failure and user action behavior.",
+                "Supports incident triage with filters across user, action, result, IP, and path.",
+                "Helps governance teams identify anomalous usage patterns and high-risk activity.",
+            ],
+            "how_to_use": [
+                "Open User Logs Analytics from the sidebar (Super Admin only).",
+                "Apply Period and optional custom Start/End dates, then refine with username/action/result/IP/path filters.",
+                "Review summary cards, daily trend, top users/actions/IPs, and recent logs.",
+                "Use pagination in Recent Logs for deeper event review.",
+            ],
+            "fields": [
+                {"name": "Period", "details": "Today, Yesterday, This Week, This Month, This Year, or Custom date range."},
+                {"name": "Username", "details": "Matches username snapshot and user email/username fields."},
+                {"name": "Action Type", "details": "Filters login, logout, failed login, and admin action categories."},
+                {"name": "Result", "details": "Success or Failed outcome filter."},
+                {"name": "IP / Path", "details": "Substring filters for IP address and request path."},
+                {"name": "Summary Metrics", "details": "Total logs, time-window counts, success/failure, unique users/IPs, login/logout."},
+                {"name": "Daily Trend", "details": "Day-level totals with success/failure split for charting and review."},
+                {"name": "Recent Logs", "details": "Timestamp, actor, action, result, IP, path, description, and browser/agent context."},
+            ],
+            "examples": [
+                "Investigate brute-force behavior by filtering Result=Failed and IP contains suspected source.",
+                "Audit privileged changes by filtering Action Type to admin create/update/delete actions.",
+            ],
+            "best_practices": [
+                "Start with a broad period, then narrow with user/action/IP filters.",
+                "Correlate repeated failures and unusual paths with system alerts before escalation.",
+                "Use recent logs table details (path and browser/user-agent) for incident context.",
+            ],
+            "warnings": [
+                "This module contains sensitive audit data and is restricted to Super Admin accounts only.",
+            ],
+        },
+        {
             "id": "system-health",
             "title": "System Health",
             "icon": "monitor_heart",

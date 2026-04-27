@@ -21,13 +21,15 @@ from apps.ops.forms import (
     ScanPolicySettingsForm,
     ThemeSettingsForm,
     UserAdminForm,
+    UserLogAnalyticsFilterForm,
     UserFilterForm,
 )
 from apps.ops.models import AppSetting, PermissionRule, Role
-from apps.ops.rbac import CapabilityRequiredMixin
+from apps.ops.rbac import CapabilityRequiredMixin, SuperAdminRequiredMixin
 from apps.ops.services import app_settings_service, permission_service, profile_governance_service, user_management_service
 from apps.ops.services.admin_audit_service import log_admin_action
 from apps.ops.services.system_health_service import overall_status, recent_alerts, recent_timeline, run_health_checks
+from apps.ops.services.user_log_analytics_service import build_user_logs_analytics_payload
 from apps.ops.services.worker_status_service import collect_worker_dashboard_context
 from apps.scans.models import ScanProfile
 
@@ -640,6 +642,44 @@ class SystemHealthView(CapabilityRequiredMixin, TemplateView):
                 ],
             }
         )
+        return context
+
+
+class UserLogsAnalyticsView(SuperAdminRequiredMixin, TemplateView):
+    template_name = "ops/health/user_logs_analytics.html"
+
+    def _get_filter_form(self):
+        return UserLogAnalyticsFilterForm(self.request.GET or None)
+
+    @staticmethod
+    def _resolved_filters(form: UserLogAnalyticsFilterForm) -> dict:
+        if form.is_valid():
+            cleaned = dict(form.cleaned_data)
+            if not cleaned.get("period"):
+                cleaned["period"] = UserLogAnalyticsFilterForm.PERIOD_THIS_WEEK
+            return cleaned
+        return {"period": UserLogAnalyticsFilterForm.PERIOD_THIS_WEEK}
+
+    def get(self, request, *args, **kwargs):
+        filter_form = self._get_filter_form()
+        analytics = build_user_logs_analytics_payload(
+            filters=self._resolved_filters(filter_form),
+            page_number=request.GET.get("page"),
+            query_params=request.GET,
+            page_size=20,
+        )
+        context = self.get_context_data(filter_form=filter_form, analytics=analytics)
+        if request.headers.get("HX-Request"):
+            return render(request, "partials/user_log_analytics_content.html", context)
+        return render(request, self.template_name, context)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update(kwargs)
+        context["breadcrumbs"] = [
+            {"label": "System Health", "url": reverse("ops:health-system")},
+            {"label": "User Logs Analytics", "url": ""},
+        ]
         return context
 
 

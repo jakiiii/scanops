@@ -85,6 +85,7 @@ class UserLogsAdmin(admin.ModelAdmin):
         "action_type_badge",
         "success_badge",
         "ip_address",
+        "location",
         "description",
         "action_datetime",
         "path_display",
@@ -107,6 +108,7 @@ class UserLogsAdmin(admin.ModelAdmin):
         "success_badge",
         "description",
         "ip_address",
+        "location",
         "request_method",
         "path",
         "device",
@@ -129,7 +131,7 @@ class UserLogsAdmin(admin.ModelAdmin):
         }),
         ("Request Context", {
             "fields": (
-                ("ip_address", "request_method"),
+                ("ip_address", "location", "request_method"),
                 "path",
                 ("browser", "operating_system", "device"),
                 "user_agent",

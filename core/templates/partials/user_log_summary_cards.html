@@ -1,0 +1,42 @@
+<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-4 mb-6">
+    <div class="scanops-panel p-5 border-l-4 border-l-blue-500">
+        <p class="text-xs uppercase tracking-widest text-slate-500">Total Logs</p>
+        <p class="text-3xl font-bold text-blue-300 mt-2">{{ summary.total_logs|default:0 }}</p>
+    </div>
+    <div class="scanops-panel p-5 border-l-4 border-l-cyan-500">
+        <p class="text-xs uppercase tracking-widest text-slate-500">Today's Logs</p>
+        <p class="text-3xl font-bold text-cyan-300 mt-2">{{ summary.todays_logs|default:0 }}</p>
+    </div>
+    <div class="scanops-panel p-5 border-l-4 border-l-indigo-500">
+        <p class="text-xs uppercase tracking-widest text-slate-500">This Week</p>
+        <p class="text-3xl font-bold text-indigo-300 mt-2">{{ summary.this_week_logs|default:0 }}</p>
+    </div>
+    <div class="scanops-panel p-5 border-l-4 border-l-violet-500">
+        <p class="text-xs uppercase tracking-widest text-slate-500">This Month</p>
+        <p class="text-3xl font-bold text-violet-300 mt-2">{{ summary.this_month_logs|default:0 }}</p>
+    </div>
+    <div class="scanops-panel p-5 border-l-4 border-l-emerald-500">
+        <p class="text-xs uppercase tracking-widest text-slate-500">Successful Actions</p>
+        <p class="text-3xl font-bold text-emerald-300 mt-2">{{ summary.successful_actions|default:0 }}</p>
+    </div>
+    <div class="scanops-panel p-5 border-l-4 border-l-rose-500">
+        <p class="text-xs uppercase tracking-widest text-slate-500">Failed Actions</p>
+        <p class="text-3xl font-bold text-rose-300 mt-2">{{ summary.failed_actions|default:0 }}</p>
+    </div>
+    <div class="scanops-panel p-5 border-l-4 border-l-amber-500">
+        <p class="text-xs uppercase tracking-widest text-slate-500">Unique Users</p>
+        <p class="text-3xl font-bold text-amber-300 mt-2">{{ summary.unique_users|default:0 }}</p>
+    </div>
+    <div class="scanops-panel p-5 border-l-4 border-l-sky-500">
+        <p class="text-xs uppercase tracking-widest text-slate-500">Unique IPs</p>
+        <p class="text-3xl font-bold text-sky-300 mt-2">{{ summary.unique_ips|default:0 }}</p>
+    </div>
+    <div class="scanops-panel p-5 border-l-4 border-l-emerald-500">
+        <p class="text-xs uppercase tracking-widest text-slate-500">Login Count</p>
+        <p class="text-3xl font-bold text-emerald-300 mt-2">{{ summary.login_count|default:0 }}</p>
+    </div>
+    <div class="scanops-panel p-5 border-l-4 border-l-orange-500">
+        <p class="text-xs uppercase tracking-widest text-slate-500">Logout Count</p>
+        <p class="text-3xl font-bold text-orange-300 mt-2">{{ summary.logout_count|default:0 }}</p>
+    </div>
+</div>

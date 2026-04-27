@@ -137,6 +137,11 @@ def has_capability(user, capability_key: str) -> bool:
 
 
 @register.filter
+def is_super_admin(user) -> bool:
+    return permission_service.is_super_admin(user)
+
+
+@register.filter
 def role_slug(user) -> str:
     return permission_service.get_user_role_slug(user) or ""
 

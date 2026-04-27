@@ -21,6 +21,7 @@ from apps.ops.views import (
     ThemeSettingsView,
     UserCreateView,
     UserFlagPasswordResetView,
+    UserLogsAnalyticsView,
     UserListView,
     UserToggleActiveView,
     UserUpdateView,
@@ -52,6 +53,7 @@ urlpatterns = [
     path("profiles/<int:pk>/delete/", AdminProfileDeleteView.as_view(), name="admin-profiles-delete"),
     path("health/queue-workers/", QueueWorkerStatusView.as_view(), name="health-queue-workers"),
     path("health/system/", SystemHealthView.as_view(), name="health-system"),
+    path("health/user-logs-analytics/", UserLogsAnalyticsView.as_view(), name="health-user-logs-analytics"),
     path("health/system/cards/", SystemHealthCardsPartialView.as_view(), name="health-system-cards"),
     path("health/system/alerts/", SystemHealthAlertsPartialView.as_view(), name="health-system-alerts"),
 ]

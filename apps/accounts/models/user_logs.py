@@ -40,6 +40,12 @@ class UserLogs(models.Model):
         default="",
         verbose_name=_("IP Address"),
     )
+    location = models.CharField(
+        max_length=160,
+        blank=True,
+        default="Unknown",
+        verbose_name=_("Location"),
+    )
     request_method = models.CharField(
         max_length=10,
         blank=True,

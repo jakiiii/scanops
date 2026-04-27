@@ -1,0 +1,19 @@
+{% load scanops_tags %}
+
+{% include "partials/user_log_summary_cards.html" with summary=analytics.summary %}
+
+<div class="scanops-panel p-5 mb-6">
+    <div class="flex items-center justify-between mb-4">
+        <h2 class="text-sm font-bold text-slate-200 uppercase tracking-widest">Daily Log Trend</h2>
+        <span class="text-[11px] text-slate-500">Chart-ready: Date, Total, Success, Failure</span>
+    </div>
+    {% include "partials/user_log_trend.html" with trend_rows=analytics.trend_rows %}
+</div>
+
+<div class="grid grid-cols-1 xl:grid-cols-3 gap-6 mb-6">
+    {% include "partials/user_log_top_users.html" with top_users=analytics.top_users %}
+    {% include "partials/user_log_top_actions.html" with top_actions=analytics.top_actions %}
+    {% include "partials/user_log_top_ips.html" with top_ips=analytics.top_ips %}
+</div>
+
+{% include "partials/user_log_recent_table.html" with logs=analytics.logs page_obj=analytics.page_obj is_paginated=analytics.is_paginated pagination_query=analytics.pagination_query %}
